@@ -1,0 +1,113 @@
+NameStar < UIWidget
+  size: 11 11
+  margin-top: 2
+  image-source: /modules/game_pokeinfo/images/star_off
+  phantom: true
+
+NameWord < Label
+  font: verdana-11px-rounded
+  color: #ffffff
+  text-auto-resize: true
+  phantom: true
+
+NameLine < UIWidget
+  height: 16
+  phantom: true
+  focusable: false
+  layout:
+    type: horizontalBox
+    spacing: 3
+
+NameInfo < UIWidget
+  height: 13
+  padding: 1 4 1 4
+  background-color: #0a1320a0
+  phantom: true
+  focusable: false
+  layout:
+    type: horizontalBox
+    spacing: 3
+
+TypeChip < Label
+  height: 15
+  padding: 0 6 0 6
+  font: verdana-11px-antialised
+  color: #ffffff
+  text-align: center
+  text-auto-resize: true
+  image-source: /modules/game_pokeinfo/images/pill
+  image-border: 6
+  phantom: true
+
+NameBar < UIWidget
+  size: 46 5
+  background-color: #0a1320e0
+  border-width: 1
+  border-color: #000000
+  phantom: true
+  focusable: false
+
+  UIWidget
+    id: fill
+    anchors.left: parent.left
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    margin: 1
+    width: 0
+    background-color: #5fd35f
+    phantom: true
+
+TypeBadge < UIWidget
+  size: 46 20
+  phantom: true
+
+LevelChip < Label
+  height: 13
+  padding: 0 4 0 4
+  margin-top: 1
+  font: verdana-11px-antialised
+  color: #1a1200
+  text-align: center
+  text-auto-resize: true
+  image-source: /modules/game_pokeinfo/images/pill
+  image-border: 6
+  phantom: true
+
+LensBox < UIWidget
+  size: 92 40
+  anchors.top: parent.top
+  anchors.left: parent.left
+  margin-top: 8
+  margin-left: 8
+  background-color: #0a1320d8
+  border-width: 1
+  border-color: #f2c400
+  focusable: false
+
+  UIItem
+    id: item
+    size: 32 32
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    virtual: true
+    phantom: true
+
+  UIWidget
+    id: icon
+    size: 24 24
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    image-source: /modules/game_pokeinfo/images/lens
+    phantom: true
+
+  Label
+    id: time
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 8
+    font: verdana-11px-antialised
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true

@@ -1,0 +1,10 @@
+Module
+  name: game_heldfusion
+  description: Fundir Helds (3 iguais = 1 do tier seguinte) - opcode 125
+  author: Marcos
+  autoload: true
+  autoload-priority: 1010
+  scripts: [ heldfusion ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

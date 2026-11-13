@@ -1,0 +1,43 @@
+WarTimerBox < UIWidget
+  size: 190 40
+  background-color: #2a0b0bdd
+  border-width: 1
+  border-color: #e04848
+  phantom: true
+  focusable: false
+
+  Label
+    id: title
+    text: GUERRA DE CASTELOS
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 4
+    margin-left: 8
+    font: verdana-11px-antialised
+    color: #ffb0b0
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: clock
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 3
+    margin-right: 8
+    font: verdana-11px-antialised
+    color: #ffffff
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: castles
+    anchors.top: title.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 3
+    margin-left: 8
+    margin-right: 8
+    height: 14
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true

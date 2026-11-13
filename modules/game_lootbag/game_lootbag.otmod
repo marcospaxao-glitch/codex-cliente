@@ -1,0 +1,12 @@
+Module
+  name: game_lootbag
+  description: Bolsa de Loot do Codex (botao no topo)
+  author: Codex
+  website: http://localhost/
+  autoload: true
+  autoload-priority: 1000
+  sandboxed: true
+  scripts: [ lootbag ]
+  dependencies: [ client_topmenu ]
+  @onLoad: init()
+  @onUnload: terminate()

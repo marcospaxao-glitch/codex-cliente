@@ -1,0 +1,761 @@
+RkLabel < Label
+  font: verdana-11px-rounded
+  color: #8fa7c4
+  text-auto-resize: true
+
+RkTitle < Label
+  font: verdana-11px-rounded
+  color: #f2c400
+  text-auto-resize: true
+
+RkBox < UIWidget
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+RkTab < UIButton
+  size: 110 26
+  font: verdana-11px-rounded
+  color: #8fa7c4
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    color: #ffffff
+    background-color: #142a4a
+
+  $on:
+    color: #0a1320
+    font: verdana-11px-antialised
+    background-color: #f2c400
+    border-color: #ffe27a
+
+RkGold < UIButton
+  height: 30
+  font: verdana-11px-antialised
+  color: #0a1320
+  background-color: #f2c400
+  border-width: 1
+  border-color: #ffe27a
+
+  $hover:
+    background-color: #ffd633
+
+  $disabled:
+    font: verdana-11px-rounded
+    color: #6f86a8
+    background-color: #101f3e
+    border-color: #24415f
+
+RkRed < UIButton
+  height: 30
+  font: verdana-11px-rounded
+  color: #ffffff
+  background-color: #a32d2d
+  border-width: 1
+  border-color: #e04848
+
+  $hover:
+    background-color: #c23a3a
+
+RkDark < UIButton
+  height: 22
+  font: verdana-11px-rounded
+  color: #dce8f5
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    color: #ffffff
+    background-color: #1a3058
+
+RkPokeSlot < UIButton
+  size: 124 92
+  background-color: #0a1320
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    border-color: #6f86a8
+
+  $on:
+    background-color: #142a4a
+    border-color: #f2c400
+
+  $disabled:
+    background-color: #0a1320
+    border-color: #101f3e
+
+  UICreature
+    id: creature
+    size: 52 52
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 2
+    phantom: true
+
+  Label
+    id: name
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: creature.bottom
+    margin: 2 4 0 4
+    text-align: center
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+  Label
+    id: level
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: name.bottom
+    text-align: center
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+  Label
+    id: pick
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin: 3 3 0 0
+    size: 18 16
+    text-align: center
+    font: verdana-11px-antialised
+    color: #0a1320
+    background-color: #f2c400
+    phantom: true
+    visible: false
+
+RkTopRow < UIWidget
+  height: 26
+  background-color: #0c1828
+  border-width: 1
+  border-color: #101f3e
+
+  $on:
+    background-color: #263b59
+    border-color: #f2c400
+
+  Label
+    id: pos
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    width: 34
+    margin-left: 6
+    text-align: right
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+  UIWidget
+    id: emblem
+    size: 20 20
+    anchors.left: pos.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    phantom: true
+
+  Label
+    id: name
+    anchors.left: emblem.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 200
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+  Label
+    id: points
+    anchors.left: name.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 90
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+  Label
+    id: record
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 110
+    margin-right: 8
+    text-align: right
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+RkRewardRow < UIWidget
+  height: 40
+  background-color: #0c1828
+  border-width: 1
+  border-color: #101f3e
+
+  UIWidget
+    id: emblem
+    size: 32 32
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    phantom: true
+
+  Label
+    id: tier
+    anchors.left: emblem.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 90
+    margin-left: 10
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+  Label
+    id: min
+    anchors.left: tier.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 130
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+  Label
+    id: reward
+    anchors.left: min.right
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 10
+    text-align: right
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+RankedWindow < UIWindow
+  size: 680 500
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  draggable: true
+
+  UIWidget
+    id: accent
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 16
+    background-color: #f2c400
+    phantom: true
+
+  RkTitle
+    id: title
+    text: RANKED 1v1
+    anchors.verticalCenter: accent.verticalCenter
+    anchors.left: accent.right
+    margin-left: 8
+
+  RkLabel
+    id: seasonLabel
+    anchors.verticalCenter: accent.verticalCenter
+    anchors.right: closeButton.left
+    margin-right: 12
+
+  UIButton
+    id: closeButton
+    text: X
+    size: 24 22
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 12
+    margin-right: 14
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+
+    $hover:
+      color: #ffffff
+      background-color: #7a1f1f
+
+  RkTab
+    id: tabPlay
+    text: Jogar
+    anchors.top: accent.bottom
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 16
+
+  RkTab
+    id: tabTop
+    text: Ranking
+    anchors.top: tabPlay.top
+    anchors.left: tabPlay.right
+    margin-left: 4
+
+  RkTab
+    id: tabRewards
+    text: Recompensas
+    anchors.top: tabPlay.top
+    anchors.left: tabTop.right
+    margin-left: 4
+
+  UIWidget
+    id: content
+    anchors.top: tabPlay.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin: 10 16 16 16
+
+    UIWidget
+      id: panelPlay
+      anchors.fill: parent
+
+      RkBox
+        id: card
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        width: 220
+
+        UIWidget
+          id: emblem
+          size: 64 64
+          anchors.top: parent.top
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 16
+          phantom: true
+
+        Label
+          id: tierName
+          anchors.top: emblem.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 8
+          text-auto-resize: true
+          font: verdana-11px-rounded
+          color: #dce8f5
+
+        Label
+          id: points
+          anchors.top: tierName.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 4
+          text-auto-resize: true
+          font: verdana-11px-rounded
+          color: #f2c400
+
+        UIWidget
+          id: barBack
+          anchors.top: points.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          height: 8
+          margin: 12 16 0 16
+          background-color: #101f3e
+          border-width: 1
+          border-color: #1d3557
+
+          UIWidget
+            id: barFill
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            width: 0
+            background-color: #f2c400
+            phantom: true
+
+        RkLabel
+          id: nextLabel
+          anchors.top: barBack.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 6
+
+        UIWidget
+          id: sep
+          anchors.top: nextLabel.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          height: 1
+          margin: 14 16 0 16
+          background-color: #1d3557
+          phantom: true
+
+        RkLabel
+          id: record
+          anchors.top: sep.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 12
+          color: #dce8f5
+
+        RkLabel
+          id: winrate
+          anchors.top: record.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 6
+
+        RkLabel
+          id: position
+          anchors.top: winrate.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 6
+          color: #f2c400
+
+        RkLabel
+          id: rules
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          margin: 0 12 12 12
+          height: 60
+          text-auto-resize: false
+          text-wrap: true
+          text-align: center
+          color: #6f86a8
+
+      RkBox
+        id: pickBox
+        anchors.top: parent.top
+        anchors.left: card.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 10
+
+        RkTitle
+          id: pickTitle
+          text: ESCOLHA SEUS POKEMONS
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin: 12 0 0 14
+
+        RkLabel
+          id: pickCount
+          anchors.verticalCenter: pickTitle.verticalCenter
+          anchors.right: parent.right
+          margin-right: 14
+
+        UIWidget
+          id: slots
+          anchors.top: pickTitle.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          height: 196
+          margin: 10 14 0 14
+          layout:
+            type: grid
+            cell-size: 124 92
+            cell-spacing: 8
+            num-columns: 3
+            flow: true
+
+        RkLabel
+          id: emptyTeam
+          text: Sua equipe esta vazia.
+          anchors.centerIn: slots
+          visible: false
+
+        RkLabel
+          id: statusLabel
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.bottom: searchButton.top
+          margin: 0 14 8 14
+          height: 32
+          text-auto-resize: false
+          text-wrap: true
+          text-align: center
+          color: #dce8f5
+
+        RkGold
+          id: searchButton
+          text: Buscar partida
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          margin: 0 14 14 14
+          height: 36
+
+    UIWidget
+      id: panelTop
+      anchors.fill: parent
+      visible: false
+
+      RkTitle
+        id: topTitle
+        text: MELHORES DA TEMPORADA
+        anchors.top: parent.top
+        anchors.left: parent.left
+
+      RkDark
+        id: topRefresh
+        text: Atualizar
+        anchors.verticalCenter: topTitle.verticalCenter
+        anchors.right: parent.right
+        width: 80
+
+      ScrollablePanel
+        id: topList
+        anchors.top: topTitle.bottom
+        anchors.left: parent.left
+        anchors.right: topScroll.left
+        anchors.bottom: parent.bottom
+        margin-top: 10
+        margin-right: 4
+        vertical-scrollbar: topScroll
+        layout:
+          type: verticalBox
+          spacing: 2
+
+      VerticalScrollBar
+        id: topScroll
+        anchors.top: topTitle.bottom
+        anchors.bottom: parent.bottom
+        margin-top: 10
+        anchors.right: parent.right
+        width: 10
+        step: 26
+        pixels-scroll: true
+
+      RkLabel
+        id: topEmpty
+        text: Ninguem jogou ainda nesta temporada.
+        anchors.centerIn: topList
+        visible: false
+
+    UIWidget
+      id: panelRewards
+      anchors.fill: parent
+      visible: false
+
+      RkTitle
+        id: rewardTitle
+        text: RECOMPENSAS DO FIM DA TEMPORADA
+        anchors.top: parent.top
+        anchors.left: parent.left
+
+      UIWidget
+        id: rewardList
+        anchors.top: rewardTitle.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 260
+        margin-top: 10
+        layout:
+          type: verticalBox
+          spacing: 3
+
+      RkTitle
+        id: topRewardTitle
+        text: EXTRA PARA O TOP 3
+        anchors.top: rewardList.bottom
+        anchors.left: parent.left
+        margin-top: 12
+
+      RkLabel
+        id: topRewards
+        anchors.top: topRewardTitle.bottom
+        anchors.left: parent.left
+        margin-top: 6
+        color: #dce8f5
+
+      RkLabel
+        id: rewardNote
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        height: 32
+        text-auto-resize: false
+        text-wrap: true
+        color: #6f86a8
+
+RankedFound < UIWindow
+  size: 340 200
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 2
+  border-color: #f2c400
+  focusable: true
+
+  RkTitle
+    id: title
+    text: PARTIDA ENCONTRADA!
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 14
+
+  UIWidget
+    id: emblem
+    size: 48 48
+    anchors.top: title.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 10
+    phantom: true
+
+  Label
+    id: opponent
+    anchors.top: emblem.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 6
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #dce8f5
+
+  RkLabel
+    id: timer
+    anchors.top: opponent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 4
+
+  RkGold
+    id: acceptButton
+    text: Aceitar
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    width: 150
+    margin: 0 0 14 16
+
+  RkRed
+    id: declineButton
+    text: Recusar
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    width: 150
+    margin: 0 16 14 0
+
+RankedHud < UIWidget
+  size: 360 48
+  background-color: #0a1320e6
+  border-width: 1
+  border-color: #f2c400
+  focusable: false
+
+  Label
+    id: me
+    text: Voce
+    anchors.left: parent.left
+    anchors.top: parent.top
+    margin: 5 0 0 12
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+  UIWidget
+    id: myDots
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin: 0 0 8 12
+    size: 60 12
+    phantom: true
+    layout:
+      type: horizontalBox
+      spacing: 6
+
+  Label
+    id: clock
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 5
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+  Label
+    id: opp
+    anchors.right: parent.right
+    anchors.top: parent.top
+    margin: 5 12 0 0
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+  UIWidget
+    id: oppDots
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin: 0 12 8 0
+    size: 60 12
+    phantom: true
+    layout:
+      type: horizontalBox
+      spacing: 6
+
+  UIButton
+    id: forfeitButton
+    text: Desistir
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-bottom: 5
+    size: 76 16
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+
+    $hover:
+      color: #ffffff
+      background-color: #7a1f1f
+
+RkDot < UIWidget
+  size: 12 12
+  background-color: #5fd35f
+  border-width: 1
+  border-color: #0a1320
+  phantom: true
+
+RankedEnd < UIWindow
+  size: 320 190
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 2
+  border-color: #f2c400
+  focusable: true
+
+  Label
+    id: result
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 16
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #5fd35f
+
+  Label
+    id: delta
+    anchors.top: result.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 8
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #f2c400
+
+  UIWidget
+    id: emblem
+    size: 40 40
+    anchors.top: delta.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 8
+    phantom: true
+
+  RkLabel
+    id: info
+    anchors.top: emblem.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 6
+    color: #dce8f5
+
+  RkGold
+    id: okButton
+    text: OK
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    width: 120
+    margin-bottom: 14

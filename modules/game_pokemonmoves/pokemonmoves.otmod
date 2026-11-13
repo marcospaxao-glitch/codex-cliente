@@ -1,0 +1,11 @@
+Module
+  name: game_pokemonmoves
+  description: Barra de moves do Codex
+  author: drakylucas, pota (base) - Codex
+  website: http://www.pokedashgames.com
+  autoload: true
+  autoload-priority: 1000
+  scripts: [ movetypes, moveicons, pokemonmoves ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

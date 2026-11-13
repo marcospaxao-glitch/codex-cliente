@@ -1,0 +1,11 @@
+Module
+  name: game_bossbar
+  description: Barra de vida do Emperium (guerra de castelos)
+  author: Codex
+  website: http://localhost/
+  autoload: true
+  autoload-priority: 1000
+  sandboxed: true
+  scripts: [ bossbar ]
+  @onLoad: init()
+  @onUnload: terminate()

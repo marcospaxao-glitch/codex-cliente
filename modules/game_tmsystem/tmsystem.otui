@@ -1,0 +1,327 @@
+TMTypeChip < UIWidget
+  size: 24 24
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+  image-size: 20 20
+  focusable: false
+  $hover:
+    border-color: #8fa7c4
+  $on:
+    border-color: #f2c400
+    background-color: #1d3557
+
+TMRow < UIWidget
+  height: 30
+  background-color: #0c1828
+  border-width: 1
+  border-color: #16294a
+  focusable: false
+  $hover:
+    background-color: #12223a
+  $on:
+    background-color: #1d3557
+    border-color: #f2c400
+
+  UIWidget
+    id: icon
+    size: 24 24
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    image-size: 24 24
+    phantom: true
+
+  Label
+    id: name
+    anchors.left: icon.right
+    anchors.top: parent.top
+    anchors.right: cost.left
+    margin-left: 6
+    margin-top: 2
+    height: 13
+    font: verdana-11px-rounded
+    color: #ffffff
+    text-auto-resize: false
+    phantom: true
+
+  Label
+    id: info
+    anchors.left: name.left
+    anchors.top: name.bottom
+    anchors.right: cost.left
+    height: 13
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: false
+    phantom: true
+
+  Label
+    id: cost
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 6
+    width: 58
+    text-align: right
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: false
+    phantom: true
+
+TMSlotButton < UIWidget
+  size: 70 34
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+  focusable: false
+  $hover:
+    background-color: #12223a
+    border-color: #8fa7c4
+  $on:
+    border-color: #f2c400
+    background-color: #2b2410
+
+  Label
+    id: slot
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 2
+    margin-left: 4
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  UIWidget
+    id: icon
+    size: 16 16
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 2
+    margin-right: 3
+    phantom: true
+
+  Label
+    id: move
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin: 0 3 3 4
+    height: 13
+    font: verdana-11px-rounded
+    color: #c9d6e6
+    text-auto-resize: false
+    phantom: true
+
+UIWindow
+  id: tmsystem
+  size: 660 470
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  draggable: true
+  @onEscape: modules.tmsystem.hide()
+
+  UIWidget
+    id: headerBar
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 12
+    margin-left: 12
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: title
+    text: TM SYSTEM
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: pokeLabel
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: title.right
+    margin-left: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: diskLabel
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.right: closeButton.left
+    margin-right: 12
+    font: verdana-11px-rounded
+    color: #c9d6e6
+    text-auto-resize: true
+    phantom: true
+
+  UIItem
+    id: diskItem
+    size: 28 28
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.right: diskLabel.left
+    margin-right: 2
+    virtual: true
+    phantom: true
+    visible: false
+
+  Button
+    id: closeButton
+    text: X
+    size: 22 20
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 10
+    margin-right: 10
+    @onClick: modules.tmsystem.hide()
+
+  TextEdit
+    id: searchEdit
+    anchors.top: headerBar.bottom
+    anchors.left: parent.left
+    margin-top: 12
+    margin-left: 12
+    width: 310
+    height: 22
+
+  Panel
+    id: typePanel
+    anchors.top: searchEdit.bottom
+    anchors.left: parent.left
+    margin-top: 6
+    margin-left: 12
+    width: 314
+    height: 52
+    layout:
+      type: grid
+      cell-size: 24 24
+      cell-spacing: 2
+      flow: true
+
+  ScrollablePanel
+    id: listPanel
+    anchors.top: typePanel.bottom
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin: 6 0 12 12
+    width: 300
+    vertical-scrollbar: listScroll
+    layout:
+      type: verticalBox
+      spacing: 2
+
+  VerticalScrollBar
+    id: listScroll
+    anchors.top: listPanel.top
+    anchors.bottom: listPanel.bottom
+    anchors.left: listPanel.right
+    margin-left: 2
+    step: 32
+    pixels-scroll: true
+
+  Panel
+    id: detailPanel
+    anchors.top: headerBar.bottom
+    anchors.left: listScroll.right
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin: 12 12 12 10
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1d3557
+
+    UIWidget
+      id: bigIcon
+      size: 40 40
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin: 10 0 0 10
+      image-size: 40 40
+
+    Label
+      id: moveName
+      anchors.top: parent.top
+      anchors.left: bigIcon.right
+      anchors.right: parent.right
+      margin: 12 8 0 10
+      height: 16
+      font: verdana-11px-rounded
+      color: #f2c400
+      text-auto-resize: false
+
+    Label
+      id: moveType
+      anchors.top: moveName.bottom
+      anchors.left: moveName.left
+      anchors.right: parent.right
+      margin-top: 2
+      height: 14
+      font: verdana-11px-rounded
+      color: #c9d6e6
+      text-auto-resize: false
+
+    Label
+      id: moveStats
+      anchors.top: bigIcon.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 10 10 0 10
+      height: 48
+      font: verdana-11px-rounded
+      color: #c9d6e6
+      text-wrap: true
+      text-auto-resize: false
+
+    Label
+      id: slotTitle
+      text: ESCOLHA O SLOT (M1 - M12)
+      anchors.top: moveStats.bottom
+      anchors.left: parent.left
+      margin: 8 0 0 10
+      font: verdana-11px-rounded
+      color: #f2c400
+      text-auto-resize: true
+
+    Panel
+      id: slotPanel
+      anchors.top: slotTitle.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 6 8 0 10
+      height: 118
+      layout:
+        type: grid
+        cell-size: 70 34
+        cell-spacing: 4
+        flow: true
+
+    Label
+      id: hintLabel
+      anchors.top: slotPanel.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 6 10 0 10
+      height: 28
+      font: verdana-11px-rounded
+      color: #8fa7c4
+      text-wrap: true
+      text-auto-resize: false
+
+    Button
+      id: learnButton
+      text: Ensinar TM
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      margin: 0 10 10 10
+      height: 26

@@ -1,0 +1,10 @@
+Module
+  name: game_phone
+  description: Celular (Aluguel, WhatsApp, Loc, Market)
+  author: Marcos
+  autoload: true
+  autoload-priority: 1005
+  scripts: [ phone ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

@@ -1,0 +1,371 @@
+MartButton < UIButton
+  height: 24
+  font: verdana-11px-antialised
+  color: #1a1200
+  background-color: #f2c400
+  border-width: 1
+  border-color: #ffe27a
+
+  $hover:
+    background-color: #ffd633
+
+  $disabled:
+    color: #8fa7c4
+    background-color: #101f3e
+    border-color: #24415f
+
+MartDarkButton < UIButton
+  height: 24
+  font: verdana-11px-antialised
+  color: #dce8f5
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    color: #ffffff
+    background-color: #1a3058
+
+MartTab < UIButton
+  size: 120 28
+  font: verdana-11px-antialised
+  color: #dce8f5
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    color: #ffffff
+    background-color: #1a3058
+
+MartEdit < TextEdit
+  height: 22
+  font: verdana-11px-antialised
+  color: #0a1320
+  background-color: #c8c8c8
+  selection-color: #ffffff
+  selection-background-color: #2b5a8a
+
+MartCard < UIWidget
+  size: 142 156
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIWidget
+    id: iconBg
+    size: 44 44
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 8
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  UIWidget
+    id: genderIcon
+    size: 11 11
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 6
+    margin-left: 6
+    visible: false
+    phantom: true
+
+  UIItem
+    id: item
+    size: 32 32
+    anchors.centerIn: iconBg
+    virtual: true
+    phantom: true
+
+  UICreature
+    id: creature
+    size: 44 44
+    anchors.centerIn: iconBg
+    visible: false
+    phantom: true
+
+  Label
+    id: name
+    anchors.top: iconBg.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 5
+    margin-left: 5
+    margin-right: 5
+    height: 28
+    text-wrap: true
+    text-align: center
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: price
+    anchors.top: name.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 2
+    height: 14
+    text-align: center
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+  Label
+    id: sub
+    anchors.top: price.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 2
+    height: 14
+    text-align: center
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  TextEdit
+    id: qty
+    size: 44 22
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin-left: 7
+    margin-bottom: 7
+    text-align: center
+    font: verdana-11px-antialised
+    color: #0a1320
+    background-color: #c8c8c8
+    selection-color: #ffffff
+    selection-background-color: #2b5a8a
+
+  UIButton
+    id: lockToggle
+    size: 24 22
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin-left: 7
+    margin-bottom: 7
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+    visible: false
+
+    $hover:
+      background-color: #1a3058
+
+    UIWidget
+      id: lockImg
+      size: 12 14
+      anchors.centerIn: parent
+      image-source: /modules/game_storage/icons/codex_lock
+      phantom: true
+
+  UIButton
+    id: actionButton
+    height: 22
+    anchors.left: qty.right
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-left: 5
+    margin-right: 7
+    margin-bottom: 7
+    font: verdana-11px-antialised
+    color: #1a1200
+    background-color: #f2c400
+    border-width: 1
+    border-color: #ffe27a
+
+    $hover:
+      background-color: #ffd633
+
+    $disabled:
+      color: #8fa7c4
+      background-color: #101f3e
+      border-color: #24415f
+
+UIWindow
+  id: martWindow
+  size: 940 640
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  visible: false
+
+  UIWidget
+    id: headerBar
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 16
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: titleLabel
+    text: MARK - LOJA
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 8
+    font: verdana-11px-antialised
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  UIButton
+    id: closeButton
+    text: X
+    size: 24 22
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 12
+    margin-right: 14
+    font: verdana-11px-antialised
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+    @onClick: modules.game_mart.hide()
+
+    $hover:
+      color: #ffffff
+      background-color: #7a1f1f
+      border-color: #e04848
+
+  Label
+    id: vipLabel
+    anchors.verticalCenter: closeButton.verticalCenter
+    anchors.right: closeButton.left
+    margin-right: 14
+    font: verdana-11px-antialised
+    color: #8fa7c4
+    text-auto-resize: true
+
+  Label
+    id: balanceLabel
+    anchors.verticalCenter: closeButton.verticalCenter
+    anchors.right: vipLabel.left
+    margin-right: 18
+    font: verdana-11px-antialised
+    color: #f2c400
+    text-auto-resize: true
+
+  MartTab
+    id: tabFree
+    text: Free
+    anchors.top: headerBar.bottom
+    anchors.left: parent.left
+    margin-top: 16
+    margin-left: 16
+
+  MartTab
+    id: tabVip
+    text: VIP
+    anchors.top: tabFree.top
+    anchors.left: tabFree.right
+    margin-left: 6
+
+  MartTab
+    id: tabSell
+    text: Vender
+    anchors.top: tabFree.top
+    anchors.left: tabVip.right
+    margin-left: 6
+
+  MartEdit
+    id: searchEdit
+    width: 220
+    anchors.verticalCenter: tabFree.verticalCenter
+    anchors.right: parent.right
+    margin-right: 16
+
+  Label
+    id: searchHint
+    text: Buscar:
+    anchors.verticalCenter: searchEdit.verticalCenter
+    anchors.right: searchEdit.left
+    margin-right: 8
+    font: verdana-11px-antialised
+    color: #dce8f5
+    text-auto-resize: true
+
+  MartButton
+    id: sellAllButton
+    width: 190
+    anchors.top: tabFree.bottom
+    anchors.right: parent.right
+    margin-top: 10
+    margin-right: 16
+    visible: false
+
+  MartDarkButton
+    id: ownedButton
+    width: 130
+    anchors.top: tabFree.bottom
+    anchors.right: sellAllButton.left
+    margin-top: 10
+    margin-right: 6
+    visible: false
+
+  MartDarkButton
+    id: bagButton
+    width: 260
+    text-offset: 12 0
+    anchors.top: tabFree.bottom
+    anchors.right: parent.right
+    margin-top: 10
+    margin-right: 16
+
+  UIItem
+    id: bagIcon
+    size: 22 22
+    anchors.verticalCenter: bagButton.verticalCenter
+    anchors.left: bagButton.left
+    margin-left: 5
+    virtual: true
+    phantom: true
+
+  Label
+    id: hintLabel
+    anchors.verticalCenter: bagButton.verticalCenter
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-left: 18
+    margin-right: 360
+    height: 14
+    font: verdana-11px-antialised
+    color: #dce8f5
+
+  ScrollablePanel
+    id: list
+    anchors.top: bagButton.bottom
+    anchors.left: parent.left
+    anchors.right: listScroll.left
+    anchors.bottom: parent.bottom
+    margin-top: 12
+    margin-left: 16
+    margin-right: 6
+    margin-bottom: 16
+    vertical-scrollbar: listScroll
+    layout:
+      type: grid
+      cell-size: 142 156
+      cell-spacing: 6
+      num-columns: 6
+      flow: true
+
+  VerticalScrollBar
+    id: listScroll
+    width: 12
+    anchors.top: bagButton.bottom
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin-top: 12
+    margin-bottom: 16
+    margin-right: 16
+    step: 81
+    pixels-scroll: true

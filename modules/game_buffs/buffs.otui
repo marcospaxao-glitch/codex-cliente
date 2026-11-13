@@ -1,0 +1,82 @@
+BuffRow < UIWidget
+  size: 150 38
+  background-color: #0a1320d8
+  border-width: 1
+  border-color: #1d3557
+  focusable: false
+
+  UIWidget
+    id: stripe
+    width: 3
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    background-color: #f2c400
+    phantom: true
+
+  UIItem
+    id: item
+    size: 32 32
+    anchors.left: stripe.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 2
+    virtual: true
+    phantom: true
+
+  UIWidget
+    id: icon
+    size: 32 32
+    anchors.centerIn: item
+    phantom: true
+
+  Label
+    id: name
+    anchors.top: parent.top
+    anchors.left: item.right
+    anchors.right: parent.right
+    margin-top: 4
+    margin-left: 5
+    margin-right: 4
+    height: 14
+    font: verdana-11px-antialised
+    color: #dce8f5
+    phantom: true
+
+  Label
+    id: time
+    anchors.top: name.bottom
+    anchors.left: name.left
+    margin-top: 1
+    font: verdana-11px-antialised
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  UIWidget
+    id: back
+    height: 3
+    anchors.left: name.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-right: 6
+    margin-bottom: 4
+    background-color: #07101c
+    phantom: true
+
+  UIWidget
+    id: fill
+    width: 0
+    anchors.left: back.left
+    anchors.top: back.top
+    anchors.bottom: back.bottom
+    background-color: #f2c400
+    phantom: true
+
+BuffPanel < UIWidget
+  width: 150
+  focusable: false
+  phantom: true
+  layout:
+    type: verticalBox
+    spacing: 4
+    fit-children: true

@@ -1,0 +1,10 @@
+Module
+  name: codex_compat
+  description: Codex - compatibilidade dos modulos antigos (OTClient 2019) com o Redemption
+  author: Codex
+  website: codexpoketibia.com.br
+  autoload: true
+  autoload-priority: 90
+  reloadable: false
+  dependencies: [ corelib, gamelib ]
+  scripts: [ codex_compat ]

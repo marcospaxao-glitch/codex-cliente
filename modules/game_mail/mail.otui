@@ -1,0 +1,582 @@
+MailButton < UIButton
+  height: 24
+  font: verdana-11px-antialised
+  color: #1a1200
+  background-color: #f2c400
+  border-width: 1
+  border-color: #ffe27a
+
+  $hover:
+    background-color: #ffd633
+
+  $disabled:
+    color: #8fa7c4
+    background-color: #101f3e
+    border-color: #24415f
+
+MailDarkButton < UIButton
+  height: 22
+  font: verdana-11px-antialised
+  color: #dce8f5
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    color: #ffffff
+    background-color: #1a3058
+
+  $disabled:
+    color: #4a5f7a
+
+MailTab < UIButton
+  size: 132 28
+  font: verdana-11px-antialised
+  color: #dce8f5
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    color: #ffffff
+    background-color: #1a3058
+
+MailEdit < TextEdit
+  height: 22
+  font: verdana-11px-antialised
+  color: #0a1320
+  background-color: #c8c8c8
+  selection-color: #ffffff
+  selection-background-color: #2b5a8a
+
+MailHint < Label
+  height: 14
+  font: verdana-11px-antialised
+  color: #8fa7c4
+
+MailCat < UIButton
+  height: 20
+  font: verdana-11px-antialised
+  color: #dce8f5
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    color: #ffffff
+
+MailCard < UIWidget
+  size: 108 134
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIWidget
+    id: iconBg
+    size: 42 42
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 7
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  UIItem
+    id: item
+    size: 32 32
+    anchors.centerIn: iconBg
+    virtual: true
+    phantom: true
+
+  UIWidget
+    id: portrait
+    size: 38 38
+    anchors.centerIn: iconBg
+    image-size: 38 38
+    visible: false
+    phantom: true
+
+  Label
+    id: name
+    anchors.top: iconBg.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 4
+    margin-left: 4
+    margin-right: 4
+    height: 28
+    text-wrap: true
+    text-align: center
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: sub
+    anchors.top: name.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 14
+    text-align: center
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  TextEdit
+    id: qty
+    size: 40 22
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin-left: 6
+    margin-bottom: 6
+    text-align: center
+    font: verdana-11px-antialised
+    color: #0a1320
+    background-color: #c8c8c8
+    selection-color: #ffffff
+    selection-background-color: #2b5a8a
+
+  UIButton
+    id: addButton
+    height: 22
+    anchors.left: qty.right
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-left: 4
+    margin-right: 6
+    margin-bottom: 6
+    text: + Pacote
+    font: verdana-11px-antialised
+    color: #1a1200
+    background-color: #f2c400
+    border-width: 1
+    border-color: #ffe27a
+
+    $hover:
+      background-color: #ffd633
+
+    $disabled:
+      color: #5fd35f
+      background-color: #0f2a1b
+      border-color: #2e7d4a
+
+MailBasketRow < UIWidget
+  height: 30
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIItem
+    id: item
+    size: 24 24
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    virtual: true
+    phantom: true
+
+  UIWidget
+    id: portrait
+    size: 24 24
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    image-size: 24 24
+    visible: false
+    phantom: true
+
+  UIButton
+    id: removeButton
+    text: x
+    size: 20 18
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 5
+    font: verdana-11px-antialised
+    color: #ffffff
+    background-color: #7a1f1f
+    border-width: 1
+    border-color: #e04848
+
+    $hover:
+      background-color: #a02828
+
+  Label
+    id: name
+    anchors.left: parent.left
+    anchors.right: removeButton.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 34
+    margin-right: 4
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+UIWindow
+  id: mailWindow
+  size: 900 600
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  visible: false
+
+  UIWidget
+    id: headerBar
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 16
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: titleLabel
+    text: CORREIO
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 8
+    font: verdana-11px-antialised
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: myIdLabel
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: titleLabel.right
+    margin-left: 14
+    font: verdana-11px-antialised
+    color: #8fa7c4
+    text-auto-resize: true
+
+  UIButton
+    id: closeButton
+    text: X
+    size: 24 22
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 12
+    margin-right: 14
+    font: verdana-11px-antialised
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+    @onClick: modules.game_mail.hide()
+
+    $hover:
+      color: #ffffff
+      background-color: #7a1f1f
+      border-color: #e04848
+
+  UIWidget
+    id: side
+    width: 270
+    anchors.top: headerBar.bottom
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-top: 14
+    margin-right: 14
+    margin-bottom: 14
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1d3557
+
+    Label
+      id: rcptTitle
+      text: DESTINATARIO
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 10
+      margin-left: 10
+      font: verdana-11px-antialised
+      color: #f2c400
+      text-auto-resize: true
+
+    MailEdit
+      id: rcptEdit
+      anchors.top: rcptTitle.bottom
+      anchors.left: parent.left
+      anchors.right: rcptButton.left
+      margin-top: 6
+      margin-left: 10
+      margin-right: 4
+
+    MailDarkButton
+      id: rcptButton
+      text: Buscar
+      width: 64
+      anchors.top: rcptTitle.bottom
+      anchors.right: parent.right
+      margin-top: 6
+      margin-right: 10
+
+    UIWidget
+      id: rcptCard
+      height: 46
+      anchors.top: rcptEdit.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 6
+      margin-left: 10
+      margin-right: 10
+      background-color: #07101c
+      border-width: 1
+      border-color: #1d3557
+
+    Label
+      id: rcptAvatar
+      size: 32 32
+      anchors.left: rcptCard.left
+      anchors.verticalCenter: rcptCard.verticalCenter
+      margin-left: 7
+      text-align: center
+      font: verdana-11px-antialised
+      color: #ffffff
+      background-color: #24415f
+
+    Label
+      id: rcptName
+      anchors.top: rcptCard.top
+      anchors.left: rcptAvatar.right
+      anchors.right: rcptCard.right
+      margin-top: 8
+      margin-left: 8
+      margin-right: 6
+      height: 14
+      font: verdana-11px-antialised
+      color: #ffffff
+
+    Label
+      id: rcptInfo
+      anchors.top: rcptName.bottom
+      anchors.left: rcptName.left
+      anchors.right: rcptCard.right
+      margin-top: 2
+      margin-right: 6
+      height: 14
+      font: verdana-11px-rounded
+      color: #8fa7c4
+
+    MailHint
+      id: noteHint
+      text: Mensagem (opcional):
+      anchors.top: rcptCard.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 10
+      margin-left: 10
+
+    MailEdit
+      id: noteEdit
+      anchors.top: noteHint.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 4
+      margin-left: 10
+      margin-right: 10
+
+    Label
+      id: basketTitle
+      anchors.top: noteEdit.bottom
+      anchors.left: parent.left
+      margin-top: 12
+      margin-left: 10
+      font: verdana-11px-antialised
+      color: #f2c400
+      text-auto-resize: true
+
+    MailDarkButton
+      id: clearButton
+      text: Limpar
+      width: 60
+      height: 18
+      anchors.verticalCenter: basketTitle.verticalCenter
+      anchors.right: parent.right
+      margin-right: 10
+
+    ScrollablePanel
+      id: basketList
+      anchors.top: basketTitle.bottom
+      anchors.left: parent.left
+      anchors.right: basketScroll.left
+      anchors.bottom: feeLabel.top
+      margin-top: 6
+      margin-left: 10
+      margin-right: 2
+      margin-bottom: 6
+      vertical-scrollbar: basketScroll
+      layout:
+        type: verticalBox
+        spacing: 3
+
+    VerticalScrollBar
+      id: basketScroll
+      width: 12
+      anchors.top: basketTitle.bottom
+      anchors.right: parent.right
+      anchors.bottom: feeLabel.top
+      margin-top: 6
+      margin-right: 8
+      margin-bottom: 6
+      step: 33
+      pixels-scroll: true
+
+    Label
+      id: feeLabel
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: sendButton.top
+      margin-left: 10
+      margin-right: 10
+      margin-bottom: 6
+      height: 14
+      text-align: center
+      font: verdana-11px-rounded
+      color: #8fa7c4
+
+    MailButton
+      id: sendButton
+      text: Enviar encomenda
+      height: 30
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      margin-left: 10
+      margin-right: 10
+      margin-bottom: 10
+
+  MailTab
+    id: tabTEAM
+    text: Equipe
+    anchors.top: headerBar.bottom
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 16
+
+  MailTab
+    id: tabPCP
+    text: PC Pokemons
+    anchors.top: tabTEAM.top
+    anchors.left: tabTEAM.right
+    margin-left: 6
+
+  MailTab
+    id: tabPCI
+    text: PC Itens
+    anchors.top: tabTEAM.top
+    anchors.left: tabPCP.right
+    margin-left: 6
+
+  MailTab
+    id: tabBAG
+    text: Mochila
+    anchors.top: tabTEAM.top
+    anchors.left: tabPCI.right
+    margin-left: 6
+
+  MailEdit
+    id: searchEdit
+    width: 170
+    anchors.top: tabTEAM.bottom
+    anchors.left: parent.left
+    margin-top: 10
+    margin-left: 16
+
+  MailDarkButton
+    id: searchButton
+    text: Buscar
+    width: 64
+    anchors.top: searchEdit.top
+    anchors.left: searchEdit.right
+    margin-left: 4
+
+  Label
+    id: listHint
+    anchors.verticalCenter: searchEdit.verticalCenter
+    anchors.left: searchButton.right
+    anchors.right: side.left
+    margin-left: 10
+    margin-right: 10
+    height: 14
+    font: verdana-11px-antialised
+    color: #8fa7c4
+
+  Panel
+    id: catPanel
+    height: 46
+    anchors.top: searchEdit.bottom
+    anchors.left: parent.left
+    anchors.right: side.left
+    margin-top: 8
+    margin-left: 16
+    margin-right: 12
+    layout:
+      type: grid
+      cell-size: 84 20
+      cell-spacing: 4
+      num-columns: 6
+      flow: false
+
+  ScrollablePanel
+    id: grid
+    anchors.top: catPanel.bottom
+    anchors.left: parent.left
+    anchors.right: gridScroll.left
+    anchors.bottom: prevPage.top
+    margin-top: 6
+    margin-left: 16
+    margin-right: 4
+    margin-bottom: 8
+    vertical-scrollbar: gridScroll
+    layout:
+      type: grid
+      cell-size: 108 134
+      cell-spacing: 6
+      num-columns: 5
+      flow: true
+
+  VerticalScrollBar
+    id: gridScroll
+    width: 12
+    anchors.top: catPanel.bottom
+    anchors.right: side.left
+    anchors.bottom: prevPage.top
+    margin-top: 6
+    margin-right: 12
+    margin-bottom: 8
+    step: 70
+    pixels-scroll: true
+
+  MailDarkButton
+    id: prevPage
+    text: <
+    size: 30 22
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin-left: 16
+    margin-bottom: 14
+
+  Label
+    id: pageLabel
+    anchors.left: prevPage.right
+    anchors.right: nextPage.left
+    anchors.verticalCenter: prevPage.verticalCenter
+    height: 14
+    text-align: center
+    font: verdana-11px-antialised
+    color: #8fa7c4
+
+  MailDarkButton
+    id: nextPage
+    text: >
+    size: 30 22
+    anchors.right: side.left
+    anchors.bottom: parent.bottom
+    margin-right: 12
+    margin-bottom: 14

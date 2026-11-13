@@ -1,0 +1,1165 @@
+ClLabel < Label
+  font: verdana-11px-rounded
+  color: #dce8f5
+  phantom: true
+
+ClSmall < Label
+  font: verdana-11px-rounded
+  color: #8fa7c4
+  phantom: true
+
+ClButton < UIButton
+  height: 24
+  font: verdana-11px-rounded
+  color: #dce8f5
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    color: #ffffff
+    border-color: #f2c400
+
+  $disabled:
+    color: #5f7596
+    background-color: #0c1828
+    border-color: #1d3557
+
+ClGold < UIButton
+  height: 24
+  font: verdana-11px-antialised
+  color: #0a1320
+  background-color: #f2c400
+  border-width: 1
+  border-color: #ffe27a
+
+  $hover:
+    background-color: #ffd633
+
+  $disabled:
+    color: #5f7596
+    background-color: #0c1828
+    border-color: #1d3557
+
+ClGreen < ClGold
+  background-color: #5fd35f
+  border-color: #9cf09c
+
+  $hover:
+    background-color: #7fe57f
+
+ClRed < UIButton
+  height: 24
+  font: verdana-11px-rounded
+  color: #ffffff
+  background-color: #5a1717
+  border-width: 1
+  border-color: #e04848
+
+  $hover:
+    background-color: #7a1f1f
+
+  $disabled:
+    color: #5f7596
+    background-color: #0c1828
+    border-color: #1d3557
+
+ClEdit < TextEdit
+  height: 24
+  font: verdana-11px-antialised
+  color: #0a1320
+  background-color: #a2a2a2
+  border-width: 1
+  border-color: #24415f
+
+ClNav < UIButton
+  height: 32
+  font: verdana-11px-antialised
+  color: #dce8f5
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+  text-align: left
+  text-offset: 14 0
+
+ClBox < UIWidget
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+ClTitle < Label
+  height: 16
+  font: verdana-11px-rounded
+  color: #f2c400
+  phantom: true
+
+ClScroll < VerticalScrollBar
+  step: 30
+  pixels-scroll: true
+
+ClList < ScrollablePanel
+  layout:
+    type: verticalBox
+    spacing: 3
+
+ClPage < Panel
+  anchors.top: parent.top
+  anchors.bottom: parent.bottom
+  anchors.left: parent.left
+  anchors.right: parent.right
+  visible: false
+
+ClMemberRow < UIWidget
+  height: 30
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIWidget
+    id: dot
+    size: 8 8
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    background-color: #5f7596
+    phantom: true
+
+  ClLabel
+    id: name
+    width: 150
+    anchors.left: dot.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+
+  ClLabel
+    id: rank
+    width: 80
+    anchors.left: name.right
+    anchors.verticalCenter: parent.verticalCenter
+    color: #f2c400
+
+  ClSmall
+    id: level
+    width: 60
+    anchors.left: rank.right
+    anchors.verticalCenter: parent.verticalCenter
+
+  ClSmall
+    id: donated
+    width: 110
+    anchors.left: level.right
+    anchors.verticalCenter: parent.verticalCenter
+
+  ClRed
+    id: kickButton
+    size: 60 22
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 4
+    text: Expulsar
+
+  ClButton
+    id: demoteButton
+    size: 26 22
+    anchors.right: kickButton.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 4
+    text: -
+
+  ClButton
+    id: promoteButton
+    size: 26 22
+    anchors.right: demoteButton.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 4
+    text: +
+
+  ClButton
+    id: transferButton
+    size: 64 22
+    anchors.right: promoteButton.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 4
+    text: Lideranca
+
+ClPairRow < UIWidget
+  height: 30
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  ClLabel
+    id: name
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 10
+    width: 180
+
+  ClSmall
+    id: info
+    anchors.left: name.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 160
+
+  ClButton
+    id: secondButton
+    size: 70 22
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 4
+
+  ClGreen
+    id: firstButton
+    size: 70 22
+    anchors.right: secondButton.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 4
+
+ClCastleCard < UIWidget
+  height: 112
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIWidget
+    id: accent
+    width: 5
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    background-color: #5f7596
+    phantom: true
+
+  ClLabel
+    id: name
+    height: 16
+    anchors.top: parent.top
+    anchors.left: accent.right
+    anchors.right: parent.right
+    margin-top: 8
+    margin-left: 10
+    color: #ffffff
+
+  ClSmall
+    id: owner
+    height: 14
+    anchors.top: name.bottom
+    anchors.left: name.left
+    anchors.right: parent.right
+    margin-top: 4
+
+  ClSmall
+    id: status
+    height: 14
+    anchors.top: owner.bottom
+    anchors.left: name.left
+    anchors.right: parent.right
+    margin-top: 2
+
+  UIWidget
+    id: hpTrack
+    height: 14
+    anchors.top: status.bottom
+    anchors.left: name.left
+    anchors.right: parent.right
+    margin-top: 6
+    margin-right: 10
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  UIWidget
+    id: hpFill
+    width: 0
+    anchors.top: hpTrack.top
+    anchors.bottom: hpTrack.bottom
+    anchors.left: hpTrack.left
+    margin: 1
+    background-color: #e04848
+    phantom: true
+
+  ClLabel
+    id: hpText
+    anchors.fill: hpTrack
+    text-align: center
+    color: #ffffff
+
+  ClButton
+    id: guardButton
+    size: 92 22
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin-right: 10
+    margin-bottom: 8
+    text: Guardioes
+
+  ClGold
+    id: chestButton
+    size: 92 22
+    anchors.bottom: guardButton.bottom
+    anchors.right: guardButton.left
+    margin-right: 6
+    text: Abrir bau
+
+  ClGreen
+    id: gotoButton
+    size: 110 22
+    anchors.bottom: guardButton.bottom
+    anchors.right: chestButton.left
+    margin-right: 6
+    text: Ir para o castelo
+
+ClGuardRow < UIWidget
+  height: 40
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UICreature
+    id: look
+    size: 36 36
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 2
+    phantom: true
+
+  ClButton
+    id: actionButton
+    size: 70 22
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 4
+
+  ClLabel
+    id: name
+    height: 14
+    anchors.top: parent.top
+    anchors.left: look.right
+    anchors.right: actionButton.left
+    margin-top: 5
+    margin-left: 6
+
+  ClSmall
+    id: info
+    height: 14
+    anchors.top: name.bottom
+    anchors.left: name.left
+    anchors.right: name.right
+    margin-top: 2
+    color: #f2c400
+
+ClShopRow < UIWidget
+  height: 44
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIWidget
+    id: slotBg
+    size: 38 38
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  UIItem
+    id: item
+    size: 32 32
+    anchors.centerIn: slotBg
+    virtual: true
+    phantom: true
+
+  ClGreen
+    id: buyButton
+    width: 80
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 6
+    text: Comprar
+
+  ClEdit
+    id: qty
+    width: 44
+    anchors.right: buyButton.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 6
+    text: 1
+    max-length: 3
+
+  ClLabel
+    id: price
+    width: 110
+    anchors.right: qty.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 10
+    text-align: right
+    color: #f2c400
+
+  ClLabel
+    id: name
+    height: 14
+    anchors.top: parent.top
+    anchors.left: slotBg.right
+    anchors.right: price.left
+    margin-top: 7
+    margin-left: 8
+    color: #ffffff
+
+  ClSmall
+    id: sub
+    height: 14
+    anchors.top: name.bottom
+    anchors.left: name.left
+    anchors.right: name.right
+    margin-top: 2
+
+ClRankRow < UIWidget
+  height: 28
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  ClLabel
+    id: pos
+    width: 40
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    color: #f2c400
+
+  ClLabel
+    id: name
+    width: 220
+    anchors.left: pos.right
+    anchors.verticalCenter: parent.verticalCenter
+
+  ClSmall
+    id: points
+    width: 110
+    anchors.left: name.right
+    anchors.verticalCenter: parent.verticalCenter
+
+  ClSmall
+    id: castles
+    width: 100
+    anchors.left: points.right
+    anchors.verticalCenter: parent.verticalCenter
+
+  ClSmall
+    id: members
+    width: 100
+    anchors.left: castles.right
+    anchors.verticalCenter: parent.verticalCenter
+
+ClLogRow < UIWidget
+  height: 20
+
+  ClSmall
+    id: when
+    width: 84
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 6
+    color: #6f86a8
+
+  ClLabel
+    id: text
+    anchors.left: when.right
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 6
+
+UIWindow
+  id: clansWindow
+  size: 820 580
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  visible: false
+  draggable: true
+
+  ClLabel
+    id: titleLabel
+    text: CLA
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 18
+    color: #f2c400
+    text-auto-resize: true
+
+  ClSmall
+    id: subtitleLabel
+    anchors.top: titleLabel.bottom
+    anchors.left: titleLabel.left
+    margin-top: 4
+    text-auto-resize: true
+
+  UIButton
+    id: closeButton
+    text: X
+    size: 22 20
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 12
+    margin-right: 14
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+
+    $hover:
+      color: #ffffff
+      background-color: #7a1f1f
+      border-color: #e04848
+
+  ClLabel
+    id: warLabel
+    anchors.verticalCenter: closeButton.verticalCenter
+    anchors.right: closeButton.left
+    margin-right: 14
+    color: #8fa7c4
+    text-auto-resize: true
+
+  UIWidget
+    id: headerLine
+    height: 1
+    anchors.top: subtitleLabel.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 12
+    margin-left: 18
+    margin-right: 18
+    background-color: #24415f
+    phantom: true
+
+  Panel
+    id: nav
+    width: 170
+    anchors.top: headerLine.bottom
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    margin: 12 0 14 18
+    layout:
+      type: verticalBox
+      spacing: 4
+
+    ClNav
+      id: navOverview
+      text: Visao geral
+
+    ClNav
+      id: navMembers
+      text: Membros
+
+    ClNav
+      id: navAllies
+      text: Aliancas
+
+    ClNav
+      id: navCastles
+      text: Castelos e guerra
+
+    ClNav
+      id: navBank
+      text: Banco e historico
+
+    ClNav
+      id: navShop
+      text: Loja do cla
+
+    ClNav
+      id: navRanking
+      text: Ranking
+
+  Panel
+    id: content
+    anchors.top: headerLine.bottom
+    anchors.bottom: parent.bottom
+    anchors.left: nav.right
+    anchors.right: parent.right
+    margin: 12 18 14 14
+
+    ClPage
+      id: pageNone
+
+      ClTitle
+        id: createTitle
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        text: FUNDAR UM CLA
+
+      ClBox
+        id: createBox
+        height: 92
+        anchors.top: createTitle.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 6
+
+      ClSmall
+        id: createHint
+        height: 14
+        anchors.top: createBox.top
+        anchors.left: createBox.left
+        anchors.right: createBox.right
+        margin: 12 12 0 12
+
+      ClEdit
+        id: createEdit
+        width: 260
+        anchors.top: createHint.bottom
+        anchors.left: createBox.left
+        margin-top: 12
+        margin-left: 12
+        max-length: 20
+
+      ClGold
+        id: createButton
+        width: 150
+        anchors.verticalCenter: createEdit.verticalCenter
+        anchors.left: createEdit.right
+        margin-left: 10
+        text: Fundar cla
+
+      ClTitle
+        id: inviteTitle
+        anchors.top: createBox.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 16
+        text: CONVITES RECEBIDOS
+
+      ClScroll
+        id: invitesScroll
+        anchors.top: inviteTitle.bottom
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        margin-top: 6
+
+      ClList
+        id: invitesList
+        anchors.top: inviteTitle.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: invitesScroll.left
+        margin-top: 6
+        margin-right: 4
+        vertical-scrollbar: invitesScroll
+
+    ClPage
+      id: pageOverview
+
+      ClBox
+        id: infoBox
+        height: 150
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+      ClLabel
+        id: clanName
+        anchors.top: infoBox.top
+        anchors.left: infoBox.left
+        margin: 12 0 0 14
+        color: #f2c400
+        text-auto-resize: true
+
+      ClLabel
+        id: myRank
+        anchors.verticalCenter: clanName.verticalCenter
+        anchors.left: clanName.right
+        margin-left: 12
+        color: #0a1320
+        background-color: #f2c400
+        font: verdana-11px-antialised
+        text-auto-resize: true
+        text-offset: 6 0
+
+      ClSmall
+        id: leaderLabel
+        height: 14
+        anchors.top: clanName.bottom
+        anchors.left: clanName.left
+        anchors.right: infoBox.right
+        margin-top: 10
+
+      ClSmall
+        id: membersLabel
+        height: 14
+        anchors.top: leaderLabel.bottom
+        anchors.left: clanName.left
+        anchors.right: infoBox.right
+        margin-top: 4
+
+      ClSmall
+        id: pointsLabel
+        height: 14
+        anchors.top: membersLabel.bottom
+        anchors.left: clanName.left
+        anchors.right: infoBox.right
+        margin-top: 4
+
+      ClSmall
+        id: castlesLabel
+        height: 14
+        anchors.top: pointsLabel.bottom
+        anchors.left: clanName.left
+        anchors.right: infoBox.right
+        margin-top: 4
+
+      ClLabel
+        id: bonusLabel
+        height: 14
+        anchors.top: castlesLabel.bottom
+        anchors.left: clanName.left
+        anchors.right: infoBox.right
+        margin-top: 8
+        color: #5fd35f
+
+      ClTitle
+        id: motdTitle
+        anchors.top: infoBox.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 14
+        text: AVISO DO CLA
+
+      ClBox
+        id: motdBox
+        height: 60
+        anchors.top: motdTitle.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 6
+
+      ClLabel
+        id: motdLabel
+        anchors.fill: motdBox
+        margin: 8 10 8 10
+        text-wrap: true
+        text-align: topLeft
+
+      ClButton
+        id: motdButton
+        width: 110
+        anchors.top: motdBox.bottom
+        margin-top: 8
+        anchors.right: parent.right
+        text: Salvar aviso
+
+      ClEdit
+        id: motdEdit
+        anchors.top: motdBox.bottom
+        anchors.left: parent.left
+        anchors.right: motdButton.left
+        margin-top: 8
+        margin-right: 8
+        max-length: 200
+
+      ClRed
+        id: disbandButton
+        width: 140
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        text: Desfazer cla
+
+      ClButton
+        id: leaveButton
+        width: 120
+        anchors.bottom: parent.bottom
+        anchors.right: disbandButton.left
+        margin-right: 8
+        text: Sair do cla
+
+      ClSmall
+        id: dangerHint
+        anchors.verticalCenter: leaveButton.verticalCenter
+        anchors.left: parent.left
+        anchors.right: leaveButton.left
+        margin-right: 8
+        height: 14
+
+    ClPage
+      id: pageMembers
+
+      ClEdit
+        id: inviteEdit
+        width: 240
+        anchors.top: parent.top
+        anchors.left: parent.left
+        max-length: 30
+
+      ClGold
+        id: inviteButton
+        width: 120
+        anchors.verticalCenter: inviteEdit.verticalCenter
+        anchors.left: inviteEdit.right
+        margin-left: 8
+        text: Convidar
+
+      ClSmall
+        id: membersHint
+        anchors.verticalCenter: inviteEdit.verticalCenter
+        anchors.left: inviteButton.right
+        anchors.right: parent.right
+        margin-left: 10
+        height: 14
+
+      ClScroll
+        id: membersScroll
+        anchors.top: inviteEdit.bottom
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        margin-top: 10
+
+      ClList
+        id: membersList
+        anchors.top: inviteEdit.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: membersScroll.left
+        margin-top: 10
+        margin-right: 4
+        vertical-scrollbar: membersScroll
+
+    ClPage
+      id: pageAllies
+
+      ClEdit
+        id: allyEdit
+        width: 240
+        anchors.top: parent.top
+        anchors.left: parent.left
+        max-length: 32
+
+      ClGold
+        id: allyButton
+        width: 140
+        anchors.verticalCenter: allyEdit.verticalCenter
+        anchors.left: allyEdit.right
+        margin-left: 8
+        text: Propor alianca
+
+      ClSmall
+        id: alliesHint
+        height: 28
+        anchors.top: allyEdit.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 8
+        text-wrap: true
+
+      ClScroll
+        id: alliesScroll
+        anchors.top: alliesHint.bottom
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        margin-top: 6
+
+      ClList
+        id: alliesList
+        anchors.top: alliesHint.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: alliesScroll.left
+        margin-top: 6
+        margin-right: 4
+        vertical-scrollbar: alliesScroll
+
+    ClPage
+      id: pageCastles
+
+      Panel
+        id: guardPanel
+        width: 250
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+
+        ClTitle
+          id: guardTitle
+          anchors.top: parent.top
+          anchors.left: parent.left
+          anchors.right: parent.right
+          text: GUARDIOES
+
+        ClSmall
+          id: guardHint
+          height: 28
+          anchors.top: guardTitle.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin-top: 4
+          text-wrap: true
+
+        ClScroll
+          id: guardScroll
+          anchors.top: guardHint.bottom
+          anchors.bottom: parent.bottom
+          anchors.right: parent.right
+          margin-top: 6
+
+        ClList
+          id: guardList
+          anchors.top: guardHint.bottom
+          anchors.bottom: parent.bottom
+          anchors.left: parent.left
+          anchors.right: guardScroll.left
+          margin-top: 6
+          margin-right: 4
+          vertical-scrollbar: guardScroll
+
+      ClScroll
+        id: castlesScroll
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: guardPanel.left
+        margin-right: 10
+
+      ClList
+        id: castlesList
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: castlesScroll.left
+        margin-right: 4
+        vertical-scrollbar: castlesScroll
+
+    ClPage
+      id: pageBank
+
+      ClBox
+        id: bankBox
+        height: 110
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+      ClLabel
+        id: bankLabel
+        anchors.top: bankBox.top
+        anchors.left: bankBox.left
+        margin: 12 0 0 14
+        color: #f2c400
+        text-auto-resize: true
+
+      ClEdit
+        id: donateEdit
+        width: 160
+        anchors.top: bankLabel.bottom
+        anchors.left: bankLabel.left
+        margin-top: 12
+        max-length: 10
+
+      ClGold
+        id: donateButton
+        width: 130
+        anchors.verticalCenter: donateEdit.verticalCenter
+        anchors.left: donateEdit.right
+        margin-left: 8
+        text: Doar do PokeBank
+
+      ClEdit
+        id: withdrawEdit
+        width: 160
+        anchors.top: donateEdit.bottom
+        anchors.left: bankLabel.left
+        margin-top: 8
+        max-length: 10
+
+      ClButton
+        id: withdrawButton
+        width: 130
+        anchors.verticalCenter: withdrawEdit.verticalCenter
+        anchors.left: withdrawEdit.right
+        margin-left: 8
+        text: Sacar (lider)
+
+      ClSmall
+        id: bankHint
+        anchors.top: donateEdit.top
+        anchors.left: donateButton.right
+        anchors.right: bankBox.right
+        margin-left: 14
+        margin-right: 12
+        height: 56
+        text-wrap: true
+        text: O banco do cla paga os guardioes dos castelos. Todo valor doado fica registrado no historico.
+
+      ClTitle
+        id: logTitle
+        anchors.top: bankBox.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 14
+        text: HISTORICO DO CLA
+
+      ClScroll
+        id: logScroll
+        anchors.top: logTitle.bottom
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        margin-top: 6
+
+      ClList
+        id: logList
+        anchors.top: logTitle.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: logScroll.left
+        margin-top: 6
+        margin-right: 4
+        vertical-scrollbar: logScroll
+
+    ClPage
+      id: pageShop
+
+      ClSmall
+        id: shopHint
+        height: 14
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        text: So membros compram aqui, com o gp do proprio PokeBank. Itens dourados exigem castelo.
+
+      ClScroll
+        id: shopScroll
+        anchors.top: shopHint.bottom
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        margin-top: 8
+
+      ClList
+        id: shopList
+        anchors.top: shopHint.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: shopScroll.left
+        margin-top: 8
+        margin-right: 4
+        vertical-scrollbar: shopScroll
+
+    ClPage
+      id: pageRanking
+
+      ClTitle
+        id: rankTitle
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        text: TOP 10 CLAS (pontos de conquista e defesa)
+
+      ClList
+        id: rankList
+        anchors.top: rankTitle.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 8
+
+ClGuardHiredRow < UIWidget
+  height: 58
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UICreature
+    id: look
+    size: 36 36
+    anchors.left: parent.left
+    anchors.top: parent.top
+    margin-left: 2
+    margin-top: 2
+    phantom: true
+
+  ClLabel
+    id: name
+    height: 14
+    anchors.top: parent.top
+    anchors.left: look.right
+    anchors.right: parent.right
+    margin-top: 4
+    margin-left: 6
+
+  ClSmall
+    id: info
+    height: 14
+    anchors.top: name.bottom
+    anchors.left: name.left
+    anchors.right: name.right
+    margin-top: 2
+    color: #f2c400
+
+  ClButton
+    id: actionButton
+    size: 70 20
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-right: 4
+    margin-bottom: 3
+
+  ClButton
+    id: autoButton
+    size: 46 20
+    anchors.right: actionButton.left
+    anchors.bottom: actionButton.bottom
+    margin-right: 4
+    text: Auto
+    !tooltip: tr('Volta para o lugar automatico')
+
+  ClGold
+    id: posButton
+    size: 46 20
+    anchors.right: autoButton.left
+    anchors.bottom: actionButton.bottom
+    margin-right: 4
+    text: Aqui
+
+ClVaultRow < UIWidget
+  height: 40
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIItem
+    id: icon
+    size: 32 32
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    virtual: true
+    phantom: true
+
+  ClButton
+    id: actionButton
+    size: 64 22
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 4
+
+  ClLabel
+    id: name
+    height: 14
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: actionButton.left
+    margin-top: 5
+    margin-left: 42
+
+  ClSmall
+    id: info
+    height: 14
+    anchors.top: name.bottom
+    anchors.left: name.left
+    anchors.right: name.right
+    margin-top: 2
+    color: #f2c400

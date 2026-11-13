@@ -1,0 +1,102 @@
+UpdaterOverlay < UIWidget
+  anchors.fill: parent
+  background-color: #070d17ee
+  focusable: true
+  phantom: false
+
+  UIWidget
+    id: box
+    size: 400 168
+    anchors.centerIn: parent
+    background-color: #0c1828
+    border-width: 1
+    border-color: #f2c400
+
+    UIWidget
+      id: topBar
+      height: 3
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      background-color: #f2c400
+
+    Label
+      id: title
+      anchors.top: topBar.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 12
+      text-align: center
+      font: verdana-11px-rounded
+      color: #f2c400
+      text: Atualizacao do cliente
+
+    Label
+      id: status
+      anchors.top: title.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 12
+      margin-left: 16
+      margin-right: 16
+      text-align: center
+      font: verdana-11px-rounded
+      color: #dce8f5
+      text-wrap: true
+      height: 28
+
+    UIWidget
+      id: barBack
+      height: 14
+      anchors.top: status.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 6
+      margin-left: 20
+      margin-right: 20
+      background-color: #101f3e
+      border-width: 1
+      border-color: #24415f
+
+      UIWidget
+        id: barFill
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        margin: 1
+        width: 0
+        background-color: #f2c400
+
+    Label
+      id: detail
+      anchors.top: barBack.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 6
+      margin-left: 16
+      margin-right: 16
+      text-align: center
+      font: verdana-11px-rounded
+      color: #8fa7c4
+
+    Button
+      id: retryButton
+      width: 120
+      anchors.bottom: parent.bottom
+      anchors.right: parent.horizontalCenter
+      margin-bottom: 12
+      margin-right: 6
+      text: Tentar de novo
+      visible: false
+      @onClick: modules.client_updater.retry()
+
+    Button
+      id: continueButton
+      width: 120
+      anchors.bottom: parent.bottom
+      anchors.left: parent.horizontalCenter
+      margin-bottom: 12
+      margin-left: 6
+      text: Continuar
+      visible: false
+      @onClick: modules.client_updater.close()

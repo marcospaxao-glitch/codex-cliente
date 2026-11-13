@@ -1,0 +1,190 @@
+DungeonCard < UIWidget
+  size: 318 120
+  background-color: #0a1320
+  border-width: 2
+  border-color: #0a1320
+  focusable: false
+
+  $hover:
+    border-color: #6f86a8
+
+  $on:
+    border-color: #f2c400
+
+  UIWidget
+    id: banner
+    anchors.fill: parent
+    margin: 3
+    phantom: true
+
+  UIWidget
+    id: shade
+    anchors.fill: banner
+    background-color: #0a1320
+    opacity: 0.65
+    phantom: true
+    visible: false
+
+  Label
+    id: rooms
+    anchors.right: banner.right
+    anchors.top: banner.top
+    margin-right: 4
+    margin-top: 4
+    height: 16
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #ffffff
+    background-color: #0a1320d8
+    padding: 1 5 1 5
+    phantom: true
+
+  Label
+    id: price
+    anchors.right: banner.right
+    anchors.bottom: banner.bottom
+    margin-right: 4
+    margin-bottom: 4
+    height: 16
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #0a1320
+    background-color: #f2c400
+    padding: 1 5 1 5
+    phantom: true
+
+  Label
+    id: soon
+    anchors.centerIn: banner
+    text: EM BREVE
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #f2c400
+    background-color: #0a1320
+    padding: 3 8 3 8
+    phantom: true
+    visible: false
+
+MainWindow
+  id: dungeonWindow
+  text: Dungeons
+  size: 610 520
+  @onEscape: modules.game_dungeon.hide()
+
+  VerticalScrollBar
+    id: listScroll
+    anchors.top: parent.top
+    anchors.left: list.right
+    anchors.bottom: bottomBar.top
+    margin-bottom: 6
+    step: 124
+    pixels-scroll: true
+
+  ScrollablePanel
+    id: list
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.bottom: bottomBar.top
+    width: 322
+    margin-bottom: 6
+    vertical-scrollbar: listScroll
+    layout:
+      type: verticalBox
+      spacing: 4
+
+  UIWidget
+    id: detail
+    anchors.top: parent.top
+    anchors.left: listScroll.right
+    anchors.right: parent.right
+    anchors.bottom: bottomBar.top
+    margin-left: 8
+    margin-bottom: 6
+    background-color: #0a1320
+    border-width: 1
+    border-color: #101f3e
+
+    UIWidget
+      id: art
+      size: 200 285
+      anchors.top: parent.top
+      anchors.horizontalCenter: parent.horizontalCenter
+      margin-top: 8
+
+    Label
+      id: name
+      anchors.top: art.bottom
+      anchors.horizontalCenter: parent.horizontalCenter
+      margin-top: 8
+      text-auto-resize: true
+      font: verdana-11px-rounded
+      color: #f2c400
+
+    Label
+      id: roomsInfo
+      anchors.top: name.bottom
+      anchors.horizontalCenter: parent.horizontalCenter
+      margin-top: 6
+      text-auto-resize: true
+      font: verdana-11px-rounded
+      color: #dce8f5
+
+    Label
+      id: priceInfo
+      anchors.top: roomsInfo.bottom
+      anchors.horizontalCenter: parent.horizontalCenter
+      margin-top: 4
+      text-auto-resize: true
+      font: verdana-11px-rounded
+      color: #dce8f5
+
+    Label
+      id: rules
+      anchors.top: priceInfo.bottom
+      anchors.horizontalCenter: parent.horizontalCenter
+      margin-top: 4
+      text: Sozinho - derrote e abra o bau
+      text-auto-resize: true
+      font: verdana-11px-rounded
+      color: #6f86a8
+
+    Button
+      id: enterButton
+      text: Entrar
+      width: 120
+      height: 26
+      anchors.bottom: parent.bottom
+      anchors.horizontalCenter: parent.horizontalCenter
+      margin-bottom: 10
+
+  UIWidget
+    id: bottomBar
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    height: 26
+
+    Label
+      id: tokens
+      anchors.left: parent.left
+      anchors.verticalCenter: parent.verticalCenter
+      text-auto-resize: true
+      font: verdana-11px-rounded
+      color: #f2c400
+
+    Button
+      id: refreshButton
+      text: Atualizar
+      width: 80
+      anchors.right: closeButton.left
+      anchors.verticalCenter: parent.verticalCenter
+      margin-right: 6
+      @onClick: modules.game_dungeon.refresh()
+
+    Button
+      id: closeButton
+      text: Fechar
+      width: 80
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      @onClick: modules.game_dungeon.hide()

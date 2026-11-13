@@ -1,0 +1,10 @@
+Module
+  name: game_missions
+  description: Missoes diarias e loja de pontos
+  author: Marcos
+  autoload: true
+  autoload-priority: 1004
+  scripts: [ missions ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

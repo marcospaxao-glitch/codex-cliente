@@ -1,0 +1,31 @@
+PhoneNotify < UIWidget
+  size: 44 44
+  background-color: #0a1320e0
+  border-width: 1
+  border-color: #f2c400
+  focusable: false
+
+  $hover:
+    background-color: #101f3e
+
+  UIWidget
+    id: icon
+    size: 20 20
+    anchors.centerIn: parent
+    image-source: /images/topbuttons/codex/mail
+    image-color: #f2c400
+    phantom: true
+
+  Label
+    id: badge
+    anchors.right: parent.right
+    anchors.top: parent.top
+    margin-right: -4
+    margin-top: -4
+    height: 14
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #0a1320
+    background-color: #f2c400
+    padding: 0 3 0 3
+    phantom: true

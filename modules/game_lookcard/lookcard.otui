@@ -1,0 +1,214 @@
+LcCard < UIWidget
+  width: 304
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  padding: 1
+  layout:
+    type: verticalBox
+    fit-children: true
+    spacing: 0
+
+LcTopBar < UIWidget
+  height: 3
+  background-color: #f2c400
+  phantom: true
+
+LcHeader < UIWidget
+  height: 56
+  background-color: #101f3e
+  phantom: true
+
+  UIWidget
+    id: slot
+    size: 44 44
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    background-color: #07101c
+    border-width: 1
+    border-color: #f2c400
+    phantom: true
+
+  UIItem
+    id: item
+    size: 32 32
+    anchors.centerIn: slot
+    virtual: true
+    phantom: true
+    visible: false
+
+  UICreature
+    id: creature
+    size: 42 42
+    anchors.centerIn: slot
+    phantom: true
+    visible: false
+
+  Label
+    id: title
+    height: 16
+    anchors.top: slot.top
+    anchors.left: slot.right
+    anchors.right: parent.right
+    margin-top: 6
+    margin-left: 10
+    margin-right: 8
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+  Label
+    id: subtitle
+    height: 14
+    anchors.top: title.bottom
+    anchors.left: title.left
+    anchors.right: title.right
+    margin-top: 4
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+LcTags < UIWidget
+  height: 28
+  background-color: #0c1828
+  phantom: true
+  padding: 5 8 5 8
+  layout:
+    type: horizontalBox
+    spacing: 5
+
+LcTag < Label
+  height: 18
+  font: verdana-11px-antialised
+  text-align: center
+  color: #ffffff
+  border-width: 1
+  border-color: #00000066
+  phantom: true
+
+LcSection < UIWidget
+  height: 22
+  margin-top: 6
+  background-color: #132744
+  phantom: true
+
+  UIWidget
+    id: bar
+    width: 3
+    anchors.left: parent.left
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: title
+    anchors.left: bar.right
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 9
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+LcGrid < UIWidget
+  height: 18
+  phantom: true
+
+  UIWidget
+    id: half
+    width: 1
+    anchors.horizontalCenter: parent.horizontalCenter
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    phantom: true
+
+  Label
+    id: label1
+    width: 62
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 16
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+  Label
+    id: value1
+    anchors.left: label1.right
+    anchors.right: half.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 4
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: label2
+    width: 52
+    anchors.left: half.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+  Label
+    id: value2
+    anchors.left: label2.right
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 10
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+LcRow < UIWidget
+  height: 18
+  phantom: true
+
+  Label
+    id: label
+    width: 62
+    height: 14
+    anchors.left: parent.left
+    anchors.top: parent.top
+    margin-left: 16
+    margin-top: 2
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+  Label
+    id: value
+    anchors.left: label.right
+    anchors.right: parent.right
+    anchors.top: parent.top
+    margin-top: 2
+    margin-right: 10
+    font: verdana-11px-rounded
+    color: #dce8f5
+    text-wrap: true
+    phantom: true
+
+LcText < Label
+  margin-left: 12
+  margin-right: 12
+  margin-top: 6
+  margin-bottom: 2
+  font: verdana-11px-rounded
+  color: #c8d6ec
+  text-wrap: true
+  text-auto-resize: true
+  phantom: true
+
+LcSpacer < UIWidget
+  height: 6
+  phantom: true
+
+Panel
+  id: lookCardRoot
+  anchors.fill: gameMapPanel
+  focusable: false
+  phantom: true

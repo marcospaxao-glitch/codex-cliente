@@ -1,0 +1,10 @@
+Module
+  name: game_adminpanel
+  description: Painel ADM (staff)
+  author: Marcos
+  autoload: true
+  autoload-priority: 1015
+  scripts: [ adminpanel ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

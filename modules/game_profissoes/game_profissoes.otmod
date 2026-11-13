@@ -1,0 +1,12 @@
+Module
+  name: game_profissoes
+  description: Sistema de Profissoes - Pokebolas V8 Visual Store
+  author: PokeFans
+  sandboxed: true
+  scripts: [profissoes]
+  autoload: true
+  autoload-priority: 1002
+  @onLoad: |
+    dofile 'profissoes'
+    init()
+  @onUnload: terminate()

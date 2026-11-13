@@ -1,0 +1,872 @@
+PBTitleBar < UIWidget
+  size: 4 14
+  background-color: #f2c400
+  phantom: true
+
+PBTitle < Label
+  font: verdana-11px-rounded
+  color: #f2c400
+  text-auto-resize: true
+  phantom: true
+
+PBCaption < Label
+  font: verdana-11px-rounded
+  color: #8fa7c4
+  text-auto-resize: true
+  phantom: true
+
+PBWalletCard < Panel
+  size: 100 46
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIWidget
+    id: icon
+    size: 20 20
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 7
+    phantom: true
+
+  Label
+    id: name
+    anchors.top: parent.top
+    anchors.left: icon.right
+    anchors.right: parent.right
+    margin-top: 7
+    margin-left: 6
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  Label
+    id: value
+    anchors.top: name.bottom
+    anchors.left: name.left
+    anchors.right: parent.right
+    margin-top: 2
+    margin-right: 4
+    font: verdana-11px-rounded
+    color: #ffffff
+    text: 0
+    phantom: true
+
+PBTab < UIButton
+  size: 99 28
+  font: verdana-11px-rounded
+  color: #8fa7c4
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    color: #ffffff
+    background-color: #101f3e
+
+  $on:
+    color: #f2c400
+    background-color: #1f1a06
+    border-color: #f2c400
+
+PBChip < UIButton
+  size: 62 24
+  font: verdana-11px-rounded
+  color: #dce8f5
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    border-color: #f2c400
+    color: #ffffff
+
+  $on:
+    background-color: #2a2306
+    border-color: #f2c400
+    color: #f2c400
+
+PBCurrency < UIButton
+  size: 99 26
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    border-color: #4a6a94
+
+  $on:
+    background-color: #16294a
+    border-color: #f2c400
+
+  Label
+    id: label
+    anchors.centerIn: parent
+    margin-left: 11
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: true
+    phantom: true
+
+  UIWidget
+    id: icon
+    size: 16 16
+    anchors.right: label.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 6
+    image-size: 16 16
+    phantom: true
+
+PBInput < TextEdit
+  height: 30
+  font: verdana-11px-antialised
+  color: #0a1320
+  text-margin: 8
+  selection-color: #ffffff
+  selection-background-color: #2b5a8a
+
+  $focus:
+    border-color: #f2c400
+
+PBAction < UIButton
+  height: 34
+  font: verdana-11px-rounded
+  color: #ffffff
+  background-color: #1d5a31
+  border-width: 1
+  border-color: #5fd35f
+
+  $hover:
+    background-color: #277a42
+    border-color: #8ef08e
+
+  $disabled:
+    color: #4a5f7a
+    background-color: #142238
+    border-color: #1d3557
+
+PBSecondary < UIButton
+  height: 26
+  font: verdana-11px-rounded
+  color: #9fd0ff
+  background-color: #0c1828
+  border-width: 1
+  border-color: #2b5a8a
+
+  $hover:
+    color: #ffffff
+    border-color: #9fd0ff
+
+PBHistoryRow < Panel
+  height: 40
+  background-color: #0c1828
+  border-width: 1
+  border-color: #16294a
+
+  UIWidget
+    id: accent
+    width: 3
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    phantom: true
+
+  Label
+    id: title
+    anchors.top: parent.top
+    anchors.left: accent.right
+    margin-top: 5
+    margin-left: 9
+    font: verdana-11px-rounded
+    color: #ffffff
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: detail
+    anchors.bottom: parent.bottom
+    anchors.left: title.left
+    margin-bottom: 5
+    font: verdana-11px-rounded
+    color: #6f86a8
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: amount
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 5
+    margin-right: 10
+    font: verdana-11px-rounded
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: after
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin-bottom: 5
+    margin-right: 10
+    font: verdana-11px-rounded
+    color: #6f86a8
+    text-auto-resize: true
+    phantom: true
+
+UIWindow
+  id: PokeBankWindow
+  size: 440 630
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  draggable: true
+
+  UIWidget
+    id: headerBar
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 12
+    margin-left: 14
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: windowTitle
+    text: POKEBANK
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  UIButton
+    id: btnClose
+    text: X
+    size: 22 20
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 10
+    margin-right: 12
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+
+    $hover:
+      color: #ffffff
+      background-color: #7a1f1f
+      border-color: #e04848
+
+  Panel
+    id: headerPanel
+    anchors.top: headerBar.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 12
+    margin-left: 14
+    margin-right: 14
+    height: 100
+    background-color: #101f3e
+    border-width: 1
+    border-color: #2b4a75
+
+    UIWidget
+      id: cardStripe
+      height: 3
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      background-color: #f2c400
+      phantom: true
+
+    Label
+      id: accountLabel
+      text: CONTA ----
+      anchors.top: cardStripe.bottom
+      anchors.left: parent.left
+      margin-top: 8
+      margin-left: 12
+      font: verdana-11px-rounded
+      color: #8fa7c4
+      text-auto-resize: true
+      phantom: true
+
+    Label
+      id: holderLabel
+      anchors.top: accountLabel.top
+      anchors.right: parent.right
+      margin-right: 12
+      font: verdana-11px-rounded
+      color: #dce8f5
+      text-auto-resize: true
+      phantom: true
+
+    UIWidget
+      id: goldIcon
+      size: 24 24
+      anchors.top: accountLabel.bottom
+      anchors.left: parent.left
+      margin-top: 10
+      margin-left: 12
+      image-source: /modules/game_pokemonmanager/images/gold.png
+      image-size: 24 24
+      phantom: true
+
+    Label
+      id: balanceLabel
+      text: 0 gp
+      anchors.verticalCenter: goldIcon.verticalCenter
+      anchors.left: goldIcon.right
+      margin-left: 8
+      font: verdana-11px-rounded
+      color: #f2c400
+      text-auto-resize: true
+      phantom: true
+
+    Label
+      id: balanceCaption
+      text: SALDO EM CONTA
+      anchors.verticalCenter: goldIcon.verticalCenter
+      anchors.right: parent.right
+      margin-right: 12
+      font: verdana-11px-rounded
+      color: #4a5f7a
+      text-auto-resize: true
+      phantom: true
+
+    Label
+      id: moneyLabel
+      text: Na mochila: 0 gp
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      margin-bottom: 9
+      margin-left: 12
+      font: verdana-11px-rounded
+      color: #8fa7c4
+      text-auto-resize: true
+      phantom: true
+
+    Label
+      id: totalLabel
+      anchors.bottom: parent.bottom
+      anchors.right: parent.right
+      margin-bottom: 9
+      margin-right: 12
+      font: verdana-11px-rounded
+      color: #8fa7c4
+      text-auto-resize: true
+      phantom: true
+
+  Panel
+    id: walletPanel
+    anchors.top: headerPanel.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 8
+    margin-left: 14
+    margin-right: 14
+    height: 46
+    layout:
+      type: horizontalBox
+      spacing: 6
+
+    PBWalletCard
+      id: walletPokecoins
+      width: 133
+
+    PBWalletCard
+      id: walletDonate
+      width: 133
+
+    PBWalletCard
+      id: walletTokens
+      width: 132
+
+  Panel
+    id: tabsPanel
+    anchors.top: walletPanel.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 12
+    margin-left: 14
+    margin-right: 14
+    height: 28
+    layout:
+      type: horizontalBox
+      spacing: 4
+
+    PBTab
+      id: tabDeposit
+      text: Depositar
+
+    PBTab
+      id: tabWithdraw
+      text: Sacar
+
+    PBTab
+      id: tabTransfer
+      text: Transferir
+
+    PBTab
+      id: tabHistory
+      text: Extrato
+
+  Panel
+    id: currencyBar
+    anchors.top: tabsPanel.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 6
+    margin-left: 14
+    margin-right: 14
+    height: 26
+    layout:
+      type: horizontalBox
+      spacing: 4
+
+    PBCurrency
+      id: curGOLD
+
+    PBCurrency
+      id: curPOKECOINS
+
+    PBCurrency
+      id: curDONATE
+
+    PBCurrency
+      id: curTOKENS
+
+  Panel
+    id: notificationBar
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-bottom: 12
+    margin-left: 14
+    margin-right: 14
+    height: 26
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1d3557
+
+    Label
+      id: notificationLabel
+      anchors.fill: parent
+      margin-left: 8
+      margin-right: 8
+      font: verdana-11px-rounded
+      text-align: center
+      color: #6f86a8
+      text: PokeBank Digital
+
+  Panel
+    id: contentPanel
+    anchors.top: currencyBar.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: notificationBar.top
+    margin-top: 8
+    margin-left: 14
+    margin-right: 14
+    margin-bottom: 8
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1d3557
+
+    Panel
+      id: panelDeposit
+      anchors.fill: parent
+
+      PBTitleBar
+        id: depBar
+        anchors.top: parent.top
+        anchors.left: parent.left
+        margin-top: 12
+        margin-left: 12
+
+      PBTitle
+        id: depTitle
+        text: DEPOSITAR GOLD
+        anchors.verticalCenter: depBar.verticalCenter
+        anchors.left: depBar.right
+        margin-left: 6
+
+      PBCaption
+        id: depAvailable
+        anchors.verticalCenter: depBar.verticalCenter
+        anchors.right: parent.right
+        margin-right: 12
+
+      PBInput
+        id: depositAmount
+        anchors.top: depBar.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 10
+        margin-left: 12
+        margin-right: 12
+
+      Panel
+        id: depChips
+        anchors.top: depositAmount.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 8
+        margin-left: 12
+        margin-right: 12
+        height: 24
+        layout:
+          type: horizontalBox
+          spacing: 5
+
+        PBChip
+          id: btnDeposit1k
+          text: 1k
+
+        PBChip
+          id: btnDeposit10k
+          text: 10k
+
+        PBChip
+          id: btnDeposit100k
+          text: 100k
+
+        PBChip
+          id: btnDeposit1kk
+          text: 1kk
+
+        PBChip
+          id: btnDepositAll
+          text: TUDO
+          width: 70
+
+      PBCaption
+        id: depPreview
+        anchors.top: depChips.bottom
+        anchors.left: parent.left
+        margin-top: 12
+        margin-left: 12
+
+      PBCaption
+        id: depNote
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: btnDeposit.top
+        margin-left: 12
+        margin-bottom: 10
+        color: #4a5f7a
+
+      PBAction
+        id: btnDeposit
+        text: DEPOSITAR
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 12
+        margin-right: 12
+        margin-bottom: 12
+
+    Panel
+      id: panelWithdraw
+      anchors.fill: parent
+      visible: false
+
+      PBTitleBar
+        id: witBar
+        anchors.top: parent.top
+        anchors.left: parent.left
+        margin-top: 12
+        margin-left: 12
+
+      PBTitle
+        id: witTitle
+        text: SACAR GOLD
+        anchors.verticalCenter: witBar.verticalCenter
+        anchors.left: witBar.right
+        margin-left: 6
+
+      PBCaption
+        id: witAvailable
+        anchors.verticalCenter: witBar.verticalCenter
+        anchors.right: parent.right
+        margin-right: 12
+
+      PBInput
+        id: withdrawAmount
+        anchors.top: witBar.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 10
+        margin-left: 12
+        margin-right: 12
+
+      Panel
+        id: witChips
+        anchors.top: withdrawAmount.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 8
+        margin-left: 12
+        margin-right: 12
+        height: 24
+        layout:
+          type: horizontalBox
+          spacing: 5
+
+        PBChip
+          id: btnWithdraw1k
+          text: 1k
+
+        PBChip
+          id: btnWithdraw10k
+          text: 10k
+
+        PBChip
+          id: btnWithdraw100k
+          text: 100k
+
+        PBChip
+          id: btnWithdraw1kk
+          text: 1kk
+
+        PBChip
+          id: btnWithdrawAll
+          text: TUDO
+          width: 70
+
+      PBCaption
+        id: witPreview
+        anchors.top: witChips.bottom
+        anchors.left: parent.left
+        margin-top: 12
+        margin-left: 12
+
+      PBCaption
+        id: witNote
+        text: O saque precisa de capacidade e espaco livre na mochila.
+        anchors.left: parent.left
+        anchors.bottom: btnWithdraw.top
+        margin-left: 12
+        margin-bottom: 10
+        color: #4a5f7a
+
+      PBAction
+        id: btnWithdraw
+        text: SACAR
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 12
+        margin-right: 12
+        margin-bottom: 12
+
+    Panel
+      id: panelTransfer
+      anchors.fill: parent
+      visible: false
+
+      PBTitleBar
+        id: traBar
+        anchors.top: parent.top
+        anchors.left: parent.left
+        margin-top: 12
+        margin-left: 12
+
+      PBTitle
+        id: traTitle
+        text: TRANSFERIR GOLD
+        anchors.verticalCenter: traBar.verticalCenter
+        anchors.left: traBar.right
+        margin-left: 6
+
+      PBCaption
+        text: ID do jogador (ou nome)
+        anchors.top: traBar.bottom
+        anchors.left: parent.left
+        margin-top: 14
+        margin-left: 12
+
+      PBInput
+        id: transferTarget
+        anchors.top: prev.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 4
+        margin-left: 12
+        margin-right: 12
+
+      Label
+        id: targetName
+        anchors.top: transferTarget.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 4
+        margin-left: 12
+        margin-right: 12
+        height: 16
+        font: verdana-11px-rounded
+        color: #6f86a8
+        text: Digite o ID que aparece em CONTA no PokeBank do jogador.
+
+      PBCaption
+        text: Valor
+        anchors.top: targetName.bottom
+        anchors.left: parent.left
+        margin-top: 10
+        margin-left: 12
+
+      PBInput
+        id: transferAmount
+        anchors.top: prev.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 4
+        margin-left: 12
+        margin-right: 12
+
+      Label
+        id: transferInfo
+        anchors.top: transferAmount.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 10
+        margin-left: 12
+        margin-right: 12
+        height: 44
+        font: verdana-11px-rounded
+        color: #8fa7c4
+        text-wrap: true
+
+      UIButton
+        id: btnTransferCancel
+        text: Cancelar
+        height: 34
+        width: 90
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        margin-left: 12
+        margin-bottom: 12
+        font: verdana-11px-rounded
+        color: #dce8f5
+        background-color: #101f3e
+        border-width: 1
+        border-color: #24415f
+        visible: false
+
+        $hover:
+          border-color: #e04848
+
+      PBAction
+        id: btnTransfer
+        text: TRANSFERIR
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 12
+        margin-right: 12
+        margin-bottom: 12
+
+    Panel
+      id: panelHistory
+      anchors.fill: parent
+      visible: false
+
+      Panel
+        id: historyFilters
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 10
+        margin-left: 10
+        margin-right: 10
+        height: 24
+        layout:
+          type: horizontalBox
+          spacing: 5
+
+        PBChip
+          id: filterAll
+          text: Tudo
+
+        PBChip
+          id: filterGold
+          text: Gold
+
+        PBChip
+          id: filterPokecoins
+          text: PokeCoins
+          width: 80
+
+        PBChip
+          id: filterDonate
+          text: Donate
+
+      ScrollablePanel
+        id: historyPanel
+        anchors.top: historyFilters.bottom
+        anchors.left: parent.left
+        anchors.right: historyScrollBar.left
+        anchors.bottom: exportDir.top
+        margin-top: 8
+        margin-left: 10
+        margin-right: 4
+        margin-bottom: 8
+        vertical-scrollbar: historyScrollBar
+        layout:
+          type: verticalBox
+          spacing: 4
+
+      PBCaption
+        id: exportCaption
+        text: Salvar PDF em:
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        margin-left: 10
+        margin-bottom: 16
+
+      PBInput
+        id: exportDir
+        height: 26
+        anchors.left: exportCaption.right
+        anchors.right: exportBrowse.left
+        anchors.bottom: parent.bottom
+        margin-left: 6
+        margin-right: 4
+        margin-bottom: 10
+
+      PBChip
+        id: exportBrowse
+        text: ...
+        width: 30
+        height: 26
+        anchors.right: exportPdf.left
+        anchors.bottom: parent.bottom
+        margin-right: 6
+        margin-bottom: 10
+
+      PBChip
+        id: exportPdf
+        text: Baixar PDF
+        width: 92
+        height: 26
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-right: 10
+        margin-bottom: 10
+
+      VerticalScrollBar
+        id: historyScrollBar
+        anchors.top: historyFilters.bottom
+        anchors.bottom: exportDir.top
+        margin-top: 8
+        margin-bottom: 8
+        anchors.right: parent.right
+        margin-right: 8
+        step: 24
+        pixels-scroll: true

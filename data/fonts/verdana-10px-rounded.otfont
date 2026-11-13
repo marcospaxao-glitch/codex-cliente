@@ -1,0 +1,7 @@
+Font
+  name: verdana-10px-rounded
+  texture: pm-verdana
+  height: 13
+  glyph-size: 13 13
+  space-width: 3
+  spacing: 0 -4

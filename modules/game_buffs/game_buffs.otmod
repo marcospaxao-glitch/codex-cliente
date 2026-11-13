@@ -1,0 +1,10 @@
+Module
+  name: game_buffs
+  description: Efeitos de itens com tempo (lupa, captura, exp...) no canto do mapa
+  author: Marcos
+  autoload: true
+  autoload-priority: 1011
+  scripts: [ buffs ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

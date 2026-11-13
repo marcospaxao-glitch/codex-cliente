@@ -1,0 +1,349 @@
+DRCell < UIWidget
+  size: 104 104
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIWidget
+    id: slotBg
+    size: 50 50
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 10
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  UIItem
+    id: item
+    size: 32 32
+    anchors.centerIn: slotBg
+    virtual: true
+    phantom: true
+
+  UIWidget
+    id: shade
+    anchors.fill: slotBg
+    background-color: #000000aa
+    visible: false
+    phantom: true
+
+  UIWidget
+    id: lock
+    size: 18 18
+    anchors.centerIn: slotBg
+    image-source: /modules/game_dailyreward/images/lock
+    visible: false
+    phantom: true
+
+  UIWidget
+    id: check
+    size: 24 24
+    anchors.top: slotBg.top
+    anchors.right: slotBg.right
+    margin-top: -8
+    margin-right: -10
+    image-source: /modules/game_dailyreward/images/check
+    visible: false
+    phantom: true
+
+  Label
+    id: amount
+    anchors.top: slotBg.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 8
+    height: 14
+    text-align: center
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: name
+    anchors.top: amount.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 2
+    margin-left: 3
+    margin-right: 3
+    height: 14
+    text-align: center
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+DRColumn < UIWidget
+  size: 104 240
+
+  UIWidget
+    id: band
+    height: 24
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    background-color: #101f3e
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  Label
+    id: dayLabel
+    anchors.centerIn: band
+    font: verdana-11px-rounded
+    color: #dce8f5
+    text-auto-resize: true
+    phantom: true
+
+  DRCell
+    id: freeCell
+    anchors.top: band.bottom
+    anchors.left: parent.left
+    margin-top: 4
+
+  DRCell
+    id: premiumCell
+    anchors.top: freeCell.bottom
+    anchors.left: parent.left
+    margin-top: 4
+    background-color: #15120a
+    border-color: #6b5a10
+
+UIWindow
+  id: dailyWindow
+  size: 920 470
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  visible: false
+
+  UIWidget
+    id: giftIcon
+    size: 32 32
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 10
+    image-source: /modules/game_dailyreward/images/gift
+    phantom: true
+
+  Label
+    id: titleLabel
+    text: RECOMPENSAS DIARIAS
+    anchors.top: giftIcon.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 4
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: subtitleLabel
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 16
+    margin-left: 18
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: true
+    phantom: true
+
+  UIButton
+    id: closeButton
+    text: X
+    size: 22 20
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 12
+    margin-right: 14
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+    @onClick: modules.game_dailyreward.hide()
+
+    $hover:
+      color: #ffffff
+      background-color: #7a1f1f
+      border-color: #e04848
+
+  Label
+    id: timerLabel
+    anchors.verticalCenter: closeButton.verticalCenter
+    anchors.right: closeButton.left
+    margin-right: 12
+    font: verdana-11px-rounded
+    color: #dce8f5
+    text-auto-resize: true
+    phantom: true
+
+  UIButton
+    id: prevPage
+    text: <
+    size: 28 24
+    anchors.top: titleLabel.bottom
+    anchors.left: parent.left
+    margin-top: 12
+    margin-left: 18
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+
+    $hover:
+      border-color: #f2c400
+
+  Label
+    id: pageLabel
+    width: 120
+    anchors.verticalCenter: prevPage.verticalCenter
+    anchors.left: prevPage.right
+    margin-left: 6
+    text-align: center
+    font: verdana-11px-rounded
+    color: #f2c400
+
+  UIButton
+    id: nextPage
+    text: >
+    size: 28 24
+    anchors.verticalCenter: prevPage.verticalCenter
+    anchors.left: pageLabel.right
+    margin-left: 6
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+
+    $hover:
+      border-color: #f2c400
+
+  UIWidget
+    id: freeRowTag
+    size: 110 104
+    anchors.top: prevPage.bottom
+    anchors.left: parent.left
+    margin-top: 38
+    margin-left: 18
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1d3557
+
+  Label
+    id: freeRowLabel
+    text: FREE
+    anchors.centerIn: freeRowTag
+    font: verdana-11px-rounded
+    color: #dce8f5
+    text-auto-resize: true
+    phantom: true
+
+  UIWidget
+    id: premiumRowTag
+    size: 110 104
+    anchors.top: freeRowTag.bottom
+    anchors.left: freeRowTag.left
+    margin-top: 4
+    background-color: #15120a
+    border-width: 1
+    border-color: #6b5a10
+
+  UIWidget
+    id: premiumCrown
+    size: 16 16
+    anchors.bottom: premiumRowLabel.top
+    anchors.horizontalCenter: premiumRowTag.horizontalCenter
+    margin-bottom: 4
+    image-source: /modules/game_dailyreward/images/crown
+    phantom: true
+
+  Label
+    id: premiumRowLabel
+    text: PREMIUM
+    anchors.centerIn: premiumRowTag
+    margin-top: 8
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  Panel
+    id: track
+    anchors.top: prevPage.bottom
+    anchors.left: freeRowTag.right
+    anchors.right: parent.right
+    height: 240
+    margin-top: 10
+    margin-left: 6
+    margin-right: 18
+    layout:
+      type: horizontalBox
+      spacing: 6
+
+  UIWidget
+    id: footerLine
+    height: 1
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-left: 18
+    margin-right: 18
+    margin-bottom: 62
+    background-color: #1d3557
+    phantom: true
+
+  UIButton
+    id: claimButton
+    size: 220 34
+    anchors.top: footerLine.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 14
+    font: verdana-11px-antialised
+    color: #1a1200
+    background-color: #f2c400
+    border-width: 1
+    border-color: #ffe27a
+
+    $hover:
+      background-color: #ffd633
+
+    $disabled:
+      color: #8fa7c4
+      background-color: #101f3e
+      border-color: #1d3557
+
+  Label
+    id: premiumLabel
+    anchors.verticalCenter: claimButton.verticalCenter
+    anchors.left: parent.left
+    anchors.right: claimButton.left
+    margin-left: 18
+    margin-right: 14
+    height: 30
+    text-wrap: true
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  UIButton
+    id: pendingButton
+    size: 220 30
+    anchors.verticalCenter: claimButton.verticalCenter
+    anchors.right: parent.right
+    margin-right: 18
+    font: verdana-11px-rounded
+    color: #f2c400
+    background-color: #1f1a06
+    border-width: 1
+    border-color: #f2c400
+    visible: false
+
+    $hover:
+      color: #ffffff
+      background-color: #3a2f08

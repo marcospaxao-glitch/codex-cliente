@@ -1,0 +1,199 @@
+PBarCard < UIWidget
+  size: 184 54
+  background-color: #0c1828cc
+  border-width: 1
+  border-color: #1d3557
+  focusable: false
+
+  $hover:
+    background-color: #142a4acc
+    border-color: #f2c400
+
+  UIWidget
+    id: stripe
+    width: 3
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    background-color: #1d3557
+    phantom: true
+
+  UIWidget
+    id: portraitBg
+    size: 46 46
+    anchors.left: stripe.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 3
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  UIWidget
+    id: portrait
+    size: 42 42
+    anchors.centerIn: portraitBg
+    image-size: 42 42
+    phantom: true
+
+  UICreature
+    id: creature
+    size: 44 44
+    anchors.centerIn: portraitBg
+    visible: false
+    phantom: true
+
+  Label
+    id: slotLabel
+    anchors.top: portraitBg.top
+    anchors.left: portraitBg.left
+    margin-top: 1
+    margin-left: 3
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: nameLabel
+    anchors.top: parent.top
+    anchors.left: portraitBg.right
+    anchors.right: levelLabel.left
+    margin-top: 5
+    margin-left: 6
+    margin-right: 4
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: levelLabel
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 5
+    margin-right: 6
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: typeLabel
+    anchors.top: nameLabel.bottom
+    anchors.left: nameLabel.left
+    anchors.right: statusLabel.left
+    margin-top: 1
+    margin-right: 4
+    height: 13
+    font: verdana-11px-rounded
+    color: #9bb6dc
+    phantom: true
+
+  Label
+    id: statusLabel
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 20
+    margin-right: 6
+    font: verdana-11px-rounded
+    color: #5fd35f
+    text-auto-resize: true
+    phantom: true
+
+  UIWidget
+    id: hpBg
+    height: 7
+    anchors.left: nameLabel.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-right: 6
+    margin-bottom: 7
+    background-color: #07101c
+    border-width: 1
+    border-color: #16294a
+    phantom: true
+
+  UIWidget
+    id: hpFill
+    height: 5
+    width: 0
+    anchors.left: hpBg.left
+    anchors.top: hpBg.top
+    margin-left: 1
+    margin-top: 1
+    background-color: #5fd35f
+    phantom: true
+
+  UIWidget
+    id: genderIcon
+    size: 11 11
+    anchors.top: portraitBg.top
+    anchors.right: portraitBg.right
+    margin-top: 2
+    margin-right: 2
+    phantom: true
+
+  UIWidget
+    id: starsBox
+    size: 44 8
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 23
+    margin-right: 6
+    phantom: true
+    layout:
+      type: horizontalBox
+      spacing: 1
+
+  UIItem
+    id: reviveButton
+    size: 24 24
+    anchors.right: portraitBg.right
+    anchors.bottom: portraitBg.bottom
+    margin-right: -4
+    margin-bottom: -4
+    virtual: true
+    background-color: #1d5a31
+    border-width: 1
+    border-color: #5fd35f
+    visible: false
+
+    $hover:
+      background-color: #277a42
+      border-color: #8ef08e
+
+UIWidget
+  id: pokeBarRoot
+  size: 184 60
+  focusable: false
+  phantom: false
+  background-color: #00000000
+
+  UIWidget
+    id: dragHandle
+    height: 8
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    draggable: true
+    background-color: #1d3557cc
+    border-width: 1
+    border-color: #2b4a75
+    tooltip: Arraste para mover a barra (botao direito: opcoes)
+
+    $hover:
+      background-color: #f2c400
+      border-color: #f2c400
+
+  Panel
+    id: mainWindow
+    anchors.top: dragHandle.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-top: 2
+    focusable: false
+    layout:
+      type: verticalBox
+      spacing: 3

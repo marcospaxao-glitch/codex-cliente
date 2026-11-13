@@ -1,0 +1,10 @@
+Module
+  name: game_pokedex
+  description: Pokedex
+  author: Marcos
+  autoload: true
+  autoload-priority: 1016
+  scripts: [ pokedex ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

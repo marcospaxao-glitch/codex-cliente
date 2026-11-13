@@ -1,0 +1,8 @@
+Module
+  name: pokebank
+  description: PokeBank Digital - Sistema bancario digital
+  author: PokeFans
+  sandboxed: true
+  scripts: [ pokebank ]
+  @onLoad: init()
+  @onUnload: terminate()

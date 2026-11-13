@@ -1,0 +1,113 @@
+HotbarSlot < UIItem
+  size: 36 36
+  virtual: true
+  draggable: true
+  focusable: false
+  background-color: #0a1320
+  border-width: 1
+  border-color: #1d3557
+  padding: 2
+  anchors.left: parent.left
+  anchors.top: parent.top
+
+  $hover:
+    border-color: #f2c400
+
+  Label
+    id: keyLabel
+    anchors.left: parent.left
+    anchors.top: parent.top
+    margin-left: -1
+    margin-top: -1
+    height: 12
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #f2c400
+    background-color: #0a1320
+    padding: 0 2 0 2
+    phantom: true
+
+  Label
+    id: countLabel
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-right: -1
+    margin-bottom: -1
+    height: 12
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #0a1320
+    padding: 0 2 0 2
+    phantom: true
+    visible: false
+
+  Label
+    id: textLabel
+    anchors.centerIn: parent
+    margin-top: 3
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+    visible: false
+
+  Label
+    id: modeLabel
+    anchors.right: parent.right
+    anchors.top: parent.top
+    margin-right: -1
+    margin-top: -1
+    height: 12
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #0a1320
+    background-color: #8fa7c4
+    padding: 0 2 0 2
+    phantom: true
+    visible: false
+
+UIWidget
+  id: codexHotbar
+  size: 60 60
+  focusable: false
+  background-color: #0c1828
+  border-width: 1
+  border-color: #101f3e
+  opacity: 0.97
+
+  UIWidget
+    id: accent
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 2
+    background-color: #f2c400
+    phantom: true
+
+  Panel
+    id: slots
+    anchors.fill: parent
+    phantom: true
+    focusable: false
+
+  UIWidget
+    id: dragHandle
+    size: 12 12
+    anchors.top: parent.top
+    anchors.left: parent.left
+    draggable: true
+    focusable: false
+    background-color: #101f3e
+    tooltip: Arraste aqui para mover a hotbar (botao direito: opcoes)
+
+    $hover:
+      background-color: #f2c400
+
+    UIWidget
+      id: grip
+      size: 12 12
+      anchors.centerIn: parent
+      image-source: /modules/game_codexhotbar/alca
+      image-color: #8fa7c4
+      phantom: true

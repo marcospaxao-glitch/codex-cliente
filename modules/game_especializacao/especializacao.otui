@@ -1,0 +1,323 @@
+EspButton < UIButton
+  height: 26
+  font: verdana-11px-antialised
+  color: #1a1200
+  background-color: #f2c400
+  border-width: 1
+  border-color: #ffe27a
+
+  $hover:
+    background-color: #ffd633
+
+  $disabled:
+    color: #6f86a8
+    background-color: #101f3e
+    border-color: #24415f
+
+EspSpecRow < UIButton
+  height: 42
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    background-color: #142a4a
+
+  $on:
+    background-color: #1a2f52
+    border-color: #f2c400
+
+  UIWidget
+    id: icon
+    size: 32 32
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 5
+    image-smooth: true
+    phantom: true
+
+  Label
+    id: name
+    anchors.top: parent.top
+    anchors.left: icon.right
+    anchors.right: parent.right
+    margin: 5 6 0 8
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: types
+    anchors.bottom: parent.bottom
+    anchors.left: icon.right
+    anchors.right: parent.right
+    margin: 0 6 6 8
+    height: 14
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+EspReqRow < UIWidget
+  height: 36
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIItem
+    id: item
+    size: 32 32
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 3
+    virtual: true
+    phantom: true
+
+  Label
+    id: name
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: item.right
+    anchors.right: count.left
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+  Label
+    id: count
+    width: 175
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.right: parent.right
+    margin-right: 8
+    text-align: right
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+EspRankRow < UIWidget
+  height: 20
+
+  Label
+    id: rank
+    width: 150
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+  Label
+    id: bonus
+    width: 170
+    anchors.left: rank.right
+    anchors.verticalCenter: parent.verticalCenter
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+  Label
+    id: cost
+    anchors.left: bonus.right
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+UIWindow
+  id: espWindow
+  size: 820 560
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  draggable: true
+  visible: false
+  @onEscape: modules.game_especializacao.hide()
+
+  UIWidget
+    id: headerBar
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 16
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: titleLabel
+    text: ESPECIALIZACOES
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  UIButton
+    id: closeButton
+    text: X
+    size: 24 22
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 12
+    margin-right: 14
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+    @onClick: modules.game_especializacao.hide()
+
+    $hover:
+      color: #ffffff
+      background-color: #7a1f1f
+      border-color: #e04848
+
+  Label
+    id: currentLabel
+    anchors.verticalCenter: closeButton.verticalCenter
+    anchors.right: closeButton.left
+    margin-right: 14
+    font: verdana-11px-rounded
+    color: #dce8f5
+    text-auto-resize: true
+
+  ScrollablePanel
+    id: specList
+    anchors.top: headerBar.bottom
+    anchors.left: parent.left
+    anchors.bottom: statusLabel.top
+    width: 230
+    margin-top: 14
+    margin-left: 16
+    margin-bottom: 8
+    layout:
+      type: verticalBox
+      spacing: 4
+
+  UIWidget
+    id: detail
+    anchors.top: specList.top
+    anchors.left: specList.right
+    anchors.right: parent.right
+    anchors.bottom: statusLabel.top
+    margin-left: 12
+    margin-right: 16
+    margin-bottom: 8
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1d3557
+
+    UIWidget
+      id: specIcon
+      size: 40 40
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin: 10 0 0 12
+      image-smooth: true
+      phantom: true
+
+    Label
+      id: specName
+      anchors.top: parent.top
+      anchors.left: specIcon.right
+      anchors.right: parent.right
+      margin: 12 12 0 10
+      height: 16
+      font: verdana-11px-rounded
+      color: #f2c400
+
+    Label
+      id: specTypes
+      anchors.top: specName.bottom
+      anchors.left: specName.left
+      anchors.right: parent.right
+      margin: 3 12 0 0
+      height: 14
+      font: verdana-11px-rounded
+      color: #8fa7c4
+
+    Label
+      id: specDesc
+      anchors.top: specIcon.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 10 12 0 12
+      height: 30
+      text-wrap: true
+      font: verdana-11px-rounded
+      color: #dce8f5
+
+    Label
+      id: rankInfo
+      anchors.top: specDesc.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 6 12 0 12
+      height: 16
+      font: verdana-11px-rounded
+      color: #5fd35f
+
+    Label
+      id: reqTitle
+      anchors.top: rankInfo.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 10 12 0 12
+      height: 14
+      font: verdana-11px-rounded
+      color: #f2c400
+
+    UIWidget
+      id: reqList
+      anchors.top: reqTitle.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 6 12 0 12
+      height: 120
+      layout:
+        type: verticalBox
+        spacing: 3
+
+    EspButton
+      id: actionButton
+      anchors.top: reqList.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 8 12 0 12
+
+    Label
+      id: ranksTitle
+      text: RANKS E BONUS (golpes dos tipos / defesa dos pokemons desses tipos)
+      anchors.top: actionButton.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 14 12 0 12
+      height: 14
+      font: verdana-11px-rounded
+      color: #f2c400
+
+    UIWidget
+      id: ranksList
+      anchors.top: ranksTitle.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      margin: 6 12 8 12
+      layout:
+        type: verticalBox
+        spacing: 1
+
+  Label
+    id: statusLabel
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin: 0 16 10 16
+    height: 16
+    font: verdana-11px-rounded
+    color: #8fa7c4

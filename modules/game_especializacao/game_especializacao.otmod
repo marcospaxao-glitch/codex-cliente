@@ -1,0 +1,10 @@
+Module
+  name: game_especializacao
+  description: Especializacoes por tipo (Mestre das Especializacoes)
+  author: Marcos
+  autoload: true
+  autoload-priority: 1007
+  scripts: [ especializacao ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

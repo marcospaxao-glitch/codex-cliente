@@ -1,0 +1,746 @@
+DayGoldButton < UIButton
+  height: 24
+  font: verdana-11px-antialised
+  color: #1a1200
+  background-color: #f2c400
+  border-width: 1
+  border-color: #ffe27a
+
+  $hover:
+    background-color: #ffd633
+
+  $disabled:
+    color: #6f86a8
+    background-color: #101f3e
+    border-color: #24415f
+
+DayGreenButton < UIButton
+  height: 22
+  font: verdana-11px-antialised
+  color: #0a1320
+  background-color: #5fd35f
+  border-width: 1
+  border-color: #a6f0a6
+
+  $hover:
+    background-color: #7ee57e
+
+  $disabled:
+    color: #6f86a8
+    background-color: #101f3e
+    border-color: #24415f
+
+DayDarkButton < UIButton
+  height: 22
+  font: verdana-11px-antialised
+  color: #dce8f5
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    color: #ffffff
+    background-color: #1a3058
+
+  $disabled:
+    color: #4a5f7a
+
+DayPairTab < UIButton
+  size: 60 22
+  font: verdana-11px-antialised
+  color: #dce8f5
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    color: #ffffff
+    background-color: #1a3058
+
+DayAccel < UIItem
+  size: 30 30
+  virtual: true
+  background-color: #07101c
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    border-color: #f2c400
+
+  Label
+    id: count
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-right: 1
+    font: verdana-11px-rounded
+    color: #ffffff
+    text-auto-resize: true
+    phantom: true
+
+DayStar < UIWidget
+  size: 11 11
+  image-source: /modules/game_pokeinfo/images/star_off
+  phantom: true
+
+DayStars < UIWidget
+  size: 59 11
+  phantom: true
+  layout:
+    type: horizontalBox
+    spacing: 1
+
+DayPanel < UIWidget
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+DayTitle < Label
+  font: verdana-11px-antialised
+  color: #f2c400
+  text-auto-resize: true
+
+DayIvBar < UIWidget
+  size: 150 14
+  phantom: true
+
+  Label
+    id: label
+    width: 30
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    font: verdana-11px-rounded
+    color: #8fa7c4
+
+  Label
+    id: value
+    width: 20
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    text-align: right
+    font: verdana-11px-rounded
+    color: #dce8f5
+
+  UIWidget
+    id: back
+    height: 6
+    anchors.left: label.right
+    anchors.right: value.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 4
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+
+  UIWidget
+    id: fill
+    width: 0
+    anchors.left: back.left
+    anchors.top: back.top
+    anchors.bottom: back.bottom
+    margin: 1
+    background-color: #5fd35f
+
+DayTeamRow < UIWidget
+  height: 56
+  background-color: #101f3e
+  border-width: 1
+  border-color: #1d3557
+
+  UIWidget
+    id: iconBg
+    size: 44 44
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 6
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  UIWidget
+    id: portrait
+    size: 40 40
+    anchors.centerIn: iconBg
+    image-size: 40 40
+    phantom: true
+
+  DayDarkButton
+    id: actionButton
+    text: Deixar
+    width: 66
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 8
+
+  Label
+    id: name
+    anchors.top: parent.top
+    anchors.left: iconBg.right
+    margin-top: 6
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #ffffff
+    text-auto-resize: true
+    phantom: true
+
+  UIWidget
+    id: gender
+    size: 11 11
+    anchors.left: name.right
+    anchors.verticalCenter: name.verticalCenter
+    margin-left: 5
+    phantom: true
+
+  DayStars
+    id: stars
+    anchors.top: name.bottom
+    anchors.left: name.left
+    margin-top: 3
+
+  Label
+    id: sub
+    anchors.top: stars.bottom
+    anchors.left: name.left
+    anchors.right: actionButton.left
+    margin-top: 3
+    margin-right: 6
+    height: 14
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+DayEggRow < UIWidget
+  height: 56
+  background-color: #101f3e
+  border-width: 1
+  border-color: #1d3557
+
+  UIWidget
+    id: iconBg
+    size: 44 44
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 6
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  UIWidget
+    id: egg
+    size: 32 32
+    anchors.centerIn: iconBg
+    phantom: true
+
+  UIItem
+    id: eggItem
+    size: 32 32
+    anchors.centerIn: iconBg
+    virtual: true
+    phantom: true
+
+  UIWidget
+    id: poke
+    size: 24 24
+    anchors.right: iconBg.right
+    anchors.bottom: iconBg.bottom
+    phantom: true
+
+  DayGreenButton
+    id: hatchButton
+    text: Chocar
+    width: 66
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 8
+
+  Label
+    id: name
+    anchors.top: parent.top
+    anchors.left: iconBg.right
+    anchors.right: hatchButton.left
+    margin-top: 6
+    margin-left: 8
+    margin-right: 6
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  UIWidget
+    id: back
+    height: 8
+    anchors.top: name.bottom
+    anchors.left: name.left
+    anchors.right: name.right
+    margin-top: 4
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  UIWidget
+    id: fill
+    width: 0
+    anchors.left: back.left
+    anchors.top: back.top
+    anchors.bottom: back.bottom
+    margin: 1
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: sub
+    anchors.top: back.bottom
+    anchors.left: name.left
+    anchors.right: name.right
+    margin-top: 3
+    height: 14
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+DaySlot < UIWidget
+  height: 148
+  background-color: #101f3e
+  border-width: 1
+  border-color: #1d3557
+
+  UIWidget
+    id: iconBg
+    size: 64 64
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 8
+    margin-left: 8
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  UIWidget
+    id: portrait
+    size: 58 58
+    anchors.centerIn: iconBg
+    image-size: 58 58
+    phantom: true
+
+  DayDarkButton
+    id: actionButton
+    text: Retirar
+    width: 70
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 8
+    margin-right: 8
+
+  Label
+    id: name
+    anchors.top: iconBg.top
+    anchors.left: iconBg.right
+    margin-top: 2
+    margin-left: 10
+    font: verdana-11px-antialised
+    color: #ffffff
+    text-auto-resize: true
+    phantom: true
+
+  UIWidget
+    id: gender
+    size: 11 11
+    anchors.left: name.right
+    anchors.verticalCenter: name.verticalCenter
+    margin-left: 5
+    phantom: true
+
+  Label
+    id: info
+    anchors.top: name.bottom
+    anchors.left: name.left
+    anchors.right: parent.right
+    margin-top: 4
+    margin-right: 8
+    height: 14
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  DayStars
+    id: stars
+    anchors.top: info.bottom
+    anchors.left: name.left
+    margin-top: 4
+
+  Label
+    id: ivLabel
+    anchors.verticalCenter: stars.verticalCenter
+    anchors.left: stars.right
+    margin-left: 6
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: empty
+    text: Vazio - escolha um pokemon da equipe
+    anchors.verticalCenter: iconBg.verticalCenter
+    anchors.left: iconBg.right
+    anchors.right: parent.right
+    margin-left: 10
+    margin-right: 8
+    height: 14
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+  UIWidget
+    id: ivPanel
+    anchors.top: iconBg.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 8
+    margin-left: 8
+    margin-right: 8
+    height: 50
+    phantom: true
+    layout:
+      type: grid
+      cell-size: 150 14
+      cell-spacing: 4
+      num-columns: 2
+
+UIWindow
+  id: daycareWindow
+  size: 980 650
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  visible: false
+
+  UIWidget
+    id: headerBar
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 16
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: titleLabel
+    text: CRECHE POKEMON
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 8
+    font: verdana-11px-antialised
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: subtitleLabel
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: titleLabel.right
+    margin-left: 14
+    font: verdana-11px-antialised
+    color: #8fa7c4
+    text-auto-resize: true
+    phantom: true
+
+  UIButton
+    id: closeButton
+    text: X
+    size: 24 22
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 12
+    margin-right: 14
+    font: verdana-11px-antialised
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+
+    $hover:
+      color: #ffffff
+      background-color: #7a1f1f
+      border-color: #e04848
+
+  Label
+    id: footerHint
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-bottom: 12
+    margin-left: 16
+    margin-right: 16
+    height: 14
+    font: verdana-11px-antialised
+    color: #6f86a8
+
+  DayPanel
+    id: teamPanel
+    width: 300
+    anchors.top: headerBar.bottom
+    anchors.left: parent.left
+    anchors.bottom: footerHint.top
+    margin-top: 14
+    margin-left: 16
+    margin-bottom: 10
+
+  DayTitle
+    id: teamTitle
+    text: SUA EQUIPE
+    anchors.top: teamPanel.top
+    anchors.left: teamPanel.left
+    margin-top: 10
+    margin-left: 10
+
+  ScrollablePanel
+    id: teamList
+    anchors.top: teamTitle.bottom
+    anchors.left: teamPanel.left
+    anchors.right: teamScroll.left
+    anchors.bottom: teamPanel.bottom
+    margin-top: 8
+    margin-left: 8
+    margin-right: 3
+    margin-bottom: 8
+    vertical-scrollbar: teamScroll
+    layout:
+      type: verticalBox
+      spacing: 4
+
+  VerticalScrollBar
+    id: teamScroll
+    width: 10
+    anchors.top: teamTitle.bottom
+    anchors.bottom: teamPanel.bottom
+    anchors.right: teamPanel.right
+    margin-top: 8
+    margin-bottom: 8
+    margin-right: 6
+    step: 60
+    pixels-scroll: true
+
+  DayPanel
+    id: carePanel
+    width: 340
+    anchors.top: teamPanel.top
+    anchors.left: teamPanel.right
+    anchors.bottom: teamPanel.bottom
+    margin-left: 12
+
+  DayTitle
+    id: careTitle
+    text: NA CRECHE
+    anchors.top: carePanel.top
+    anchors.left: carePanel.left
+    margin-top: 10
+    margin-left: 10
+
+  Label
+    id: walletLabel
+    anchors.verticalCenter: careTitle.verticalCenter
+    anchors.right: carePanel.right
+    margin-right: 10
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+
+  UIWidget
+    id: walletIcon
+    size: 16 16
+    anchors.verticalCenter: walletLabel.verticalCenter
+    anchors.right: walletLabel.left
+    margin-right: 4
+    image-source: /modules/game_pokemonmanager/images/donate
+    phantom: true
+
+  UIWidget
+    id: pairBar
+    height: 22
+    anchors.top: careTitle.bottom
+    anchors.left: carePanel.left
+    anchors.right: carePanel.right
+    margin-top: 8
+    margin-left: 8
+    margin-right: 8
+    layout:
+      type: horizontalBox
+      spacing: 4
+
+  DaySlot
+    id: slot1
+    anchors.top: pairBar.bottom
+    anchors.left: carePanel.left
+    anchors.right: carePanel.right
+    margin-top: 8
+    margin-left: 8
+    margin-right: 8
+
+  DaySlot
+    id: slot2
+    anchors.top: slot1.bottom
+    anchors.left: carePanel.left
+    anchors.right: carePanel.right
+    margin-top: 8
+    margin-left: 8
+    margin-right: 8
+
+  UIWidget
+    id: lockPanel
+    anchors.top: slot1.top
+    anchors.bottom: slot2.bottom
+    anchors.left: slot1.left
+    anchors.right: slot1.right
+    background-color: #101f3e
+    border-width: 1
+    border-color: #1d3557
+    visible: false
+
+  Label
+    id: lockText
+    anchors.centerIn: lockPanel
+    margin-top: -24
+    font: verdana-11px-antialised
+    color: #dce8f5
+    text-auto-resize: true
+    visible: false
+
+  DayGoldButton
+    id: unlockButton
+    width: 220
+    anchors.top: lockText.bottom
+    anchors.horizontalCenter: lockPanel.horizontalCenter
+    margin-top: 14
+    text-offset: 10 0
+    visible: false
+
+    UIWidget
+      id: unlockIcon
+      size: 16 16
+      anchors.left: parent.left
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 12
+      image-source: /modules/game_pokemonmanager/images/donate
+      phantom: true
+
+  Label
+    id: statusLabel
+    anchors.top: slot2.bottom
+    anchors.left: carePanel.left
+    anchors.right: carePanel.right
+    margin-top: 12
+    margin-left: 10
+    margin-right: 10
+    height: 14
+    text-align: center
+    font: verdana-11px-antialised
+    color: #dce8f5
+
+  Label
+    id: timerLabel
+    anchors.top: statusLabel.bottom
+    anchors.left: carePanel.left
+    anchors.right: carePanel.right
+    margin-top: 6
+    margin-left: 10
+    margin-right: 10
+    height: 14
+    text-align: center
+    font: verdana-11px-rounded
+    color: #8fa7c4
+
+  UIWidget
+    id: timerBack
+    height: 10
+    anchors.top: timerLabel.bottom
+    anchors.left: carePanel.left
+    anchors.right: carePanel.right
+    margin-top: 6
+    margin-left: 16
+    margin-right: 16
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+
+  UIWidget
+    id: timerFill
+    width: 0
+    anchors.left: timerBack.left
+    anchors.top: timerBack.top
+    anchors.bottom: timerBack.bottom
+    margin: 1
+    background-color: #f2c400
+
+  UIWidget
+    id: accelPanel
+    height: 30
+    anchors.bottom: collectButton.top
+    anchors.left: carePanel.left
+    anchors.right: carePanel.right
+    margin-bottom: 6
+    margin-left: 16
+    margin-right: 16
+    layout:
+      type: horizontalBox
+      spacing: 6
+
+  DayGoldButton
+    id: collectButton
+    text: Pegar ovo
+    anchors.bottom: carePanel.bottom
+    anchors.left: carePanel.left
+    anchors.right: carePanel.right
+    margin-bottom: 10
+    margin-left: 16
+    margin-right: 16
+
+  DayPanel
+    id: eggPanel
+    anchors.top: teamPanel.top
+    anchors.left: carePanel.right
+    anchors.right: parent.right
+    anchors.bottom: teamPanel.bottom
+    margin-left: 12
+    margin-right: 16
+
+  DayTitle
+    id: eggTitle
+    text: SEUS OVOS
+    anchors.top: eggPanel.top
+    anchors.left: eggPanel.left
+    margin-top: 10
+    margin-left: 10
+
+  ScrollablePanel
+    id: eggList
+    anchors.top: eggTitle.bottom
+    anchors.left: eggPanel.left
+    anchors.right: eggScroll.left
+    anchors.bottom: eggPanel.bottom
+    margin-top: 8
+    margin-left: 8
+    margin-right: 3
+    margin-bottom: 8
+    vertical-scrollbar: eggScroll
+    layout:
+      type: verticalBox
+      spacing: 4
+
+  VerticalScrollBar
+    id: eggScroll
+    width: 10
+    anchors.top: eggTitle.bottom
+    anchors.bottom: eggPanel.bottom
+    anchors.right: eggPanel.right
+    margin-top: 8
+    margin-bottom: 8
+    margin-right: 6
+    step: 60
+    pixels-scroll: true

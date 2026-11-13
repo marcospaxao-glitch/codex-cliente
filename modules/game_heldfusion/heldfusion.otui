@@ -1,0 +1,193 @@
+HFButton < UIButton
+  height: 22
+  font: verdana-11px-antialised
+  color: #1a1200
+  background-color: #f2c400
+  border-width: 1
+  border-color: #ffe27a
+  $hover:
+    background-color: #ffd633
+  $disabled:
+    color: #8fa7c4
+    background-color: #101f3e
+    border-color: #24415f
+
+HFRow < UIWidget
+  height: 52
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIItem
+    id: fromItem
+    size: 32 32
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 10
+    virtual: true
+    phantom: true
+
+  Label
+    id: fromName
+    anchors.left: fromItem.right
+    anchors.top: parent.top
+    margin-left: 8
+    margin-top: 9
+    width: 200
+    font: verdana-11px-antialised
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: fromCount
+    anchors.left: fromName.left
+    anchors.top: fromName.bottom
+    margin-top: 4
+    width: 200
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  Label
+    id: arrow
+    text: >>
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 262
+    font: verdana-11px-antialised
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  UIItem
+    id: toItem
+    size: 32 32
+    anchors.left: arrow.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 12
+    virtual: true
+    phantom: true
+
+  Label
+    id: toName
+    anchors.left: toItem.right
+    anchors.top: parent.top
+    margin-left: 8
+    margin-top: 9
+    width: 190
+    font: verdana-11px-antialised
+    color: #7cf0ff
+    phantom: true
+
+  Label
+    id: cost
+    anchors.left: toName.left
+    anchors.top: toName.bottom
+    margin-top: 4
+    width: 190
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+  HFButton
+    id: fuseAll
+    text: Todos
+    width: 60
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 10
+
+  HFButton
+    id: fuseOne
+    text: Fundir
+    width: 64
+    anchors.right: fuseAll.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 6
+
+UIWindow
+  id: heldFusionWindow
+  size: 720 480
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  draggable: true
+  visible: false
+
+  UIWidget
+    id: headerBar
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 16
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: titleLabel
+    text: FUNDIR HELDS
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 8
+    font: verdana-11px-antialised
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  UIButton
+    id: closeButton
+    text: X
+    size: 24 22
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 12
+    margin-right: 14
+    font: verdana-11px-antialised
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+    @onClick: modules.game_heldfusion.hide()
+
+  Label
+    id: infoLabel
+    anchors.top: headerBar.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 12
+    margin-left: 18
+    margin-right: 18
+    height: 30
+    text-wrap: true
+    font: verdana-11px-antialised
+    color: #dce8f5
+
+  ScrollablePanel
+    id: list
+    anchors.top: infoLabel.bottom
+    anchors.left: parent.left
+    anchors.right: listScroll.left
+    anchors.bottom: parent.bottom
+    margin-top: 8
+    margin-left: 16
+    margin-right: 6
+    margin-bottom: 16
+    vertical-scrollbar: listScroll
+    layout:
+      type: verticalBox
+      spacing: 4
+
+  VerticalScrollBar
+    id: listScroll
+    width: 12
+    anchors.top: infoLabel.bottom
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin-top: 8
+    margin-bottom: 16
+    margin-right: 16
+    step: 56
+    pixels-scroll: true

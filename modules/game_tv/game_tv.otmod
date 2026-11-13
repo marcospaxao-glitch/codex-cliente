@@ -1,0 +1,11 @@
+Module
+  name: game_tv
+  description: TV - assistir outro jogador
+  author: Codex
+  website: http://localhost/
+  autoload: true
+  autoload-priority: 1000
+  sandboxed: true
+  scripts: [ tv ]
+  @onLoad: init()
+  @onUnload: terminate()

@@ -1,0 +1,1591 @@
+PhoneApp < UIButton
+  size: 72 80
+  background-color: #00000000
+
+  UIWidget
+    id: icon
+    size: 48 48
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 4
+    image-size: 48 48
+    phantom: true
+
+  Label
+    id: badge
+    size: 22 16
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-right: 4
+    text-align: center
+    font: verdana-11px-rounded
+    color: #ffffff
+    background-color: #e04848
+    border-width: 1
+    border-color: #0a1320
+    visible: false
+    phantom: true
+
+  Label
+    id: name
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    height: 14
+    margin-bottom: 6
+    text-align: center
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+  $hover:
+    background-color: #ffffff12
+
+PhoneButton < UIButton
+  height: 22
+  font: verdana-11px-antialised
+  color: #1a1200
+  background-color: #f2c400
+  border-width: 1
+  border-color: #ffe27a
+
+  $hover:
+    background-color: #ffd633
+
+  $disabled:
+    color: #6f86a8
+    background-color: #101f3e
+    border-color: #1d3557
+
+PhoneDarkButton < UIButton
+  height: 22
+  font: verdana-11px-rounded
+  color: #dce8f5
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    color: #ffffff
+    background-color: #1a3058
+
+PhoneRedButton < UIButton
+  height: 22
+  font: verdana-11px-rounded
+  color: #ffffff
+  background-color: #7a1f1f
+  border-width: 1
+  border-color: #e04848
+
+  $hover:
+    background-color: #a02828
+
+PhoneFilter < UIButton
+  height: 20
+  font: verdana-11px-antialised
+  color: #8fa7c4
+  background-color: #101f3e
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    color: #ffffff
+    border-color: #24415f
+
+PhoneEdit < TextEdit
+  height: 22
+  font: verdana-11px-antialised
+  color: #0a1320
+  background-color: #a2a2a2
+  selection-color: #ffffff
+  selection-background-color: #2b5a8a
+
+PhoneHint < Label
+  height: 14
+  font: verdana-11px-rounded
+  color: #8fa7c4
+
+PhoneHouse < UIWidget
+  height: 62
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  Label
+    id: name
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 5
+    margin-left: 8
+    margin-right: 8
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: info
+    anchors.top: name.bottom
+    anchors.left: name.left
+    anchors.right: name.right
+    margin-top: 2
+    height: 14
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  Label
+    id: price
+    anchors.bottom: parent.bottom
+    anchors.left: name.left
+    margin-bottom: 7
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  PhoneButton
+    id: actionButton
+    size: 72 20
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin-bottom: 4
+    margin-right: 6
+
+  PhoneDarkButton
+    id: markButton
+    size: 52 20
+    anchors.bottom: parent.bottom
+    anchors.right: actionButton.left
+    margin-bottom: 4
+    margin-right: 4
+    text: Mapa
+
+PhoneChat < UIButton
+  height: 44
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  Label
+    id: avatar
+    size: 30 30
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 6
+    text-align: center
+    font: verdana-11px-antialised
+    color: #ffffff
+    background-color: #24415f
+    phantom: true
+
+  UIWidget
+    id: dot
+    size: 9 9
+    anchors.right: avatar.right
+    anchors.bottom: avatar.bottom
+    background-color: #6f86a8
+    border-width: 1
+    border-color: #0c1828
+    phantom: true
+
+  Label
+    id: time
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 6
+    margin-right: 8
+    font: verdana-11px-rounded
+    color: #6f86a8
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: name
+    anchors.top: parent.top
+    anchors.left: avatar.right
+    anchors.right: time.left
+    margin-top: 6
+    margin-left: 8
+    margin-right: 4
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: badge
+    size: 22 15
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin-bottom: 6
+    margin-right: 8
+    text-align: center
+    font: verdana-11px-rounded
+    color: #0a1320
+    background-color: #5fd35f
+    visible: false
+    phantom: true
+
+  Label
+    id: last
+    anchors.bottom: parent.bottom
+    anchors.left: name.left
+    anchors.right: badge.left
+    margin-bottom: 6
+    margin-right: 4
+    height: 14
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+  $hover:
+    background-color: #101f3e
+
+PhoneMsgRow < UIWidget
+  height: 40
+  phantom: true
+
+  UIWidget
+    id: bubble
+    width: 160
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    background-color: #101f3e
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+    Label
+      id: author
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 5
+      margin-left: 8
+      margin-right: 8
+      height: 14
+      font: verdana-11px-rounded
+      color: #f2c400
+      phantom: true
+
+    UIWidget
+      id: pin
+      size: 16 16
+      anchors.top: author.bottom
+      anchors.left: parent.left
+      margin-left: 7
+      image-source: /modules/game_phone/images/pin
+      visible: false
+      phantom: true
+
+    Label
+      id: text
+      anchors.top: author.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-left: 8
+      margin-right: 8
+      height: 14
+      text-wrap: true
+      text-align: topLeft
+      font: verdana-11px-rounded
+      color: #dce8f5
+      phantom: true
+
+    Label
+      id: time
+      anchors.bottom: parent.bottom
+      anchors.right: parent.right
+      margin-bottom: 4
+      margin-right: 7
+      font: verdana-11px-rounded
+      color: #6f86a8
+      text-auto-resize: true
+      phantom: true
+
+PhoneMember < UIWidget
+  height: 30
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIWidget
+    id: dot
+    size: 8 8
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    background-color: #6f86a8
+    phantom: true
+
+  Label
+    id: name
+    anchors.left: dot.right
+    anchors.right: kickButton.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    margin-right: 4
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  PhoneRedButton
+    id: kickButton
+    size: 64 20
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 5
+    text: Remover
+
+PhoneOffer < UIWidget
+  height: 50
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIWidget
+    id: iconBg
+    size: 38 38
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 5
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  UIItem
+    id: item
+    size: 32 32
+    anchors.centerIn: iconBg
+    virtual: true
+    phantom: true
+
+  UIWidget
+    id: portrait
+    size: 34 34
+    anchors.centerIn: iconBg
+    image-size: 34 34
+    visible: false
+    phantom: true
+
+  Label
+    id: name
+    anchors.top: parent.top
+    anchors.left: iconBg.right
+    anchors.right: parent.right
+    margin-top: 5
+    margin-left: 7
+    margin-right: 6
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: info
+    anchors.top: name.bottom
+    anchors.left: name.left
+    anchors.right: parent.right
+    margin-top: 1
+    margin-right: 6
+    height: 14
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+  Label
+    id: price
+    anchors.bottom: parent.bottom
+    anchors.left: name.left
+    margin-bottom: 4
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  PhoneButton
+    id: actionButton
+    size: 70 18
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin-bottom: 4
+    margin-right: 5
+
+PhoneSellRow < UIButton
+  height: 40
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIItem
+    id: item
+    size: 32 32
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 5
+    virtual: true
+    phantom: true
+
+  UIWidget
+    id: portrait
+    size: 32 32
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 5
+    image-size: 32 32
+    visible: false
+    phantom: true
+
+  Label
+    id: name
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 5
+    margin-left: 44
+    margin-right: 6
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: info
+    anchors.top: name.bottom
+    anchors.left: name.left
+    anchors.right: name.right
+    margin-top: 1
+    height: 14
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+  $hover:
+    background-color: #101f3e
+
+PhoneContact < UIButton
+  height: 40
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  Label
+    id: avatar
+    size: 28 28
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 6
+    text-align: center
+    font: verdana-11px-antialised
+    color: #ffffff
+    background-color: #24415f
+    phantom: true
+
+  UIWidget
+    id: dot
+    size: 9 9
+    anchors.right: avatar.right
+    anchors.bottom: avatar.bottom
+    background-color: #6f86a8
+    border-width: 1
+    border-color: #0c1828
+    phantom: true
+
+  Label
+    id: fav
+    size: 14 14
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 5
+    margin-right: 8
+    text: *
+    text-align: center
+    font: verdana-11px-antialised
+    color: #f2c400
+    visible: false
+    phantom: true
+
+  Label
+    id: name
+    anchors.top: parent.top
+    anchors.left: avatar.right
+    anchors.right: fav.left
+    margin-top: 5
+    margin-left: 8
+    margin-right: 4
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: sub
+    anchors.bottom: parent.bottom
+    anchors.left: name.left
+    anchors.right: parent.right
+    margin-bottom: 5
+    margin-right: 8
+    height: 14
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+  $hover:
+    background-color: #101f3e
+
+PhoneView < UIWidget
+  anchors.top: titleBar.bottom
+  anchors.left: parent.left
+  anchors.right: parent.right
+  anchors.bottom: parent.bottom
+  visible: false
+  phantom: true
+
+PhoneList < ScrollablePanel
+  margin-left: 6
+  margin-right: 2
+  layout:
+    type: verticalBox
+    spacing: 3
+
+PhoneScroll < VerticalScrollBar
+  width: 12
+  anchors.right: parent.right
+  margin-right: 4
+  step: 30
+  pixels-scroll: true
+
+UIWindow
+  id: phoneWindow
+  size: 320 620
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 4
+  border-color: #3478dc
+  focusable: true
+  visible: false
+
+  UIWidget
+    id: notch
+    size: 70 6
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 8
+    background-color: #3478dc
+    phantom: true
+
+  UIWidget
+    id: screen
+    anchors.top: notch.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: homeButton.top
+    margin-top: 8
+    margin-left: 10
+    margin-right: 10
+    margin-bottom: 10
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+    Label
+      id: clockLabel
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 5
+      margin-left: 8
+      font: verdana-11px-rounded
+      color: #8fa7c4
+      text-auto-resize: true
+
+    Label
+      id: modelLabel
+      anchors.top: parent.top
+      anchors.right: closeButton.left
+      margin-top: 5
+      margin-right: 6
+      font: verdana-11px-rounded
+      color: #6f86a8
+      text-auto-resize: true
+
+    UIButton
+      id: closeButton
+      text: X
+      size: 18 16
+      anchors.top: parent.top
+      anchors.right: parent.right
+      margin-top: 3
+      margin-right: 4
+      font: verdana-11px-rounded
+      color: #dce8f5
+      background-color: #101f3e
+      border-width: 1
+      border-color: #24415f
+      @onClick: modules.game_phone.hide()
+
+      $hover:
+        background-color: #7a1f1f
+        border-color: #e04848
+
+    UIWidget
+      id: titleBar
+      height: 28
+      anchors.top: closeButton.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 5
+      background-color: #3478dc
+      phantom: true
+
+    PhoneDarkButton
+      id: backButton
+      text: <
+      size: 22 20
+      anchors.verticalCenter: titleBar.verticalCenter
+      anchors.left: titleBar.left
+      margin-left: 4
+      visible: false
+
+    PhoneDarkButton
+      id: titleAction
+      size: 74 20
+      anchors.verticalCenter: titleBar.verticalCenter
+      anchors.right: titleBar.right
+      margin-right: 4
+      visible: false
+
+    Label
+      id: titleLabel
+      anchors.verticalCenter: titleBar.verticalCenter
+      anchors.left: backButton.right
+      anchors.right: titleAction.left
+      margin-left: 6
+      margin-right: 6
+      height: 14
+      font: verdana-11px-antialised
+      color: #ffffff
+      phantom: true
+
+    PhoneView
+      id: homeView
+
+      Panel
+        id: appGrid
+        size: 246 172
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        margin-top: 24
+        layout:
+          type: grid
+          cell-size: 72 80
+          cell-spacing: 15
+          num-columns: 3
+          flow: false
+
+        PhoneApp
+          id: appHouses
+
+        PhoneApp
+          id: appChat
+
+        PhoneApp
+          id: appContacts
+
+        PhoneApp
+          id: appLoc
+
+        PhoneApp
+          id: appMarket
+
+        PhoneApp
+          id: appPC
+          visible: false
+
+        PhoneApp
+          id: appBank
+          visible: false
+
+        PhoneApp
+          id: appMark
+          visible: false
+
+      Label
+        id: myIdLabel
+        anchors.top: appGrid.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        margin-top: 24
+        font: verdana-11px-rounded
+        color: #f2c400
+        text-auto-resize: true
+
+      Label
+        id: homeHint
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 10
+        margin-right: 10
+        margin-bottom: 14
+        height: 30
+        text-align: center
+        text-wrap: true
+        font: verdana-11px-rounded
+        color: #6f86a8
+
+    PhoneView
+      id: housesView
+
+      Label
+        id: housesInfo
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 6
+        margin-left: 8
+        margin-right: 8
+        height: 28
+        text-wrap: true
+        font: verdana-11px-rounded
+        color: #8fa7c4
+
+      PhoneEdit
+        id: houseSearch
+        anchors.top: housesInfo.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 4
+        margin-left: 6
+        margin-right: 6
+
+      PhoneList
+        id: housesList
+        anchors.top: houseSearch.bottom
+        anchors.left: parent.left
+        anchors.right: housesScroll.left
+        anchors.bottom: parent.bottom
+        margin-top: 4
+        margin-bottom: 6
+        vertical-scrollbar: housesScroll
+
+      PhoneScroll
+        id: housesScroll
+        anchors.top: houseSearch.bottom
+        anchors.bottom: parent.bottom
+        margin-top: 4
+        margin-bottom: 6
+
+    PhoneView
+      id: chatsView
+
+      Label
+        id: chatsMyId
+        anchors.top: parent.top
+        anchors.left: parent.left
+        margin-top: 9
+        margin-left: 8
+        font: verdana-11px-rounded
+        color: #f2c400
+        text-auto-resize: true
+
+      PhoneDarkButton
+        id: groupModeButton
+        text: + Grupo
+        size: 70 20
+        anchors.top: parent.top
+        anchors.right: parent.right
+        margin-top: 6
+        margin-right: 6
+
+      PhoneHint
+        id: chatsHint
+        anchors.top: groupModeButton.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 6
+        margin-left: 8
+        margin-right: 8
+
+      PhoneEdit
+        id: idEdit
+        anchors.top: chatsHint.bottom
+        anchors.left: parent.left
+        anchors.right: idButton.left
+        margin-top: 3
+        margin-left: 6
+        margin-right: 4
+
+      PhoneButton
+        id: idButton
+        text: Buscar
+        width: 60
+        anchors.top: chatsHint.bottom
+        anchors.right: parent.right
+        margin-top: 3
+        margin-right: 6
+
+      PhoneList
+        id: chatsList
+        anchors.top: idEdit.bottom
+        anchors.left: parent.left
+        anchors.right: chatsScroll.left
+        anchors.bottom: parent.bottom
+        margin-top: 8
+        margin-bottom: 6
+        vertical-scrollbar: chatsScroll
+
+      PhoneScroll
+        id: chatsScroll
+        anchors.top: idEdit.bottom
+        anchors.bottom: parent.bottom
+        margin-top: 8
+        margin-bottom: 6
+
+    PhoneView
+      id: convView
+
+      PhoneList
+        id: messagesList
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: messagesScroll.left
+        anchors.bottom: sendButton.top
+        margin-top: 6
+        margin-bottom: 6
+        layout:
+          type: verticalBox
+          spacing: 6
+        vertical-scrollbar: messagesScroll
+
+      PhoneScroll
+        id: messagesScroll
+        anchors.top: parent.top
+        anchors.bottom: sendButton.top
+        margin-top: 6
+        margin-bottom: 6
+
+      PhoneDarkButton
+        id: locButton
+        size: 26 24
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        margin-left: 6
+        margin-bottom: 6
+
+        UIWidget
+          id: locPin
+          size: 16 16
+          anchors.centerIn: parent
+          image-source: /modules/game_phone/images/pin
+          phantom: true
+
+      PhoneButton
+        id: sendButton
+        text: Enviar
+        size: 56 24
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-right: 6
+        margin-bottom: 6
+
+      PhoneEdit
+        id: msgEdit
+        height: 24
+        anchors.left: locButton.right
+        anchors.right: sendButton.left
+        anchors.bottom: parent.bottom
+        margin-left: 4
+        margin-right: 4
+        margin-bottom: 6
+
+    PhoneView
+      id: membersView
+
+      PhoneHint
+        id: membersInfo
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 8
+        margin-left: 8
+        margin-right: 8
+
+      PhoneHint
+        id: memberHint
+        anchors.top: membersInfo.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 6
+        margin-left: 8
+        margin-right: 8
+
+      PhoneEdit
+        id: memberIdEdit
+        anchors.top: memberHint.bottom
+        anchors.left: parent.left
+        anchors.right: memberIdButton.left
+        margin-top: 3
+        margin-left: 6
+        margin-right: 4
+
+      PhoneButton
+        id: memberIdButton
+        text: Buscar
+        width: 60
+        anchors.top: memberHint.bottom
+        anchors.right: parent.right
+        margin-top: 3
+        margin-right: 6
+
+      PhoneList
+        id: membersList
+        anchors.top: memberIdEdit.bottom
+        anchors.left: parent.left
+        anchors.right: membersScroll.left
+        anchors.bottom: leaveGroupButton.top
+        margin-top: 8
+        margin-bottom: 6
+        vertical-scrollbar: membersScroll
+
+      PhoneScroll
+        id: membersScroll
+        anchors.top: memberIdEdit.bottom
+        anchors.bottom: leaveGroupButton.top
+        margin-top: 8
+        margin-bottom: 6
+
+      PhoneRedButton
+        id: leaveGroupButton
+        text: Sair do grupo
+        width: 280
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        margin-left: 6
+        margin-bottom: 6
+
+      PhoneRedButton
+        id: deleteGroupButton
+        text: Apagar grupo
+        anchors.left: leaveGroupButton.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 4
+        margin-right: 6
+        margin-bottom: 6
+        visible: false
+
+    PhoneView
+      id: marketView
+
+      Label
+        id: balanceLabel
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 6
+        margin-left: 8
+        margin-right: 8
+        height: 14
+        text-align: center
+        font: verdana-11px-rounded
+        color: #f2c400
+
+      Panel
+        id: filterGrid
+        height: 44
+        anchors.top: balanceLabel.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 5
+        margin-left: 6
+        margin-right: 6
+        layout:
+          type: grid
+          cell-size: 66 20
+          cell-spacing: 4
+          num-columns: 4
+          flow: false
+
+      PhoneEdit
+        id: searchEdit
+        anchors.top: filterGrid.bottom
+        anchors.left: parent.left
+        anchors.right: searchButton.left
+        margin-top: 4
+        margin-left: 6
+        margin-right: 4
+
+      PhoneButton
+        id: searchButton
+        text: Buscar
+        width: 60
+        anchors.top: filterGrid.bottom
+        anchors.right: parent.right
+        margin-top: 4
+        margin-right: 6
+
+      PhoneList
+        id: marketList
+        anchors.top: searchEdit.bottom
+        anchors.left: parent.left
+        anchors.right: marketScroll.left
+        anchors.bottom: prevPage.top
+        margin-top: 6
+        margin-bottom: 5
+        vertical-scrollbar: marketScroll
+
+      PhoneScroll
+        id: marketScroll
+        anchors.top: searchEdit.bottom
+        anchors.bottom: prevPage.top
+        margin-top: 6
+        margin-bottom: 5
+
+      PhoneDarkButton
+        id: prevPage
+        text: <
+        size: 30 20
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        margin-left: 6
+        margin-bottom: 6
+
+      PhoneDarkButton
+        id: nextPage
+        text: >
+        size: 30 20
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-right: 6
+        margin-bottom: 6
+
+      Label
+        id: pageLabel
+        anchors.left: prevPage.right
+        anchors.right: nextPage.left
+        anchors.verticalCenter: prevPage.verticalCenter
+        height: 14
+        text-align: center
+        font: verdana-11px-rounded
+        color: #8fa7c4
+
+    PhoneView
+      id: sellView
+
+      Panel
+        id: sellCats
+        height: 68
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 6
+        margin-left: 6
+        margin-right: 6
+        layout:
+          type: grid
+          cell-size: 66 20
+          cell-spacing: 4
+          num-columns: 4
+          flow: false
+
+      PhoneEdit
+        id: sellSearch
+        anchors.top: sellCats.bottom
+        anchors.left: parent.left
+        anchors.right: sellSearchButton.left
+        margin-top: 4
+        margin-left: 6
+        margin-right: 4
+
+      PhoneButton
+        id: sellSearchButton
+        text: Buscar
+        width: 60
+        anchors.top: sellCats.bottom
+        anchors.right: parent.right
+        margin-top: 4
+        margin-right: 6
+
+      PhoneHint
+        id: sellHint
+        anchors.top: sellSearch.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 5
+        margin-left: 8
+        margin-right: 8
+
+      PhoneList
+        id: sellList
+        anchors.top: sellHint.bottom
+        anchors.left: parent.left
+        anchors.right: sellScroll.left
+        anchors.bottom: sellPrev.top
+        margin-top: 4
+        margin-bottom: 4
+        vertical-scrollbar: sellScroll
+
+      PhoneScroll
+        id: sellScroll
+        anchors.top: sellHint.bottom
+        anchors.bottom: sellPrev.top
+        margin-top: 4
+        margin-bottom: 4
+
+      PhoneDarkButton
+        id: sellPrev
+        text: <
+        size: 30 20
+        anchors.left: parent.left
+        anchors.bottom: sellPanel.top
+        margin-left: 6
+        margin-bottom: 5
+
+      PhoneDarkButton
+        id: sellNext
+        text: >
+        size: 30 20
+        anchors.right: parent.right
+        anchors.bottom: sellPanel.top
+        margin-right: 6
+        margin-bottom: 5
+
+      Label
+        id: sellPageLabel
+        anchors.left: sellPrev.right
+        anchors.right: sellNext.left
+        anchors.verticalCenter: sellPrev.verticalCenter
+        height: 14
+        text-align: center
+        font: verdana-11px-rounded
+        color: #8fa7c4
+
+      UIWidget
+        id: sellPanel
+        height: 92
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 6
+        margin-right: 6
+        margin-bottom: 6
+        background-color: #0c1828
+        border-width: 1
+        border-color: #1d3557
+
+        Label
+          id: sellSelected
+          anchors.top: parent.top
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin-top: 6
+          margin-left: 8
+          margin-right: 8
+          height: 14
+          font: verdana-11px-rounded
+          color: #ffffff
+
+        PhoneHint
+          id: sellCountHint
+          text: Qtd
+          width: 52
+          anchors.top: sellSelected.bottom
+          anchors.left: parent.left
+          margin-top: 5
+          margin-left: 8
+
+        PhoneHint
+          id: sellPriceHint
+          text: Preco
+          width: 90
+          anchors.top: sellSelected.bottom
+          anchors.left: sellCountHint.right
+          margin-top: 5
+          margin-left: 6
+
+        PhoneEdit
+          id: sellCount
+          width: 52
+          anchors.top: sellCountHint.bottom
+          anchors.left: parent.left
+          margin-top: 2
+          margin-left: 8
+
+        PhoneEdit
+          id: sellPrice
+          width: 90
+          anchors.top: sellCountHint.bottom
+          anchors.left: sellCount.right
+          margin-top: 2
+          margin-left: 6
+
+        PhoneDarkButton
+          id: sellCurrency
+          anchors.top: sellCountHint.bottom
+          anchors.left: sellPrice.right
+          anchors.right: parent.right
+          margin-top: 2
+          margin-left: 6
+          margin-right: 8
+
+        PhoneButton
+          id: sellButton
+          text: Anunciar
+          height: 20
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          margin-left: 8
+          margin-right: 8
+          margin-bottom: 5
+
+    PhoneView
+      id: contactsView
+
+      PhoneHint
+        id: contactsInfo
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: newContactButton.left
+        margin-top: 10
+        margin-left: 8
+        margin-right: 4
+
+      PhoneButton
+        id: newContactButton
+        text: + Novo
+        size: 70 20
+        anchors.top: parent.top
+        anchors.right: parent.right
+        margin-top: 6
+        margin-right: 6
+
+      PhoneEdit
+        id: contactSearch
+        anchors.top: newContactButton.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 8
+        margin-left: 6
+        margin-right: 6
+
+      PhoneList
+        id: contactsList
+        anchors.top: contactSearch.bottom
+        anchors.left: parent.left
+        anchors.right: contactsScroll.left
+        anchors.bottom: parent.bottom
+        margin-top: 8
+        margin-bottom: 6
+        vertical-scrollbar: contactsScroll
+
+      PhoneScroll
+        id: contactsScroll
+        anchors.top: contactSearch.bottom
+        anchors.bottom: parent.bottom
+        margin-top: 8
+        margin-bottom: 6
+
+    PhoneView
+      id: contactEditView
+
+      PhoneHint
+        id: newIdHint
+        text: ID do jogador:
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 10
+        margin-left: 8
+        margin-right: 8
+
+      PhoneEdit
+        id: newIdEdit
+        anchors.top: newIdHint.bottom
+        anchors.left: parent.left
+        anchors.right: newIdButton.left
+        margin-top: 3
+        margin-left: 6
+        margin-right: 4
+
+      PhoneButton
+        id: newIdButton
+        text: Buscar
+        width: 60
+        anchors.top: newIdHint.bottom
+        anchors.right: parent.right
+        margin-top: 3
+        margin-right: 6
+
+      Label
+        id: editAvatar
+        size: 44 44
+        anchors.top: newIdEdit.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        margin-top: 14
+        text-align: center
+        font: verdana-11px-antialised
+        color: #ffffff
+        background-color: #24415f
+
+      Label
+        id: editRealName
+        anchors.top: editAvatar.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 6
+        height: 14
+        text-align: center
+        font: verdana-11px-rounded
+        color: #ffffff
+
+      Label
+        id: editInfo
+        anchors.top: editRealName.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 3
+        height: 14
+        text-align: center
+        font: verdana-11px-rounded
+        color: #8fa7c4
+
+      PhoneHint
+        id: aliasHint
+        text: Nome na agenda:
+        anchors.top: editInfo.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 12
+        margin-left: 8
+        margin-right: 8
+
+      PhoneEdit
+        id: aliasEdit
+        anchors.top: aliasHint.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 3
+        margin-left: 6
+        margin-right: 6
+
+      PhoneHint
+        id: noteHint
+        text: Observacao:
+        anchors.top: aliasEdit.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 8
+        margin-left: 8
+        margin-right: 8
+
+      PhoneEdit
+        id: noteEdit
+        anchors.top: noteHint.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 3
+        margin-left: 6
+        margin-right: 6
+
+      PhoneDarkButton
+        id: favButton
+        anchors.top: noteEdit.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 8
+        margin-left: 6
+        margin-right: 6
+
+      PhoneButton
+        id: saveContactButton
+        text: Salvar contato
+        anchors.top: favButton.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 10
+        margin-left: 6
+        margin-right: 6
+
+      PhoneDarkButton
+        id: msgContactButton
+        text: Mensagem
+        width: 136
+        anchors.top: saveContactButton.bottom
+        anchors.left: parent.left
+        margin-top: 6
+        margin-left: 6
+
+      PhoneDarkButton
+        id: locContactButton
+        text: Enviar local
+        anchors.top: saveContactButton.bottom
+        anchors.left: msgContactButton.right
+        anchors.right: parent.right
+        margin-top: 6
+        margin-left: 4
+        margin-right: 6
+
+      PhoneRedButton
+        id: deleteContactButton
+        text: Apagar contato
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 6
+        margin-right: 6
+        margin-bottom: 6
+
+    UIWidget
+      id: lookupCard
+      size: 250 168
+      anchors.centerIn: parent
+      background-color: #0c1828
+      border-width: 2
+      border-color: #3478dc
+      visible: false
+
+      Label
+        id: cardTitle
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 10
+        height: 14
+        text-align: center
+        font: verdana-11px-rounded
+        color: #8fa7c4
+
+      Label
+        id: cardAvatar
+        size: 34 34
+        anchors.top: cardTitle.bottom
+        anchors.left: parent.left
+        margin-top: 10
+        margin-left: 16
+        text-align: center
+        font: verdana-11px-antialised
+        color: #ffffff
+        background-color: #24415f
+
+      Label
+        id: cardName
+        anchors.top: cardAvatar.top
+        anchors.left: cardAvatar.right
+        anchors.right: parent.right
+        margin-left: 10
+        margin-right: 10
+        height: 14
+        font: verdana-11px-rounded
+        color: #ffffff
+
+      Label
+        id: cardInfo
+        anchors.top: cardName.bottom
+        anchors.left: cardName.left
+        anchors.right: cardName.right
+        margin-top: 4
+        height: 14
+        font: verdana-11px-rounded
+        color: #8fa7c4
+
+      PhoneButton
+        id: cardMain
+        anchors.top: cardAvatar.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 14
+        margin-left: 16
+        margin-right: 16
+
+      PhoneDarkButton
+        id: cardChat
+        text: Conversar
+        anchors.top: cardMain.bottom
+        anchors.left: parent.left
+        margin-top: 6
+        margin-left: 16
+        width: 104
+
+      PhoneDarkButton
+        id: cardCancel
+        text: Cancelar
+        anchors.top: cardMain.bottom
+        anchors.right: parent.right
+        margin-top: 6
+        margin-right: 16
+        width: 104
+
+    UIWidget
+      id: optionsCard
+      size: 230 176
+      anchors.centerIn: parent
+      background-color: #0c1828
+      border-width: 2
+      border-color: #3478dc
+      visible: false
+
+      Label
+        id: optionsTitle
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 10
+        margin-left: 10
+        margin-right: 10
+        height: 14
+        text-align: center
+        font: verdana-11px-rounded
+        color: #ffffff
+
+      PhoneDarkButton
+        id: option1
+        anchors.top: optionsTitle.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 12
+        margin-left: 14
+        margin-right: 14
+
+      PhoneDarkButton
+        id: option2
+        anchors.top: option1.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 6
+        margin-left: 14
+        margin-right: 14
+
+      PhoneDarkButton
+        id: option3
+        anchors.top: option2.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 6
+        margin-left: 14
+        margin-right: 14
+
+      PhoneButton
+        id: optionsCancel
+        text: Fechar
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 14
+        margin-right: 14
+        margin-bottom: 10
+
+  UIButton
+    id: homeButton
+    size: 46 14
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-bottom: 8
+    background-color: #3478dc
+    border-width: 1
+    border-color: #ffffff40

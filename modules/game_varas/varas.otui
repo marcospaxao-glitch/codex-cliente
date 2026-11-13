@@ -1,0 +1,321 @@
+VRSlotBox < UIWidget
+  size: 150 118
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIWidget
+    id: goldBar
+    size: 3 14
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 6
+    margin-left: 6
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: boxTitle
+    anchors.verticalCenter: goldBar.verticalCenter
+    anchors.left: goldBar.right
+    margin-left: 5
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: boxInfo
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-bottom: 6
+    margin-left: 4
+    margin-right: 4
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    text-align: center
+    phantom: true
+
+VRRodSlot < Item
+  id: rodSlot
+  size: 36 36
+  image-source: /images/game/slots/neck
+  &position: {x=65535, y=2, z=0}
+
+VRBaitSlot < Item
+  id: baitSlot
+  size: 36 36
+  image-source: /images/game/slots/ammo
+  virtual: true
+
+VRButton < Button
+  height: 24
+  width: 100
+
+VRMiniButton < Button
+  height: 20
+  width: 62
+
+VRMiniWindow < UIWindow
+  size: 226 128
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+
+  UIWidget
+    id: headerBar
+    size: 4 14
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 9
+    margin-left: 10
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    text: VARAS
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 6
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  Button
+    id: closeButton
+    text: X
+    size: 20 18
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 6
+    margin-right: 6
+    @onClick: modules.game_varas.hide()
+
+  Button
+    id: modeButton
+    text: +
+    size: 20 18
+    anchors.top: parent.top
+    anchors.right: closeButton.left
+    margin-top: 6
+    margin-right: 4
+    !tooltip: 'Modo completo'
+    @onClick: modules.game_varas.toggleCompact()
+
+  VRRodSlot
+    id: miniRod
+    anchors.top: headerBar.bottom
+    anchors.left: parent.left
+    margin-top: 10
+    margin-left: 12
+
+  VRBaitSlot
+    id: miniBait
+    anchors.top: miniRod.top
+    anchors.left: miniRod.right
+    margin-left: 6
+
+  Label
+    id: miniBonus
+    anchors.top: miniRod.top
+    anchors.left: miniBait.right
+    anchors.right: parent.right
+    margin-left: 8
+    margin-right: 8
+    height: 14
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: false
+
+  Label
+    id: miniInfo
+    anchors.top: miniBonus.bottom
+    anchors.left: miniBonus.left
+    anchors.right: parent.right
+    margin-top: 2
+    margin-right: 8
+    height: 20
+    font: verdana-11px-rounded
+    color: #9fb3c8
+    text-auto-resize: false
+
+  VRMiniButton
+    id: unbaitButton
+    text: Retirar
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    margin-bottom: 10
+    margin-left: 10
+    !tooltip: 'Retirar iscas'
+    @onClick: modules.game_varas.removeBait()
+
+  VRMiniButton
+    id: toReserveButton
+    text: Mochila
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-bottom: 10
+    !tooltip: 'Vara para a mochila'
+    @onClick: modules.game_varas.mainToReserve()
+
+  VRMiniButton
+    id: mainCpButton
+    text: CP
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin-bottom: 10
+    margin-right: 10
+    !tooltip: 'Vara ao CP'
+    @onClick: modules.game_varas.mainToCp()
+
+UIWindow
+  id: varasWindow
+  size: 344 336
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  visible: false
+
+  UIWidget
+    id: headerBar
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 12
+    margin-left: 12
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: titleLabel
+    text: VARAS
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  Button
+    id: closeButton
+    text: X
+    size: 22 20
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 10
+    margin-right: 10
+    @onClick: modules.game_varas.hide()
+
+  Button
+    id: modeButton
+    text: -
+    size: 22 20
+    anchors.top: parent.top
+    anchors.right: closeButton.left
+    margin-top: 10
+    margin-right: 4
+    !tooltip: 'Modo compacto'
+    @onClick: modules.game_varas.toggleCompact()
+
+  VRSlotBox
+    id: rodBox
+    anchors.top: headerBar.bottom
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 16
+
+    VRRodSlot
+      anchors.centerIn: parent
+
+  VRSlotBox
+    id: baitBox
+    anchors.top: rodBox.top
+    anchors.right: parent.right
+    margin-right: 16
+
+    VRBaitSlot
+      anchors.centerIn: parent
+
+  UIWidget
+    id: infoPanel
+    anchors.top: rodBox.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 10
+    margin-left: 16
+    margin-right: 16
+    height: 70
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1d3557
+
+    Label
+      id: bonusLabel
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 8
+      margin-left: 8
+      margin-right: 8
+      height: 14
+      font: verdana-11px-rounded
+      color: #f2c400
+
+    Label
+      id: descLabel
+      anchors.top: bonusLabel.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      margin-top: 4
+      margin-left: 8
+      margin-right: 8
+      margin-bottom: 4
+      font: verdana-11px-rounded
+      color: #9fb3c8
+      text-wrap: true
+
+  VRButton
+    id: unbaitButton
+    text: Retirar iscas
+    anchors.top: infoPanel.bottom
+    anchors.left: infoPanel.left
+    margin-top: 8
+    @onClick: modules.game_varas.removeBait()
+
+  VRButton
+    id: toReserveButton
+    text: Para mochila
+    anchors.top: infoPanel.bottom
+    anchors.horizontalCenter: infoPanel.horizontalCenter
+    margin-top: 8
+    @onClick: modules.game_varas.mainToReserve()
+
+  VRButton
+    id: mainCpButton
+    text: Vara ao CP
+    anchors.top: infoPanel.bottom
+    anchors.right: infoPanel.right
+    margin-top: 8
+    @onClick: modules.game_varas.mainToCp()
+
+  Label
+    id: reserveHint
+    anchors.top: unbaitButton.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 10
+    margin-left: 16
+    margin-right: 16
+    height: 42
+    font: verdana-11px-rounded
+    color: #9fb3c8
+    text-wrap: true
+    text-align: center

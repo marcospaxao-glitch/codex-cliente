@@ -1,0 +1,1584 @@
+// =====================================================================
+//  Sistema de Profissoes - mesmo padrao visual do Pokemon Manager
+//  Cards #0c1828 / fundo #101F3E, barra dourada #f2c400 nos titulos
+// =====================================================================
+
+ProfSectionTitle < Label
+  height: 14
+  text-offset: 10 0
+  text-align: left
+  text-auto-resize: false
+  font: verdana-9px-bold
+  color: #ffd24a
+
+  Panel
+    id: bar
+    anchors.left: parent.left
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    width: 3
+    background-color: #f2c400
+    focusable: false
+    phantom: true
+
+ProfCard < Panel
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1c3350
+  focusable: false
+
+ButtonShopProfession < Button
+  width: 96
+  height: 26
+  font: verdana-9px-bold
+  color: #dce8f5
+  background-color: #142038
+  border-width: 1
+  border-color: #294765
+  text-align: center
+
+  $hover !disabled:
+    background-color: #1c3350
+    border-color: #f2c400
+    color: #ffffff
+
+  $pressed:
+    background-color: #0c1828
+
+  $disabled:
+    background-color: #0c1828
+    border-color: #1c3350
+    color: #4f6178
+
+ProfPrimaryButton < ButtonShopProfession
+  color: #8ff09a
+  background-color: #0f2230
+  border-color: #2c5a4a
+
+  $hover !disabled:
+    background-color: #153a2c
+    border-color: #72e6a0
+    color: #ffffff
+
+  $pressed:
+    background-color: #0c1828
+
+  $disabled:
+    background-color: #0c1828
+    border-color: #1c3350
+    color: #4f6178
+
+ProfCloseButton < Button
+  width: 26
+  height: 26
+  text: X
+  font: verdana-10px-bold
+  color: #e7edf7
+  background-color: #0a1a2a
+  border-width: 1
+  border-color: #1a3850
+
+  $hover:
+    background-color: #2a4d68
+    border-color: #f2c400
+    color: #ffffff
+
+ProfessionCategoryButton < UIButton
+  height: 34
+  margin-bottom: 4
+  text-offset: 36 0
+  text-align: left
+  icon-rect: 12 9 16 16
+  icon-size: 16 16
+  font: verdana-9px-bold
+  color: #9bb6dc
+  text-auto-resize: false
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1c3350
+  border-left: 3 #3a5170
+
+  $hover !checked:
+    background-color: #142038
+    border-color: #294765
+    border-left: 3 #8fd3ff
+    color: #ffffff
+
+  $checked:
+    background-color: #142038
+    border-color: #6b5a1a
+    border-left: 3 #f2c400
+    color: #ffd24a
+
+  $disabled:
+    background-color: #0a1524
+    border-left: 3 #1c3350
+    color: #4f6178
+
+// ============================================================ JANELA 1
+
+ProfessionWindow < UIWindow
+  id: profissoesWindow
+  size: 840 566
+  focusable: true
+  background-color: #101F3E
+  border-width: 1
+  border-color: #1c3350
+  opacity: 0.99
+  @onEscape: Profissoes.hide()
+
+  Panel
+    id: header
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 42
+    focusable: false
+    phantom: true
+
+    Panel
+      anchors.left: parent.left
+      anchors.verticalCenter: parent.verticalCenter
+      width: 3
+      height: 18
+      margin-left: 14
+      background-color: #f2c400
+      focusable: false
+      phantom: true
+
+    Label
+      id: windowTitle
+      anchors.left: parent.left
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 24
+      text: "PROFISSOES"
+      font: verdana-12px-bold
+      color: #dce8f5
+      phantom: true
+
+    Label
+      id: shortcutLabel
+      anchors.right: closeX.left
+      anchors.verticalCenter: parent.verticalCenter
+      width: 80
+      margin-right: 10
+      text: "CTRL+J"
+      text-align: right
+      font: verdana-8px-bold
+      color: #5f7596
+      phantom: true
+
+    ProfCloseButton
+      id: closeX
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      margin-right: 10
+      @onClick: Profissoes.hide()
+
+    Panel
+      id: topAccent
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      height: 2
+      background-color: #f2c400
+      opacity: 0.85
+      focusable: false
+      phantom: true
+
+  Panel
+    id: headerPanel
+    anchors.top: header.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 92
+    margin: 10 12 0 12
+    focusable: false
+
+    Panel
+      id: primarySlot
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      anchors.right: parent.horizontalCenter
+      margin-right: 4
+      background-color: #0c1828
+      border-width: 1
+      border-color: #1c3350
+      focusable: false
+
+      Panel
+        id: professionAccent
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        width: 3
+        background-color: #3a5170
+        focusable: false
+
+      Panel
+        id: professionIconBox
+        anchors.left: parent.left
+        anchors.top: parent.top
+        width: 44
+        height: 44
+        margin-left: 12
+        margin-top: 10
+        background-color: #0a1422
+        border-width: 1
+        border-color: #1c3350
+        focusable: false
+
+      UIWidget
+        id: professionIcon
+        anchors.horizontalCenter: professionIconBox.horizontalCenter
+        anchors.verticalCenter: professionIconBox.verticalCenter
+        width: 32
+        height: 32
+        image-source: /game_profissoes/images/pokeball_icon.png
+        phantom: true
+
+      Label
+        id: professionCaption
+        anchors.left: professionIconBox.right
+        anchors.top: parent.top
+        width: 150
+        height: 12
+        margin-left: 10
+        margin-top: 10
+        text: "PROFISSAO PRINCIPAL"
+        font: verdana-8px-bold
+        color: #f2c400
+
+      Label
+        id: professionValue
+        anchors.left: professionIconBox.right
+        anchors.top: professionCaption.bottom
+        width: 200
+        height: 18
+        margin-left: 10
+        margin-top: 1
+        text: "SEM PROFISSAO"
+        font: verdana-12px-bold
+        color: #7f94b1
+
+      ButtonShopProfession
+        id: primaryChangeButton
+        anchors.right: parent.right
+        anchors.top: parent.top
+        width: 96
+        height: 22
+        margin-right: 10
+        margin-top: 10
+        font: verdana-8px-bold
+        text: "TROCAR"
+
+      Label
+        id: levelValue
+        anchors.left: professionIconBox.right
+        anchors.top: parent.top
+        width: 150
+        height: 12
+        margin-left: 10
+        margin-top: 46
+        text: "NIVEL 0 / 250"
+        font: verdana-8px-bold
+        color: #ffffff
+
+      Label
+        id: expValue
+        anchors.right: parent.right
+        anchors.top: parent.top
+        width: 150
+        height: 12
+        margin-right: 12
+        margin-top: 46
+        text: ""
+        text-align: right
+        font: verdana-8px-bold
+        color: #7f94b1
+
+      Panel
+        id: expTrack
+        anchors.left: professionIconBox.right
+        anchors.right: parent.right
+        anchors.top: parent.top
+        height: 7
+        margin-left: 10
+        margin-right: 12
+        margin-top: 61
+        background-color: #091522
+        focusable: false
+
+        UIWidget
+          id: expFill
+          anchors.left: parent.left
+          anchors.top: parent.top
+          anchors.bottom: parent.bottom
+          width: 0
+          background-color: #f2c400
+          phantom: true
+
+      Label
+        id: professionDesc
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        height: 12
+        margin-left: 12
+        margin-right: 12
+        margin-top: 74
+        text: ""
+        font: verdana-8px-bold
+        color: #5f7596
+
+      Label
+        id: careerValue
+        anchors.right: parent.right
+        anchors.top: parent.top
+        width: 1
+        height: 1
+        visible: false
+        text: ""
+
+    Panel
+      id: secondarySlot
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.left: parent.horizontalCenter
+      anchors.right: parent.right
+      margin-left: 4
+      background-color: #0c1828
+      border-width: 1
+      border-color: #1c3350
+      focusable: false
+
+      Panel
+        id: secAccent
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        width: 3
+        background-color: #3a5170
+        focusable: false
+
+      Panel
+        id: secIconBox
+        anchors.left: parent.left
+        anchors.top: parent.top
+        width: 44
+        height: 44
+        margin-left: 12
+        margin-top: 10
+        background-color: #0a1422
+        border-width: 1
+        border-color: #1c3350
+        focusable: false
+
+      UIWidget
+        id: secIcon
+        anchors.horizontalCenter: secIconBox.horizontalCenter
+        anchors.verticalCenter: secIconBox.verticalCenter
+        width: 32
+        height: 32
+        image-source: /game_profissoes/images/pokeball_icon.png
+        phantom: true
+
+      Label
+        id: secCaption
+        anchors.left: secIconBox.right
+        anchors.top: parent.top
+        width: 150
+        height: 12
+        margin-left: 10
+        margin-top: 10
+        text: "PROFISSAO SECUNDARIA"
+        font: verdana-8px-bold
+        color: #f2c400
+
+      Label
+        id: secValue
+        anchors.left: secIconBox.right
+        anchors.top: secCaption.bottom
+        width: 200
+        height: 18
+        margin-left: 10
+        margin-top: 1
+        text: "SEM PROFISSAO"
+        font: verdana-12px-bold
+        color: #7f94b1
+
+      ButtonShopProfession
+        id: secondaryButton
+        anchors.right: parent.right
+        anchors.top: parent.top
+        width: 96
+        height: 22
+        margin-right: 10
+        margin-top: 10
+        font: verdana-8px-bold
+        text: "ESCOLHER"
+
+      Label
+        id: secLevelValue
+        anchors.left: secIconBox.right
+        anchors.top: parent.top
+        width: 150
+        height: 12
+        margin-left: 10
+        margin-top: 46
+        text: "NIVEL 0 / 250"
+        font: verdana-8px-bold
+        color: #ffffff
+
+      Label
+        id: secExpValue
+        anchors.right: parent.right
+        anchors.top: parent.top
+        width: 150
+        height: 12
+        margin-right: 12
+        margin-top: 46
+        text: ""
+        text-align: right
+        font: verdana-8px-bold
+        color: #7f94b1
+
+      Panel
+        id: secExpTrack
+        anchors.left: secIconBox.right
+        anchors.right: parent.right
+        anchors.top: parent.top
+        height: 7
+        margin-left: 10
+        margin-right: 12
+        margin-top: 61
+        background-color: #091522
+        focusable: false
+
+        UIWidget
+          id: secExpFill
+          anchors.left: parent.left
+          anchors.top: parent.top
+          anchors.bottom: parent.bottom
+          width: 0
+          background-color: #f2c400
+          phantom: true
+
+      Label
+        id: secDesc
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        height: 12
+        margin-left: 12
+        margin-right: 12
+        margin-top: 74
+        text: ""
+        font: verdana-8px-bold
+        color: #5f7596
+
+      Label
+        id: secCareerValue
+        anchors.right: parent.right
+        anchors.top: parent.top
+        width: 1
+        height: 1
+        visible: false
+        text: ""
+
+  ProfSectionTitle
+    id: categories
+    text: "CATEGORIAS"
+    anchors.top: headerPanel.bottom
+    anchors.left: parent.left
+    width: 190
+    margin: 12 0 0 12
+
+  Panel
+    id: categoryPanel
+    anchors.top: categories.bottom
+    anchors.left: parent.left
+    anchors.bottom: footer.top
+    width: 190
+    margin: 6 0 8 12
+    focusable: false
+
+    ScrollablePanel
+      id: categoryList
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      anchors.right: categoryScrollbar.left
+      margin-right: 2
+      vertical-scrollbar: categoryScrollbar
+      layout:
+        type: verticalBox
+
+    VerticalScrollBar
+      id: categoryScrollbar
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.right: parent.right
+      width: 8
+      step: 14
+      pixels-scroll: true
+
+  ProfSectionTitle
+    id: products
+    text: "RECEITAS"
+    anchors.top: categories.top
+    anchors.left: categoryPanel.right
+    anchors.right: recipeCount.left
+    margin-left: 10
+
+  Label
+    id: recipeCount
+    anchors.top: categories.top
+    anchors.right: parent.right
+    width: 280
+    height: 14
+    margin-right: 12
+    text: ""
+    text-align: right
+    font: verdana-8px-bold
+    color: #7f94b1
+
+  ScrollablePanel
+    id: recipeList
+    anchors.top: products.bottom
+    anchors.left: categoryPanel.right
+    anchors.right: parent.right
+    anchors.bottom: footer.top
+    margin: 6 12 8 10
+    padding: 4
+    padding-right: 14
+    vertical-scrollbar: recipeScrollbar
+    layout:
+      type: grid
+      flow: true
+      cell-size: 114 150
+      cell-spacing: 5
+
+  VerticalScrollBar
+    id: recipeScrollbar
+    anchors.top: recipeList.top
+    anchors.bottom: recipeList.bottom
+    anchors.right: recipeList.right
+    width: 10
+    step: 20
+    pixels-scroll: true
+
+  Label
+    id: recipeEmpty
+    anchors.fill: recipeList
+    margin: 40
+    text-align: center
+    text-wrap: true
+    text-auto-resize: false
+    font: verdana-9px-bold
+    color: #5f7596
+    visible: false
+    phantom: true
+
+  Panel
+    id: footer
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    height: 36
+    focusable: false
+
+    Label
+      id: hintLabel
+      anchors.left: parent.left
+      anchors.right: rewardsLabel.left
+      anchors.verticalCenter: parent.verticalCenter
+      height: 14
+      margin-left: 14
+      margin-right: 10
+      text: "Clique em uma receita para ver materiais e fabricar."
+      font: verdana-9px-rounded
+      color: #5f7596
+
+    Label
+      id: rewardsLabel
+      anchors.right: collectAllButton.left
+      anchors.verticalCenter: parent.verticalCenter
+      width: 250
+      height: 14
+      margin-right: 8
+      text: ""
+      text-align: right
+      font: verdana-9px-bold
+      color: #72e6a0
+
+    ProfPrimaryButton
+      id: collectAllButton
+      anchors.right: closeButton.left
+      anchors.verticalCenter: parent.verticalCenter
+      width: 130
+      margin-right: 8
+      text: "COLETAR TUDO"
+      visible: false
+
+    ButtonShopProfession
+      id: closeButton
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      margin-right: 12
+      text: "FECHAR"
+      @onClick: Profissoes.hide()
+
+  Panel
+    id: chooserPanel
+    anchors.top: header.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    background-color: #101F3E
+    visible: false
+    focusable: false
+
+    ProfSectionTitle
+      id: chooserTitle
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 12 12 0 12
+      text: "ESCOLHA SUA PROFISSAO"
+
+    Label
+      id: chooserSubtitle
+      anchors.top: chooserTitle.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 14
+      margin: 5 12 0 12
+      text: ""
+      font: verdana-9px-rounded
+      color: #829abe
+
+    Panel
+      id: chooserCards
+      anchors.top: chooserSubtitle.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 330
+      margin: 10 12 0 12
+      focusable: false
+      layout:
+        type: horizontalBox
+        spacing: 8
+
+    ProfCard
+      id: chooserFooter
+      anchors.top: chooserCards.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 56
+      margin: 10 12 0 12
+
+      Panel
+        id: chooserFooterAccent
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        width: 3
+        background-color: #3a5170
+        focusable: false
+
+      Label
+        id: chooserSelection
+        anchors.left: parent.left
+        anchors.top: parent.top
+        width: 420
+        height: 14
+        margin-left: 14
+        margin-top: 11
+        text: "SELECIONE UMA PROFISSAO"
+        font: verdana-10px-bold
+        color: #7f94b1
+
+      Label
+        id: chooserCost
+        anchors.left: parent.left
+        anchors.top: chooserSelection.bottom
+        width: 460
+        height: 12
+        margin-left: 14
+        margin-top: 4
+        text: ""
+        font: verdana-8px-bold
+        color: #5f7596
+
+      ProfPrimaryButton
+        id: chooserConfirm
+        anchors.right: chooserCancel.left
+        anchors.verticalCenter: parent.verticalCenter
+        width: 170
+        height: 28
+        margin-right: 8
+        text: "CONFIRMAR"
+
+      ButtonShopProfession
+        id: chooserCancel
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        width: 100
+        height: 28
+        margin-right: 12
+        text: "VOLTAR"
+
+ProfessionWindow
+  id: profissoes
+
+ProfessionChoiceCard < UIButton
+  width: 198
+  height: 330
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1c3350
+
+  $hover !disabled:
+    background-color: #142038
+
+  $disabled:
+    background-color: #0a1524
+
+  UIWidget
+    id: cardStrip
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 4
+    background-color: #3a5170
+    phantom: true
+
+  Panel
+    id: cardIconBox
+    anchors.top: cardStrip.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    width: 64
+    height: 64
+    margin-top: 18
+    background-color: #0a1422
+    border-width: 1
+    border-color: #1c3350
+    phantom: true
+
+  UIWidget
+    id: cardIcon
+    anchors.horizontalCenter: cardIconBox.horizontalCenter
+    anchors.verticalCenter: cardIconBox.verticalCenter
+    width: 40
+    height: 40
+    phantom: true
+
+  Label
+    id: cardName
+    anchors.top: cardIconBox.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 18
+    margin-top: 12
+    text-align: center
+    text-auto-resize: false
+    font: verdana-12px-bold
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: cardDesc
+    anchors.top: cardName.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 30
+    margin: 6 12 0 12
+    text-align: center
+    text-wrap: true
+    text-auto-resize: false
+    font: verdana-8px-bold
+    color: #9bb6dc
+    phantom: true
+
+  Label
+    id: cardLinesTitle
+    anchors.top: cardDesc.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 12
+    margin: 12 14 0 14
+    text: "RECEITAS"
+    font: verdana-8px-bold
+    color: #f2c400
+    phantom: true
+
+  Label
+    id: cardLines
+    anchors.top: cardLinesTitle.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 80
+    margin: 4 14 0 14
+    text-wrap: true
+    text-auto-resize: false
+    font: verdana-8px-bold
+    color: #c8d6ec
+    phantom: true
+
+  Label
+    id: cardTag
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 20
+    margin: 0 12 12 12
+    text-align: center
+    text-auto-resize: false
+    font: verdana-8px-bold
+    color: #7f94b1
+    background-color: #0a1422
+    phantom: true
+
+// ------------------------------------------------------ card de receita
+
+ProfessionProductCard < UIButton
+  size: 114 150
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1c3350
+
+  $hover !disabled:
+    background-color: #142038
+    border-color: #f2c400
+
+  $pressed:
+    background-color: #0a1422
+
+  $disabled:
+    background-color: #0a1524
+    border-color: #1c3350
+
+  UIWidget
+    id: rarityStrip
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 3
+    background-color: #8FA3B8
+    phantom: true
+
+  Label
+    id: productTitle
+    anchors.top: rarityStrip.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 18
+    text-align: center
+    font: verdana-8px-bold
+    color: #ffffff
+    background-color: #0a1422
+    text-auto-resize: false
+    phantom: true
+
+  UIWidget
+    id: productSlot
+    anchors.top: productTitle.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    width: 56
+    height: 56
+    margin-top: 7
+    background-color: #0a1422
+    border-width: 1
+    border-color: #1c3350
+    phantom: true
+
+  UIWidget
+    id: productImage
+    anchors.horizontalCenter: productSlot.horizontalCenter
+    anchors.verticalCenter: productSlot.verticalCenter
+    width: 48
+    height: 48
+    visible: false
+    phantom: true
+
+  UIItem
+    id: productItem
+    anchors.horizontalCenter: productSlot.horizontalCenter
+    anchors.verticalCenter: productSlot.verticalCenter
+    width: 32
+    height: 32
+    visible: false
+    phantom: true
+
+  Label
+    id: productLock
+    anchors.fill: productSlot
+    text: "BLOQUEADO"
+    text-align: center
+    text-wrap: true
+    text-auto-resize: false
+    font: verdana-8px-bold
+    color: #ff9a7a
+    background-color: #000000c8
+    visible: false
+    phantom: true
+
+  Label
+    id: productLevel
+    anchors.top: productSlot.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 12
+    margin-top: 5
+    text-align: center
+    font: verdana-8px-bold
+    color: #ffd24a
+    text-auto-resize: false
+    phantom: true
+
+  Label
+    id: productAmount
+    anchors.top: productLevel.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 12
+    margin-top: 1
+    text-align: center
+    font: verdana-8px-bold
+    color: #7f94b1
+    text-auto-resize: false
+    phantom: true
+
+  Label
+    id: productExp
+    anchors.top: productAmount.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 12
+    margin-top: 1
+    text-align: center
+    font: verdana-8px-bold
+    color: #72e6a0
+    text-auto-resize: false
+    phantom: true
+
+  UIWidget
+    id: statusBar
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 3
+    background-color: #1c3350
+    phantom: true
+
+// ============================================================ JANELA 2
+
+ProfessionCraftWindow < UIWindow
+  id: professionCraftWindow
+  size: 480 648
+  anchors.centerIn: parent
+  focusable: true
+  background-color: #101F3E
+  border-width: 1
+  border-color: #1c3350
+  opacity: 0.99
+  @onEscape: Profissoes.closeCraftWindow()
+
+  Panel
+    id: craftHeader
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 40
+    focusable: false
+    phantom: true
+
+    Panel
+      anchors.left: parent.left
+      anchors.verticalCenter: parent.verticalCenter
+      width: 3
+      height: 16
+      margin-left: 12
+      background-color: #f2c400
+      focusable: false
+      phantom: true
+
+    Label
+      id: craftTitle
+      anchors.left: parent.left
+      anchors.right: craftCloseX.left
+      anchors.verticalCenter: parent.verticalCenter
+      height: 16
+      margin-left: 22
+      margin-right: 8
+      text: "FABRICAR"
+      font: verdana-10px-bold
+      color: #dce8f5
+      phantom: true
+
+    ProfCloseButton
+      id: craftCloseX
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      margin-right: 8
+      @onClick: Profissoes.closeCraftWindow()
+
+    Panel
+      id: craftAccent
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      height: 2
+      background-color: #f2c400
+      opacity: 0.85
+      focusable: false
+      phantom: true
+
+  ProfCard
+    id: outputPanel
+    anchors.top: craftHeader.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 86
+    margin: 10 10 0 10
+
+    Panel
+      id: outputAccent
+      anchors.left: parent.left
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      width: 3
+      background-color: #f2c400
+      focusable: false
+
+    UIWidget
+      id: outputBox
+      anchors.left: parent.left
+      anchors.verticalCenter: parent.verticalCenter
+      width: 66
+      height: 66
+      margin-left: 14
+      background-color: #0a1422
+      border-width: 1
+      border-color: #294765
+
+    UIWidget
+      id: outputImage
+      anchors.horizontalCenter: outputBox.horizontalCenter
+      anchors.verticalCenter: outputBox.verticalCenter
+      width: 56
+      height: 56
+      visible: false
+      phantom: true
+
+    UIItem
+      id: outputItem
+      anchors.horizontalCenter: outputBox.horizontalCenter
+      anchors.verticalCenter: outputBox.verticalCenter
+      width: 32
+      height: 32
+      visible: false
+      phantom: true
+
+    Label
+      id: outputName
+      anchors.top: outputBox.top
+      anchors.left: outputBox.right
+      anchors.right: parent.right
+      height: 16
+      margin-left: 12
+      margin-right: 10
+      text-auto-resize: false
+      font: verdana-10px-bold
+      color: #ffffff
+
+    Label
+      id: outputAmount
+      anchors.top: outputName.bottom
+      anchors.left: outputName.left
+      width: 300
+      height: 12
+      margin-top: 4
+      font: verdana-8px-bold
+      color: #c8d6ec
+
+    Label
+      id: requiredLevel
+      anchors.top: outputAmount.bottom
+      anchors.left: outputName.left
+      width: 300
+      height: 12
+      margin-top: 2
+      font: verdana-8px-bold
+      color: #ffd24a
+
+    Label
+      id: craftTime
+      anchors.top: requiredLevel.bottom
+      anchors.left: outputName.left
+      width: 300
+      height: 12
+      margin-top: 2
+      font: verdana-8px-bold
+      color: #8fd3ff
+
+  ProfSectionTitle
+    id: materialsTitle
+    text: "MATERIAIS NECESSARIOS"
+    anchors.top: outputPanel.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 10 10 0 10
+
+  ScrollablePanel
+    id: materialList
+    anchors.top: materialsTitle.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 118
+    margin: 5 10 0 10
+    padding: 3
+    padding-right: 16
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1c3350
+    vertical-scrollbar: materialScrollbar
+    layout:
+      type: verticalBox
+      spacing: 3
+
+  VerticalScrollBar
+    id: materialScrollbar
+    anchors.top: materialList.top
+    anchors.bottom: materialList.bottom
+    anchors.right: materialList.right
+    margin: 3 3 3 0
+    width: 10
+    step: 14
+    pixels-scroll: true
+
+  ProfSectionTitle
+    id: productionTitle
+    text: "PRODUCAO EM ANDAMENTO"
+    anchors.top: materialList.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 10 10 0 10
+
+  ProfCard
+    id: currentCraftPanel
+    anchors.top: productionTitle.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 72
+    margin: 5 10 0 10
+
+    Panel
+      id: currentCraftAccent
+      anchors.left: parent.left
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      width: 3
+      background-color: #3a5170
+      focusable: false
+
+    UIWidget
+      id: currentCraftSlot
+      anchors.left: parent.left
+      anchors.verticalCenter: parent.verticalCenter
+      width: 52
+      height: 52
+      margin-left: 12
+      background-color: #0a1422
+      border-width: 1
+      border-color: #1c3350
+
+    UIWidget
+      id: currentCraftImage
+      anchors.horizontalCenter: currentCraftSlot.horizontalCenter
+      anchors.verticalCenter: currentCraftSlot.verticalCenter
+      width: 44
+      height: 44
+      visible: false
+      phantom: true
+
+    UIItem
+      id: currentCraftItem
+      anchors.horizontalCenter: currentCraftSlot.horizontalCenter
+      anchors.verticalCenter: currentCraftSlot.verticalCenter
+      width: 32
+      height: 32
+      visible: false
+      phantom: true
+
+    Label
+      id: currentCraftName
+      anchors.top: parent.top
+      anchors.left: currentCraftSlot.right
+      anchors.right: currentCraftPercent.left
+      height: 14
+      margin-left: 12
+      margin-right: 6
+      margin-top: 11
+      text-auto-resize: false
+      font: verdana-9px-bold
+      color: #ffffff
+
+    Label
+      id: currentCraftPercent
+      anchors.top: parent.top
+      anchors.right: parent.right
+      width: 46
+      height: 14
+      margin-top: 11
+      margin-right: 12
+      text-align: right
+      font: verdana-9px-bold
+      color: #ffd24a
+
+    Label
+      id: currentCraftTime
+      anchors.top: currentCraftName.bottom
+      anchors.left: currentCraftName.left
+      width: 250
+      height: 12
+      margin-top: 3
+      font: verdana-8px-bold
+      color: #7f94b1
+
+    Panel
+      id: currentCraftTrack
+      anchors.left: currentCraftSlot.right
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      height: 8
+      margin-left: 12
+      margin-right: 12
+      margin-bottom: 12
+      background-color: #091522
+      focusable: false
+
+      UIWidget
+        id: currentCraftFill
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        width: 0
+        background-color: #5aa9e6
+        phantom: true
+
+  ProfSectionTitle
+    id: queueTitle
+    text: "FILA DE FABRICACAO"
+    anchors.top: currentCraftPanel.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 10 10 0 10
+
+  Label
+    id: queueCount
+    anchors.top: queueTitle.top
+    anchors.right: parent.right
+    width: 110
+    height: 14
+    margin-right: 10
+    text-align: right
+    font: verdana-8px-bold
+    color: #8fd3ff
+
+  Panel
+    id: queueList
+    anchors.top: queueTitle.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 76
+    margin: 5 10 0 10
+    padding: 4
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1c3350
+    layout:
+      type: horizontalBox
+      spacing: 4
+
+  Label
+    id: queueEmpty
+    anchors.fill: queueList
+    text: "Nenhuma fabricacao aguardando"
+    text-align: center
+    text-auto-resize: false
+    font: verdana-8px-bold
+    color: #5f7596
+    visible: false
+    phantom: true
+
+  ProfSectionTitle
+    id: readyTitle
+    text: "ITENS PRONTOS PARA COLETA"
+    anchors.top: queueList.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 10 10 0 10
+
+  Panel
+    id: readyBox
+    anchors.top: readyTitle.bottom
+    anchors.bottom: materialStatus.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 5 10 6 10
+    padding: 4
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1c3350
+    layout:
+      type: horizontalBox
+      spacing: 4
+
+  Label
+    id: readyEmpty
+    anchors.fill: readyBox
+    text: "Nenhum item pronto para coletar"
+    text-align: center
+    text-auto-resize: false
+    font: verdana-8px-bold
+    color: #5f7596
+    visible: false
+    phantom: true
+
+  Label
+    id: materialStatus
+    anchors.bottom: craftButton.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 14
+    margin: 0 10 8 10
+    text-auto-resize: false
+    text-align: center
+    font: verdana-9px-bold
+    color: #72e6a0
+
+  ProfPrimaryButton
+    id: craftButton
+    anchors.bottom: parent.bottom
+    anchors.right: cancelButton.left
+    width: 150
+    margin-right: 6
+    margin-bottom: 10
+    text: "FABRICAR"
+
+  ButtonShopProfession
+    id: cancelButton
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin-right: 10
+    margin-bottom: 10
+    text: "CANCELAR"
+
+// ------------------------------------------------------ cards auxiliares
+
+ProfessionQueueCard < Panel
+  size: 72 66
+  background-color: #0a1422
+  border-width: 1
+  border-color: #1c3350
+
+  Label
+    id: queuePosition
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 13
+    text-align: center
+    text-auto-resize: false
+    font: verdana-8px-bold
+    color: #ffd24a
+    background-color: #101F3E
+
+  UIWidget
+    id: queueIcon
+    anchors.top: queuePosition.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    width: 26
+    height: 26
+    margin-top: 2
+    visible: false
+    phantom: true
+
+  UIItem
+    id: queueItem
+    anchors.top: queuePosition.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    width: 26
+    height: 26
+    margin-top: 2
+    visible: false
+    phantom: true
+
+  Label
+    id: queueName
+    anchors.top: queueIcon.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 11
+    margin-top: 1
+    text-align: center
+    text-auto-resize: false
+    font: verdana-8px-bold
+    color: #c8d6ec
+
+  Label
+    id: queueState
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 11
+    margin-bottom: 1
+    text-align: center
+    text-auto-resize: false
+    font: verdana-8px-bold
+    color: #7f94b1
+
+ProfessionRewardCard < Panel
+  size: 84 88
+  background-color: #0f2230
+  border-width: 1
+  border-color: #2c5a4a
+
+  $hover:
+    border-color: #72e6a0
+
+  Label
+    id: rewardPosition
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 13
+    text-align: center
+    text-auto-resize: false
+    font: verdana-8px-bold
+    color: #72e6a0
+    background-color: #101F3E
+
+  UIWidget
+    id: rewardIcon
+    anchors.top: rewardPosition.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    width: 26
+    height: 26
+    margin-top: 2
+    visible: false
+    phantom: true
+
+  UIItem
+    id: rewardItem
+    anchors.top: rewardPosition.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    width: 26
+    height: 26
+    margin-top: 2
+    visible: false
+    phantom: true
+
+  Label
+    id: rewardName
+    anchors.top: rewardIcon.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 11
+    margin-top: 1
+    text-align: center
+    text-auto-resize: false
+    font: verdana-8px-bold
+    color: #c8d6ec
+
+  Label
+    id: rewardAmount
+    anchors.top: rewardName.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 11
+    text-align: center
+    text-auto-resize: false
+    font: verdana-8px-bold
+    color: #ffd24a
+
+  ProfPrimaryButton
+    id: rewardCollect
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    width: 72
+    height: 16
+    margin-bottom: 3
+    text: "COLETAR"
+    font: verdana-8px-bold
+
+ProfessionMaterialLine < Panel
+  height: 36
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1c3350
+
+  Panel
+    id: materialAccent
+    anchors.left: parent.left
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    width: 3
+    background-color: #3a5170
+    focusable: false
+
+  UIWidget
+    id: materialSlot
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    width: 30
+    height: 30
+    margin-left: 9
+    background-color: #0a1422
+    border-width: 1
+    border-color: #1c3350
+
+  UIWidget
+    id: materialIcon
+    anchors.horizontalCenter: materialSlot.horizontalCenter
+    anchors.verticalCenter: materialSlot.verticalCenter
+    width: 26
+    height: 26
+    visible: false
+    phantom: true
+
+  UIItem
+    id: materialItem
+    anchors.horizontalCenter: materialSlot.horizontalCenter
+    anchors.verticalCenter: materialSlot.verticalCenter
+    width: 26
+    height: 26
+    visible: false
+    phantom: true
+
+  Label
+    id: materialName
+    anchors.left: materialSlot.right
+    anchors.right: materialCount.left
+    anchors.verticalCenter: parent.verticalCenter
+    height: 14
+    margin-left: 10
+    margin-right: 8
+    text-auto-resize: false
+    font: verdana-9px-bold
+    color: #c8d6ec
+
+  Label
+    id: materialCount
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 90
+    height: 14
+    margin-right: 10
+    text-align: right
+    text-auto-resize: false
+    font: verdana-9px-bold
+    color: #72e6a0

@@ -1,0 +1,10 @@
+Module
+  name: game_codexstreamer
+  description: Painel do Streamer, tag e cor no chat (opcode 130)
+  author: Codex
+  sandboxed: true
+  scripts: [ codexstreamer ]
+  autoload: true
+  autoload-priority: 1003
+  @onLoad: init()
+  @onUnload: terminate()

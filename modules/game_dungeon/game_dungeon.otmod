@@ -1,0 +1,11 @@
+Module
+  name: game_dungeon
+  description: Terminal das dungeons de lendarios
+  author: Codex
+  website: http://localhost/
+  autoload: true
+  autoload-priority: 1000
+  sandboxed: true
+  scripts: [ dungeon ]
+  @onLoad: init()
+  @onUnload: terminate()

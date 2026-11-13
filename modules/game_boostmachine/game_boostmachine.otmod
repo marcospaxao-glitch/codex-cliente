@@ -1,0 +1,10 @@
+Module
+  name: game_boostmachine
+  description: Maquina de Boost com calculo antes de confirmar - opcode 126
+  author: Marcos
+  autoload: true
+  autoload-priority: 1010
+  scripts: [ boostmachine ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

@@ -1,0 +1,10 @@
+Module
+  name: game_tutorial
+  description: Guia Codex - todos os sistemas do servidor
+  author: Codex
+  sandboxed: true
+  scripts: [ guia_conteudo, tutorial ]
+  autoload-priority: 1001
+  autoload: true
+  @onLoad: init()
+  @onUnload: terminate()

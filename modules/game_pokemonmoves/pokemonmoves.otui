@@ -1,0 +1,140 @@
+MoveSlot < UIWidget
+  size: 36 36
+  focusable: false
+  image-size: 36 36
+  image-color: #e6e6e6
+  anchors.left: parent.left
+  anchors.top: parent.top
+
+  $hover:
+    image-color: #ffffff
+
+  $disabled:
+    image-color: #8a8a8a
+
+  UIWidget
+    id: glyph
+    anchors.fill: parent
+    image-size: 36 36
+    phantom: true
+    focusable: false
+
+  UIProgressRect
+    id: cooldown
+    anchors.fill: parent
+    margin: 7
+    background: #0a1320d0
+    percent: 100
+    phantom: true
+    focusable: false
+    font: verdana-11px-rounded
+    color: #dce8f5
+    text-align: center
+
+  UIWidget
+    id: hoverRing
+    anchors.fill: parent
+    image-source: /modules/game_pokemonmoves/moves_icon/anel
+    image-size: 36 36
+    phantom: true
+    focusable: false
+    visible: false
+
+  Label
+    id: lockLabel
+    anchors.horizontalCenter: parent.horizontalCenter
+    anchors.bottom: parent.bottom
+    margin-bottom: 1
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #ff6b6b
+    background-color: #0a1320
+    padding: 0 2 0 2
+    phantom: true
+    visible: false
+
+  Label
+    id: keyLabel
+    anchors.left: parent.left
+    anchors.top: parent.top
+    margin-left: -2
+    margin-top: -2
+    height: 12
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #f2c400
+    background-color: #0a1320
+    padding: 0 2 0 2
+    phantom: true
+
+MoveTip < UIWidget
+  focusable: false
+  phantom: true
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  padding: 4 6 4 6
+
+  Label
+    id: tipName
+    anchors.top: parent.top
+    anchors.left: parent.left
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+  Label
+    id: tipInfo
+    anchors.top: tipName.bottom
+    anchors.left: parent.left
+    margin-top: 2
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+UIWidget
+  id: codexMoves
+  size: 60 60
+  focusable: false
+  background-color: #0c1828
+  border-width: 1
+  border-color: #101f3e
+  opacity: 0.97
+
+  UIWidget
+    id: accent
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 2
+    background-color: #f2c400
+    phantom: true
+
+  Panel
+    id: mainWindow
+    anchors.fill: parent
+    phantom: true
+    focusable: false
+
+  UIWidget
+    id: dragHandle
+    size: 12 12
+    anchors.top: parent.top
+    anchors.left: parent.left
+    draggable: true
+    focusable: false
+    background-color: #101f3e
+    tooltip: Arraste aqui para mover a barra (botao direito: opcoes)
+
+    $hover:
+      background-color: #f2c400
+
+    UIWidget
+      id: grip
+      size: 12 12
+      anchors.centerIn: parent
+      image-source: /modules/game_pokemonmoves/moves_icon/alca
+      image-color: #8fa7c4
+      phantom: true

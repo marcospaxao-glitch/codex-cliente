@@ -1,0 +1,1 @@
+Coloque aqui um PNG 36x36 com o nome da move em minusculo (ex: razor leaf.png).

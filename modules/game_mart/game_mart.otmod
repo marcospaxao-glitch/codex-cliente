@@ -1,0 +1,10 @@
+Module
+  name: game_mart
+  description: Loja do Mark (gp do PokeBank, precos VIP)
+  author: Marcos
+  autoload: true
+  autoload-priority: 1006
+  scripts: [ mart ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

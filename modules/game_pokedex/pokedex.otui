@@ -1,0 +1,932 @@
+DexButton < UIButton
+  height: 22
+  font: verdana-11px-antialised
+  color: #8fa7c4
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    color: #ffffff
+    background-color: #142a4a
+
+  $on:
+    color: #1a1200
+    background-color: #f2c400
+    border-color: #ffe27a
+
+  $disabled:
+    color: #5f7596
+
+DexLabel < Label
+  font: verdana-11px-rounded
+  color: #8fa7c4
+  phantom: true
+
+DexTitle < Label
+  font: verdana-11px-antialised
+  color: #f2c400
+  text-auto-resize: true
+  phantom: true
+
+DexBox < UIWidget
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+  phantom: true
+
+DexTypeChip < Label
+  size: 74 18
+  font: verdana-11px-antialised
+  color: #0a1320
+  text-align: center
+  background-color: #6f86a8
+  phantom: true
+
+DexCard < UIButton
+  size: 76 74
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    background-color: #142a4a
+    border-color: #2f5582
+
+  $on:
+    background-color: #1a2c4a
+    border-color: #f2c400
+
+  UICreature
+    id: creature
+    size: 46 46
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 6
+    phantom: true
+
+  Label
+    id: unknown
+    text: ?
+    anchors.centerIn: creature
+    font: verdana-11px-antialised
+    color: #5f7596
+    text-auto-resize: true
+    visible: false
+    phantom: true
+
+  Label
+    id: number
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 3
+    margin-left: 4
+    font: verdana-11px-rounded
+    color: #6f86a8
+    text-auto-resize: true
+    phantom: true
+
+  UIWidget
+    id: caught
+    size: 8 8
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 5
+    margin-right: 5
+    background-color: #f2c400
+    border-width: 1
+    border-color: #ffe27a
+    visible: false
+    phantom: true
+
+  Label
+    id: name
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-bottom: 4
+    margin-left: 2
+    margin-right: 2
+    height: 14
+    text-align: center
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+DexFormButton < DexButton
+  height: 20
+  text-auto-resize: true
+  text-offset: 0 0
+
+DexStatRow < UIWidget
+  height: 20
+  phantom: true
+
+  Label
+    id: label
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    width: 78
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  Label
+    id: value
+    anchors.left: label.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 44
+    text-align: right
+    font: verdana-11px-antialised
+    color: #dce8f5
+    phantom: true
+
+  UIWidget
+    id: track
+    anchors.left: value.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 12
+    size: 330 8
+    background-color: #091522
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  UIWidget
+    id: fill
+    anchors.left: track.left
+    anchors.top: track.top
+    anchors.bottom: track.bottom
+    width: 0
+    background-color: #5fd35f
+    phantom: true
+
+DexMoveRow < UIWidget
+  height: 22
+  background-color: #0c1828
+  phantom: true
+
+  Label
+    id: level
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    width: 40
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  UIWidget
+    id: moveIcon
+    anchors.left: level.right
+    anchors.verticalCenter: parent.verticalCenter
+    size: 18 18
+    phantom: true
+
+  Label
+    id: name
+    anchors.left: moveIcon.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    width: 148
+    font: verdana-11px-antialised
+    color: #dce8f5
+    phantom: true
+
+  Label
+    id: type
+    anchors.left: name.right
+    anchors.verticalCenter: parent.verticalCenter
+    size: 70 16
+    text-align: center
+    font: verdana-11px-antialised
+    color: #0a1320
+    background-color: #6f86a8
+    phantom: true
+
+  Label
+    id: power
+    anchors.left: type.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 70
+    text-align: right
+    font: verdana-11px-antialised
+    color: #f2c400
+    phantom: true
+
+  Label
+    id: cooldown
+    anchors.left: power.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 80
+    text-align: right
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+DexEvoRow < UIButton
+  height: 46
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    background-color: #142a4a
+
+  $on:
+    border-color: #f2c400
+
+  UIWidget
+    id: indent
+    anchors.left: parent.left
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    width: 4
+    phantom: true
+
+  Label
+    id: arrow
+    anchors.left: indent.right
+    anchors.verticalCenter: parent.verticalCenter
+    font: verdana-11px-antialised
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  UICreature
+    id: creature
+    size: 40 40
+    anchors.left: arrow.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 6
+    phantom: true
+
+  Label
+    id: name
+    anchors.left: creature.right
+    anchors.top: parent.top
+    margin-left: 10
+    margin-top: 7
+    font: verdana-11px-antialised
+    color: #dce8f5
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: how
+    anchors.left: name.left
+    anchors.top: name.bottom
+    margin-top: 3
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: state
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 10
+    font: verdana-11px-rounded
+    color: #6f86a8
+    text-auto-resize: true
+    phantom: true
+
+DexDropCell < UIWidget
+  size: 112 40
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIItem
+    id: item
+    size: 32 32
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    virtual: true
+    phantom: true
+
+  Label
+    id: chance
+    anchors.left: item.right
+    anchors.right: parent.right
+    anchors.top: parent.top
+    margin-left: 6
+    margin-top: 5
+    font: verdana-11px-antialised
+    color: #f2c400
+    phantom: true
+
+  Label
+    id: count
+    anchors.left: chance.left
+    anchors.right: parent.right
+    anchors.top: chance.bottom
+    margin-top: 1
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+UIWindow
+  id: pokedexWindow
+  size: 880 600
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  visible: false
+
+  UIWidget
+    id: headerBar
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 16
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: titleLabel
+    text: POKEDEX
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 8
+    font: verdana-11px-antialised
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: progressLabel
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: titleLabel.right
+    margin-left: 18
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: true
+    phantom: true
+
+  UIWidget
+    id: progressTrack
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: progressLabel.right
+    margin-left: 12
+    size: 160 6
+    background-color: #091522
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  UIWidget
+    id: progressFill
+    anchors.left: progressTrack.left
+    anchors.top: progressTrack.top
+    anchors.bottom: progressTrack.bottom
+    width: 0
+    background-color: #f2c400
+    phantom: true
+
+  UIButton
+    id: closeButton
+    text: X
+    size: 24 22
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 12
+    margin-right: 14
+    font: verdana-11px-antialised
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+
+    $hover:
+      background-color: #e04848
+
+  Label
+    id: searchLabel
+    text: Buscar
+    anchors.top: headerBar.bottom
+    anchors.left: parent.left
+    margin-top: 18
+    margin-left: 16
+    width: 46
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  TextEdit
+    id: searchEdit
+    anchors.verticalCenter: searchLabel.verticalCenter
+    anchors.left: searchLabel.right
+    size: 284 22
+    font: verdana-11px-antialised
+    color: #0a1320
+    background-color: #a2a2a2
+    selection-color: #ffffff
+    selection-background-color: #2b5a8a
+
+  DexButton
+    id: filterAll
+    text: Todos
+    anchors.top: searchEdit.bottom
+    anchors.left: parent.left
+    margin-top: 8
+    margin-left: 16
+    width: 80
+
+  DexButton
+    id: filterSeen
+    text: Vistos
+    anchors.top: filterAll.top
+    anchors.left: filterAll.right
+    margin-left: 4
+    width: 80
+
+  DexButton
+    id: filterCaught
+    text: Capturados
+    anchors.top: filterAll.top
+    anchors.left: filterSeen.right
+    margin-left: 4
+    width: 82
+
+  DexButton
+    id: filterMissing
+    text: Faltando
+    anchors.top: filterAll.top
+    anchors.left: filterCaught.right
+    margin-left: 4
+    width: 80
+
+  DexButton
+    id: typeButton
+    anchors.top: filterAll.bottom
+    anchors.left: parent.left
+    margin-top: 6
+    margin-left: 16
+    width: 162
+
+  DexButton
+    id: genButton
+    anchors.top: typeButton.top
+    anchors.left: typeButton.right
+    margin-left: 4
+    width: 168
+
+  UIWidget
+    id: grid
+    anchors.top: typeButton.bottom
+    anchors.left: parent.left
+    margin-top: 8
+    margin-left: 16
+    size: 334 394
+    layout:
+      type: grid
+      cell-size: 80 76
+      cell-spacing: 2
+      num-columns: 4
+      flow: true
+
+  Label
+    id: emptyLabel
+    text: Nenhum pokemon encontrado.
+    anchors.top: grid.top
+    anchors.left: grid.left
+    margin-top: 20
+    margin-left: 10
+    font: verdana-11px-rounded
+    color: #6f86a8
+    text-auto-resize: true
+    visible: false
+    phantom: true
+
+  DexButton
+    id: prevPage
+    text: <
+    anchors.top: grid.bottom
+    anchors.left: grid.left
+    margin-top: 6
+    width: 40
+
+  DexButton
+    id: nextPage
+    text: >
+    anchors.top: prevPage.top
+    anchors.right: grid.right
+    width: 40
+
+  Label
+    id: pageLabel
+    anchors.verticalCenter: prevPage.verticalCenter
+    anchors.left: prevPage.right
+    anchors.right: nextPage.left
+    text-align: center
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  UIWidget
+    id: divider
+    anchors.top: searchEdit.top
+    anchors.bottom: parent.bottom
+    anchors.left: grid.right
+    width: 1
+    margin-left: 12
+    margin-bottom: 16
+    background-color: #1d3557
+    phantom: true
+
+  UIWidget
+    id: detail
+    anchors.top: searchEdit.top
+    anchors.left: divider.right
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-left: 14
+    margin-right: 16
+    margin-bottom: 16
+
+    Label
+      id: placeholder
+      text: Selecione um pokemon na lista.
+      anchors.centerIn: parent
+      font: verdana-11px-rounded
+      color: #6f86a8
+      text-auto-resize: true
+      phantom: true
+
+    UIWidget
+      id: content
+      anchors.fill: parent
+      visible: false
+
+      DexBox
+        id: portrait
+        anchors.top: parent.top
+        anchors.left: parent.left
+        size: 132 132
+        phantom: false
+
+      UICreature
+        id: bigCreature
+        size: 118 118
+        anchors.centerIn: portrait
+        phantom: true
+
+      Label
+        id: dexName
+        anchors.top: portrait.top
+        anchors.left: portrait.right
+        margin-left: 14
+        margin-top: 4
+        font: verdana-11px-antialised
+        color: #f2c400
+        text-auto-resize: true
+        phantom: true
+
+      Label
+        id: dexNumber
+        anchors.top: dexName.bottom
+        anchors.left: dexName.left
+        margin-top: 4
+        font: verdana-11px-rounded
+        color: #8fa7c4
+        text-auto-resize: true
+        phantom: true
+
+      DexTypeChip
+        id: type1
+        anchors.top: dexNumber.bottom
+        anchors.left: dexName.left
+        margin-top: 8
+
+      DexTypeChip
+        id: type2
+        anchors.top: type1.top
+        anchors.left: type1.right
+        margin-left: 4
+
+      Label
+        id: stateTag
+        anchors.top: type1.bottom
+        anchors.left: dexName.left
+        margin-top: 10
+        height: 18
+        text-auto-resize: true
+        text-offset: 6 0
+        font: verdana-11px-antialised
+        color: #0a1320
+        background-color: #5fd35f
+        phantom: true
+
+      Label
+        id: evoLabel
+        anchors.verticalCenter: stateTag.verticalCenter
+        anchors.left: stateTag.right
+        margin-left: 8
+        font: verdana-11px-rounded
+        color: #f2c400
+        text-auto-resize: true
+
+      Label
+        id: catchLabel
+        anchors.top: stateTag.bottom
+        anchors.left: dexName.left
+        margin-top: 8
+        font: verdana-11px-rounded
+        color: #8fa7c4
+        text-auto-resize: true
+        phantom: true
+
+      Label
+        id: expLabel
+        anchors.top: catchLabel.bottom
+        anchors.left: dexName.left
+        margin-top: 3
+        font: verdana-11px-rounded
+        color: #8fa7c4
+        text-auto-resize: true
+        phantom: true
+
+      UIWidget
+        id: pityTrack
+        anchors.top: expLabel.bottom
+        anchors.left: dexName.left
+        margin-top: 3
+        size: 160 5
+        background-color: #1d3557
+
+        UIWidget
+          id: pityFill
+          anchors.left: parent.left
+          anchors.top: parent.top
+          anchors.bottom: parent.bottom
+          width: 0
+          background-color: #f2c400
+          phantom: true
+
+      UIWidget
+        id: forms
+        anchors.top: portrait.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 8
+        height: 20
+        layout:
+          type: horizontalBox
+          spacing: 4
+
+      DexButton
+        id: tabStatus
+        text: Status
+        anchors.top: forms.bottom
+        anchors.left: parent.left
+        margin-top: 10
+        width: 100
+
+      DexButton
+        id: tabMoves
+        text: Golpes
+        anchors.top: tabStatus.top
+        anchors.left: tabStatus.right
+        margin-left: 4
+        width: 100
+
+      DexButton
+        id: tabEvo
+        text: Evolucao
+        anchors.top: tabStatus.top
+        anchors.left: tabMoves.right
+        margin-left: 4
+        width: 100
+
+      DexButton
+        id: tabDrops
+        text: Drops
+        anchors.top: tabStatus.top
+        anchors.left: tabEvo.right
+        margin-left: 4
+        width: 100
+
+      UIWidget
+        id: pageStatus
+        anchors.top: tabStatus.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-top: 10
+        layout:
+          type: verticalBox
+          spacing: 4
+
+        DexStatRow
+          id: statHp
+        DexStatRow
+          id: statAtk
+        DexStatRow
+          id: statSpa
+        DexStatRow
+          id: statDef
+        DexStatRow
+          id: statSpd
+        DexStatRow
+          id: statSpe
+
+        DexTitle
+          id: abilityTitle
+          text: HIDDEN ABILITY
+          margin-top: 8
+
+        Label
+          id: abilityName
+          font: verdana-11px-antialised
+          color: #dce8f5
+          height: 16
+          phantom: true
+
+        Label
+          id: abilityDesc
+          font: verdana-11px-rounded
+          color: #8fa7c4
+          height: 32
+          text-wrap: true
+          text-align: topLeft
+          phantom: true
+
+        DexTitle
+          id: fieldTitle
+          text: HABILIDADES DE CAMPO
+          margin-top: 4
+
+        Label
+          id: fieldLabel
+          font: verdana-11px-rounded
+          color: #dce8f5
+          height: 16
+          phantom: true
+
+      UIWidget
+        id: pageMoves
+        anchors.top: tabStatus.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-top: 10
+        visible: false
+
+        UIWidget
+          id: movesHeader
+          anchors.top: parent.top
+          anchors.left: parent.left
+          anchors.right: parent.right
+          height: 18
+          phantom: true
+
+          Label
+            id: hLevel
+            text: Nv
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            margin-left: 8
+            width: 40
+            font: verdana-11px-rounded
+            color: #6f86a8
+            phantom: true
+
+          Label
+            id: hName
+            text: Golpe
+            anchors.left: hLevel.right
+            anchors.verticalCenter: parent.verticalCenter
+            width: 170
+            font: verdana-11px-rounded
+            color: #6f86a8
+            phantom: true
+
+          Label
+            id: hType
+            text: Tipo
+            anchors.left: hName.right
+            anchors.verticalCenter: parent.verticalCenter
+            width: 70
+            text-align: center
+            font: verdana-11px-rounded
+            color: #6f86a8
+            phantom: true
+
+          Label
+            id: hPower
+            text: Poder
+            anchors.left: hType.right
+            anchors.verticalCenter: parent.verticalCenter
+            width: 70
+            text-align: right
+            font: verdana-11px-rounded
+            color: #6f86a8
+            phantom: true
+
+          Label
+            id: hCooldown
+            text: Recarga
+            anchors.left: hPower.right
+            anchors.verticalCenter: parent.verticalCenter
+            width: 80
+            text-align: right
+            font: verdana-11px-rounded
+            color: #6f86a8
+            phantom: true
+
+        ScrollablePanel
+          id: movesList
+          anchors.top: movesHeader.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          margin-top: 4
+          margin-right: 14
+          vertical-scrollbar: movesScroll
+          layout:
+            type: verticalBox
+            spacing: 2
+
+        VerticalScrollBar
+          id: movesScroll
+          anchors.top: movesList.top
+          anchors.bottom: movesList.bottom
+          anchors.right: parent.right
+          width: 10
+          step: 24
+          pixels-scroll: true
+
+      UIWidget
+        id: pageEvo
+        anchors.top: tabStatus.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-top: 10
+        visible: false
+
+        ScrollablePanel
+          id: evoList
+          anchors.fill: parent
+          margin-right: 14
+          vertical-scrollbar: evoScroll
+          layout:
+            type: verticalBox
+            spacing: 4
+
+        VerticalScrollBar
+          id: evoScroll
+          anchors.top: evoList.top
+          anchors.bottom: evoList.bottom
+          anchors.right: parent.right
+          width: 10
+          step: 40
+          pixels-scroll: true
+
+      UIWidget
+        id: pageDrops
+        anchors.top: tabStatus.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-top: 10
+        visible: false
+
+        ScrollablePanel
+          id: dropsList
+          anchors.fill: parent
+          margin-right: 14
+          vertical-scrollbar: dropsScroll
+          layout:
+            type: grid
+            cell-size: 112 40
+            cell-spacing: 6
+            num-columns: 4
+            flow: true
+
+        VerticalScrollBar
+          id: dropsScroll
+          anchors.top: dropsList.top
+          anchors.bottom: dropsList.bottom
+          anchors.right: parent.right
+          width: 10
+          step: 46
+          pixels-scroll: true
+
+        Label
+          id: dropsEmpty
+          text: Este pokemon nao tem drops.
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin-top: 6
+          font: verdana-11px-rounded
+          color: #6f86a8
+          text-auto-resize: true
+          visible: false
+          phantom: true

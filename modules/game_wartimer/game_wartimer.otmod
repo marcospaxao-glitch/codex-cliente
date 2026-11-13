@@ -1,0 +1,10 @@
+Module
+  name: game_wartimer
+  description: Contador da guerra de castelos na tela (opcode 128)
+  author: Marcos
+  autoload: true
+  autoload-priority: 1010
+  scripts: [ wartimer ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

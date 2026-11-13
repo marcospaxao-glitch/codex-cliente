@@ -1,0 +1,273 @@
+CharacterWidget < UIWidget
+  size: 156 196
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+  focusable: true
+  &updateOnStates: |
+    function(self)
+      local children = self:getChildren()
+      for i=1,#children do
+        children[i]:setOn(self:isFocused())
+      end
+    end
+  @onFocusChange: self:updateOnStates()
+  @onSetup: self:updateOnStates()
+
+  $hover !focus:
+    background-color: #132744
+    border-color: #3d6a96
+
+  $focus:
+    background-color: #16305a
+    border-color: #f2c400
+
+  UIWidget
+    id: topLine
+    height: 3
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 1
+    background-color: #24415f
+    phantom: true
+    $on:
+      background-color: #f2c400
+
+  UIWidget
+    id: slot
+    size: 96 96
+    anchors.top: topLine.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 12
+    background-color: #0a1320
+    border-width: 1
+    border-color: #1c3150
+    phantom: true
+
+  UICreature
+    id: outfitView
+    size: 88 88
+    anchors.centerIn: slot
+    phantom: true
+    visible: false
+
+  Label
+    id: initial
+    anchors.centerIn: slot
+    font: verdana-11px-rounded
+    color: #3d6a96
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: name
+    anchors.top: slot.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 10
+    margin-left: 6
+    margin-right: 6
+    height: 14
+    text-align: center
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+    $on:
+      color: #f2c400
+
+  Label
+    id: levelLabel
+    anchors.top: name.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 6
+    height: 14
+    text-align: center
+    font: verdana-11px-rounded
+    color: #dce8f5
+    text: Level -
+    phantom: true
+
+  Label
+    id: profLabel
+    anchors.top: levelLabel.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 3
+    height: 14
+    text-align: center
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  Label
+    id: clanLabel
+    anchors.top: profLabel.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 3
+    height: 14
+    text-align: center
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+  Label
+    id: worldName
+    visible: false
+    &baseText: '%s'
+
+CodexCharButton < UIButton
+  size: 110 32
+  font: verdana-11px-antialised
+  color: #0a1320
+  background-color: #f2c400
+  border-width: 1
+  border-color: #b08c00
+  text-align: center
+
+  $hover !disabled:
+    background-color: #ffd84a
+
+  $pressed:
+    background-color: #d9a900
+    text-offset: 1 1
+
+CodexCharGhostButton < UIButton
+  size: 110 32
+  font: verdana-11px-rounded
+  color: #dce8f5
+  background-color: #0a1320
+  border-width: 1
+  border-color: #24415f
+  text-align: center
+
+  $hover !disabled:
+    border-color: #f2c400
+    color: #ffffff
+
+UIWindow
+  id: charactersWindow
+  size: 560 520
+  anchors.centerIn: parent
+  background-color: #0c1828f2
+  border-width: 1
+  border-color: #f2c400
+  padding: 48 18 16 18
+  visible: false
+  @onEnter: CharacterList.doLogin()
+  @onEscape: CharacterList.hide(true)
+  @onSetup: |
+    local list = self:getChildById('characters')
+    g_keyboard.bindKeyPress('Up', function() list:focusPreviousChild(KeyboardFocusReason) end, self)
+    g_keyboard.bindKeyPress('Down', function() list:focusNextChild(KeyboardFocusReason) end, self)
+    g_keyboard.bindKeyPress('Left', function() list:focusPreviousChild(KeyboardFocusReason) end, self)
+    g_keyboard.bindKeyPress('Right', function() list:focusNextChild(KeyboardFocusReason) end, self)
+
+  $dragging:
+    opacity: 0.85
+
+  UIWidget
+    id: topBar
+    height: 3
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: -47
+    margin-left: -17
+    margin-right: -17
+    background-color: #f2c400
+    phantom: true
+
+  UIWidget
+    id: titleBand
+    height: 34
+    anchors.top: topBar.bottom
+    anchors.left: topBar.left
+    anchors.right: topBar.right
+    background-color: #101f3e
+    phantom: true
+
+  Label
+    id: windowTitle
+    anchors.centerIn: titleBand
+    font: verdana-11px-rounded
+    color: #f2c400
+    text: ESCOLHA SEU PERSONAGEM
+    text-auto-resize: true
+    phantom: true
+
+  ScrollablePanel
+    id: characters
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: characterListScrollBar.left
+    anchors.bottom: separator.top
+    margin-bottom: 10
+    margin-right: 4
+    phantom: false
+    focusable: false
+    vertical-scrollbar: characterListScrollBar
+    auto-focus: first
+    layout:
+      type: grid
+      cell-size: 156 196
+      cell-spacing: 10
+      flow: true
+
+  VerticalScrollBar
+    id: characterListScrollBar
+    anchors.top: parent.top
+    anchors.bottom: separator.top
+    anchors.right: parent.right
+    margin-bottom: 10
+    step: 40
+    pixels-scroll: true
+
+  Label
+    id: accountStatusCaption
+    text: Conta:
+    font: verdana-11px-rounded
+    color: #6f86a8
+    anchors.left: parent.left
+    anchors.verticalCenter: buttonOk.verticalCenter
+    text-auto-resize: true
+
+  Label
+    id: accountStatusLabel
+    text: Free Account
+    font: verdana-11px-rounded
+    color: #dce8f5
+    anchors.left: accountStatusCaption.right
+    anchors.verticalCenter: buttonOk.verticalCenter
+    margin-left: 6
+    text-auto-resize: true
+
+    $on:
+      color: #e04848
+
+  UIWidget
+    id: separator
+    height: 1
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: buttonOk.top
+    margin-bottom: 10
+    background-color: #1c3150
+    phantom: true
+
+  CodexCharButton
+    id: buttonOk
+    text: JOGAR
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    @onClick: CharacterList.doLogin()
+
+  CodexCharGhostButton
+    id: buttonCancel
+    text: Voltar
+    anchors.right: buttonOk.left
+    anchors.bottom: parent.bottom
+    margin-right: 10
+    @onClick: CharacterList.hide(true)

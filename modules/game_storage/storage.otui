@@ -1,0 +1,1447 @@
+PCTabHeader < UIWidget
+  height: 20
+  phantom: true
+
+  Label
+    id: title
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin-left: 6
+    margin-bottom: 3
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  UIWidget
+    id: line
+    height: 1
+    anchors.left: title.right
+    anchors.right: parent.right
+    anchors.verticalCenter: title.verticalCenter
+    margin-left: 6
+    margin-right: 4
+    background-color: #1d3557
+    phantom: true
+
+PCTab < UIButton
+  height: 28
+  font: verdana-11px-rounded
+  color: #8fa7c4
+  text-align: left
+  text-offset: 36 0
+  background-color: #00000000
+  border-width: 1
+  border-color: #00000000
+
+  $hover:
+    color: #ffffff
+    background-color: #101f3e
+    border-color: #1d3557
+
+  $on:
+    color: #ffffff
+    background-color: #142a4a
+    border-color: #2b4a75
+
+  UIWidget
+    id: marker
+    width: 3
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    background-color: #00000000
+    phantom: true
+
+  UIWidget
+    id: iconBg
+    size: 26 26
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 6
+    background-color: #07101c
+    phantom: true
+
+  UIItem
+    id: icon
+    size: 24 24
+    anchors.centerIn: iconBg
+    virtual: true
+    phantom: true
+
+  UIWidget
+    id: iconImage
+    size: 24 24
+    anchors.centerIn: iconBg
+    phantom: true
+    visible: false
+
+  Label
+    id: countLabel
+    size: 34 16
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 5
+    text-align: center
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #0a1320
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+PCButton < UIButton
+  height: 24
+  font: verdana-11px-rounded
+  color: #dce8f5
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    color: #ffffff
+    border-color: #f2c400
+
+  $disabled:
+    color: #3a4c64
+    border-color: #142238
+
+PCPokeSlot < UIWidget
+  size: 128 100
+  background-color: #07101c
+  border-width: 1
+  border-color: #16294a
+  draggable: true
+
+  $hover:
+    border-color: #2b4a75
+
+  Label
+    id: slotLabel
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 2
+    margin-left: 4
+    font: verdana-11px-rounded
+    color: #24415f
+    text-auto-resize: true
+    phantom: true
+
+  UIWidget
+    id: portrait
+    size: 56 56
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 2
+    image-size: 56 56
+    phantom: true
+
+  UIItem
+    id: ball
+    size: 20 20
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 2
+    margin-right: 2
+    virtual: true
+    phantom: true
+
+  UIWidget
+    id: lockIcon
+    size: 12 14
+    anchors.top: parent.top
+    anchors.right: ball.left
+    margin-top: 3
+    margin-right: 3
+    image-source: /modules/game_storage/icons/codex_lock
+    visible: false
+    phantom: true
+
+  UIWidget
+    id: genderIcon
+    size: 11 11
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 17
+    margin-left: 5
+    phantom: true
+
+  UIWidget
+    id: starsCol
+    size: 8 44
+    anchors.top: genderIcon.bottom
+    anchors.left: parent.left
+    margin-top: 3
+    margin-left: 6
+    phantom: true
+    layout:
+      type: verticalBox
+      spacing: 1
+
+  Label
+    id: tagLabel
+    anchors.top: ball.bottom
+    anchors.right: parent.right
+    margin-top: 1
+    margin-right: 3
+    font: verdana-11px-rounded
+    color: #5fe0ff
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: nameLabel
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: portrait.bottom
+    margin-left: 3
+    margin-right: 3
+    height: 13
+    text-align: center
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: levelLabel
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: nameLabel.bottom
+    margin-left: 3
+    margin-right: 3
+    height: 13
+    text-align: center
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  UIWidget
+    id: hpBg
+    height: 4
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-left: 6
+    margin-right: 6
+    margin-bottom: 4
+    background-color: #0c1828
+    phantom: true
+
+  UIWidget
+    id: hpFill
+    height: 4
+    width: 0
+    anchors.left: hpBg.left
+    anchors.top: hpBg.top
+    background-color: #5fd35f
+    phantom: true
+
+PCItemSlot < UIWidget
+  size: 62 62
+  background-color: #07101c
+  border-width: 1
+  border-color: #16294a
+  draggable: true
+
+  $hover:
+    border-color: #2b4a75
+
+  UIItem
+    id: item
+    size: 32 32
+    anchors.centerIn: parent
+    margin-bottom: 8
+    virtual: true
+    phantom: true
+
+  Label
+    id: countLabel
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-bottom: 2
+    height: 13
+    text-align: center
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+PCMarketRow < UIWidget
+  height: 42
+  background-color: #07101c
+  border-width: 1
+  border-color: #16294a
+
+  $hover:
+    border-color: #2b4a75
+
+  UIWidget
+    id: slot
+    size: 36 36
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 3
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  UIItem
+    id: icon
+    size: 32 32
+    anchors.centerIn: slot
+    virtual: true
+    phantom: true
+
+  UIWidget
+    id: portrait
+    size: 34 34
+    anchors.centerIn: slot
+    image-size: 34 34
+    phantom: true
+
+  Label
+    id: nameLabel
+    anchors.top: parent.top
+    anchors.left: slot.right
+    anchors.right: priceLabel.left
+    margin-top: 5
+    margin-left: 8
+    margin-right: 6
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: infoLabel
+    anchors.top: nameLabel.bottom
+    anchors.left: nameLabel.left
+    anchors.right: priceLabel.left
+    margin-top: 2
+    margin-right: 6
+    height: 14
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+  UIButton
+    id: actionButton
+    size: 80 24
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 6
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #1d5a31
+    border-width: 1
+    border-color: #5fd35f
+
+    $hover:
+      color: #ffffff
+      background-color: #277a42
+
+    $disabled:
+      color: #3a4c64
+      background-color: #0c1828
+      border-color: #142238
+
+  Label
+    id: priceLabel
+    width: 130
+    anchors.right: actionButton.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 8
+    text-align: right
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+PCFilter < UIButton
+  width: 104
+  font: verdana-11px-rounded
+  color: #8fa7c4
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    color: #ffffff
+    border-color: #4a6a94
+
+  $on:
+    color: #f2c400
+    background-color: #1f1a06
+    border-color: #f2c400
+
+PCInfoSection < Label
+  height: 20
+  font: verdana-11px-rounded
+  color: #f2c400
+  text-offset: 2 4
+
+PCInfoRow < UIWidget
+  height: 16
+
+  Label
+    id: key
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 10
+    width: 120
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  Label
+    id: value
+    anchors.left: key.right
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+PCForgeSpecies < UIWidget
+  height: 40
+  background-color: #07101c
+  border-width: 1
+  border-color: #16294a
+
+  $hover:
+    border-color: #2b4a75
+
+  $on:
+    background-color: #142a4a
+    border-color: #f2c400
+
+  UIWidget
+    id: portrait
+    size: 32 32
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    image-size: 32 32
+    phantom: true
+
+  Label
+    id: nameLabel
+    anchors.top: parent.top
+    anchors.left: portrait.right
+    anchors.right: countLabel.left
+    margin-top: 5
+    margin-left: 6
+    margin-right: 4
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: infoLabel
+    anchors.top: nameLabel.bottom
+    anchors.left: nameLabel.left
+    anchors.right: parent.right
+    margin-top: 1
+    height: 14
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+  Label
+    id: countLabel
+    size: 40 16
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 4
+    margin-right: 4
+    text-align: center
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #0a1320
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+PCForgePoke < UIWidget
+  size: 84 60
+  background-color: #07101c
+  border-width: 1
+  border-color: #16294a
+
+  $hover:
+    border-color: #2b4a75
+
+  UIWidget
+    id: portrait
+    size: 32 32
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 3
+    margin-left: 3
+    image-size: 32 32
+    phantom: true
+
+  Label
+    id: levelLabel
+    anchors.top: parent.top
+    anchors.left: portrait.right
+    anchors.right: parent.right
+    margin-top: 5
+    margin-left: 2
+    height: 13
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: ivLabel
+    anchors.top: levelLabel.bottom
+    anchors.left: levelLabel.left
+    anchors.right: parent.right
+    margin-top: 2
+    height: 13
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  Label
+    id: stateLabel
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-bottom: 3
+    height: 13
+    text-align: center
+    font: verdana-11px-rounded
+    color: #3a4c64
+    phantom: true
+
+PCForgeCost < UIButton
+  size: 150 40
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    color: #ffffff
+    border-color: #4a6a94
+
+  $on:
+    background-color: #1f1a06
+    border-color: #f2c400
+
+  $disabled:
+    background-color: #0a1320
+    border-color: #142238
+
+  UIWidget
+    id: iconBg
+    size: 32 32
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    background-color: #07101c
+    phantom: true
+
+  UIItem
+    id: icon
+    size: 32 32
+    anchors.centerIn: iconBg
+    virtual: true
+    phantom: true
+
+  Label
+    id: amount
+    anchors.top: parent.top
+    anchors.left: iconBg.right
+    anchors.right: parent.right
+    margin-top: 5
+    margin-left: 8
+    margin-right: 4
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: balance
+    anchors.top: amount.bottom
+    anchors.left: amount.left
+    anchors.right: parent.right
+    margin-top: 2
+    margin-right: 4
+    height: 14
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+PCForgeAttr < UIWidget
+  height: 15
+
+  Label
+    id: name
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 10
+    font: verdana-11px-rounded
+    color: #dce8f5
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: perfect
+    width: 110
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 10
+    text-align: center
+    font: verdana-11px-rounded
+    color: #5fd35f
+    phantom: true
+
+  Label
+    id: common
+    width: 110
+    anchors.right: perfect.left
+    anchors.verticalCenter: parent.verticalCenter
+    text-align: center
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+  Label
+    id: best
+    width: 80
+    anchors.right: common.left
+    anchors.verticalCenter: parent.verticalCenter
+    text-align: center
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+PCSellRow < UIWidget
+  height: 30
+  background-color: #07101c
+  border-width: 1
+  border-color: #16294a
+
+  Label
+    id: nameLabel
+    anchors.left: parent.left
+    anchors.right: countEdit.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    margin-right: 6
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  TextEdit
+    id: countEdit
+    size: 50 22
+    anchors.right: priceEdit.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 6
+    font: verdana-11px-antialised
+    color: #0a1320
+    background-color: #a2a2a2
+    selection-color: #ffffff
+    selection-background-color: #2b5a8a
+
+  TextEdit
+    id: priceEdit
+    size: 100 22
+    anchors.right: currencyButton.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 6
+    font: verdana-11px-antialised
+    color: #0a1320
+    background-color: #a2a2a2
+    selection-color: #ffffff
+    selection-background-color: #2b5a8a
+
+  PCButton
+    id: currencyButton
+    size: 80 22
+    anchors.right: removeButton.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 6
+
+  PCButton
+    id: removeButton
+    text: X
+    size: 22 22
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 4
+
+UIWindow
+  id: pcWindow
+  size: 900 660
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  visible: false
+
+  UIWidget
+    id: headerBar
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 12
+    margin-left: 14
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: titleLabel
+    text: PC
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: summaryLabel
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: titleLabel.right
+    margin-left: 10
+    font: verdana-11px-rounded
+    color: #6f86a8
+    text-auto-resize: true
+    phantom: true
+
+  UIButton
+    id: closeButton
+    text: X
+    size: 22 20
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 10
+    margin-right: 12
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+    @onClick: modules.game_storage.hide()
+
+    $hover:
+      color: #ffffff
+      background-color: #7a1f1f
+      border-color: #e04848
+
+  Panel
+    id: tabsPanel
+    width: 160
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin-top: 40
+    margin-left: 12
+    margin-bottom: 12
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1d3557
+    padding: 4
+    layout:
+      type: verticalBox
+      spacing: 2
+
+  Panel
+    id: contentPanel
+    anchors.top: parent.top
+    anchors.left: tabsPanel.right
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-top: 40
+    margin-left: 8
+    margin-right: 12
+    margin-bottom: 12
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1d3557
+
+    PCButton
+      id: prevButton
+      text: <
+      size: 28 24
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 8
+      margin-left: 8
+
+    Label
+      id: pageLabel
+      width: 120
+      anchors.verticalCenter: prevButton.verticalCenter
+      anchors.left: prevButton.right
+      margin-left: 4
+      text-align: center
+      font: verdana-11px-rounded
+      color: #f2c400
+
+    PCButton
+      id: nextButton
+      text: >
+      size: 28 24
+      anchors.verticalCenter: prevButton.verticalCenter
+      anchors.left: pageLabel.right
+      margin-left: 4
+
+    TextEdit
+      id: searchEdit
+      height: 22
+      anchors.verticalCenter: prevButton.verticalCenter
+      anchors.right: parent.right
+      margin-right: 8
+      width: 170
+      font: verdana-11px-antialised
+      color: #0a1320
+      background-color: #a2a2a2
+      selection-color: #ffffff
+      selection-background-color: #2b5a8a
+
+    Panel
+      id: pokeGrid
+      anchors.top: prevButton.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 418
+      margin-top: 8
+      margin-left: 8
+      margin-right: 8
+      layout:
+        type: grid
+        cell-size: 128 100
+        cell-spacing: 6
+        num-columns: 5
+        flow: false
+
+    Panel
+      id: itemGrid
+      anchors.top: prevButton.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 402
+      margin-top: 8
+      margin-left: 8
+      margin-right: 8
+      visible: false
+      layout:
+        type: grid
+        cell-size: 62 62
+        cell-spacing: 6
+        num-columns: 10
+        flow: false
+
+    Panel
+      id: marketFilters
+      anchors.top: prevButton.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 24
+      margin-top: 8
+      margin-left: 8
+      margin-right: 8
+      visible: false
+      layout:
+        type: horizontalBox
+        spacing: 4
+
+    ScrollablePanel
+      id: marketPanel
+      anchors.top: marketFilters.bottom
+      anchors.left: parent.left
+      anchors.right: marketScroll.left
+      height: 386
+      margin-top: 6
+      margin-left: 8
+      margin-right: 4
+      vertical-scrollbar: marketScroll
+      visible: false
+      layout:
+        type: verticalBox
+        spacing: 3
+
+    VerticalScrollBar
+      id: marketScroll
+      width: 12
+      anchors.top: marketFilters.bottom
+      anchors.right: parent.right
+      height: 386
+      margin-top: 6
+      margin-right: 8
+      step: 45
+      pixels-scroll: true
+      visible: false
+
+    ScrollablePanel
+      id: searchPanel
+      anchors.top: prevButton.bottom
+      anchors.left: parent.left
+      anchors.right: searchScroll.left
+      height: 410
+      margin-top: 8
+      margin-left: 8
+      margin-right: 4
+      vertical-scrollbar: searchScroll
+      visible: false
+      layout:
+        type: verticalBox
+        spacing: 3
+
+    VerticalScrollBar
+      id: searchScroll
+      width: 12
+      anchors.top: prevButton.bottom
+      anchors.right: parent.right
+      height: 410
+      margin-top: 8
+      margin-right: 8
+      step: 45
+      pixels-scroll: true
+      visible: false
+
+    UIWidget
+      id: footerLine
+      height: 1
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      margin-bottom: 104
+      background-color: #1d3557
+      phantom: true
+
+    Label
+      id: selectedLabel
+      anchors.top: footerLine.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 8
+      margin-left: 10
+      margin-right: 10
+      height: 14
+      font: verdana-11px-rounded
+      color: #ffffff
+
+    TextEdit
+      id: amountEdit
+      size: 60 22
+      anchors.top: selectedLabel.bottom
+      anchors.left: parent.left
+      margin-top: 8
+      margin-left: 10
+      font: verdana-11px-antialised
+      color: #0a1320
+      background-color: #a2a2a2
+      selection-color: #ffffff
+      selection-background-color: #2b5a8a
+      text: 1
+
+    PCButton
+      id: withdrawButton
+      text: Sacar
+      width: 70
+      anchors.verticalCenter: amountEdit.verticalCenter
+      anchors.left: amountEdit.right
+      margin-left: 6
+
+    PCButton
+      id: withdrawAllButton
+      text: Sacar tudo
+      width: 80
+      anchors.verticalCenter: amountEdit.verticalCenter
+      anchors.left: withdrawButton.right
+      margin-left: 6
+
+    PCButton
+      id: depositTabButton
+      text: Guardar tudo desta aba
+      width: 150
+      anchors.verticalCenter: amountEdit.verticalCenter
+      anchors.right: parent.right
+      margin-right: 10
+
+    PCButton
+      id: summaryButton
+      text: Resumo
+      width: 80
+      anchors.verticalCenter: amountEdit.verticalCenter
+      anchors.left: cartAddButton.right
+      margin-left: 6
+      visible: false
+
+    PCButton
+      id: lockButton
+      text: Cadeado
+      width: 84
+      anchors.verticalCenter: amountEdit.verticalCenter
+      anchors.left: summaryButton.right
+      margin-left: 6
+      visible: false
+
+    UIButton
+      id: releaseButton
+      text: Liberar
+      width: 90
+      height: 24
+      anchors.verticalCenter: amountEdit.verticalCenter
+      anchors.left: lockButton.right
+      margin-left: 6
+      font: verdana-11px-rounded
+      color: #ffd0d0
+      background-color: #3a1212
+      border-width: 1
+      border-color: #7a1f1f
+      visible: false
+
+      $hover:
+        color: #ffffff
+        background-color: #7a1f1f
+        border-color: #e04848
+
+      $disabled:
+        color: #5a3a3a
+        background-color: #1a0d0d
+        border-color: #3a1a1a
+
+    PCButton
+      id: cartAddButton
+      text: + Carrinho
+      width: 100
+      anchors.verticalCenter: amountEdit.verticalCenter
+      anchors.left: withdrawAllButton.right
+      margin-left: 6
+
+    Label
+      id: cartLabel
+      anchors.top: amountEdit.bottom
+      anchors.left: parent.left
+      margin-top: 10
+      margin-left: 10
+      font: verdana-11px-rounded
+      color: #f2c400
+      text-auto-resize: true
+      text: Carrinho
+
+    PCButton
+      id: sellButton
+      text: Anunciar
+      width: 100
+      anchors.verticalCenter: cartLabel.verticalCenter
+      anchors.right: parent.right
+      margin-right: 10
+
+    Label
+      id: cartSummary
+      anchors.verticalCenter: cartLabel.verticalCenter
+      anchors.left: cartLabel.right
+      anchors.right: sellButton.left
+      margin-left: 8
+      margin-right: 8
+      height: 14
+      font: verdana-11px-rounded
+      color: #8fa7c4
+
+    Label
+      id: hintLabel
+      anchors.top: cartLabel.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 6
+      margin-left: 10
+      margin-right: 10
+      height: 13
+      font: verdana-11px-rounded
+      color: #6f86a8
+
+    Panel
+      id: forgePanel
+      anchors.fill: parent
+      margin: 1
+      background-color: #0c1828
+      visible: false
+
+      Label
+        id: forgeSpeciesTitle
+        text: POKEMONS NO PC
+        anchors.top: parent.top
+        anchors.left: parent.left
+        margin-top: 10
+        margin-left: 10
+        font: verdana-11px-rounded
+        color: #f2c400
+        text-auto-resize: true
+
+      ScrollablePanel
+        id: forgeSpeciesList
+        anchors.top: forgeSpeciesTitle.bottom
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        width: 200
+        margin-top: 8
+        margin-left: 10
+        margin-bottom: 10
+        vertical-scrollbar: forgeSpeciesScroll
+        layout:
+          type: verticalBox
+          spacing: 3
+
+      VerticalScrollBar
+        id: forgeSpeciesScroll
+        width: 12
+        anchors.top: forgeSpeciesList.top
+        anchors.bottom: forgeSpeciesList.bottom
+        anchors.left: forgeSpeciesList.right
+        margin-left: 2
+        step: 43
+        pixels-scroll: true
+
+      Label
+        id: forgeTitle
+        anchors.top: parent.top
+        anchors.left: forgeSpeciesScroll.right
+        anchors.right: forgeAuto.left
+        margin-top: 10
+        margin-left: 12
+        margin-right: 8
+        height: 14
+        font: verdana-11px-rounded
+        color: #ffffff
+
+      PCButton
+        id: forgeAuto
+        text: Auto
+        width: 60
+        anchors.top: parent.top
+        anchors.right: parent.right
+        margin-top: 6
+        margin-right: 10
+
+      ScrollablePanel
+        id: forgePokeList
+        anchors.top: forgeTitle.bottom
+        anchors.left: forgeTitle.left
+        anchors.right: forgePokeScroll.left
+        height: 126
+        margin-top: 8
+        margin-right: 4
+        vertical-scrollbar: forgePokeScroll
+        layout:
+          type: grid
+          cell-size: 84 60
+          cell-spacing: 6
+          num-columns: 5
+          flow: false
+
+      VerticalScrollBar
+        id: forgePokeScroll
+        width: 12
+        height: 126
+        anchors.top: forgeTitle.bottom
+        anchors.right: parent.right
+        margin-top: 8
+        margin-right: 10
+        step: 66
+        pixels-scroll: true
+
+      Panel
+        id: forgePreview
+        anchors.top: forgePokeList.bottom
+        anchors.left: forgeTitle.left
+        anchors.right: parent.right
+        height: 268
+        margin-top: 8
+        margin-right: 10
+        background-color: #07101c
+        border-width: 1
+        border-color: #1d3557
+
+        UIWidget
+          id: tableHeader
+          height: 18
+          anchors.top: parent.top
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 1
+          background-color: #101f3e
+          phantom: true
+
+        Label
+          id: hAttr
+          text: ATRIBUTO
+          anchors.verticalCenter: tableHeader.verticalCenter
+          anchors.left: parent.left
+          margin-left: 10
+          font: verdana-11px-rounded
+          color: #8fa7c4
+          text-auto-resize: true
+
+        Label
+          id: hBest
+          text: MELHOR
+          width: 80
+          anchors.verticalCenter: tableHeader.verticalCenter
+          anchors.right: hCommon.left
+          text-align: center
+          font: verdana-11px-rounded
+          color: #8fa7c4
+
+        Label
+          id: hCommon
+          width: 110
+          anchors.verticalCenter: tableHeader.verticalCenter
+          anchors.right: hPerfect.left
+          text-align: center
+          font: verdana-11px-rounded
+          color: #f2c400
+
+        Label
+          id: hPerfect
+          width: 110
+          anchors.verticalCenter: tableHeader.verticalCenter
+          anchors.right: parent.right
+          margin-right: 10
+          text-align: center
+          font: verdana-11px-rounded
+          color: #5fd35f
+
+        Panel
+          id: forgeTable
+          anchors.top: tableHeader.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          height: 226
+          margin-top: 2
+          layout:
+            type: verticalBox
+            spacing: 1
+
+        Label
+          id: shinyLabel
+          anchors.bottom: parent.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin-bottom: 4
+          margin-left: 10
+          height: 14
+          font: verdana-11px-rounded
+          color: #f2c400
+
+      Label
+        id: costTitle
+        text: PAGAMENTO
+        anchors.top: forgePreview.bottom
+        anchors.left: forgeTitle.left
+        margin-top: 10
+        font: verdana-11px-rounded
+        color: #f2c400
+        text-auto-resize: true
+
+      Panel
+        id: forgeCosts
+        anchors.top: costTitle.bottom
+        anchors.left: forgeTitle.left
+        anchors.right: parent.right
+        height: 40
+        margin-top: 6
+        margin-right: 10
+        layout:
+          type: horizontalBox
+          spacing: 6
+
+      UIButton
+        id: forgeButton
+        anchors.left: forgeTitle.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        height: 36
+        margin-right: 10
+        margin-bottom: 10
+        font: verdana-11px-antialised
+        color: #1a1200
+        background-color: #f2c400
+        border-width: 1
+        border-color: #ffe27a
+
+        $hover:
+          background-color: #ffd633
+
+        $disabled:
+          color: #6f86a8
+          background-color: #101f3e
+          border-color: #1d3557
+
+  Panel
+    id: sellPanel
+    size: 480 330
+    anchors.centerIn: parent
+    background-color: #0a1320
+    border-width: 1
+    border-color: #f2c400
+    visible: false
+
+    UIWidget
+      id: sellBar
+      size: 4 16
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 12
+      margin-left: 12
+      background-color: #f2c400
+      phantom: true
+
+    Label
+      id: sellTitle
+      text: ANUNCIAR NO MARKET
+      anchors.verticalCenter: sellBar.verticalCenter
+      anchors.left: sellBar.right
+      margin-left: 8
+      font: verdana-11px-rounded
+      color: #f2c400
+      text-auto-resize: true
+
+    Label
+      id: sellHeader
+      text: Item                                              Qtd       Preco total         Moeda
+      anchors.top: sellBar.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 12
+      margin-left: 20
+      height: 14
+      font: verdana-11px-rounded
+      color: #6f86a8
+
+    Panel
+      id: sellList
+      anchors.top: sellHeader.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 200
+      margin-top: 4
+      margin-left: 12
+      margin-right: 12
+      layout:
+        type: verticalBox
+        spacing: 3
+
+    Label
+      id: sellNote
+      anchors.top: sellList.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 6
+      margin-left: 14
+      margin-right: 14
+      height: 14
+      font: verdana-11px-rounded
+      color: #6f86a8
+
+    PCButton
+      id: sellConfirm
+      text: Confirmar
+      width: 110
+      anchors.bottom: parent.bottom
+      anchors.right: parent.right
+      margin-bottom: 12
+      margin-right: 12
+
+    PCButton
+      id: sellCancel
+      text: Voltar
+      width: 90
+      anchors.verticalCenter: sellConfirm.verticalCenter
+      anchors.right: sellConfirm.left
+      margin-right: 8
+
+  Panel
+    id: infoPanel
+    size: 400 600
+    anchors.centerIn: parent
+    background-color: #0a1320
+    border-width: 1
+    border-color: #f2c400
+    visible: false
+
+    UIWidget
+      id: infoPortraitBg
+      size: 64 64
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 16
+      margin-left: 16
+      background-color: #07101c
+      border-width: 1
+      border-color: #1d3557
+
+    UIWidget
+      id: infoPortrait
+      size: 60 60
+      anchors.centerIn: infoPortraitBg
+      image-size: 60 60
+      phantom: true
+
+    Label
+      id: infoName
+      anchors.top: infoPortraitBg.top
+      anchors.left: infoPortraitBg.right
+      anchors.right: parent.right
+      margin-top: 8
+      margin-left: 10
+      margin-right: 40
+      height: 14
+      font: verdana-11px-rounded
+      color: #ffffff
+
+    Label
+      id: infoSub
+      anchors.top: infoName.bottom
+      anchors.left: infoName.left
+      anchors.right: parent.right
+      margin-top: 6
+      margin-right: 12
+      height: 14
+      font: verdana-11px-rounded
+      color: #f2c400
+
+    UIButton
+      id: infoClose
+      text: X
+      size: 22 20
+      anchors.top: parent.top
+      anchors.right: parent.right
+      margin-top: 10
+      margin-right: 10
+      font: verdana-11px-rounded
+      color: #dce8f5
+      background-color: #101f3e
+      border-width: 1
+      border-color: #24415f
+
+      $hover:
+        color: #ffffff
+        background-color: #7a1f1f
+        border-color: #e04848
+
+    Panel
+      id: infoList
+      anchors.top: infoPortraitBg.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      margin-top: 10
+      margin-left: 16
+      margin-right: 16
+      margin-bottom: 16
+      layout:
+        type: verticalBox
+        spacing: 1

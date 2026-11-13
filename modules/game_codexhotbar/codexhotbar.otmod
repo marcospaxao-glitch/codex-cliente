@@ -1,0 +1,12 @@
+Module
+  name: game_codexhotbar
+  description: Hotbar do Codex (mostra as Hotkeys)
+  author: Codex
+  website: http://localhost/
+  autoload: true
+  autoload-priority: 1000
+  sandboxed: true
+  scripts: [ codexhotbar ]
+  dependencies: [ client_topmenu, game_interface, game_hotkeys ]
+  @onLoad: init()
+  @onUnload: terminate()

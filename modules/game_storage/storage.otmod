@@ -1,0 +1,10 @@
+Module
+  name: game_storage
+  description: PC - armazenamento de itens e pokemons
+  author: Marcos
+  autoload: true
+  autoload-priority: 1002
+  scripts: [ storage ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

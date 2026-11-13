@@ -1,0 +1,348 @@
+GachaCard < UIWidget
+  size: 84 100
+  anchors.top: parent.top
+  anchors.left: parent.left
+  margin-top: 8
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+  phantom: true
+
+  UIWidget
+    id: portrait
+    size: 64 64
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 6
+    image-size: 64 64
+    phantom: true
+
+  Label
+    id: name
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-bottom: 6
+    margin-left: 2
+    margin-right: 2
+    height: 14
+    text-align: center
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+GachaBox < UIWidget
+  size: 196 120
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  UIWidget
+    id: stripe
+    height: 3
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    phantom: true
+
+  UIWidget
+    id: iconBg
+    size: 40 40
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 12
+    margin-left: 10
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  UIItem
+    id: icon
+    size: 32 32
+    anchors.centerIn: iconBg
+    virtual: true
+    phantom: true
+
+  Label
+    id: name
+    anchors.top: iconBg.top
+    anchors.left: iconBg.right
+    anchors.right: parent.right
+    margin-left: 8
+    margin-right: 6
+    height: 14
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: count
+    anchors.top: name.bottom
+    anchors.left: name.left
+    anchors.right: parent.right
+    margin-top: 6
+    height: 14
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  Label
+    id: desc
+    anchors.top: iconBg.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 8
+    margin-left: 10
+    margin-right: 6
+    height: 14
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+  UIButton
+    id: rollButton
+    text: GIRAR
+    height: 24
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-left: 10
+    margin-right: 10
+    margin-bottom: 8
+    font: verdana-11px-antialised
+    color: #1a1200
+    background-color: #f2c400
+    border-width: 1
+    border-color: #ffe27a
+
+    $hover:
+      background-color: #ffd633
+
+    $disabled:
+      color: #6f86a8
+      background-color: #101f3e
+      border-color: #1d3557
+
+GachaIv < Label
+  width: 96
+  height: 15
+  font: verdana-11px-rounded
+  color: #dce8f5
+
+UIWindow
+  id: gachaWindow
+  size: 700 470
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  visible: false
+
+  UIWidget
+    id: headerBar
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 16
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: titleLabel
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  UIButton
+    id: closeButton
+    text: X
+    size: 22 20
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 12
+    margin-right: 14
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+    @onClick: modules.game_gacha.hide()
+
+    $hover:
+      color: #ffffff
+      background-color: #7a1f1f
+      border-color: #e04848
+
+  UIWidget
+    id: rollFrame
+    size: 600 116
+    anchors.top: headerBar.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 20
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    clipping: true
+
+  UIWidget
+    id: markerTop
+    size: 14 8
+    anchors.bottom: rollFrame.top
+    anchors.horizontalCenter: rollFrame.horizontalCenter
+    background-color: #f2c400
+    phantom: true
+
+  UIWidget
+    id: markerLine
+    width: 2
+    anchors.top: rollFrame.top
+    anchors.bottom: rollFrame.bottom
+    anchors.horizontalCenter: rollFrame.horizontalCenter
+    background-color: #f2c40088
+    phantom: true
+
+  UIWidget
+    id: markerBottom
+    size: 14 8
+    anchors.top: rollFrame.bottom
+    anchors.horizontalCenter: rollFrame.horizontalCenter
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: statusLabel
+    anchors.top: markerBottom.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 10
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: true
+
+  Panel
+    id: resultPanel
+    anchors.top: statusLabel.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-top: 10
+    margin-left: 50
+    margin-right: 50
+    margin-bottom: 60
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1d3557
+    visible: false
+
+    UIWidget
+      id: resultPortraitBg
+      size: 92 92
+      anchors.left: parent.left
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 14
+      background-color: #07101c
+      border-width: 1
+      border-color: #f2c400
+
+    UIWidget
+      id: resultPortrait
+      size: 84 84
+      anchors.centerIn: resultPortraitBg
+      image-size: 84 84
+      phantom: true
+
+    Label
+      id: resultName
+      anchors.top: parent.top
+      anchors.left: resultPortraitBg.right
+      anchors.right: parent.right
+      margin-top: 12
+      margin-left: 14
+      height: 14
+      font: verdana-11px-rounded
+      color: #ffffff
+
+    Label
+      id: resultInfo
+      anchors.top: resultName.bottom
+      anchors.left: resultName.left
+      anchors.right: parent.right
+      margin-top: 6
+      height: 14
+      font: verdana-11px-rounded
+      color: #f2c400
+
+    Label
+      id: resultExtra
+      anchors.top: resultInfo.bottom
+      anchors.left: resultName.left
+      anchors.right: parent.right
+      margin-top: 6
+      height: 14
+      font: verdana-11px-rounded
+      color: #8fa7c4
+
+    Panel
+      id: ivGrid
+      anchors.top: resultExtra.bottom
+      anchors.left: resultName.left
+      anchors.right: parent.right
+      height: 34
+      margin-top: 8
+      layout:
+        type: grid
+        cell-size: 140 15
+        cell-spacing: 2
+        num-columns: 3
+        flow: false
+
+  Panel
+    id: lobbyPanel
+    anchors.top: headerBar.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    size: 604 256
+    margin-top: 24
+    visible: false
+    layout:
+      type: grid
+      cell-size: 196 120
+      cell-spacing: 8
+      num-columns: 3
+      flow: false
+
+  Label
+    id: lobbyHint
+    anchors.top: lobbyPanel.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 16
+    font: verdana-11px-rounded
+    color: #6f86a8
+    text-auto-resize: true
+    visible: false
+
+  UIButton
+    id: okButton
+    text: OK
+    size: 160 32
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-bottom: 16
+    font: verdana-11px-antialised
+    color: #1a1200
+    background-color: #f2c400
+    border-width: 1
+    border-color: #ffe27a
+
+    $hover:
+      background-color: #ffd633
+
+    $disabled:
+      color: #6f86a8
+      background-color: #101f3e
+      border-color: #1d3557

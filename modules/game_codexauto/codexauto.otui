@@ -1,0 +1,518 @@
+AutoGripDot < UIWidget
+  size: 2 2
+  background-color: #6f86a8
+  phantom: true
+
+AutoRow < UIWidget
+  height: 30
+  background-color: #0c1828
+  focusable: false
+  $hover:
+    background-color: #12223a
+
+  UIWidget
+    id: dot
+    anchors.left: parent.left
+    anchors.top: parent.top
+    size: 8 8
+    margin-left: 6
+    margin-top: 6
+    background-color: #3a5170
+    phantom: true
+
+  Label
+    id: title
+    anchors.left: dot.right
+    anchors.top: parent.top
+    width: 100
+    height: 14
+    margin-left: 5
+    margin-top: 2
+    text-auto-resize: false
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+  Label
+    id: state
+    anchors.right: parent.right
+    anchors.top: parent.top
+    size: 32 14
+    margin-right: 4
+    margin-top: 2
+    text: OFF
+    text-align: center
+    font: verdana-11px-antialised
+    color: #8fa7c4
+    background-color: #1a2a40
+    phantom: true
+
+  Label
+    id: info
+    anchors.left: dot.left
+    anchors.right: parent.right
+    anchors.top: title.bottom
+    height: 13
+    margin-right: 4
+    margin-top: 0
+    text-auto-resize: false
+    text-align: left
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+AutoPanel < UIWidget
+  size: 200 34
+  background-color: #0c1828
+  border-width: 1
+  border-color: #6b5a1a
+  focusable: false
+
+  UIWidget
+    id: handle
+    anchors.left: parent.left
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    width: 12
+    margin: 1 0 1 1
+    background-color: #13243d
+    draggable: true
+    focusable: false
+    $hover:
+      background-color: #1f3658
+
+    AutoGripDot
+      anchors.left: parent.left
+      anchors.top: parent.top
+      margin-left: 3
+      margin-top: 9
+    AutoGripDot
+      anchors.left: parent.left
+      anchors.top: parent.top
+      margin-left: 7
+      margin-top: 9
+    AutoGripDot
+      anchors.left: parent.left
+      anchors.top: parent.top
+      margin-left: 3
+      margin-top: 14
+    AutoGripDot
+      anchors.left: parent.left
+      anchors.top: parent.top
+      margin-left: 7
+      margin-top: 14
+    AutoGripDot
+      anchors.left: parent.left
+      anchors.top: parent.top
+      margin-left: 3
+      margin-top: 19
+    AutoGripDot
+      anchors.left: parent.left
+      anchors.top: parent.top
+      margin-left: 7
+      margin-top: 19
+
+  AutoRow
+    id: row
+    anchors.left: handle.right
+    anchors.right: parent.right
+    anchors.top: parent.top
+    margin: 1 1 0 1
+
+ABRow < UIWidget
+  height: 38
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+  margin-bottom: 4
+
+  $hover:
+    background-color: #101f3e
+
+  UICreature
+    id: creature
+    size: 34 34
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 3
+    phantom: true
+
+  Label
+    id: nameLabel
+    anchors.left: creature.right
+    anchors.right: ballSlot.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    margin-right: 6
+    font: verdana-11px-rounded
+    color: #ffffff
+    height: 14
+    text-auto-resize: false
+    phantom: true
+
+  UIWidget
+    id: ballSlot
+    size: 30 30
+    anchors.right: numLabel.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 4
+    background-color: #0a1422
+    border-width: 1
+    border-color: #1d3557
+    $hover:
+      border-color: #f2c400
+
+    Item
+      id: ballIcon
+      size: 26 26
+      anchors.centerIn: parent
+      virtual: true
+      phantom: true
+
+  Label
+    id: numLabel
+    anchors.right: removeButton.left
+    anchors.verticalCenter: parent.verticalCenter
+    width: 34
+    margin-right: 6
+    font: verdana-11px-rounded
+    color: #6f86a8
+    text-align: right
+    phantom: true
+
+  Button
+    id: removeButton
+    text: X
+    size: 24 22
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 6
+
+ABResult < UIWidget
+  size: 48 48
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    background-color: #1a3560
+    border-color: #f2c400
+
+  UICreature
+    id: creature
+    size: 44 44
+    anchors.centerIn: parent
+    phantom: true
+
+ABBall < UIWidget
+  size: 42 50
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    border-color: #f2c400
+
+  Item
+    id: itemIcon
+    size: 32 32
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 3
+    virtual: true
+    phantom: true
+
+  Label
+    id: count
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-bottom: 2
+    height: 12
+    text-align: center
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+ABModeButton < Button
+  height: 22
+  width: 104
+
+ABSectionTitle < Label
+  font: verdana-11px-rounded
+  color: #f2c400
+  text-auto-resize: true
+  phantom: true
+
+ABWindow < UIWindow
+  size: 660 540
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  draggable: true
+  @onEscape: modules.game_codexauto.closeWindow()
+
+  UIWidget
+    id: headerBar
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 12
+    margin-left: 12
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: titleLabel
+    text: AUTO BALL
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  Button
+    id: panelButton
+    text: Esconder quadro
+    size: 110 20
+    anchors.top: parent.top
+    anchors.right: closeButton.left
+    margin-top: 10
+    margin-right: 6
+    @onClick: modules.game_codexauto.toggleBallPanel()
+
+  Button
+    id: closeButton
+    text: X
+    size: 22 20
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 10
+    margin-right: 10
+    @onClick: modules.game_codexauto.closeWindow()
+
+  Button
+    id: toggleButton
+    height: 24
+    anchors.top: headerBar.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 12
+    margin-left: 12
+    margin-right: 12
+    @onClick: modules.game_codexauto.toggleBall()
+
+  Label
+    id: ballTitle
+    text: Pokebola:
+    anchors.top: toggleButton.bottom
+    anchors.left: parent.left
+    margin-top: 12
+    margin-left: 12
+    font: verdana-11px-rounded
+    color: #9fb3c8
+    text-auto-resize: true
+
+  Label
+    id: ballName
+    anchors.verticalCenter: ballTitle.verticalCenter
+    anchors.left: ballTitle.right
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+
+  UIWidget
+    id: ballsPanel
+    anchors.top: ballTitle.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 6
+    margin-left: 12
+    margin-right: 12
+    height: 50
+    layout:
+      type: horizontalBox
+      spacing: 4
+
+  Label
+    id: modeTitle
+    text: Jogar em:
+    anchors.top: ballsPanel.bottom
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 12
+    font: verdana-11px-rounded
+    color: #9fb3c8
+    text-auto-resize: true
+
+  ABModeButton
+    id: mode_todos
+    text: Todos
+    anchors.verticalCenter: modeTitle.verticalCenter
+    anchors.left: modeTitle.right
+    margin-left: 8
+    @onClick: modules.game_codexauto.setMode('todos')
+
+  ABModeButton
+    id: mode_nunca
+    text: Nunca capturei
+    anchors.verticalCenter: modeTitle.verticalCenter
+    anchors.left: mode_todos.right
+    margin-left: 6
+    @onClick: modules.game_codexauto.setMode('nunca')
+
+  ABModeButton
+    id: mode_shiny
+    text: So shiny
+    anchors.verticalCenter: modeTitle.verticalCenter
+    anchors.left: mode_nunca.right
+    margin-left: 6
+    @onClick: modules.game_codexauto.setMode('shiny')
+
+  ABModeButton
+    id: mode_lista
+    text: So a lista
+    anchors.verticalCenter: modeTitle.verticalCenter
+    anchors.left: mode_shiny.right
+    margin-left: 6
+    @onClick: modules.game_codexauto.setMode('lista')
+
+  Label
+    id: modeNote
+    anchors.top: modeTitle.bottom
+    anchors.left: modeTitle.right
+    anchors.right: parent.right
+    margin-top: 8
+    margin-left: 8
+    margin-right: 12
+    height: 14
+    font: verdana-11px-rounded
+    color: #6f86a8
+
+  ABSectionTitle
+    id: listTitle
+    anchors.top: modeNote.bottom
+    anchors.left: parent.left
+    margin-top: 12
+    margin-left: 12
+
+  Button
+    id: clearButton
+    text: Limpar
+    size: 60 18
+    anchors.verticalCenter: listTitle.verticalCenter
+    anchors.right: listScroll.right
+    @onClick: modules.game_codexauto.clearList()
+
+  ScrollablePanel
+    id: listPanel
+    anchors.top: listTitle.bottom
+    anchors.left: parent.left
+    anchors.bottom: footerHint.top
+    width: 284
+    margin-top: 10
+    margin-left: 12
+    margin-bottom: 8
+    vertical-scrollbar: listScroll
+    layout:
+      type: verticalBox
+
+  VerticalScrollBar
+    id: listScroll
+    anchors.top: listPanel.top
+    anchors.bottom: listPanel.bottom
+    anchors.left: listPanel.right
+    margin-left: 2
+    step: 42
+    pixels-scroll: true
+
+  Label
+    id: emptyLabel
+    anchors.centerIn: listPanel
+    font: verdana-11px-rounded
+    color: #4a5f7a
+    text-auto-resize: true
+    phantom: true
+
+  ABSectionTitle
+    id: searchTitle
+    text: ADICIONAR POKEMON
+    anchors.top: listTitle.top
+    anchors.left: listScroll.right
+    margin-left: 16
+
+  TextEdit
+    id: searchEdit
+    height: 24
+    anchors.top: searchTitle.bottom
+    anchors.left: searchTitle.left
+    anchors.right: searchButton.left
+    margin-top: 10
+    margin-right: 6
+
+  Button
+    id: searchButton
+    text: Buscar
+    size: 72 24
+    anchors.top: searchTitle.bottom
+    anchors.right: parent.right
+    margin-top: 10
+    margin-right: 12
+    @onClick: modules.game_codexauto.doSearch()
+
+  ScrollablePanel
+    id: resultsPanel
+    anchors.top: searchEdit.bottom
+    anchors.left: searchTitle.left
+    anchors.right: resultsScroll.left
+    anchors.bottom: resultsInfo.top
+    margin-top: 8
+    margin-right: 2
+    margin-bottom: 6
+    vertical-scrollbar: resultsScroll
+    layout:
+      type: grid
+      cell-size: 48 48
+      cell-spacing: 4
+      flow: true
+
+  VerticalScrollBar
+    id: resultsScroll
+    anchors.top: searchEdit.bottom
+    anchors.bottom: resultsInfo.top
+    anchors.right: parent.right
+    margin-top: 8
+    margin-bottom: 6
+    margin-right: 12
+    step: 52
+    pixels-scroll: true
+
+  Label
+    id: resultsInfo
+    anchors.bottom: footerHint.top
+    anchors.left: searchTitle.left
+    anchors.right: parent.right
+    margin-bottom: 8
+    margin-right: 12
+    height: 14
+    font: verdana-11px-rounded
+    color: #9fb3c8
+
+  Label
+    id: footerHint
+    text: Clique num resultado para adicionar. Clique na bola da lista para escolher a bola daquele pokemon.
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-bottom: 12
+    margin-left: 12
+    margin-right: 12
+    height: 14
+    font: verdana-11px-rounded
+    color: #9fb3c8
+    text-align: center

@@ -1,0 +1,10 @@
+Module
+  name: client_updater
+  description: Atualizacao automatica do cliente
+  author: Marcos
+  autoload: true
+  autoload-priority: 600
+  scripts: [ updater ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

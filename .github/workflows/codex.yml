@@ -1,0 +1,103 @@
+# ============================================================
+# CODEX - compila o cliente no GitHub (gratis, sem instalar nada no PC)
+# Actions > "Codex - compilar" > Run workflow > escolha o alvo.
+# O resultado sai em "Artifacts" no fim da execucao.
+# ============================================================
+name: Codex - compilar
+
+on:
+  workflow_dispatch:
+    inputs:
+      alvo:
+        description: "O que compilar"
+        type: choice
+        options: [windows, navegador, os-dois]
+        default: windows
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codex-${{ github.ref }}-${{ inputs.alvo }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    name: Windows (.exe)
+    if: inputs.alvo == 'windows' || inputs.alvo == 'os-dois'
+    runs-on: windows-2025-vs2026
+    env:
+      VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}\\vcpkg-cache,readwrite"
+    steps:
+      - name: Baixar o codigo
+        uses: actions/checkout@v6
+
+      - name: Versao do vcpkg
+        shell: pwsh
+        run: |
+          $json = Get-Content vcpkg.json -Raw | ConvertFrom-Json
+          "VCPKG_GIT_COMMIT_ID=$($json.'builtin-baseline')" | Out-File -FilePath $env:GITHUB_ENV -Append
+          New-Item -ItemType Directory -Force -Path vcpkg-cache | Out-Null
+          Remove-Item -Recurse -Force C:\mysql* -ErrorAction SilentlyContinue
+
+      - name: Cache das bibliotecas (deixa as proximas compilacoes bem mais rapidas)
+        uses: actions/cache@v4
+        with:
+          path: vcpkg-cache
+          key: vcpkg-windows-${{ hashFiles('vcpkg.json', 'vcpkg-configuration.json') }}
+          restore-keys: vcpkg-windows-
+
+      - name: Preparar vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitURL: "https://github.com/microsoft/vcpkg.git"
+          vcpkgGitCommitId: ${{ env.VCPKG_GIT_COMMIT_ID }}
+
+      - name: Compilar
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: windows-release
+          buildPreset: windows-release
+          configurePresetAdditionalArgs: "['-DTOGGLE_BIN_FOLDER=ON', '-DOPTIONS_ENABLE_IPO=OFF', '-DOTCLIENT_BUILD_TESTS=OFF']"
+
+      - name: Montar a pasta do cliente
+        shell: pwsh
+        run: |
+          $out = "Codex-Windows"
+          New-Item -ItemType Directory -Force -Path $out | Out-Null
+          Copy-Item build/windows-release/bin/* $out -Recurse -Force
+          foreach ($p in @('init.lua', 'otclientrc.lua', 'config.ini', 'cacert.pem')) { if (Test-Path $p) { Copy-Item $p $out -Force } }
+          foreach ($d in @('data', 'modules', 'mods')) { if (Test-Path $d) { Copy-Item $d $out -Recurse -Force } }
+          if (Test-Path "$out/otclient.exe") { Rename-Item "$out/otclient.exe" "Codex.exe" }
+          Set-Content -Path "$out/COLOQUE_O_SPR_AQUI.txt" -Value "Copie o seu Tibia.spr para data\things\1098\ (ele nao vai no GitHub por ser grande demais)."
+          Get-ChildItem $out | Format-Table Name, Length
+
+      - name: Enviar resultado
+        uses: actions/upload-artifact@v7
+        with:
+          name: Codex-Windows
+          path: Codex-Windows/
+          retention-days: 14
+
+  navegador:
+    name: Navegador (WebAssembly)
+    if: inputs.alvo == 'navegador' || inputs.alvo == 'os-dois'
+    runs-on: ubuntu-latest
+    env:
+      BUILD_LOG: docker-browser-build.log
+      OUTPUT_DIR: build-emscripten-web
+    steps:
+      - name: Baixar o codigo
+        uses: actions/checkout@v6
+
+      - name: Compilar com Docker (Emscripten)
+        run: bash Dockerfile.browser.sh
+
+      - name: Enviar resultado
+        uses: actions/upload-artifact@v7
+        with:
+          name: Codex-Navegador
+          path: |
+            ${{ env.BUILD_LOG }}
+            ${{ env.OUTPUT_DIR }}
+          retention-days: 14

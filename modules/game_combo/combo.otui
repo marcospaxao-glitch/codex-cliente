@@ -1,0 +1,142 @@
+ComboGripDot < UIWidget
+  size: 2 2
+  background-color: #6f86a8
+  phantom: true
+
+ComboButton < UIWidget
+  size: 150 44
+  background-color: #0c1828
+  border-width: 1
+  border-color: #6b5a1a
+  focusable: false
+
+  $hover:
+    border-color: #f2c400
+
+  UIWidget
+    id: handle
+    anchors.left: parent.left
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    width: 12
+    margin: 1 0 1 1
+    background-color: #13243d
+    draggable: true
+    focusable: false
+    $hover:
+      background-color: #1f3658
+
+    ComboGripDot
+      anchors.left: parent.left
+      anchors.top: parent.top
+      margin-left: 3
+      margin-top: 13
+    ComboGripDot
+      anchors.left: parent.left
+      anchors.top: parent.top
+      margin-left: 7
+      margin-top: 13
+    ComboGripDot
+      anchors.left: parent.left
+      anchors.top: parent.top
+      margin-left: 3
+      margin-top: 18
+    ComboGripDot
+      anchors.left: parent.left
+      anchors.top: parent.top
+      margin-left: 7
+      margin-top: 18
+    ComboGripDot
+      anchors.left: parent.left
+      anchors.top: parent.top
+      margin-left: 3
+      margin-top: 23
+    ComboGripDot
+      anchors.left: parent.left
+      anchors.top: parent.top
+      margin-left: 7
+      margin-top: 23
+    ComboGripDot
+      anchors.left: parent.left
+      anchors.top: parent.top
+      margin-left: 3
+      margin-top: 28
+    ComboGripDot
+      anchors.left: parent.left
+      anchors.top: parent.top
+      margin-left: 7
+      margin-top: 28
+
+  UIWidget
+    id: dot
+    anchors.left: handle.right
+    anchors.top: parent.top
+    size: 8 8
+    margin-left: 7
+    margin-top: 8
+    background-color: #3a5170
+    phantom: true
+
+  Label
+    id: title
+    anchors.left: dot.right
+    anchors.top: parent.top
+    width: 60
+    height: 14
+    margin-left: 5
+    margin-top: 5
+    text: COMBO
+    text-auto-resize: false
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+  Label
+    id: state
+    anchors.right: parent.right
+    anchors.top: parent.top
+    size: 32 14
+    margin-right: 5
+    margin-top: 5
+    text: OFF
+    text-align: center
+    font: verdana-11px-antialised
+    color: #8fa7c4
+    background-color: #1a2a40
+    phantom: true
+
+  Label
+    id: info
+    anchors.left: handle.right
+    anchors.right: parent.right
+    anchors.top: title.bottom
+    height: 14
+    margin-left: 7
+    margin-right: 5
+    margin-top: 3
+    text-auto-resize: false
+    text-align: left
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  UIWidget
+    id: track
+    anchors.left: handle.right
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    height: 3
+    margin-left: 7
+    margin-right: 5
+    margin-bottom: 4
+    background-color: #0a1422
+    phantom: true
+
+  UIWidget
+    id: fill
+    anchors.left: track.left
+    anchors.top: track.top
+    anchors.bottom: track.bottom
+    width: 0
+    background-color: #f2c400
+    phantom: true

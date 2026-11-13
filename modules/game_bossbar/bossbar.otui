@@ -1,0 +1,78 @@
+BossBar < UIWidget
+  size: 476 74
+  padding: 6 8 6 8
+  background-color: #0a1320d0
+  border-width: 1
+  border-color: #101f3e
+  focusable: false
+  phantom: true
+
+  Label
+    id: title
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+  UIWidget
+    id: frame
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: title.bottom
+    margin-top: 3
+    height: 22
+    background-color: #0a1320
+    border-width: 1
+    border-color: #f2c400
+    phantom: true
+
+    UIWidget
+      id: trail
+      anchors.left: parent.left
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      margin: 2
+      width: 0
+      background-color: #f2c400
+      opacity: 0.55
+      phantom: true
+
+    UIWidget
+      id: fill
+      anchors.left: parent.left
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      margin: 2
+      width: 0
+      background-color: #c9372f
+      phantom: true
+
+    UIWidget
+      id: shine
+      anchors.left: fill.left
+      anchors.right: fill.right
+      anchors.top: fill.top
+      height: 6
+      background-color: #ffffff
+      opacity: 0.18
+      phantom: true
+
+    Label
+      id: value
+      anchors.centerIn: parent
+      text-auto-resize: true
+      font: verdana-11px-rounded
+      color: #ffffff
+      phantom: true
+
+  Label
+    id: owner
+    anchors.top: frame.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 3
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true

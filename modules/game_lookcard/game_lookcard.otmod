@@ -1,0 +1,10 @@
+Module
+  name: game_lookcard
+  description: Look em cartao (opcode 105)
+  author: Marcos
+  autoload: true
+  autoload-priority: 1006
+  scripts: [ lookcard ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

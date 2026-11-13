@@ -1,0 +1,459 @@
+StoreGoldButton < UIButton
+  height: 24
+  font: verdana-11px-antialised
+  color: #1a1200
+  background-color: #f2c400
+  border-width: 1
+  border-color: #ffe27a
+
+  $hover:
+    background-color: #ffd633
+
+  $disabled:
+    color: #6f86a8
+    background-color: #101f3e
+    border-color: #24415f
+
+StoreDarkButton < UIButton
+  height: 24
+  font: verdana-11px-rounded
+  color: #dce8f5
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    color: #ffffff
+    background-color: #1a3058
+
+StoreEdit < TextEdit
+  height: 22
+  font: verdana-11px-antialised
+  color: #0a1320
+  background-color: #c8c8c8
+  selection-color: #ffffff
+  selection-background-color: #2b5a8a
+
+StoreCategory < UIButton
+  height: 40
+  font: verdana-11px-rounded
+  color: #dce8f5
+  text-align: left
+  text-offset: 46 0
+  icon-rect: 6 4 32 32
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    background-color: #142a4a
+
+  $on:
+    color: #f2c400
+    background-color: #1a2f52
+    border-color: #f2c400
+
+StoreCard < UIButton
+  size: 112 136
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    background-color: #142a4a
+    border-color: #f2c400
+
+  Label
+    id: name
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 5 4 0 4
+    height: 28
+    text-wrap: true
+    text-align: center
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  UIWidget
+    id: picture
+    size: 88 62
+    anchors.top: name.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 2
+    image-fixed-ratio: true
+    phantom: true
+
+  Label
+    id: price
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-bottom: 8
+    height: 16
+    text-align: center
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+  Label
+    id: owned
+    text: JA TEM
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin: 2 2 0 0
+    font: verdana-11px-rounded
+    color: #5fd35f
+    text-auto-resize: true
+    visible: false
+    phantom: true
+
+StorePanel < UIWidget
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  visible: false
+
+UIWindow
+  id: storeWindow
+  size: 820 560
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  draggable: true
+  visible: false
+  @onEscape: modules.store_module.hide()
+
+  UIWidget
+    id: headerBar
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 16
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: titleLabel
+    text: LOJA CODEX
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  UIButton
+    id: closeButton
+    text: X
+    size: 24 22
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 12
+    margin-right: 14
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+    @onClick: modules.store_module.hide()
+
+    $hover:
+      color: #ffffff
+      background-color: #7a1f1f
+      border-color: #e04848
+
+  StoreDarkButton
+    id: transferButton
+    text: Transferir
+    width: 90
+    anchors.verticalCenter: closeButton.verticalCenter
+    anchors.right: closeButton.left
+    margin-right: 10
+
+  StoreGoldButton
+    id: getButton
+    text: Comprar Donate
+    width: 120
+    anchors.verticalCenter: closeButton.verticalCenter
+    anchors.right: transferButton.left
+    margin-right: 6
+
+  Label
+    id: balanceLabel
+    text: Donate: ...
+    anchors.verticalCenter: closeButton.verticalCenter
+    anchors.right: getButton.left
+    margin-right: 14
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+
+  ScrollablePanel
+    id: categoryList
+    anchors.top: headerBar.bottom
+    anchors.left: parent.left
+    anchors.bottom: statusLabel.top
+    width: 180
+    margin-top: 14
+    margin-left: 16
+    margin-bottom: 8
+    layout:
+      type: verticalBox
+      spacing: 4
+
+  UIWidget
+    id: banner
+    anchors.top: categoryList.top
+    anchors.left: categoryList.right
+    anchors.right: parent.right
+    height: 76
+    margin-left: 12
+    margin-right: 16
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1d3557
+
+    UIWidget
+      id: bannerImage
+      size: 64 64
+      anchors.left: parent.left
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 8
+      image-fixed-ratio: true
+      phantom: true
+
+    Label
+      id: bannerTitle
+      anchors.top: parent.top
+      anchors.left: bannerImage.right
+      anchors.right: parent.right
+      margin: 12 10 0 12
+      height: 16
+      font: verdana-11px-rounded
+      color: #f2c400
+
+    Label
+      id: bannerText
+      anchors.top: bannerTitle.bottom
+      anchors.left: bannerImage.right
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      margin: 4 10 6 12
+      text-wrap: true
+      font: verdana-11px-rounded
+      color: #8fa7c4
+
+  Label
+    id: searchHint
+    text: Buscar:
+    anchors.top: banner.bottom
+    anchors.left: banner.left
+    margin-top: 12
+    font: verdana-11px-rounded
+    color: #dce8f5
+    text-auto-resize: true
+
+  StoreEdit
+    id: searchEdit
+    width: 220
+    anchors.verticalCenter: searchHint.verticalCenter
+    anchors.left: searchHint.right
+    margin-left: 8
+
+  Label
+    id: countLabel
+    anchors.verticalCenter: searchHint.verticalCenter
+    anchors.right: banner.right
+    font: verdana-11px-rounded
+    color: #6f86a8
+    text-auto-resize: true
+
+  ScrollablePanel
+    id: productList
+    anchors.top: searchEdit.bottom
+    anchors.left: banner.left
+    anchors.right: productScroll.left
+    anchors.bottom: statusLabel.top
+    margin-top: 10
+    margin-right: 4
+    margin-bottom: 8
+    vertical-scrollbar: productScroll
+    layout:
+      type: grid
+      cell-size: 112 136
+      cell-spacing: 6
+      flow: true
+
+  VerticalScrollBar
+    id: productScroll
+    width: 12
+    anchors.top: searchEdit.bottom
+    anchors.bottom: statusLabel.top
+    anchors.right: parent.right
+    margin-top: 10
+    margin-bottom: 8
+    margin-right: 16
+    step: 71
+    pixels-scroll: true
+
+  Label
+    id: statusLabel
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin: 0 16 10 16
+    height: 16
+    font: verdana-11px-rounded
+    color: #8fa7c4
+
+  StorePanel
+    id: confirmPanel
+    size: 360 250
+    anchors.centerIn: parent
+
+    Label
+      id: confirmTitle
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 14 14 0 14
+      height: 16
+      text-align: center
+      font: verdana-11px-rounded
+      color: #f2c400
+
+    UIWidget
+      id: confirmImage
+      size: 110 80
+      anchors.top: confirmTitle.bottom
+      anchors.horizontalCenter: parent.horizontalCenter
+      margin-top: 8
+      image-fixed-ratio: true
+      phantom: true
+
+    Label
+      id: confirmText
+      anchors.top: confirmImage.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 8 16 0 16
+      height: 46
+      text-wrap: true
+      text-align: center
+      font: verdana-11px-rounded
+      color: #dce8f5
+
+    Label
+      id: confirmPrice
+      anchors.top: confirmText.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 4 16 0 16
+      height: 16
+      text-align: center
+      font: verdana-11px-rounded
+      color: #f2c400
+
+    StoreGoldButton
+      id: confirmBuy
+      text: Comprar
+      width: 120
+      anchors.bottom: parent.bottom
+      anchors.right: parent.horizontalCenter
+      margin-bottom: 14
+      margin-right: 4
+
+    StoreDarkButton
+      id: confirmCancel
+      text: Cancelar
+      width: 120
+      anchors.bottom: parent.bottom
+      anchors.left: parent.horizontalCenter
+      margin-bottom: 14
+      margin-left: 4
+
+  StorePanel
+    id: transferPanel
+    size: 360 210
+    anchors.centerIn: parent
+
+    Label
+      id: transferTitle
+      text: TRANSFERIR DONATE
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 14 14 0 14
+      height: 16
+      text-align: center
+      font: verdana-11px-rounded
+      color: #f2c400
+
+    Label
+      id: transferInfo
+      text: O Donate vai para o PokeBank de quem receber.
+      anchors.top: transferTitle.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 8 16 0 16
+      height: 16
+      text-align: center
+      font: verdana-11px-rounded
+      color: #8fa7c4
+
+    Label
+      id: transferNameLabel
+      text: Personagem:
+      anchors.top: transferInfo.bottom
+      anchors.left: parent.left
+      margin: 16 0 0 20
+      width: 90
+      font: verdana-11px-rounded
+      color: #dce8f5
+
+    StoreEdit
+      id: transferName
+      anchors.verticalCenter: transferNameLabel.verticalCenter
+      anchors.left: transferNameLabel.right
+      anchors.right: parent.right
+      margin-right: 20
+
+    Label
+      id: transferAmountLabel
+      text: Quantidade:
+      anchors.top: transferNameLabel.bottom
+      anchors.left: parent.left
+      margin: 18 0 0 20
+      width: 90
+      font: verdana-11px-rounded
+      color: #dce8f5
+
+    StoreEdit
+      id: transferAmount
+      anchors.verticalCenter: transferAmountLabel.verticalCenter
+      anchors.left: transferAmountLabel.right
+      width: 90
+
+    StoreGoldButton
+      id: transferSend
+      text: Enviar
+      width: 120
+      anchors.bottom: parent.bottom
+      anchors.right: parent.horizontalCenter
+      margin-bottom: 14
+      margin-right: 4
+
+    StoreDarkButton
+      id: transferCancel
+      text: Cancelar
+      width: 120
+      anchors.bottom: parent.bottom
+      anchors.left: parent.horizontalCenter
+      margin-bottom: 14
+      margin-left: 4

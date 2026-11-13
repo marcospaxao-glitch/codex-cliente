@@ -1,0 +1,247 @@
+CodexLoginPanel < UIWindow
+  width: 340
+  anchors.top: topMenu.bottom
+  anchors.left: parent.left
+  anchors.bottom: parent.bottom
+  margin-top: 1
+  background-color: #0a1320
+  image-source: images/panel
+  image-smooth: true
+  image-fixed-ratio: true
+  draggable: false
+  padding: 0 34 0 34
+
+CodexLoginLabel < Label
+  font: verdana-11px-rounded
+  color: #8fa7c4
+  text-auto-resize: true
+
+CodexLoginEdit < PasswordTextEdit
+  height: 30
+  text-offset: 0 8
+  color: #0a1320
+
+CodexLoginButton < UIButton
+  height: 36
+  font: verdana-11px-antialised
+  color: #0a1320
+  background-color: #f2c400
+  border-width: 1
+  border-color: #b08c00
+  text-align: center
+
+  $hover !disabled:
+    background-color: #ffd84a
+
+  $pressed:
+    background-color: #d9a900
+    text-offset: 1 1
+
+  $disabled:
+    background-color: #6f86a8
+
+CodexLinkButton < UIButton
+  font: verdana-11px-rounded
+  color: #8fa7c4
+  text-auto-resize: true
+
+  $hover !disabled:
+    color: #f2c400
+
+ServerListButton < UIButton
+  size: 17 17
+  image-source: /images/topbuttons/minimap
+  image-color: #ffffffff
+
+CodexLoginPanel
+  id: enterGame
+  &authenticatorEnabled: false
+  &authenticatorHeight: 44
+  &stayLoggedBoxEnabled: false
+  &stayLoggedBoxHeight: 24
+  @onEnter: EnterGame.doLogin()
+
+  UIWidget
+    id: edge
+    width: 3
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin-right: -34
+    background-color: #f2c400
+    phantom: true
+
+  UIWidget
+    id: logo
+    image-source: images/logo
+    image-smooth: true
+    size: 268 141
+    anchors.bottom: accountLabel.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-bottom: 40
+    phantom: true
+
+  CodexLoginLabel
+    id: accountLabel
+    text: Conta
+    anchors.left: parent.left
+    anchors.top: parent.verticalCenter
+    margin-top: -70
+
+  CodexLoginEdit
+    id: accountNameTextEdit
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: accountLabel.bottom
+    margin-top: 5
+
+  CodexLoginLabel
+    id: passwordLabel
+    text: Senha
+    anchors.left: parent.left
+    anchors.top: accountNameTextEdit.bottom
+    margin-top: 14
+
+  CodexLoginEdit
+    id: accountPasswordTextEdit
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: passwordLabel.bottom
+    margin-top: 5
+
+  CheckBox
+    id: rememberPasswordBox
+    text: Lembrar senha
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: accountPasswordTextEdit.bottom
+    margin-top: 16
+    @onCheckChange: self:getParent():getChildById('autoLoginBox'):setEnabled(self:isChecked())
+
+  CheckBox
+    id: autoLoginBox
+    enabled: false
+    text: Entrar automaticamente
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: rememberPasswordBox.bottom
+    margin-top: 8
+
+  CodexLoginButton
+    id: loginButton
+    text: ENTRAR
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: autoLoginBox.bottom
+    margin-top: 22
+    @onClick: EnterGame.doLogin()
+
+  CodexLinkButton
+    id: createAccountButton
+    text: Criar conta
+    anchors.left: parent.left
+    anchors.top: loginButton.bottom
+    margin-top: 14
+    @onClick: EnterGame.openSite('register.php')
+
+  CodexLinkButton
+    id: recoverButton
+    text: Esqueci a senha
+    anchors.right: parent.right
+    anchors.top: loginButton.bottom
+    margin-top: 14
+    @onClick: EnterGame.openSite('recovery.php')
+
+  Label
+    id: serverInfoLabel
+    font: verdana-11px-rounded
+    anchors.top: createAccountButton.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 10
+    color: #5fd35f
+    text-auto-resize: true
+
+  Label
+    id: footerLabel
+    font: verdana-11px-rounded
+    color: #6f86a8
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-bottom: 14
+    text-auto-resize: true
+    phantom: true
+
+  MenuLabel
+    id: authenticatorTokenLabel
+    anchors.left: parent.left
+    anchors.top: parent.top
+    visible: false
+    $on:
+      visible: false
+
+  TextEdit
+    id: authenticatorTokenTextEdit
+    anchors.left: parent.left
+    anchors.top: parent.top
+    width: 10
+    visible: false
+    max-length: 8
+    $on:
+      visible: false
+
+  CheckBox
+    id: stayLoggedBox
+    anchors.left: parent.left
+    anchors.top: parent.top
+    visible: false
+    $on:
+      visible: false
+
+  MenuLabel
+    id: serverLabel
+    anchors.left: parent.left
+    anchors.top: parent.top
+    visible: false
+
+  ServerListButton
+    id: serverListButton
+    anchors.right: parent.right
+    anchors.top: parent.top
+    visible: false
+
+  TextEdit
+    id: serverHostTextEdit
+    anchors.left: parent.left
+    anchors.top: parent.top
+    width: 10
+    visible: false
+
+  MenuLabel
+    id: clientLabel
+    anchors.left: parent.left
+    anchors.top: parent.top
+    visible: false
+
+  ComboBox
+    id: clientComboBox
+    anchors.left: parent.left
+    anchors.top: parent.top
+    width: 10
+    visible: false
+    menu-scroll: true
+    menu-height: 125
+    menu-scroll-step: 25
+
+  MenuLabel
+    id: portLabel
+    anchors.left: parent.left
+    anchors.top: parent.top
+    visible: false
+
+  TextEdit
+    id: serverPortTextEdit
+    text: 7171
+    anchors.left: parent.left
+    anchors.top: parent.top
+    width: 10
+    visible: false

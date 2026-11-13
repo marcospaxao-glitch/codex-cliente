@@ -1,0 +1,12 @@
+Module
+  name: game_combo
+  description: Botao e atalho do Combo de Moves (Codex)
+  author: Codex
+  website: -
+  dependencies: [ game_interface, client_topmenu ]
+  autoload: true
+  autoload-priority: 1001
+  sandboxed: true
+  scripts: [ combo ]
+  @onLoad: init()
+  @onUnload: terminate()

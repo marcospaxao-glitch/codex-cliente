@@ -1,0 +1,2530 @@
+AdmButton < UIButton
+  height: 22
+  font: verdana-11px-antialised
+  color: #dce8f5
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    color: #ffffff
+    background-color: #1a3058
+
+  $on:
+    color: #1a1200
+    background-color: #f2c400
+    border-color: #ffe27a
+
+  $disabled:
+    color: #4a5f7a
+
+AdmGold < UIButton
+  height: 24
+  font: verdana-11px-antialised
+  color: #1a1200
+  background-color: #f2c400
+  border-width: 1
+  border-color: #ffe27a
+
+  $hover:
+    background-color: #ffd633
+
+  $disabled:
+    color: #6f86a8
+    background-color: #101f3e
+    border-color: #24415f
+
+AdmGreen < UIButton
+  height: 24
+  font: verdana-11px-antialised
+  color: #0a1320
+  background-color: #5fd35f
+  border-width: 1
+  border-color: #a6f0a6
+
+  $hover:
+    background-color: #7ee57e
+
+AdmRed < UIButton
+  height: 24
+  font: verdana-11px-antialised
+  color: #ffffff
+  background-color: #a32d2d
+  border-width: 1
+  border-color: #e04848
+
+  $hover:
+    background-color: #c23a3a
+
+AdmTab < UIButton
+  height: 30
+  font: verdana-11px-antialised
+  color: #8fa7c4
+  text-align: left
+  text-offset: 12 0
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    color: #ffffff
+    background-color: #142a4a
+
+  $on:
+    color: #1a1200
+    background-color: #f2c400
+    border-color: #ffe27a
+
+AdmEdit < TextEdit
+  height: 22
+  font: verdana-11px-antialised
+  color: #0a1320
+  background-color: #a2a2a2
+  selection-color: #ffffff
+  selection-background-color: #2b5a8a
+
+AdmLabel < Label
+  font: verdana-11px-rounded
+  color: #8fa7c4
+  text-auto-resize: true
+
+AdmTitle < Label
+  font: verdana-11px-antialised
+  color: #f2c400
+  text-auto-resize: true
+
+AdmBox < UIWidget
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+AdmPlayerRow < UIButton
+  height: 36
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    background-color: #142a4a
+
+  $on:
+    background-color: #263b59
+    border-color: #f2c400
+
+  Label
+    id: name
+    anchors.left: parent.left
+    anchors.top: parent.top
+    margin-left: 8
+    margin-top: 4
+    width: 150
+    font: verdana-11px-antialised
+    color: #dce8f5
+    phantom: true
+
+  Label
+    id: ids
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin-left: 8
+    margin-bottom: 4
+    width: 150
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+  Label
+    id: info
+    anchors.left: name.right
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 8
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+AdmItemRow < UIButton
+  height: 40
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    background-color: #142a4a
+
+  $on:
+    background-color: #263b59
+    border-color: #f2c400
+
+  UIItem
+    id: item
+    size: 32 32
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    virtual: true
+    phantom: true
+
+  Label
+    id: name
+    anchors.left: item.right
+    anchors.right: id.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    font: verdana-11px-antialised
+    color: #dce8f5
+    phantom: true
+
+  Label
+    id: id
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 60
+    margin-right: 8
+    text-align: right
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+AdmStatRow < UIWidget
+  height: 22
+
+  Label
+    id: statName
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    width: 84
+    margin-left: 12
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+  AdmEdit
+    id: iv
+    anchors.left: statName.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 56
+    margin-left: 6
+
+  AdmEdit
+    id: ev
+    anchors.left: iv.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 56
+    margin-left: 6
+
+  AdmEdit
+    id: bonus
+    anchors.left: ev.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 56
+    margin-left: 6
+
+AdmMonRow < UIButton
+  height: 44
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    background-color: #142a4a
+
+  $on:
+    background-color: #263b59
+    border-color: #f2c400
+
+  UICreature
+    id: creature
+    size: 40 40
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    phantom: true
+
+  Label
+    id: name
+    anchors.left: creature.right
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    font: verdana-11px-antialised
+    color: #dce8f5
+    phantom: true
+
+AdmFavRow < UIWidget
+  height: 26
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  Label
+    id: name
+    anchors.left: parent.left
+    anchors.right: goButton.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    margin-right: 6
+    font: verdana-11px-rounded
+    color: #dce8f5
+
+  AdmButton
+    id: removeButton
+    text: x
+    size: 22 20
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 3
+
+  AdmButton
+    id: goButton
+    text: Ir
+    size: 40 20
+    anchors.right: removeButton.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 3
+
+AdmRateRow < UIWidget
+  height: 26
+
+  Label
+    id: name
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    width: 90
+    font: verdana-11px-rounded
+    color: #dce8f5
+
+  AdmEdit
+    id: value
+    anchors.left: name.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 60
+
+  AdmButton
+    id: applyButton
+    text: Aplicar
+    anchors.left: value.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 6
+    width: 62
+
+AdmStaffRow < UIButton
+  height: 30
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    background-color: #142a4a
+
+  $on:
+    background-color: #263b59
+    border-color: #f2c400
+
+  UIWidget
+    id: dot
+    size: 8 8
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    background-color: #4a5f7a
+    phantom: true
+
+  Label
+    id: name
+    anchors.left: dot.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    width: 150
+    font: verdana-11px-antialised
+    color: #dce8f5
+    phantom: true
+
+  Label
+    id: role
+    anchors.left: name.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 90
+    font: verdana-11px-antialised
+    color: #f2c400
+    phantom: true
+
+  Label
+    id: info
+    anchors.left: role.right
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 8
+    text-align: right
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+AdmEditStatRow < UIWidget
+  height: 22
+
+  Label
+    id: statName
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    width: 92
+    margin-left: 12
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+  AdmEdit
+    id: iv
+    anchors.left: statName.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 54
+
+  AdmEdit
+    id: ev
+    anchors.left: iv.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 54
+    margin-left: 6
+
+  AdmEdit
+    id: vit
+    anchors.left: ev.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 54
+    margin-left: 6
+
+  AdmEdit
+    id: bonus
+    anchors.left: vit.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 54
+    margin-left: 6
+
+AdmCastleRow < UIButton
+  height: 38
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    background-color: #142a4a
+
+  $on:
+    background-color: #263b59
+    border-color: #f2c400
+
+  Label
+    id: name
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: parent.top
+    margin: 4 8 0 8
+    font: verdana-11px-antialised
+    color: #dce8f5
+    phantom: true
+
+  Label
+    id: info
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin: 0 8 4 8
+    font: verdana-11px-rounded
+    color: #6f86a8
+    phantom: true
+
+UIWindow
+  id: adminWindow
+  size: 900 580
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  visible: false
+
+  UIWidget
+    id: headerBar
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 16
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: titleLabel
+    text: PAINEL ADM
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 8
+    font: verdana-11px-antialised
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: whoLabel
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: titleLabel.right
+    margin-left: 14
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: statusLabel
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: whoLabel.right
+    anchors.right: closeButton.left
+    margin-left: 20
+    margin-right: 10
+    font: verdana-11px-antialised
+    color: #5fd35f
+    text-align: right
+
+  UIButton
+    id: closeButton
+    text: X
+    size: 24 22
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 12
+    margin-right: 14
+    font: verdana-11px-antialised
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+
+    $hover:
+      color: #ffffff
+      background-color: #7a1f1f
+
+  UIWidget
+    id: nav
+    anchors.top: headerBar.bottom
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    width: 140
+    margin-top: 16
+    margin-left: 16
+    margin-bottom: 16
+    layout:
+      type: verticalBox
+      spacing: 4
+
+    AdmTab
+      id: navPlayers
+      text: Jogadores
+
+    AdmTab
+      id: navItems
+      text: Itens
+
+    AdmTab
+      id: navMons
+      text: Pokemon / Monstros
+
+    AdmTab
+      id: navEdit
+      text: Editar Pokemon
+
+    AdmTab
+      id: navCastle
+      text: Castelos
+
+    AdmTab
+      id: navTele
+      text: Teleporte
+
+    AdmTab
+      id: navServer
+      text: Servidor
+
+    AdmTab
+      id: navMe
+      text: Eu (GM)
+
+    AdmTab
+      id: navStaff
+      text: Equipe
+      visible: false
+
+  UIWidget
+    id: content
+    anchors.top: nav.top
+    anchors.left: nav.right
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-left: 12
+    margin-right: 16
+    margin-bottom: 16
+
+    UIWidget
+      id: tabPlayers
+      anchors.fill: parent
+
+      AdmEdit
+        id: playerFilter
+        anchors.top: parent.top
+        anchors.left: parent.left
+        width: 200
+        !tooltip: tr('Nome, ID do personagem ou ID da conta. Enter ou Buscar procura tambem quem esta offline.')
+
+      AdmButton
+        id: playerSearch
+        text: Buscar
+        anchors.top: parent.top
+        anchors.left: playerFilter.right
+        margin-left: 6
+        width: 70
+
+      AdmButton
+        id: playerRefresh
+        text: Online
+        anchors.top: parent.top
+        anchors.left: playerSearch.right
+        margin-left: 6
+        width: 70
+
+      AdmLabel
+        id: playerCount
+        anchors.verticalCenter: playerRefresh.verticalCenter
+        anchors.left: playerRefresh.right
+        margin-left: 10
+
+      ScrollablePanel
+        id: playerList
+        anchors.top: playerFilter.bottom
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        width: 380
+        margin-top: 8
+        vertical-scrollbar: playerScroll
+        layout:
+          type: verticalBox
+          spacing: 3
+
+      VerticalScrollBar
+        id: playerScroll
+        anchors.top: playerList.top
+        anchors.bottom: playerList.bottom
+        anchors.left: playerList.right
+        width: 10
+        step: 30
+        pixels-scroll: true
+
+      AdmBox
+        id: playerActions
+        anchors.top: parent.top
+        anchors.left: playerScroll.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 10
+
+        AdmTitle
+          id: pTitle
+          text: JOGADOR
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin: 10 0 0 12
+
+        AdmEdit
+          id: playerName
+          anchors.top: pTitle.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 6 12 0 12
+
+        AdmButton
+          id: pGoto
+          text: Ir ate
+          anchors.top: playerName.bottom
+          anchors.left: parent.left
+          margin: 8 0 0 12
+          width: 96
+
+        AdmButton
+          id: pBring
+          text: Puxar
+          anchors.top: pGoto.top
+          anchors.left: pGoto.right
+          margin-left: 6
+          width: 96
+
+        AdmButton
+          id: pHeal
+          text: Curar
+          anchors.top: pGoto.top
+          anchors.left: pBring.right
+          margin-left: 6
+          width: 96
+
+        AdmButton
+          id: pTemple
+          text: Templo
+          anchors.top: pGoto.bottom
+          anchors.left: pGoto.left
+          margin-top: 6
+          width: 96
+
+        AdmRed
+          id: pKick
+          text: Expulsar
+          anchors.top: pTemple.top
+          anchors.left: pTemple.right
+          margin-left: 6
+          width: 96
+          height: 22
+
+        AdmTitle
+          id: banTitle
+          text: BANIMENTO
+          anchors.top: pTemple.bottom
+          anchors.left: parent.left
+          margin: 16 0 0 12
+
+        AdmLabel
+          id: banDaysLabel
+          text: Dias
+          anchors.top: banTitle.bottom
+          anchors.left: parent.left
+          margin: 8 0 0 12
+
+        AdmEdit
+          id: banDays
+          text: 7
+          anchors.verticalCenter: banDaysLabel.verticalCenter
+          anchors.left: banDaysLabel.right
+          margin-left: 8
+          width: 50
+
+        AdmEdit
+          id: banReason
+          anchors.verticalCenter: banDaysLabel.verticalCenter
+          anchors.left: banDays.right
+          anchors.right: parent.right
+          margin-left: 8
+          margin-right: 12
+
+        AdmRed
+          id: pBan
+          text: Banir
+          anchors.top: banReason.bottom
+          anchors.left: parent.left
+          margin: 8 0 0 12
+          width: 96
+          height: 22
+
+        AdmButton
+          id: pUnban
+          text: Desbanir
+          anchors.top: pBan.top
+          anchors.left: pBan.right
+          margin-left: 6
+          width: 96
+
+        AdmTitle
+          id: coinTitle
+          text: DAR MOEDAS
+          anchors.top: pBan.bottom
+          anchors.left: parent.left
+          margin: 16 0 0 12
+
+        AdmButton
+          id: curGOLD
+          text: Gold
+          anchors.top: coinTitle.bottom
+          anchors.left: parent.left
+          margin: 8 0 0 12
+          width: 72
+
+        AdmButton
+          id: curPOKECOINS
+          text: PokeCoins
+          anchors.top: curGOLD.top
+          anchors.left: curGOLD.right
+          margin-left: 4
+          width: 72
+
+        AdmButton
+          id: curDONATE
+          text: Donate
+          anchors.top: curGOLD.top
+          anchors.left: curPOKECOINS.right
+          margin-left: 4
+          width: 72
+
+        AdmButton
+          id: curTOKENS
+          text: Tokens
+          anchors.top: curGOLD.top
+          anchors.left: curDONATE.right
+          margin-left: 4
+          width: 72
+
+        AdmEdit
+          id: coinAmount
+          anchors.top: curGOLD.bottom
+          anchors.left: parent.left
+          margin: 6 0 0 12
+          width: 120
+
+        AdmGold
+          id: pCoins
+          text: Dar
+          anchors.verticalCenter: coinAmount.verticalCenter
+          anchors.left: coinAmount.right
+          margin-left: 6
+          width: 70
+          height: 22
+
+        AdmTitle
+          id: premTitle
+          text: PREMIUM (DIAS)
+          anchors.top: coinAmount.bottom
+          anchors.left: parent.left
+          margin: 16 0 0 12
+
+        AdmEdit
+          id: premDays
+          anchors.top: premTitle.bottom
+          anchors.left: parent.left
+          margin: 6 0 0 12
+          width: 120
+
+        AdmGold
+          id: pPremium
+          text: Dar
+          anchors.verticalCenter: premDays.verticalCenter
+          anchors.left: premDays.right
+          margin-left: 6
+          width: 70
+          height: 22
+
+    UIWidget
+      id: tabItems
+      anchors.fill: parent
+      visible: false
+
+      AdmEdit
+        id: itemSearch
+        anchors.top: parent.top
+        anchors.left: parent.left
+        width: 300
+
+      AdmButton
+        id: itemSearchButton
+        text: Buscar
+        anchors.top: parent.top
+        anchors.left: itemSearch.right
+        margin-left: 6
+        width: 80
+
+      AdmLabel
+        id: itemHint
+        text: nome ou ID do item
+        anchors.verticalCenter: itemSearchButton.verticalCenter
+        anchors.left: itemSearchButton.right
+        margin-left: 10
+
+      ScrollablePanel
+        id: itemGrid
+        anchors.top: itemSearch.bottom
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        width: 400
+        margin-top: 8
+        vertical-scrollbar: itemScroll
+        layout:
+          type: verticalBox
+          spacing: 3
+
+      VerticalScrollBar
+        id: itemScroll
+        anchors.top: itemGrid.top
+        anchors.bottom: itemGrid.bottom
+        anchors.left: itemGrid.right
+        width: 10
+        step: 44
+        pixels-scroll: true
+
+      AdmBox
+        id: itemBox
+        anchors.top: parent.top
+        anchors.left: itemScroll.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 10
+
+        UIItem
+          id: itemPreview
+          size: 64 64
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin: 12 0 0 12
+          virtual: true
+          background-color: #07101c
+          border-width: 1
+          border-color: #24415f
+
+        Label
+          id: itemName
+          anchors.top: itemPreview.top
+          anchors.left: itemPreview.right
+          anchors.right: parent.right
+          margin-left: 10
+          margin-right: 10
+          font: verdana-11px-antialised
+          color: #ffffff
+          text-wrap: true
+          height: 32
+
+        AdmLabel
+          id: itemIdLabel
+          anchors.top: itemName.bottom
+          anchors.left: itemName.left
+
+        AdmLabel
+          id: itemCountLabel
+          text: Quantidade
+          anchors.top: itemPreview.bottom
+          anchors.left: parent.left
+          margin: 14 0 0 12
+
+        AdmEdit
+          id: itemCount
+          text: 1
+          anchors.top: itemCountLabel.bottom
+          anchors.left: parent.left
+          margin: 4 0 0 12
+          width: 90
+
+        AdmLabel
+          id: itemTargetLabel
+          text: Para (vazio = voce)
+          anchors.top: itemCount.bottom
+          anchors.left: parent.left
+          margin: 10 0 0 12
+
+        AdmEdit
+          id: itemTarget
+          anchors.top: itemTargetLabel.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 4 12 0 12
+
+        AdmButton
+          id: itemToBag
+          text: Mochila
+          anchors.top: itemTarget.bottom
+          anchors.left: parent.left
+          margin: 10 0 0 12
+          width: 90
+
+        AdmButton
+          id: itemToDepot
+          text: PC
+          anchors.top: itemToBag.top
+          anchors.left: itemToBag.right
+          margin-left: 6
+          width: 90
+
+        AdmGreen
+          id: itemCreate
+          text: Criar item
+          anchors.top: itemToBag.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 14 12 0 12
+
+    UIWidget
+      id: tabMons
+      anchors.fill: parent
+      visible: false
+
+      AdmEdit
+        id: monSearch
+        anchors.top: parent.top
+        anchors.left: parent.left
+        width: 196
+
+      AdmButton
+        id: monSearchButton
+        text: Buscar
+        anchors.top: parent.top
+        anchors.left: monSearch.right
+        margin-left: 6
+        width: 78
+
+      ScrollablePanel
+        id: monList
+        anchors.top: monSearch.bottom
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        width: 280
+        margin-top: 8
+        vertical-scrollbar: monScroll
+        layout:
+          type: verticalBox
+          spacing: 3
+
+      VerticalScrollBar
+        id: monScroll
+        anchors.top: monList.top
+        anchors.bottom: monList.bottom
+        anchors.left: monList.right
+        width: 10
+        step: 47
+        pixels-scroll: true
+
+      AdmBox
+        id: monBox
+        anchors.top: parent.top
+        anchors.left: monScroll.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 10
+
+        UICreature
+          id: monPreview
+          size: 56 56
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin: 10 0 0 12
+          background-color: #07101c
+          border-width: 1
+          border-color: #24415f
+
+        Label
+          id: monName
+          anchors.top: monPreview.top
+          anchors.left: monPreview.right
+          anchors.right: parent.right
+          margin-top: 4
+          margin-left: 10
+          font: verdana-11px-antialised
+          color: #ffffff
+
+        AdmButton
+          id: monShiny
+          text: Shiny
+          anchors.bottom: monPreview.bottom
+          anchors.left: monPreview.right
+          margin-left: 10
+          width: 60
+
+        AdmLabel
+          id: monLevelLabel
+          text: Level
+          anchors.verticalCenter: monShiny.verticalCenter
+          anchors.left: monShiny.right
+          margin-left: 12
+
+        AdmEdit
+          id: monLevel
+          text: 1
+          anchors.verticalCenter: monShiny.verticalCenter
+          anchors.left: monLevelLabel.right
+          margin-left: 6
+          width: 56
+
+        AdmLabel
+          id: monBoostLabel
+          text: Boost
+          anchors.verticalCenter: monShiny.verticalCenter
+          anchors.left: monLevel.right
+          margin-left: 10
+
+        AdmEdit
+          id: monBoost
+          text: 0
+          anchors.verticalCenter: monShiny.verticalCenter
+          anchors.left: monBoostLabel.right
+          margin-left: 6
+          width: 48
+
+        UIWidget
+          id: attrBar
+          size: 3 14
+          anchors.top: monPreview.bottom
+          anchors.left: parent.left
+          margin-top: 14
+          margin-left: 12
+          background-color: #f2c400
+          phantom: true
+
+        AdmTitle
+          id: attrTitle
+          text: ATRIBUTOS (vale para os dois)
+          anchors.verticalCenter: attrBar.verticalCenter
+          anchors.left: attrBar.right
+          margin-left: 6
+
+        AdmButton
+          id: attrClear
+          text: Limpar
+          anchors.verticalCenter: attrBar.verticalCenter
+          anchors.right: parent.right
+          margin-right: 12
+          width: 62
+
+        AdmButton
+          id: attrPerfect
+          text: IV 31
+          anchors.verticalCenter: attrBar.verticalCenter
+          anchors.right: attrClear.left
+          margin-right: 4
+          width: 52
+
+        UIWidget
+          id: attrHeader
+          anchors.top: attrBar.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin-top: 8
+          height: 14
+          phantom: true
+
+          AdmLabel
+            id: hStat
+            text: Status
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            margin-left: 12
+
+          AdmLabel
+            id: hIv
+            text: IV
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            margin-left: 102
+
+          AdmLabel
+            id: hEv
+            text: EV
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            margin-left: 164
+
+          AdmLabel
+            id: hBonus
+            text: Bonus
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            margin-left: 226
+
+        UIWidget
+          id: statRows
+          anchors.top: attrHeader.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin-top: 4
+          height: 142
+          layout:
+            type: verticalBox
+            spacing: 2
+
+        Label
+          id: attrHint
+          text: IV vazio = aleatorio (acima de 31 so pelo painel). EV e Bonus vazios = 0. Bonus soma direto no status final.
+          anchors.top: statRows.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 2 12 0 12
+          height: 26
+          font: verdana-11px-rounded
+          color: #6f86a8
+          text-wrap: true
+
+        UIWidget
+          id: spawnBar
+          size: 3 14
+          anchors.top: attrHint.bottom
+          anchors.left: parent.left
+          margin-top: 8
+          margin-left: 12
+          background-color: #5fd35f
+          phantom: true
+
+        AdmTitle
+          id: spawnTitle
+          text: CRIAR SELVAGEM (na sua posicao)
+          anchors.verticalCenter: spawnBar.verticalCenter
+          anchors.left: spawnBar.right
+          margin-left: 6
+
+        AdmLabel
+          id: spawnCountLabel
+          text: Quantidade
+          anchors.top: spawnBar.bottom
+          anchors.left: parent.left
+          margin: 8 0 0 12
+
+        AdmEdit
+          id: spawnCount
+          text: 1
+          anchors.verticalCenter: spawnCountLabel.verticalCenter
+          anchors.left: spawnCountLabel.right
+          margin-left: 8
+          width: 50
+
+        AdmGreen
+          id: spawnButton
+          text: Criar
+          anchors.verticalCenter: spawnCountLabel.verticalCenter
+          anchors.right: parent.right
+          margin-right: 12
+          width: 120
+          height: 22
+
+        UIWidget
+          id: ballBar
+          size: 3 14
+          anchors.top: spawnCountLabel.bottom
+          anchors.left: parent.left
+          margin-top: 12
+          margin-left: 12
+          background-color: #f2c400
+          phantom: true
+
+        AdmTitle
+          id: ballTitle
+          text: DAR POKEMON (pokebola)
+          anchors.verticalCenter: ballBar.verticalCenter
+          anchors.left: ballBar.right
+          margin-left: 6
+
+        AdmLabel
+          id: ballTargetLabel
+          text: Para
+          anchors.top: ballBar.bottom
+          anchors.left: parent.left
+          margin: 10 0 0 12
+          width: 54
+
+        AdmEdit
+          id: ballTarget
+          anchors.verticalCenter: ballTargetLabel.verticalCenter
+          anchors.left: ballTargetLabel.right
+          width: 130
+
+        AdmLabel
+          id: natureLabel
+          text: Natureza
+          anchors.verticalCenter: ballTargetLabel.verticalCenter
+          anchors.left: ballTarget.right
+          margin-left: 10
+
+        AdmEdit
+          id: ballNature
+          anchors.verticalCenter: ballTargetLabel.verticalCenter
+          anchors.left: natureLabel.right
+          anchors.right: parent.right
+          margin-left: 6
+          margin-right: 12
+
+        AdmLabel
+          id: sexLabel
+          text: Sexo
+          anchors.top: ballTargetLabel.bottom
+          anchors.left: parent.left
+          margin: 10 0 0 12
+          width: 54
+
+        AdmButton
+          id: sexR
+          text: Aleatorio
+          anchors.verticalCenter: sexLabel.verticalCenter
+          anchors.left: sexLabel.right
+          width: 74
+
+        AdmButton
+          id: sexM
+          text: Macho
+          anchors.verticalCenter: sexLabel.verticalCenter
+          anchors.left: sexR.right
+          margin-left: 4
+          width: 62
+
+        AdmButton
+          id: sexF
+          text: Femea
+          anchors.verticalCenter: sexLabel.verticalCenter
+          anchors.left: sexM.right
+          margin-left: 4
+          width: 62
+
+        AdmButton
+          id: ballToTeam
+          text: Equipe
+          anchors.top: sexLabel.bottom
+          anchors.left: parent.left
+          margin: 10 0 0 12
+          width: 80
+
+        AdmButton
+          id: ballToDepot
+          text: PC
+          anchors.top: ballToTeam.top
+          anchors.left: ballToTeam.right
+          margin-left: 4
+          width: 60
+
+        AdmGold
+          id: ballButton
+          text: Dar Pokemon
+          anchors.top: ballToTeam.top
+          anchors.left: ballToDepot.right
+          anchors.right: parent.right
+          margin-left: 8
+          margin-right: 12
+          height: 22
+
+    UIWidget
+      id: tabEdit
+      anchors.fill: parent
+      visible: false
+
+      AdmEdit
+        id: editTarget
+        anchors.top: parent.top
+        anchors.left: parent.left
+        width: 150
+        !tooltip: tr('Nome do jogador (online). Vazio = voce.')
+
+      AdmButton
+        id: editLoad
+        text: Carregar
+        anchors.top: parent.top
+        anchors.left: editTarget.right
+        margin-left: 6
+        width: 66
+
+      UIWidget
+        id: editTeam
+        anchors.top: editTarget.bottom
+        anchors.left: parent.left
+        width: 222
+        height: 282
+        margin-top: 8
+        layout:
+          type: verticalBox
+          spacing: 3
+
+      AdmTitle
+        id: editActTitle
+        text: ACOES RAPIDAS
+        anchors.top: editTeam.bottom
+        anchors.left: parent.left
+        margin-top: 8
+
+      AdmGreen
+        id: editHeal
+        text: Curar
+        anchors.top: editActTitle.bottom
+        anchors.left: parent.left
+        margin-top: 6
+        width: 108
+        height: 22
+
+      AdmButton
+        id: editUnexcl
+        text: Tirar Exclusivo
+        anchors.top: editHeal.top
+        anchors.left: editHeal.right
+        margin-left: 6
+        width: 108
+
+      AdmButton
+        id: editMovesAll
+        text: Liberar golpes
+        anchors.top: editHeal.bottom
+        anchors.left: parent.left
+        margin-top: 4
+        width: 108
+
+      AdmButton
+        id: editMovesLevel
+        text: Golpes p/ level
+        anchors.top: editMovesAll.top
+        anchors.left: editMovesAll.right
+        margin-left: 6
+        width: 108
+
+      AdmButton
+        id: editMovesNone
+        text: Travar golpes
+        anchors.top: editMovesAll.bottom
+        anchors.left: parent.left
+        margin-top: 4
+        width: 222
+
+      AdmBox
+        id: editBox
+        anchors.top: parent.top
+        anchors.left: editTeam.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 10
+
+        UICreature
+          id: editPreview
+          size: 48 48
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin: 10 0 0 12
+          background-color: #07101c
+          border-width: 1
+          border-color: #24415f
+
+        Label
+          id: editName
+          text: Carregue um jogador e escolha um pokemon.
+          anchors.top: editPreview.top
+          anchors.left: editPreview.right
+          anchors.right: parent.right
+          margin-left: 10
+          margin-right: 10
+          margin-top: 4
+          font: verdana-11px-antialised
+          color: #ffffff
+
+        Label
+          id: editInfo
+          anchors.top: editName.bottom
+          anchors.left: editName.left
+          anchors.right: parent.right
+          margin-top: 4
+          margin-right: 10
+          font: verdana-11px-rounded
+          color: #8fa7c4
+
+        AdmLabel
+          id: lSpecies
+          text: Especie
+          anchors.top: editPreview.bottom
+          anchors.left: parent.left
+          margin: 10 0 0 12
+          width: 56
+
+        AdmEdit
+          id: editSpecies
+          anchors.verticalCenter: lSpecies.verticalCenter
+          anchors.left: lSpecies.right
+          width: 130
+          !tooltip: tr('Nome do pokemon. Troque para mudar a especie.')
+
+        AdmButton
+          id: editShiny
+          text: Shiny
+          anchors.verticalCenter: lSpecies.verticalCenter
+          anchors.left: editSpecies.right
+          margin-left: 6
+          width: 54
+
+        AdmButton
+          id: editSexM
+          text: Macho
+          anchors.verticalCenter: lSpecies.verticalCenter
+          anchors.left: editShiny.right
+          margin-left: 10
+          width: 58
+
+        AdmButton
+          id: editSexF
+          text: Femea
+          anchors.verticalCenter: lSpecies.verticalCenter
+          anchors.left: editSexM.right
+          margin-left: 4
+          width: 58
+
+        AdmLabel
+          id: lLevel
+          text: Level
+          anchors.top: lSpecies.bottom
+          anchors.left: parent.left
+          margin: 12 0 0 12
+          width: 56
+
+        AdmEdit
+          id: editLevel
+          anchors.verticalCenter: lLevel.verticalCenter
+          anchors.left: lLevel.right
+          width: 50
+
+        AdmLabel
+          id: lBoost
+          text: Boost
+          anchors.verticalCenter: lLevel.verticalCenter
+          anchors.left: editLevel.right
+          margin-left: 10
+
+        AdmEdit
+          id: editBoost
+          anchors.verticalCenter: lLevel.verticalCenter
+          anchors.left: lBoost.right
+          margin-left: 6
+          width: 40
+
+        AdmLabel
+          id: lNature
+          text: Natureza
+          anchors.verticalCenter: lLevel.verticalCenter
+          anchors.left: editBoost.right
+          margin-left: 10
+
+        AdmEdit
+          id: editNature
+          anchors.verticalCenter: lLevel.verticalCenter
+          anchors.left: lNature.right
+          margin-left: 6
+          width: 82
+          !tooltip: tr('Adamant, Modest, Jolly, Timid... (vazio = nao muda)')
+
+        AdmLabel
+          id: lTera
+          text: Tera
+          anchors.verticalCenter: lLevel.verticalCenter
+          anchors.left: editNature.right
+          margin-left: 10
+
+        AdmEdit
+          id: editTera
+          anchors.verticalCenter: lLevel.verticalCenter
+          anchors.left: lTera.right
+          margin-left: 6
+          width: 36
+          !tooltip: tr('0 = sem tera. 11 normal, 12 fire, 13 fighting, 14 water, 15 flying, 16 grass, 17 poison, 18 electric, 19 ground, 20 psychic, 21 rock, 22 ice, 23 bug, 24 dragon, 25 ghost, 26 dark, 27 steel, 28 fairy')
+
+        AdmLabel
+          id: lFriend
+          text: Amizade
+          anchors.top: lLevel.bottom
+          anchors.left: parent.left
+          margin: 12 0 0 12
+          width: 56
+
+        AdmEdit
+          id: editFriend
+          anchors.verticalCenter: lFriend.verticalCenter
+          anchors.left: lFriend.right
+          width: 50
+          !tooltip: tr('0 a 1000')
+
+        AdmButton
+          id: editDevice
+          text: Attachment Device
+          anchors.verticalCenter: lFriend.verticalCenter
+          anchors.left: editFriend.right
+          margin-left: 10
+          width: 130
+
+        UIWidget
+          id: editHeader
+          anchors.top: lFriend.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin-top: 12
+          height: 14
+          phantom: true
+
+          AdmLabel
+            text: Status
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            margin-left: 12
+
+          AdmLabel
+            text: IV
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            margin-left: 108
+
+          AdmLabel
+            text: EV
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            margin-left: 168
+
+          AdmLabel
+            text: Vitamina
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            margin-left: 228
+
+          AdmLabel
+            text: Bonus
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            margin-left: 288
+
+        UIWidget
+          id: editRows
+          anchors.top: editHeader.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin-top: 4
+          height: 142
+          layout:
+            type: verticalBox
+            spacing: 2
+
+        AdmButton
+          id: editIv31
+          text: IV 31
+          anchors.top: editHeader.top
+          anchors.right: parent.right
+          margin-right: 12
+          width: 96
+
+        AdmButton
+          id: editEvZero
+          text: Zerar EV
+          anchors.top: editIv31.bottom
+          anchors.right: parent.right
+          margin-top: 4
+          margin-right: 12
+          width: 96
+
+        AdmButton
+          id: editVitZero
+          text: Zerar vitaminas
+          anchors.top: editEvZero.bottom
+          anchors.right: parent.right
+          margin-top: 4
+          margin-right: 12
+          width: 96
+
+        AdmButton
+          id: editBonusZero
+          text: Zerar bonus
+          anchors.top: editVitZero.bottom
+          anchors.right: parent.right
+          margin-top: 4
+          margin-right: 12
+          width: 96
+
+        Label
+          id: editTotals
+          anchors.top: editRows.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 4 12 0 12
+          height: 14
+          font: verdana-11px-rounded
+          color: #6f86a8
+
+        AdmLabel
+          id: lHeld
+          text: Held X
+          anchors.top: editTotals.bottom
+          anchors.left: parent.left
+          margin: 10 0 0 12
+          width: 56
+
+        AdmEdit
+          id: editHeld
+          anchors.verticalCenter: lHeld.verticalCenter
+          anchors.left: lHeld.right
+          width: 170
+          !tooltip: tr('Nome do item, ex: held attack (tier 3). Vazio = sem held.')
+
+        AdmLabel
+          id: lHeldY
+          text: Held Y
+          anchors.verticalCenter: lHeld.verticalCenter
+          anchors.left: editHeld.right
+          margin-left: 10
+
+        AdmEdit
+          id: editHeldY
+          anchors.verticalCenter: lHeld.verticalCenter
+          anchors.left: lHeldY.right
+          anchors.right: parent.right
+          margin-left: 6
+          margin-right: 12
+
+        AdmLabel
+          id: lHeld3
+          text: Held 3
+          anchors.top: lHeld.bottom
+          anchors.left: parent.left
+          margin: 12 0 0 12
+          width: 56
+
+        AdmEdit
+          id: editHeld3
+          anchors.verticalCenter: lHeld3.verticalCenter
+          anchors.left: lHeld3.right
+          width: 170
+          !tooltip: tr('3o slot (precisa do Attachment Device ligado)')
+
+        AdmGold
+          id: editSave
+          text: Salvar alteracoes
+          anchors.verticalCenter: lHeld3.verticalCenter
+          anchors.left: editHeld3.right
+          anchors.right: parent.right
+          margin-left: 10
+          margin-right: 12
+          height: 24
+
+        Label
+          id: editHint
+          text: O pokemon precisa estar na pokebola para salvar. Tudo fica no log do painel.
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          margin: 0 12 8 12
+          height: 14
+          font: verdana-11px-rounded
+          color: #6f86a8
+
+    UIWidget
+      id: tabCastle
+      anchors.fill: parent
+      visible: false
+
+      AdmTitle
+        id: castleTitle
+        text: CASTELOS
+        anchors.top: parent.top
+        anchors.left: parent.left
+        margin-top: 4
+
+      AdmButton
+        id: castleRefresh
+        text: Atualizar
+        anchors.verticalCenter: castleTitle.verticalCenter
+        anchors.left: castleTitle.right
+        margin-left: 10
+        width: 72
+
+      ScrollablePanel
+        id: castleList
+        anchors.top: castleRefresh.bottom
+        anchors.left: parent.left
+        width: 250
+        height: 250
+        margin-top: 8
+        vertical-scrollbar: castleScroll
+        layout:
+          type: verticalBox
+          spacing: 3
+
+      VerticalScrollBar
+        id: castleScroll
+        anchors.top: castleList.top
+        anchors.bottom: castleList.bottom
+        anchors.left: castleList.right
+        width: 10
+        step: 40
+        pixels-scroll: true
+
+      AdmBox
+        id: warBox
+        anchors.top: castleList.bottom
+        anchors.left: parent.left
+        anchors.right: castleScroll.right
+        anchors.bottom: parent.bottom
+        margin-top: 10
+
+        AdmTitle
+          id: warTitle
+          text: GUERRA
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin: 10 0 0 12
+
+        Label
+          id: warState
+          anchors.verticalCenter: warTitle.verticalCenter
+          anchors.left: warTitle.right
+          anchors.right: parent.right
+          margin-left: 10
+          margin-right: 10
+          font: verdana-11px-antialised
+          color: #8fa7c4
+
+        AdmLabel
+          id: warMinLabel
+          text: Minutos
+          anchors.top: warTitle.bottom
+          anchors.left: parent.left
+          margin: 12 0 0 12
+
+        AdmEdit
+          id: warMinutes
+          text: 60
+          anchors.verticalCenter: warMinLabel.verticalCenter
+          anchors.left: warMinLabel.right
+          margin-left: 8
+          width: 50
+
+        AdmGreen
+          id: warAll
+          text: Iniciar (todos)
+          anchors.top: warMinLabel.bottom
+          anchors.left: parent.left
+          margin: 10 0 0 12
+          width: 118
+          height: 22
+
+        AdmButton
+          id: warOne
+          text: So o escolhido
+          anchors.top: warAll.top
+          anchors.left: warAll.right
+          margin-left: 6
+          width: 118
+
+        AdmRed
+          id: warStop
+          text: Parar guerra
+          anchors.top: warAll.bottom
+          anchors.left: parent.left
+          margin: 6 0 0 12
+          width: 118
+          height: 22
+
+        AdmButton
+          id: clanReload
+          text: Recarregar clas
+          anchors.top: warStop.top
+          anchors.left: warStop.right
+          margin-left: 6
+          width: 118
+
+      AdmBox
+        id: castleBox
+        anchors.top: parent.top
+        anchors.left: castleScroll.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 10
+
+        Label
+          id: castleName
+          text: Escolha um castelo na lista.
+          anchors.top: parent.top
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 10 12 0 12
+          font: verdana-11px-antialised
+          color: #ffffff
+
+        Label
+          id: castleInfo
+          anchors.top: castleName.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 6 12 0 12
+          height: 70
+          text-wrap: true
+          text-auto-resize: false
+          font: verdana-11px-rounded
+          color: #8fa7c4
+
+        AdmTitle
+          id: markTitle
+          text: MARCAR ONDE VOCE ESTA PISANDO
+          anchors.top: castleInfo.bottom
+          anchors.left: parent.left
+          margin: 8 0 0 12
+
+        UIWidget
+          id: markGrid
+          anchors.top: markTitle.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 6 12 0 12
+          height: 104
+          layout:
+            type: grid
+            cell-size: 112 22
+            cell-spacing: 4
+            flow: true
+
+          AdmButton
+            id: mk_pos1
+            text: Canto 1 area
+          AdmButton
+            id: mk_pos2
+            text: Canto 2 area
+          AdmButton
+            id: mk_emperium
+            text: Emperium
+          AdmButton
+            id: mk_home
+            text: Entrada
+          AdmButton
+            id: mk_exit
+            text: Saida
+          AdmButton
+            id: mk_room1
+            text: Canto 1 sala
+          AdmButton
+            id: mk_room2
+            text: Canto 2 sala
+          AdmButton
+            id: mk_noroom
+            text: Sem sala
+          AdmButton
+            id: mk_guard
+            text: + Guardiao
+          AdmButton
+            id: mk_noguards
+            text: Limpar guardioes
+          AdmButton
+            id: mk_show
+            text: Mostrar no chao
+
+        AdmButton
+          id: goHome
+          text: Ir: entrada
+          anchors.top: markGrid.bottom
+          anchors.left: parent.left
+          margin: 6 0 0 12
+          width: 112
+
+        AdmButton
+          id: goEmp
+          text: Ir: Emperium
+          anchors.top: goHome.top
+          anchors.left: goHome.right
+          margin-left: 4
+          width: 112
+
+        AdmButton
+          id: goExit
+          text: Ir: saida
+          anchors.top: goHome.top
+          anchors.left: goEmp.right
+          margin-left: 4
+          width: 112
+
+        AdmLabel
+          id: hpLabel
+          text: Vida Emperium
+          anchors.top: goHome.bottom
+          anchors.left: parent.left
+          margin: 14 0 0 12
+          width: 90
+
+        AdmEdit
+          id: castleHp
+          anchors.verticalCenter: hpLabel.verticalCenter
+          anchors.left: hpLabel.right
+          width: 90
+
+        AdmButton
+          id: castleHpApply
+          text: Aplicar
+          anchors.verticalCenter: hpLabel.verticalCenter
+          anchors.left: castleHp.right
+          margin-left: 6
+          width: 64
+
+        AdmLabel
+          id: nameLabel
+          text: Nome
+          anchors.top: hpLabel.bottom
+          anchors.left: parent.left
+          margin: 12 0 0 12
+          width: 90
+
+        AdmEdit
+          id: castleNewName
+          anchors.verticalCenter: nameLabel.verticalCenter
+          anchors.left: nameLabel.right
+          width: 160
+
+        AdmButton
+          id: castleRename
+          text: Renomear
+          anchors.verticalCenter: nameLabel.verticalCenter
+          anchors.left: castleNewName.right
+          margin-left: 6
+          width: 72
+
+        AdmButton
+          id: castleCreate
+          text: Criar novo
+          anchors.verticalCenter: nameLabel.verticalCenter
+          anchors.left: castleRename.right
+          margin-left: 4
+          width: 76
+
+        AdmLabel
+          id: ownerLabel
+          text: Cla dono
+          anchors.top: nameLabel.bottom
+          anchors.left: parent.left
+          margin: 12 0 0 12
+          width: 90
+
+        AdmEdit
+          id: castleClan
+          anchors.verticalCenter: ownerLabel.verticalCenter
+          anchors.left: ownerLabel.right
+          width: 160
+          !tooltip: tr('Clique para escolher o cla na lista (o lider toma posse do castelo)')
+
+        AdmGold
+          id: castleGive
+          text: Dar castelo
+          anchors.verticalCenter: ownerLabel.verticalCenter
+          anchors.left: castleClan.right
+          margin-left: 6
+          width: 84
+          height: 22
+
+        AdmRed
+          id: castleClear
+          text: Tirar dono
+          anchors.verticalCenter: ownerLabel.verticalCenter
+          anchors.left: castleGive.right
+          margin-left: 4
+          width: 72
+          height: 22
+
+        Label
+          id: clanNames
+          anchors.top: ownerLabel.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          margin: 8 12 8 12
+          text-wrap: true
+          text-auto-resize: false
+          font: verdana-11px-rounded
+          color: #6f86a8
+
+    UIWidget
+      id: tabTele
+      anchors.fill: parent
+      visible: false
+
+      AdmBox
+        id: posBox
+        anchors.top: parent.top
+        anchors.left: parent.left
+        width: 330
+        height: 150
+
+        AdmTitle
+          id: posTitle
+          text: POSICAO
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin: 10 0 0 12
+
+        AdmLabel
+          id: myPos
+          anchors.verticalCenter: posTitle.verticalCenter
+          anchors.right: parent.right
+          margin-right: 12
+
+        AdmEdit
+          id: posX
+          anchors.top: posTitle.bottom
+          anchors.left: parent.left
+          margin: 10 0 0 12
+          width: 70
+
+        AdmEdit
+          id: posY
+          anchors.top: posX.top
+          anchors.left: posX.right
+          margin-left: 6
+          width: 70
+
+        AdmEdit
+          id: posZ
+          anchors.top: posX.top
+          anchors.left: posY.right
+          margin-left: 6
+          width: 40
+
+        AdmGreen
+          id: posGo
+          text: Ir
+          anchors.top: posX.top
+          anchors.left: posZ.right
+          anchors.right: parent.right
+          margin-left: 6
+          margin-right: 12
+          height: 22
+
+        AdmButton
+          id: floorUp
+          text: Subir andar
+          anchors.top: posX.bottom
+          anchors.left: parent.left
+          margin: 10 0 0 12
+          width: 100
+
+        AdmButton
+          id: floorDown
+          text: Descer andar
+          anchors.top: floorUp.top
+          anchors.left: floorUp.right
+          margin-left: 6
+          width: 100
+
+        AdmButton
+          id: posFill
+          text: Usar a minha
+          anchors.top: floorUp.bottom
+          anchors.left: parent.left
+          margin: 6 0 0 12
+          width: 206
+
+      AdmBox
+        id: townBox
+        anchors.top: posBox.bottom
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        width: 330
+        margin-top: 10
+
+        AdmTitle
+          id: townTitle
+          text: CIDADES (templo)
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin: 10 0 0 12
+
+        ScrollablePanel
+          id: townList
+          anchors.top: townTitle.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          margin: 8 12 10 12
+          layout:
+            type: grid
+            cell-size: 148 24
+            cell-spacing: 4
+            flow: true
+
+      AdmBox
+        id: favBox
+        anchors.top: parent.top
+        anchors.left: posBox.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 10
+
+        AdmTitle
+          id: favTitle
+          text: FAVORITOS (salvo neste PC)
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin: 10 0 0 12
+
+        AdmEdit
+          id: favName
+          anchors.top: favTitle.bottom
+          anchors.left: parent.left
+          anchors.right: favAdd.left
+          margin: 8 6 0 12
+
+        AdmGold
+          id: favAdd
+          text: Salvar aqui
+          anchors.top: favTitle.bottom
+          anchors.right: parent.right
+          margin-top: 8
+          margin-right: 12
+          width: 90
+          height: 22
+
+        ScrollablePanel
+          id: favList
+          anchors.top: favName.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          margin: 8 12 10 12
+          layout:
+            type: verticalBox
+            spacing: 3
+
+    UIWidget
+      id: tabServer
+      anchors.fill: parent
+      visible: false
+
+      AdmBox
+        id: bcBox
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 96
+
+        AdmTitle
+          id: bcTitle
+          text: MENSAGEM PARA TODOS
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin: 10 0 0 12
+
+        AdmEdit
+          id: bcText
+          anchors.top: bcTitle.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 8 12 0 12
+
+        AdmRed
+          id: bcRed
+          text: Aviso (vermelho)
+          anchors.top: bcText.bottom
+          anchors.left: parent.left
+          margin: 8 0 0 12
+          width: 140
+          height: 22
+
+        AdmButton
+          id: bcWhite
+          text: Evento (branco)
+          anchors.top: bcRed.top
+          anchors.left: bcRed.right
+          margin-left: 6
+          width: 140
+
+        AdmGreen
+          id: bcGreen
+          text: Info (verde)
+          anchors.top: bcRed.top
+          anchors.left: bcWhite.right
+          margin-left: 6
+          width: 140
+          height: 22
+
+      AdmBox
+        id: srvBox
+        anchors.top: bcBox.bottom
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        width: 330
+        margin-top: 10
+
+        AdmTitle
+          id: srvTitle
+          text: SERVIDOR
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin: 10 0 0 12
+
+        AdmButton
+          id: srvSave
+          text: Salvar servidor
+          anchors.top: srvTitle.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 10 12 0 12
+
+        AdmButton
+          id: srvClean
+          text: Limpar mapa
+          anchors.top: srvSave.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 6 12 0 12
+
+        AdmLabel
+          id: srvHint
+          text: Limpar mapa pede 2 cliques.
+          anchors.top: srvClean.bottom
+          anchors.left: parent.left
+          margin: 10 0 0 12
+
+      AdmBox
+        id: rateBox
+        anchors.top: bcBox.bottom
+        anchors.left: srvBox.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-top: 10
+        margin-left: 10
+
+        AdmTitle
+          id: rateTitle
+          text: TAXAS (ate reiniciar o servidor)
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin: 10 0 0 12
+
+        UIWidget
+          id: rateList
+          anchors.top: rateTitle.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          margin: 8 12 10 12
+          layout:
+            type: verticalBox
+            spacing: 4
+
+    UIWidget
+      id: tabMe
+      anchors.fill: parent
+      visible: false
+
+      AdmBox
+        id: meBox
+        anchors.top: parent.top
+        anchors.left: parent.left
+        width: 330
+        height: 250
+
+        AdmTitle
+          id: meTitle
+          text: FERRAMENTAS DO GM
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin: 10 0 0 12
+
+        AdmButton
+          id: meGhost
+          text: Invisivel (ghost)
+          anchors.top: meTitle.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 10 12 0 12
+
+        AdmButton
+          id: meHide
+          text: Esconder vida
+          anchors.top: meGhost.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 6 12 0 12
+
+        AdmGreen
+          id: meHeal
+          text: Curar
+          anchors.top: meHide.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 6 12 0 12
+          height: 22
+
+        AdmLabel
+          id: lookLabel
+          text: Looktype
+          anchors.top: meHeal.bottom
+          anchors.left: parent.left
+          margin: 14 0 0 12
+          width: 70
+
+        AdmEdit
+          id: lookValue
+          anchors.verticalCenter: lookLabel.verticalCenter
+          anchors.left: lookLabel.right
+          margin-left: 6
+          width: 70
+
+        AdmButton
+          id: lookApply
+          text: Aplicar
+          anchors.verticalCenter: lookLabel.verticalCenter
+          anchors.left: lookValue.right
+          margin-left: 6
+          width: 70
+
+        AdmLabel
+          id: effectLabel
+          text: Efeito
+          anchors.top: lookLabel.bottom
+          anchors.left: parent.left
+          margin: 14 0 0 12
+          width: 70
+
+        AdmEdit
+          id: effectValue
+          anchors.verticalCenter: effectLabel.verticalCenter
+          anchors.left: effectLabel.right
+          margin-left: 6
+          width: 70
+
+        AdmButton
+          id: effectApply
+          text: Testar
+          anchors.verticalCenter: effectLabel.verticalCenter
+          anchors.left: effectValue.right
+          margin-left: 6
+          width: 70
+
+        AdmButton
+          id: effectNext
+          text: +1
+          anchors.verticalCenter: effectLabel.verticalCenter
+          anchors.left: effectApply.right
+          margin-left: 4
+          width: 36
+
+      AdmBox
+        id: logBox
+        anchors.top: parent.top
+        anchors.left: meBox.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 10
+
+        AdmTitle
+          id: logTitle
+          text: ULTIMAS ACOES
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin: 10 0 0 12
+
+        UIWidget
+          id: logList
+          anchors.top: logTitle.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          margin: 8 12 10 12
+          layout:
+            type: verticalBox
+            spacing: 2
+
+    UIWidget
+      id: tabStaff
+      anchors.fill: parent
+      visible: false
+
+      AdmTitle
+        id: staffTitle
+        text: EQUIPE
+        anchors.top: parent.top
+        anchors.left: parent.left
+        margin-top: 4
+
+      AdmButton
+        id: staffRefresh
+        text: Atualizar
+        anchors.verticalCenter: staffTitle.verticalCenter
+        anchors.left: staffTitle.right
+        margin-left: 12
+        width: 80
+
+      AdmLabel
+        id: staffCount
+        anchors.verticalCenter: staffTitle.verticalCenter
+        anchors.left: staffRefresh.right
+        margin-left: 10
+
+      ScrollablePanel
+        id: staffList
+        anchors.top: staffRefresh.bottom
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        width: 400
+        margin-top: 8
+        vertical-scrollbar: staffScroll
+        layout:
+          type: verticalBox
+          spacing: 3
+
+      VerticalScrollBar
+        id: staffScroll
+        anchors.top: staffList.top
+        anchors.bottom: staffList.bottom
+        anchors.left: staffList.right
+        width: 10
+        step: 30
+        pixels-scroll: true
+
+      AdmBox
+        id: staffBox
+        anchors.top: parent.top
+        anchors.left: staffScroll.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-left: 10
+
+        AdmTitle
+          id: roleTitle
+          text: MUDAR CARGO
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin: 10 0 0 12
+
+        AdmLabel
+          id: staffNameLabel
+          text: Nome do personagem (online ou offline)
+          anchors.top: roleTitle.bottom
+          anchors.left: parent.left
+          margin: 8 0 0 12
+
+        AdmEdit
+          id: staffName
+          anchors.top: staffNameLabel.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 4 12 0 12
+
+        AdmLabel
+          id: roleChooseLabel
+          text: Novo cargo
+          anchors.top: staffName.bottom
+          anchors.left: parent.left
+          margin: 12 0 0 12
+
+        UIWidget
+          id: roleButtons
+          anchors.top: roleChooseLabel.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          height: 130
+          margin: 4 12 0 12
+          layout:
+            type: verticalBox
+            spacing: 4
+
+          AdmButton
+            id: role5
+            text: Diretor
+
+          AdmButton
+            id: role4
+            text: Suporte
+
+          AdmButton
+            id: role3
+            text: Ajudante
+
+          AdmButton
+            id: role2
+            text: Treinador
+
+          AdmButton
+            id: role1
+            text: Jogador (tirar da equipe)
+
+        AdmGold
+          id: staffApply
+          text: Aplicar cargo
+          anchors.top: roleButtons.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 10 12 0 12
+
+        AdmLabel
+          id: staffRules
+          anchors.top: staffApply.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin: 12 12 0 12
+          text-auto-resize: false
+          text-wrap: true
+          height: 90
+          text: Salva no banco na hora. Se a pessoa estiver online, o cargo vale sem relogar. Voce so da cargos abaixo do seu e so mexe em quem esta abaixo de voce.

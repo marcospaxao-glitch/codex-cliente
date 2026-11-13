@@ -1,0 +1,10 @@
+Module
+  name: game_trade
+  description: Troca de itens e pokemons entre jogadores
+  author: Marcos
+  autoload: true
+  autoload-priority: 1008
+  scripts: [ trade ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

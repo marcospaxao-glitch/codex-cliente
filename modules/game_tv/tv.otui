@@ -1,0 +1,138 @@
+TvRow < UIWidget
+  height: 34
+  background-color: #0c1828
+  border-width: 1
+  border-color: #101f3e
+  focusable: false
+
+  $hover:
+    border-color: #1d3557
+
+  Label
+    id: name
+    anchors.left: parent.left
+    anchors.top: parent.top
+    margin-left: 8
+    margin-top: 3
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+  Label
+    id: info
+    anchors.left: name.left
+    anchors.top: name.bottom
+    margin-top: 2
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  Button
+    id: watch
+    width: 74
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 5
+    text: Assistir
+
+TvWatching < UIWidget
+  size: 300 34
+  background-color: #0a1320e0
+  border-width: 1
+  border-color: #f2c400
+  focusable: false
+
+  UIWidget
+    id: dot
+    size: 8 8
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 10
+    background-color: #ff4a3d
+    phantom: true
+
+  Label
+    id: text
+    anchors.left: dot.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+  Button
+    id: stop
+    width: 60
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 5
+    text: Parar
+
+MainWindow
+  id: tvWindow
+  text: TV
+  size: 330 420
+  @onEscape: modules.game_tv.hide()
+
+  Label
+    id: hint
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    text: Escolha um jogador para assistir. Voce fica parado e invisivel.
+    text-wrap: true
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #8fa7c4
+
+  VerticalScrollBar
+    id: listScroll
+    anchors.top: hint.bottom
+    anchors.right: parent.right
+    anchors.bottom: closeButton.top
+    margin-top: 6
+    margin-bottom: 8
+    step: 36
+    pixels-scroll: true
+
+  ScrollablePanel
+    id: list
+    anchors.top: hint.bottom
+    anchors.left: parent.left
+    anchors.right: listScroll.left
+    anchors.bottom: closeButton.top
+    margin-top: 6
+    margin-bottom: 8
+    margin-right: 4
+    vertical-scrollbar: listScroll
+    layout:
+      type: verticalBox
+      spacing: 3
+
+  Label
+    id: empty
+    anchors.centerIn: list
+    text: Ninguem para assistir agora.
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #6f86a8
+    visible: false
+
+  Button
+    id: refreshButton
+    text: Atualizar
+    width: 80
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    @onClick: modules.game_tv.refresh()
+
+  Button
+    id: closeButton
+    text: Fechar
+    width: 80
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    @onClick: modules.game_tv.hide()

@@ -1,0 +1,10 @@
+Module
+  name: game_pokelooks
+  description: Sprites dos pokemons em todas as janelas (igual a barra) - opcode 127
+  author: Marcos
+  autoload: true
+  autoload-priority: 999
+  scripts: [ pokelooks_data, pokelooks ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

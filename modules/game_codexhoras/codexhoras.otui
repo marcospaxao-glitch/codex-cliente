@@ -1,0 +1,176 @@
+CHTitle < Label
+  font: verdana-11px-rounded
+  color: #f2c400
+  text-auto-resize: true
+  margin-top: 12
+
+CHStat < Label
+  font: verdana-11px-antialised
+  color: #c9d6ea
+  height: 16
+
+CHValue < Label
+  font: verdana-11px-rounded
+  color: #ffffff
+  height: 16
+  text-align: right
+
+CHPrize < Label
+  font: verdana-11px-antialised
+  color: #c9d6ea
+  height: 15
+  text-auto-resize: false
+
+MainWindow
+  id: codexHorasWindow
+  text: Recompensa por Tempo Jogado
+  size: 330 440
+  @onEscape: modules.game_codexhoras.hide()
+
+  Label
+    id: nextPrize
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 20
+    font: sans-bold-16px
+    color: #ffffff
+    text-align: center
+
+  Panel
+    id: barBg
+    anchors.top: nextPrize.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 6
+    height: 14
+    background-color: #0b1626
+    border-width: 1
+    border-color: #2b4a75
+
+    Panel
+      id: barFill
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      margin: 1
+      width: 1
+      background-color: #f2c400
+
+  Label
+    id: state
+    anchors.top: barBg.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 4
+    height: 14
+    font: verdana-11px-antialised
+    color: #8ea4c2
+    text-align: center
+
+  Label
+    id: points
+    anchors.top: state.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 10
+    height: 30
+    font: sans-bold-16px
+    color: #f2c400
+    text-align: center
+
+  CHStat
+    id: l1
+    anchors.top: points.bottom
+    anchors.left: parent.left
+    margin-top: 6
+    width: 150
+    text: Horas hoje
+  CHValue
+    id: today
+    anchors.top: l1.top
+    anchors.right: parent.right
+    width: 120
+
+  CHStat
+    id: l2
+    anchors.top: l1.bottom
+    anchors.left: parent.left
+    width: 150
+    text: Horas no total
+  CHValue
+    id: total
+    anchors.top: l2.top
+    anchors.right: parent.right
+    width: 120
+
+  CHStat
+    id: l3
+    anchors.top: l2.bottom
+    anchors.left: parent.left
+    width: 150
+    text: Dias seguidos
+  CHValue
+    id: streak
+    anchors.top: l3.top
+    anchors.right: parent.right
+    width: 120
+
+  CHStat
+    id: l4
+    anchors.top: l3.bottom
+    anchors.left: parent.left
+    width: 150
+    text: Pontos por hora
+  CHValue
+    id: perHour
+    anchors.top: l4.top
+    anchors.right: parent.right
+    width: 120
+
+  CHStat
+    id: l5
+    anchors.top: l4.bottom
+    anchors.left: parent.left
+    width: 120
+    text: Proximo marco
+  CHValue
+    id: marco
+    anchors.top: l5.top
+    anchors.right: parent.right
+    anchors.left: l5.right
+
+  CHTitle
+    id: tPrizes
+    anchors.top: l5.bottom
+    anchors.left: parent.left
+    text: PREMIOS POSSIVEIS A CADA HORA
+
+  Panel
+    id: prizes
+    anchors.top: tPrizes.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: shopButton.top
+    margin-top: 4
+    margin-bottom: 8
+    layout:
+      type: verticalBox
+
+  Button
+    id: shopButton
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    width: 150
+    height: 26
+    text: Loja de Horas
+    @onClick: modules.game_codexhoras.openShop()
+
+  Button
+    id: closeButton
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    width: 90
+    height: 26
+    text: Fechar
+    @onClick: modules.game_codexhoras.hide()

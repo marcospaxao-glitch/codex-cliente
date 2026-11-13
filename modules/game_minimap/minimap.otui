@@ -1,0 +1,103 @@
+MiniWindow
+  id: minimapWindow
+  !text: tr('Minimap')
+  height: 190
+  icon: /modules/game_minimap/images/icon
+  icon-rect: 4 4 16 16
+  text-offset: 25 5
+  color: #f2c400
+  image-source: /modules/game_minimap/images/window
+  image-border: 4
+  image-border-top: 23
+  image-border-bottom: 4
+  @onClose: modules.game_minimap.onMiniWindowClose()
+  &save: true
+
+  UIButton
+    id: helpButton
+    text: ?
+    size: 14 14
+    anchors.top: minimizeButton.top
+    anchors.right: minimizeButton.left
+    margin-right: 3
+    font: verdana-11px-antialised
+    color: #f2c400
+    text-align: center
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+    !tooltip: tr('Arraste com o botao esquerdo para mover o mapa\nRoda do mouse: zoom   |   Ctrl + roda: andar\nBotao direito: criar marca\nCtrl+Tab: mapa inteiro   |   Ctrl+M: abrir/fechar')
+
+    $hover:
+      color: #ffffff
+      border-color: #f2c400
+
+  UIButton
+    id: sizeButton
+    size: 14 14
+    anchors.top: minimizeButton.top
+    anchors.right: helpButton.left
+    margin-right: 3
+    icon: /modules/game_minimap/images/resize
+    icon-size: 10 10
+    icon-offset: 2 2
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+    !tooltip: tr('Tamanho do minimapa (pequeno / medio / grande)')
+    @onClick: modules.game_minimap.cycleSize()
+
+    $hover:
+      border-color: #f2c400
+
+  MiniWindowContents
+    margin-bottom: 23
+
+    Minimap
+      id: minimap
+      anchors.fill: parent
+
+  UIWidget
+    id: infoBar
+    height: 18
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-left: 3
+    margin-right: 3
+    margin-bottom: 4
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  Label
+    id: posLabel
+    anchors.left: infoBar.left
+    anchors.verticalCenter: infoBar.verticalCenter
+    margin-left: 5
+    font: verdana-11px-rounded
+    color: #dce8f5
+    text-auto-resize: true
+    !tooltip: tr('Sua posicao (X, Y, Z)')
+
+  Label
+    id: floorLabel
+    anchors.right: infoBar.right
+    anchors.verticalCenter: infoBar.verticalCenter
+    margin-right: 5
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: true
+
+  Label
+    id: cityLabel
+    anchors.left: posLabel.right
+    anchors.right: floorLabel.left
+    anchors.verticalCenter: infoBar.verticalCenter
+    margin-left: 4
+    margin-right: 4
+    height: 14
+    text-align: center
+    font: verdana-11px-rounded
+    color: #f2c400

@@ -1,0 +1,241 @@
+CodexTopButton < UIButton
+  size: 28 28
+  background-color: #0a1320
+  border-width: 1
+  border-color: #0a1320
+  icon-color: #c9d6e6
+  focusable: false
+
+  $hover:
+    background-color: #101f3e
+    border-color: #f2c400
+    icon-color: #f2c400
+
+  $on:
+    background-color: #101f3e
+    border-color: #6f86a8
+    icon-color: #ffffff
+
+  $pressed:
+    background-color: #0c1828
+    icon-color: #ffffff
+
+  $disabled:
+    icon-color: #6f86a8
+
+CodexTopButtonRaw < CodexTopButton
+  icon-color: #ffffff
+  icon-rect: 3 3 22 22
+
+  $hover:
+    background-color: #101f3e
+    border-color: #f2c400
+    icon-color: #ffffff
+
+  $on:
+    background-color: #101f3e
+    border-color: #6f86a8
+    icon-color: #ffffff
+
+  $disabled:
+    icon-color: #ffffff66
+
+CodexTopButtonsPanel < Panel
+  layout:
+    type: horizontalBox
+    spacing: 3
+    fit-children: true
+  padding: 3 3
+
+CodexTopSeparator < UIWidget
+  width: 1
+  margin-top: 8
+  margin-bottom: 8
+  background-color: #1d3557
+  phantom: true
+
+CodexCatButton < UIButton
+  size: 96 28
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+  icon-color: #c9d6e6
+  icon-rect: 4 3 22 22
+  text-align: left
+  text-offset: 30 0
+  font: verdana-11px-rounded
+  color: #dce8f5
+  focusable: false
+
+  $hover:
+    background-color: #101f3e
+    border-color: #f2c400
+    icon-color: #f2c400
+    color: #f2c400
+
+  $on:
+    background-color: #101f3e
+    border-color: #f2c400
+    icon-color: #f2c400
+    color: #ffffff
+
+CodexMenuTile < UIWidget
+  size: 76 68
+  background-color: #0c1828
+  border-width: 1
+  border-color: #101f3e
+  focusable: false
+
+  $hover:
+    background-color: #101f3e
+    border-color: #f2c400
+
+  Panel
+    id: slot
+    size: 28 28
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 5
+
+  Label
+    id: label
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-bottom: 3
+    margin-left: 2
+    margin-right: 2
+    height: 26
+    text-wrap: true
+    // codex: nome em 2 linhas
+    text-align: center
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+CodexMenuDrawer < UIWidget
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  padding: 8
+  focusable: true
+
+  Label
+    id: title
+    text: Menu
+    anchors.top: parent.top
+    anchors.left: parent.left
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #f2c400
+
+  Label
+    id: hint
+    text: Digite para buscar em todos
+    anchors.top: parent.top
+    anchors.right: parent.right
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #6f86a8
+
+  TextEdit
+    id: search
+    anchors.top: title.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 6
+    height: 20
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #0c1828
+    border-width: 1
+    border-color: #1d3557
+    placeholder: Buscar (digite o nome e Enter)
+
+  Panel
+    id: grid
+    anchors.top: search.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-top: 6
+    layout:
+      type: grid
+      cell-size: 76 68
+      cell-spacing: 4
+      num-columns: 6
+      flow: true
+
+  Label
+    id: empty
+    text: Nada aqui.
+    anchors.centerIn: grid
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    color: #6f86a8
+    visible: false
+
+Panel
+  id: topMenu
+  height: 34
+  anchors.top: parent.top
+  anchors.left: parent.left
+  anchors.right: parent.right
+  background-color: #0a1320
+  focusable: false
+
+  UIWidget
+    id: goldLine
+    height: 1
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    background-color: #f2c400
+    opacity: 0.55
+    phantom: true
+
+  CodexTopButtonsPanel
+    id: leftButtonsPanel
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    margin-left: 4
+
+  Label
+    id: fpsLabel
+    text-auto-resize: true
+    anchors.top: parent.top
+    anchors.left: leftButtonsPanel.right
+    margin-top: 4
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #6f86a8
+
+  Label
+    id: pingLabel
+    text-auto-resize: true
+    anchors.top: fpsLabel.bottom
+    anchors.left: fpsLabel.left
+    font: verdana-11px-rounded
+    color: #6f86a8
+
+  CodexTopButtonsPanel
+    id: pinnedPanel
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    visible: false
+
+  Panel
+    id: storagePanel
+    size: 1 1
+    anchors.top: parent.top
+    anchors.left: parent.left
+    visible: false
+
+  CodexTopButtonsPanel
+    id: rightButtonsPanel
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin-right: 4

@@ -1,0 +1,11 @@
+Module
+  name: game_phonenotify
+  description: Aviso de mensagem nao lida do celular
+  author: Codex
+  website: http://localhost/
+  autoload: true
+  autoload-priority: 1000
+  sandboxed: true
+  scripts: [ phonenotify ]
+  @onLoad: init()
+  @onUnload: terminate()

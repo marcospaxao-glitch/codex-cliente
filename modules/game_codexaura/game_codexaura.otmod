@@ -1,0 +1,11 @@
+Module
+  name: game_codexaura
+  description: Codex - aura colorida por tipo (skull 11 a 30), antes feita no C++
+  author: Codex
+  website: codexpoketibia.com.br
+  autoload: true
+  autoload-priority: 1000
+  sandboxed: true
+  scripts: [ aura ]
+  @onLoad: init()
+  @onUnload: terminate()

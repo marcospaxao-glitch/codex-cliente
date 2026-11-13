@@ -1,0 +1,181 @@
+GuiaCat < Label
+  height: 22
+  font: verdana-11px-rounded
+  color: #f2c400
+  text-offset: 6 4
+  background-color: #12223a
+  focusable: false
+  phantom: false
+
+GuiaRow < Label
+  height: 20
+  font: verdana-11px-antialised
+  color: #d6e2f2
+  text-offset: 16 3
+  focusable: true
+  background-color: alpha
+
+  $hover:
+    background-color: #1a3050
+
+  $focus:
+    background-color: #24456f
+    color: #ffffff
+
+GuiaBox < UIWidget
+  background-color: #0b1626
+  border-width: 1
+  border-color: #23395a
+
+MainWindow
+  id: guiaWindow
+  text: Guia Codex
+  size: 860 600
+  @onEscape: modules.game_tutorial.hide()
+
+  TextEdit
+    id: searchEdit
+    anchors.top: parent.top
+    anchors.left: parent.left
+    width: 236
+    height: 24
+    margin-top: 4
+    font: verdana-11px-antialised
+    text-margin: 6
+    placeholder: Buscar no guia...
+
+  TextList
+    id: pageList
+    anchors.top: searchEdit.bottom
+    anchors.left: parent.left
+    anchors.bottom: closeButton.top
+    width: 224
+    margin-top: 6
+    margin-bottom: 8
+    focusable: false
+    vertical-scrollbar: pageListScroll
+    background-color: #0b1626
+    border-width: 1
+    border-color: #23395a
+
+  VerticalScrollBar
+    id: pageListScroll
+    anchors.top: pageList.top
+    anchors.bottom: pageList.bottom
+    anchors.left: pageList.right
+    step: 20
+    pixels-scroll: true
+
+  Label
+    id: pageTitle
+    anchors.top: parent.top
+    anchors.left: pageListScroll.right
+    anchors.right: parent.right
+    margin-left: 12
+    margin-top: 2
+    height: 22
+    font: sans-bold-16px
+    color: #f2c400
+
+  Label
+    id: pageCat
+    anchors.top: pageTitle.bottom
+    anchors.left: pageTitle.left
+    anchors.right: parent.right
+    height: 14
+    font: verdana-11px-rounded
+    color: #7f97b8
+
+  GuiaBox
+    id: visuals
+    anchors.top: pageCat.bottom
+    anchors.left: pageTitle.left
+    anchors.right: parent.right
+    margin-top: 6
+    height: 76
+    padding: 6
+    layout:
+      type: horizontalBox
+      spacing: 8
+
+  UIWidget
+    id: pageImage
+    anchors.top: visuals.bottom
+    anchors.left: pageTitle.left
+    anchors.right: parent.right
+    margin-top: 6
+    height: 0
+    image-fixed-ratio: true
+    image-smooth: true
+    visible: false
+
+  GuiaBox
+    id: textBox
+    anchors.top: pageImage.bottom
+    anchors.left: pageTitle.left
+    anchors.right: parent.right
+    anchors.bottom: closeButton.top
+    margin-top: 6
+    margin-bottom: 8
+
+  ScrollablePanel
+    id: textPanel
+    anchors.top: textBox.top
+    anchors.left: textBox.left
+    anchors.right: textScroll.left
+    anchors.bottom: textBox.bottom
+    margin: 8 4 8 10
+    vertical-scrollbar: textScroll
+
+    Label
+      id: pageText
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      font: verdana-11px-antialised
+      color: #e4ecf7
+      text-wrap: true
+      text-auto-resize: true
+
+  VerticalScrollBar
+    id: textScroll
+    anchors.top: textBox.top
+    anchors.bottom: textBox.bottom
+    anchors.right: textBox.right
+    step: 24
+    pixels-scroll: true
+
+  Button
+    id: prevButton
+    text: < Anterior
+    width: 90
+    anchors.left: pageTitle.left
+    anchors.bottom: parent.bottom
+    @onClick: modules.game_tutorial.step(-1)
+
+  Label
+    id: pageCount
+    anchors.left: prevButton.right
+    anchors.verticalCenter: prevButton.verticalCenter
+    width: 80
+    margin-left: 6
+    text-align: center
+    font: verdana-11px-rounded
+    color: #7f97b8
+
+  Button
+    id: nextButton
+    text: Proximo >
+    width: 90
+    anchors.left: pageCount.right
+    anchors.bottom: parent.bottom
+    margin-left: 6
+    @onClick: modules.game_tutorial.step(1)
+
+  Button
+    id: closeButton
+    text: Fechar
+    width: 80
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    @onClick: modules.game_tutorial.hide()

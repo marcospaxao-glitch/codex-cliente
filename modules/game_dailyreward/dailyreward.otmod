@@ -1,0 +1,10 @@
+Module
+  name: game_dailyreward
+  description: Recompensas diarias (free e premium)
+  author: Marcos
+  autoload: true
+  autoload-priority: 1003
+  scripts: [ dailyreward ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

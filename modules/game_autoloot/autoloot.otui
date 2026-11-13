@@ -1,0 +1,562 @@
+ALTitleBar < UIWidget
+  size: 4 14
+  background-color: #f2c400
+  phantom: true
+
+ALSectionTitle < Label
+  font: verdana-11px-rounded
+  color: #f2c400
+  text-auto-resize: true
+  phantom: true
+
+ALCaption < Label
+  font: verdana-11px-rounded
+  color: #6f86a8
+  text-auto-resize: true
+  phantom: true
+
+ALCard < Panel
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+ALChip < UIButton
+  height: 24
+  font: verdana-11px-rounded
+  color: #8fa7c4
+  background-color: #0c1828
+  border-width: 1
+  border-color: #1d3557
+
+  $hover:
+    color: #ffffff
+    border-color: #4a6a94
+
+  $on:
+    color: #f2c400
+    background-color: #1f1a06
+    border-color: #f2c400
+
+  $disabled:
+    color: #3a4c64
+    border-color: #142238
+
+ALSmallButton < UIButton
+  height: 24
+  font: verdana-11px-rounded
+  color: #dce8f5
+  background-color: #101f3e
+  border-width: 1
+  border-color: #24415f
+
+  $hover:
+    color: #ffffff
+    border-color: #f2c400
+
+  $disabled:
+    color: #3a4c64
+    border-color: #142238
+
+ALRow < UIWidget
+  height: 40
+  background-color: #0c1828
+  border-width: 1
+  border-color: #16294a
+  margin-bottom: 4
+
+  $hover:
+    background-color: #101f3e
+    border-color: #2b4a75
+
+  UIWidget
+    id: slot
+    size: 34 34
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 3
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  Item
+    id: itemIcon
+    size: 32 32
+    anchors.centerIn: slot
+    virtual: true
+    phantom: true
+
+  Label
+    id: nameLabel
+    anchors.left: slot.right
+    anchors.right: removeButton.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    margin-right: 6
+    font: verdana-11px-rounded
+    color: #ffffff
+    height: 14
+    phantom: true
+
+  UIButton
+    id: removeButton
+    text: X
+    size: 22 22
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 8
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+
+    $hover:
+      color: #ffffff
+      background-color: #7a1f1f
+      border-color: #e04848
+
+ALResult < UIWidget
+  height: 40
+  background-color: #0c1828
+  border-width: 1
+  border-color: #16294a
+
+  $hover:
+    background-color: #142a4a
+    border-color: #f2c400
+
+  UIWidget
+    id: slot
+    size: 34 34
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 3
+    background-color: #07101c
+    border-width: 1
+    border-color: #1d3557
+    phantom: true
+
+  Item
+    id: itemIcon
+    size: 32 32
+    anchors.centerIn: slot
+    virtual: true
+    phantom: true
+
+  Label
+    id: nameLabel
+    anchors.left: slot.right
+    anchors.right: parent.right
+    anchors.top: parent.top
+    margin-left: 6
+    margin-right: 4
+    margin-top: 6
+    font: verdana-11px-rounded
+    color: #ffffff
+    height: 14
+    phantom: true
+
+  Label
+    id: statusLabel
+    anchors.left: nameLabel.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-right: 4
+    margin-bottom: 5
+    font: verdana-11px-rounded
+    color: #6f86a8
+    height: 13
+    phantom: true
+
+UIWindow
+  id: autolootWindow
+  size: 700 520
+  anchors.centerIn: parent
+  background-color: #0a1320
+  border-width: 1
+  border-color: #f2c400
+  focusable: true
+  visible: false
+
+  UIWidget
+    id: headerBar
+    size: 4 18
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 12
+    margin-left: 14
+    background-color: #f2c400
+    phantom: true
+
+  Label
+    id: titleLabel
+    text: AUTOLOOT
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: headerBar.right
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: subtitleLabel
+    text: coleta automatica de itens
+    anchors.verticalCenter: headerBar.verticalCenter
+    anchors.left: titleLabel.right
+    margin-left: 8
+    font: verdana-11px-rounded
+    color: #4a5f7a
+    text-auto-resize: true
+    phantom: true
+
+  UIButton
+    id: closeButton
+    text: X
+    size: 22 20
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 10
+    margin-right: 12
+    font: verdana-11px-rounded
+    color: #dce8f5
+    background-color: #101f3e
+    border-width: 1
+    border-color: #24415f
+    @onClick: modules.game_autoloot.hide()
+
+    $hover:
+      color: #ffffff
+      background-color: #7a1f1f
+      border-color: #e04848
+
+  ALCard
+    id: statusCard
+    anchors.top: headerBar.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 12
+    margin-left: 14
+    margin-right: 14
+    height: 58
+
+    UIWidget
+      id: statusStripe
+      width: 4
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      background-color: #5fd35f
+      phantom: true
+
+    UIWidget
+      id: statusDot
+      size: 10 10
+      anchors.left: statusStripe.right
+      anchors.top: parent.top
+      margin-left: 12
+      margin-top: 13
+      background-color: #5fd35f
+      phantom: true
+
+    Label
+      id: statusLabel
+      anchors.verticalCenter: statusDot.verticalCenter
+      anchors.left: statusDot.right
+      margin-left: 8
+      font: verdana-11px-rounded
+      color: #5fd35f
+      text-auto-resize: true
+      phantom: true
+
+    Label
+      id: statusHint
+      anchors.top: statusLabel.bottom
+      anchors.left: statusDot.left
+      margin-top: 7
+      font: verdana-11px-rounded
+      color: #6f86a8
+      text-auto-resize: true
+      phantom: true
+
+    ALChip
+      id: modeAllButton
+      text: Coletar tudo
+      width: 110
+      anchors.verticalCenter: parent.verticalCenter
+      anchors.right: modeListButton.left
+      margin-right: 4
+      @onClick: modules.game_autoloot.setMode(0)
+
+    ALChip
+      id: modeListButton
+      text: Somente a lista
+      width: 120
+      anchors.verticalCenter: parent.verticalCenter
+      anchors.right: toggleButton.left
+      margin-right: 12
+      @onClick: modules.game_autoloot.setMode(1)
+
+    UIButton
+      id: toggleButton
+      width: 104
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.right: parent.right
+      margin: 6 6 6 0
+      font: verdana-11px-rounded
+      color: #ffffff
+      background-color: #7a1f1f
+      border-width: 1
+      border-color: #e04848
+      @onClick: modules.game_autoloot.toggleSystem()
+
+      $hover:
+        background-color: #9a2a2a
+
+  ALCard
+    id: listCard
+    anchors.top: statusCard.bottom
+    anchors.left: parent.left
+    anchors.bottom: footerHint.top
+    width: 318
+    margin-top: 10
+    margin-left: 14
+    margin-bottom: 8
+
+    ALTitleBar
+      id: listBar
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 10
+      margin-left: 10
+
+    ALSectionTitle
+      id: listTitle
+      anchors.verticalCenter: listBar.verticalCenter
+      anchors.left: listBar.right
+      margin-left: 6
+
+    ALSmallButton
+      id: clearButton
+      text: Limpar
+      width: 64
+      height: 20
+      anchors.verticalCenter: listBar.verticalCenter
+      anchors.right: parent.right
+      margin-right: 10
+
+    UIWidget
+      id: listUsageBg
+      height: 4
+      anchors.top: listBar.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 8
+      margin-left: 10
+      margin-right: 10
+      background-color: #16294a
+      phantom: true
+
+    UIWidget
+      id: listUsage
+      height: 4
+      width: 0
+      anchors.top: listUsageBg.top
+      anchors.left: listUsageBg.left
+      background-color: #f2c400
+      phantom: true
+
+    ScrollablePanel
+      id: listPanel
+      anchors.top: listUsageBg.bottom
+      anchors.left: parent.left
+      anchors.right: listScroll.left
+      anchors.bottom: parent.bottom
+      margin-top: 8
+      margin-left: 8
+      margin-right: 3
+      margin-bottom: 8
+      vertical-scrollbar: listScroll
+      layout:
+        type: verticalBox
+
+    VerticalScrollBar
+      id: listScroll
+      anchors.top: listUsageBg.bottom
+      anchors.bottom: parent.bottom
+      anchors.right: parent.right
+      margin-top: 8
+      margin-bottom: 8
+      margin-right: 6
+      step: 44
+      pixels-scroll: true
+
+    Label
+      id: emptyLabel
+      anchors.centerIn: listPanel
+      font: verdana-11px-rounded
+      color: #4a5f7a
+      text-auto-resize: true
+      phantom: true
+
+  ALCard
+    id: searchCard
+    anchors.top: statusCard.bottom
+    anchors.left: listCard.right
+    anchors.right: parent.right
+    anchors.bottom: footerHint.top
+    margin-top: 10
+    margin-left: 8
+    margin-right: 14
+    margin-bottom: 8
+
+    ALTitleBar
+      id: searchBar
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 10
+      margin-left: 10
+
+    ALSectionTitle
+      id: searchTitle
+      text: ADICIONAR ITEM
+      anchors.verticalCenter: searchBar.verticalCenter
+      anchors.left: searchBar.right
+      margin-left: 6
+
+    ALChip
+      id: filterId
+      text: ID
+      width: 40
+      height: 20
+      anchors.verticalCenter: searchBar.verticalCenter
+      anchors.right: parent.right
+      margin-right: 10
+      visible: false
+      @onClick: modules.game_autoloot.setFilter('id')
+
+    ALChip
+      id: filterName
+      text: Nome
+      width: 52
+      height: 20
+      anchors.verticalCenter: searchBar.verticalCenter
+      anchors.right: filterId.left
+      margin-right: 4
+      visible: false
+      @onClick: modules.game_autoloot.setFilter('name')
+
+    TextEdit
+      id: searchEdit
+      height: 28
+      anchors.top: searchBar.bottom
+      anchors.left: parent.left
+      anchors.right: searchButton.left
+      margin-top: 12
+      margin-left: 10
+      margin-right: 6
+      font: verdana-11px-antialised
+      color: #0a1320
+      text-margin: 6
+      selection-color: #ffffff
+      selection-background-color: #2b5a8a
+
+      $focus:
+        border-color: #f2c400
+
+    ALSmallButton
+      id: searchButton
+      text: Buscar
+      width: 72
+      height: 28
+      anchors.top: searchBar.bottom
+      anchors.right: parent.right
+      margin-top: 12
+      margin-right: 10
+      @onClick: modules.game_autoloot.doSearch()
+
+    Label
+      id: resultsInfo
+      anchors.top: searchEdit.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 8
+      margin-left: 10
+      margin-right: 10
+      height: 14
+      font: verdana-11px-rounded
+      color: #8fa7c4
+
+    ScrollablePanel
+      id: resultsPanel
+      anchors.top: resultsInfo.bottom
+      anchors.left: parent.left
+      anchors.right: resultsScroll.left
+      anchors.bottom: pagerPrev.top
+      margin-top: 6
+      margin-left: 8
+      margin-right: 3
+      margin-bottom: 8
+      vertical-scrollbar: resultsScroll
+      layout:
+        type: grid
+        cell-size: 152 40
+        cell-spacing: 4
+        flow: true
+
+    VerticalScrollBar
+      id: resultsScroll
+      anchors.top: resultsInfo.bottom
+      anchors.bottom: pagerPrev.top
+      anchors.right: parent.right
+      margin-top: 6
+      margin-bottom: 8
+      margin-right: 6
+      step: 44
+      pixels-scroll: true
+
+    ALSmallButton
+      id: pagerPrev
+      text: < Anterior
+      width: 90
+      anchors.left: parent.left
+      anchors.bottom: parent.bottom
+      margin-left: 10
+      margin-bottom: 10
+      @onClick: modules.game_autoloot.prevPage()
+
+    ALSmallButton
+      id: pagerNext
+      text: Proxima >
+      width: 90
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      margin-right: 10
+      margin-bottom: 10
+      @onClick: modules.game_autoloot.nextPage()
+
+    Label
+      id: pagerLabel
+      anchors.verticalCenter: pagerPrev.verticalCenter
+      anchors.left: pagerPrev.right
+      anchors.right: pagerNext.left
+      font: verdana-11px-rounded
+      color: #8fa7c4
+      text-align: center
+      height: 14
+
+  Label
+    id: footerHint
+    text: Clique em um resultado para adicionar. Tambem pode arrastar itens da mochila para esta janela.
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-bottom: 10
+    margin-left: 14
+    margin-right: 14
+    height: 14
+    font: verdana-11px-rounded
+    color: #4a5f7a
+    text-align: center
