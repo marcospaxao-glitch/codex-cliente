@@ -1,3 +1,4 @@
+// CODEX: so as classes do Redemption que o Codex nao tem
 BordedMiniWidget < UIWidget
   UIWidget
     height: 2

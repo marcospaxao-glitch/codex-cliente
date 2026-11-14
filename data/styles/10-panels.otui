@@ -18,6 +18,7 @@ LightFlatPanel < Panel
   image-source: /images/ui/panel_lightflat
   image-border: 1
 
+// ---- classes que so existem no Redemption (mantidas por compatibilidade)
 QtPanel < UIWidget
   padding: 10
   auto-focus: first

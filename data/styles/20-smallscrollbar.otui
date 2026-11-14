@@ -1,3 +1,4 @@
+// CODEX: so as classes do Redemption que o Codex nao tem
 SmallScrollBar < UIScrollBar
   orientation: vertical
   margin-bottom: 1

@@ -1,3 +1,4 @@
+// CODEX: so as classes do Redemption que o Codex nao tem
 StatsBarDarkBackground < UIWidget
   UIWidget
     anchors.fill: parent
@@ -696,7 +697,6 @@ TopStatsBarDefaultOnTop < UIWidget
     anchors.left: icons.right
     anchors.bottom: parent.bottom
 
-
 TopStatsBarCompactOnTop < UIWidget
   StatsBarTopWithShrink
     anchors.fill: parent
@@ -842,6 +842,7 @@ TopStatsBar < UIWidget
     phantom: true
 
 // NOTE: Background of exp/skills on top
+
 StatsBarDarkBackground < UIWidget
   UIWidget
     anchors.fill: parent
@@ -1159,7 +1160,6 @@ StatsBarBottomWithShrink < UIWidget
     anchors.right: parent.right
     anchors.top: rightBottomIncreaseSidePanels.bottom
     size: 0 0
-
 
 BottomStatsSkillElement < UIWidget
   height: 20
@@ -1583,6 +1583,7 @@ TopStatsBarCompactOnBottom < UIWidget
 
 // Proficiency XP Bar Widget for TopBar
 // Structure: [Button+Highlight] [Progress Bar with % label] [Tree Icon]
+
 ProficiencyTopBarWidget < UIWidget
   id: proficiencyTopBar
   size: 113 20

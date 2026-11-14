@@ -2,7 +2,7 @@ ProgressBar < UIProgressBar
   height: 16
   background-color: red
   image-source: /images/ui/progressbar
-  image-border: 2
+  image-border: 1
   font: verdana-11px-rounded
   text-offset: 0 2
 
@@ -11,9 +11,6 @@ ProgressBar < UIProgressBar
     margin-top: 0
     margin-bottom: 0
     height: 0
-
-ThickProgressBar < ProgressBar
-  image-source: /images/ui/progressbar_thick
 
 LifeProgressBar < UIProgressBar
   height: 16
@@ -30,10 +27,15 @@ ProgressRect < UIProgressRect
   background-color: #00000088
   font: verdana-11px-rounded
 
+// ---- classes que so existem no Redemption (mantidas por compatibilidade)
+ThickProgressBar < ProgressBar
+  image-source: /images/ui/progressbar_thick
+
 HealthBar < ProgressBar
   image-source: /images/ui/progressbarhpmana
   image-border: 3
   
+
 ManaBar < ProgressBar
   image-source: /images/ui/progressbarhpmana
   image-border: 4
@@ -51,6 +53,7 @@ InvManaBar < UIProgressBarSDInverted
   size: 10 30
   image-border: 1
   
+
 InvVerticalBar < UIVerticalProgressBarSDInverted 
   size: 10 30
   image-border: 1

@@ -1,67 +1,65 @@
 ComboBoxPopupScrollMenuButton < UIButton
-  height: 17
-  font: Verdana Bold-11px
+  height: 23
+  font: verdana-11px-antialised
   text-align: left
   text-offset: 4 0
-  color: #c0c0c0
+  color: #dfdfdf
   background-color: alpha
   margin: 1
 
   $hover !disabled:
-    color: #f4f4f4
-    background-color: #86868750
+    color: #dfdfdf
+    background-color: #355d89
 
   $disabled:
     color: #dfdfdf88
 
 ComboBoxPopupScrollMenu < UIPopupScrollMenu
   image-source: /images/ui/combobox_square
-  image-clip: 0 60 98 20
+  image-clip: 0 69 91 23
   image-border: 1
 
 ComboBoxPopupMenuButton < UIButton
-  height: 17
-  font: Verdana Bold-11px
+  height: 23
+  font: verdana-11px-antialised
   text-align: left
   text-offset: 4 0
-  color: #c0c0c0
+  color: #dfdfdf
   background-color: alpha
   margin: 1
 
   $hover !disabled:
-    color: #f4f4f4
-    background-color: #86868750
+    color: #dfdfdf
+    background-color: #355d89
 
   $disabled:
     color: #dfdfdf88
 
 ComboBoxPopupMenu < UIPopupMenu
   image-source: /images/ui/combobox_square
-  image-clip: 0 60 98 20
+  image-clip: 0 69 91 23
   image-border: 1
 
 ComboBox < UIComboBox
-  font: Verdana Bold-11px
-  color: #c0c0c0
-  text-offset: -15 2
-  size: 91 20
+  font: verdana-11px-antialised
+  color: #dfdfdf
+  size: 91 23
+  text-offset: 3 0
+  text-align: left
   image-source: /images/ui/combobox_square
   image-border: 3
-  image-border-right: 21
-  image-clip: 0 0 91 20
+  image-border-right: 19
+  image-clip: 0 0 91 23
 
   $hover !disabled:
-    image-clip: 0 0 91 20
+    image-clip: 0 23 91 23
 
   $on:
-    image-clip: 0 40 91 20
+    image-clip: 0 46 91 23
 
   $disabled:
     color: #dfdfdf88
     opacity: 0.8
-  
-  $checked:
-    image-clip: 0 20 91 20
 
 ComboBoxRoundedPopupScrollMenuButton < UIButton
   height: 23
@@ -107,6 +105,7 @@ ComboBoxRounded < ComboBox
   image-source: /images/ui/combobox_rounded
   image-border: 3
 
+// ---- classes que so existem no Redemption (mantidas por compatibilidade)
 QtComboBoxPopupScrollMenuButton < UIButton
   height: 23
   font: verdana-11px-antialised

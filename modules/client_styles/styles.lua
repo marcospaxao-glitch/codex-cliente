@@ -12,14 +12,15 @@ function init()
         error('Failed to import global OTUI variables')
     end
     importResources("styles", "otui", device)
-    -- CODEX: fontes do cliente antigo ficam soltas em /fonts (verdana-*, terminus-*, sans-*)
-    for _, file in pairs(g_resources.listDirectoryFiles('/fonts/', true, false, false)) do
-        if g_resources.isFileType(file, 'otfont') then g_fonts.importFont(file) end
-    end
     importResources("fonts/otfont", "otfont", device)
     importResources("fonts//ttf", "ttf", device)
     importResources("fonts/ttf", "otf", device)
     importResources("particles", "otps", device)
+    -- CODEX: fontes do cliente antigo (soltas em /fonts) por ultimo, para valerem
+    -- por cima das fontes do Redemption com o mesmo nome (visual igual ao antigo)
+    for _, file in pairs(g_resources.listDirectoryFiles('/fonts/', true, false, false)) do
+        if g_resources.isFileType(file, 'otfont') then g_fonts.importFont(file) end
+    end
 
     g_mouse.loadCursors('/cursors/cursors')
     g_gameConfig.loadFonts()

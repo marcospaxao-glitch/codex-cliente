@@ -1,2 +1,3 @@
+// CODEX: so as classes do Redemption que o Codex nao tem
 GameButtonsWindow < MiniWindow
   height: 26

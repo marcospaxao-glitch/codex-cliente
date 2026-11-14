@@ -1,3 +1,4 @@
+// CODEX: so as classes do Redemption que o Codex nao tem
 CombatBox < UICheckBox
   size: 20 20
   image-clip: 0 0 20 20
@@ -8,6 +9,7 @@ CombatBox < UICheckBox
 
 ChaseModeBox < CombatBox
   image-source: /images/game/combatmodes/chasemode
+
 MiniPanel < Panel
   text-offset: 0 3
   text-align: top

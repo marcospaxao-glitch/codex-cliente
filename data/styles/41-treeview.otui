@@ -1,3 +1,4 @@
+// CODEX: so as classes do Redemption que o Codex nao tem
 ButtonTibia14 < UIButton
   font: $var-font
   margin: -1
@@ -21,6 +22,7 @@ ButtonTibia14 < UIButton
     anchors.left: parent.left
     margin-left: 4
     phantom: true
+
 TreeCategory < UIWidget
   size: 115 22
   border-width-top: 1
@@ -106,8 +108,6 @@ TreeSubCategory < TreeCategory
   border-color-bottom: #747474
   border-width-right: 1
   border-color-right: #747474
-
-
 
 SubCategoryContainer < UIWidget
   border-width-top: 1
