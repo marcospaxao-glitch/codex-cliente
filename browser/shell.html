@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
     />
-    <title>Loading</title>
+    <title>Codex Pokétibia</title>
     <style>
       body {
         margin: 0;
@@ -53,8 +53,27 @@
         top: 50%;
         transform: translate(-50%, -50%);
         z-index: 3;
-        font-size: 2rem;
+        font: 700 1.6rem "Roboto", Helvetica, sans-serif;
+        padding: 14px 48px;
+        border: 0;
+        border-radius: 10px;
+        background: #e3350d;
+        color: #fff;
+        cursor: pointer;
+        box-shadow: 0 6px 24px rgba(227, 53, 13, 0.45);
         display: none;
+      }
+      #start:hover { background: #ff4a1f; }
+      #aviso {
+        position: absolute;
+        left: 50%;
+        bottom: 24px;
+        transform: translateX(-50%);
+        color: #9aa4b2;
+        font: 14px "Roboto", Helvetica, sans-serif;
+        text-align: center;
+        z-index: 2;
+        pointer-events: none;
       }
     </style>
   </head>
@@ -65,7 +84,8 @@
       contenteditable
       virtualkeyboardpolicy="manual"
     ></div>
-    <button id="start" onclick="startGame()">Start</button>
+    <button id="start" onclick="startGame()">Jogar</button>
+    <div id="aviso">Codex Pokétibia — primeira abertura baixa os arquivos do jogo; nas próximas abre mais rápido.</div>
     <canvas
       class="backbuffer"
       id="canvas"
@@ -96,11 +116,12 @@
         console.error(payload);
         const title = document.getElementById("title-text");
         if (title) {
-          title.innerHTML = "Runtime error – check console";
+          title.innerHTML = "Erro ao rodar o jogo – aperte F12 e veja o Console";
         }
       }
       function startGame() {
         document.getElementById("start").style.display = "none";
+        document.getElementById("aviso").style.display = "none";
         callMain();
         document.addEventListener("touchstart", function (ev) {
           ev.preventDefault();
@@ -168,7 +189,7 @@
           };
         })(),
         printErr: function () {
-          reportRuntimeError("stderr", Array.prototype.slice.call(arguments).join(" "));
+          console.warn(Array.prototype.slice.call(arguments).join(" "));
         },
         canvas: (function () {
           var canvas = document.getElementById("canvas");
@@ -181,17 +202,18 @@
           console.log("status: " + text);
           let display = "";
           if (text.includes("Running...")) {
-            display = "Loading...";
+            display = "";
             document.getElementById("start").style.display = "block";
           } else if (text.includes("Downloading data...")) {
-            display = text;
+            const m = text.match(/\((\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)\)/);
+            display = m ? "Baixando o jogo... " + Math.floor((m[1] / m[2]) * 100) + "%" : "Baixando o jogo...";
           }
 
           document.getElementById("title-text").innerHTML = display;
         },
         monitorRunDependencies: function (left) {
           console.log("monitor run deps: " + left);
-          document.getElementById("title-text").innerHTML = "Initializing...";
+          document.getElementById("title-text").innerHTML = "Preparando...";
         },
       };
       window.onerror = function (message, source, lineno, colno, error) {
