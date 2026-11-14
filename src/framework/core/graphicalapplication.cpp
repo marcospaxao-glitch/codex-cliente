@@ -195,17 +195,24 @@ bool GraphicalApplication::canDrawMap() const {
 void GraphicalApplication::run()
 {
     // run the first poll
+    codexPasso("run: mainPoll 1");
     mainPoll();
+    codexPasso("run: poll 1");
     poll();
 
     // show window
+    codexPasso("run: show");
     g_window.show();
 
     // run the second poll
+    codexPasso("run: mainPoll 2");
     mainPoll();
+    codexPasso("run: poll 2");
     poll();
 
+    codexPasso("run: onRun");
     g_lua.callGlobalField("g_app", "onRun");
+    codexPasso("run: onRun ok");
 
 #ifndef __EMSCRIPTEN__
     const auto FPS = [this] {
@@ -218,8 +225,11 @@ void GraphicalApplication::run()
         BS::multi_future<void> tasks;
 
         g_luaThreadId = g_eventThreadId = stdext::getThreadId();
+        int codexVoltas = 0;
         while (!m_stopping) {
+            if (codexVoltas < 3) codexPasso("run: thread do mapa - volta");
             poll();
+            if (codexVoltas < 3) { codexPasso("run: thread do mapa - poll ok"); ++codexVoltas; }
 
             if (!g_window.isVisible()) {
                 stdext::millisleep(10);
@@ -272,14 +282,19 @@ void GraphicalApplication::run()
     emscripten_set_main_loop(([] { g_app.mainLoop(); }), 0, 1);
 #else
     m_running = true;
+    int codexQuadros = 0;
     while (!m_stopping) {
+        const bool codexLog = codexQuadros < 3;
+        if (codexLog) codexPasso("run: quadro - mainPoll");
         mainPoll();
 
         if (!g_window.isVisible()) {
+            if (codexLog) { codexPasso("run: quadro - janela invisivel"); ++codexQuadros; }
             stdext::millisleep(10);
             continue;
         }
 
+        if (codexLog) codexPasso("run: quadro - draw");
         {
             AutoStat s(STATS_RENDER, "DrawPool");
             g_drawPool.draw();
@@ -290,6 +305,7 @@ void GraphicalApplication::run()
             AutoStat s(STATS_RENDER, "SwapBuffers");
             g_window.swapBuffers();
         }
+        if (codexLog) { codexPasso("run: quadro - ok"); ++codexQuadros; }
 
         if (m_graphicFrameCounter.update()) {
             g_dispatcher.addEvent([this, fps = FPS()] {
