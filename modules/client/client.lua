@@ -1,10 +1,20 @@
-local musicFilename = "/sounds/startup"
-local musicChannel = g_sounds.getChannel(1)
+-- CODEX: modulo "client" adaptado ao Redemption.
+-- O tamanho/posicao da janela agora e feito pelo modulo "startup" do Redemption.
+-- Saiu daqui: g_window.poll() e o redimensionamento durante o carregamento
+-- (no Redemption isso corrompia a memoria e fechava o cliente na abertura).
+local musicFilename = '/sounds/startup'
+local musicChannel = nil
+if g_sounds then
+  musicChannel = g_sounds.getChannel(1)
+end
+
+local function temMusica()
+  return musicChannel and g_resources.fileExists(musicFilename .. '.ogg')
+end
 
 function setMusic(filename)
   musicFilename = filename
-
-  if not g_game.isOnline() then
+  if temMusica() and not g_game.isOnline() then
     musicChannel:stop()
     musicChannel:enqueue(musicFilename, 3)
   end
@@ -20,30 +30,32 @@ function reloadScripts()
   end
 
   local message = tr('All modules and scripts were reloaded.')
-
-  modules.game_textmessage.displayGameMessage(message)
+  if modules.game_textmessage then
+    modules.game_textmessage.displayGameMessage(message)
+  end
   print(message)
 end
 
+local function onGameStart()
+  if musicChannel then musicChannel:stop(3) end
+end
+
+local function onGameEnd()
+  if temMusica() then
+    g_sounds.stopAll()
+    musicChannel:enqueue(musicFilename, 3)
+  end
+end
+
 function startup()
-  -- Play startup music (The Silver Tree, by Mattias Westlund)
-  musicChannel:enqueue(musicFilename, 3)
-  connect(g_game, { onGameStart = function() musicChannel:stop(3) end })
-  connect(g_game, { onGameEnd = function()
-      g_sounds.stopAll()
-      musicChannel:enqueue(musicFilename, 3)
-  end })
+  if temMusica() then musicChannel:enqueue(musicFilename, 3) end
 
-  -- Check for startup errors
-  local errtitle = nil
-  local errmsg = nil
-
+  local errtitle, errmsg = nil, nil
   if g_graphics.getRenderer():lower():match('gdi generic') then
     errtitle = tr('Graphics card driver not detected')
     errmsg = tr('No graphics card detected, everything will be drawn using the CPU,\nthus the performance will be really bad.\nPlease update your graphics driver to have a better performance.')
   end
 
-  -- Show entergame
   if errmsg or errtitle then
     local msgbox = displayErrorBox(errtitle, errmsg)
     msgbox.onOk = function() EnterGame.firstShow() end
@@ -53,59 +65,32 @@ function startup()
 end
 
 function init()
-  connect(g_app, { onRun = startup,
-                   onExit = exit })
+  if codexPasso then codexPasso('client: init') end
+  connect(g_app, { onRun = startup, onExit = exit })
+  connect(g_game, { onGameStart = onGameStart, onGameEnd = onGameEnd })
 
-  g_window.setMinimumSize({ width = 600, height = 480 })
-  g_sounds.preload(musicFilename)
-
-  -- initialize in fullscreen mode on mobile devices
-  if g_window.getPlatformType() == "X11-EGL" then
-    g_window.setFullscreen(true)
-  else
-    -- window size
-    local size = { width = 800, height = 600 }
-    size = g_settings.getSize('window-size', size)
-    g_window.resize(size)
-
-    -- window position, default is the screen center
-    local displaySize = g_window.getDisplaySize()
-    local defaultPos = { x = (displaySize.width - size.width)/2,
-                         y = (displaySize.height - size.height)/2 }
-    local pos = g_settings.getPoint('window-pos', defaultPos)
-    pos.x = math.max(pos.x, 0)
-    pos.y = math.max(pos.y, 0)
-    g_window.move(pos)
-
-    -- window maximized?
-    local maximized = g_settings.getBoolean('window-maximized', false)
-    if maximized then g_window.maximize() end
-  end
+  if temMusica() then g_sounds.preload(musicFilename) end
 
   g_window.setTitle(g_app.getName())
-  g_window.setIcon('/images/clienticon')
-
-  -- poll resize events
-  g_window.poll()
+  -- o icone agora vem do proprio Codex.exe (o setIcon do Lua nao e usado no Redemption)
 
   g_keyboard.bindKeyDown('Ctrl+Shift+R', reloadScripts)
+  if codexPasso then codexPasso('client: uuid') end
 
-  -- generate machine uuid, this is a security measure for storing passwords
+  -- uuid da maquina (protege a senha salva)
   if not g_crypt.setMachineUUID(g_settings.get('uuid')) then
     g_settings.set('uuid', g_crypt.getMachineUUID())
     g_settings.save()
   end
+  if codexPasso then codexPasso('client: init ok') end
 end
 
 function terminate()
-  disconnect(g_app, { onRun = startup,
-                      onExit = exit })
-  -- save window configs
-  g_settings.set('window-size', g_window.getUnmaximizedSize())
-  g_settings.set('window-pos', g_window.getUnmaximizedPos())
-  g_settings.set('window-maximized', g_window.isMaximized())
+  disconnect(g_app, { onRun = startup, onExit = exit })
+  disconnect(g_game, { onGameStart = onGameStart, onGameEnd = onGameEnd })
+  g_keyboard.unbindKeyDown('Ctrl+Shift+R')
 end
 
 function exit()
-  g_logger.info("Exiting application..")
+  g_logger.info('Exiting application..')
 end

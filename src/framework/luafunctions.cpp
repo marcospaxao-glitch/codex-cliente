@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#include "framework/core/codexpassos.h"
 #include "graphics/paintershaderprogram.h"
 #include <framework/core/application.h>
 #include <framework/core/config.h>
@@ -81,6 +82,7 @@ void Application::registerLuaFunctions()
     // Lets corelib's connect() tell the engine that a handler may have appeared
     // on a class table, which no metamethod can observe.
     g_lua.bindGlobalFunction("invalidateEventCache", [] { LuaObject::invalidateEventCache(); });
+    g_lua.bindGlobalFunction("codexPasso", [](const std::string& passo) { codexPasso(("lua: " + passo).c_str()); }); // CODEX diagnostico
 
     // conversion globals
     g_lua.bindGlobalFunction("torect", [](const std::string_view v) { return stdext::from_string<Rect>(v); });
