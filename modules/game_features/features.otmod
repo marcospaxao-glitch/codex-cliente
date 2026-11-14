@@ -3,6 +3,7 @@ Module
   description: Manager game features
   reloadable: false
   sandboxed: true
+  dependencies: [ modulelib, gamelib ]
   scripts: [features]
   @onLoad: controller:init()
   @onUnload: controller:terminate()

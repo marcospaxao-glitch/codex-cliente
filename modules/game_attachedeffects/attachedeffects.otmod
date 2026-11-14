@@ -5,5 +5,6 @@ Module
   website:
   scripts: [lib, effects, *]
   sandboxed: true
+  dependencies: [ modulelib, gamelib ]
   @onLoad: controller:init()
   @onUnload: controller:terminate()
