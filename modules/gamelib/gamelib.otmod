@@ -23,5 +23,8 @@ Module
     dofile 'items'
     dofiles 'ui'
 
+  # CODEX: features primeiro (liga as opcoes do 10.98 antes de ler o Tibia.dat)
   load-later:
+    - game_features
+    - game_attachedeffects
     - game_things
