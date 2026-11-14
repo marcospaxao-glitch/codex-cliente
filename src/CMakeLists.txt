@@ -1105,11 +1105,17 @@ endif()
 # *****************************************************************************
 # Enable otclient console only for debug build
 # *****************************************************************************
+option(CODEX_CONSOLE "CODEX: abre uma janela de console junto (para testes)" OFF)
+if(WIN32 AND CODEX_CONSOLE)
+  set(CODEX_RELEASE_SUBSYSTEM "/SUBSYSTEM:CONSOLE")
+else()
+  set(CODEX_RELEASE_SUBSYSTEM "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+endif()
 if(WIN32)
   set_target_properties(${PROJECT_NAME}
           PROPERTIES
           LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE"
-          LINK_FLAGS_RELEASE "/SUBSYSTEM:windows /ENTRY:mainCRTStartup"
+          LINK_FLAGS_RELEASE "${CODEX_RELEASE_SUBSYSTEM}"
           LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:CONSOLE"
           LINK_FLAGS_MINSIZEREL "/SUBSYSTEM:windows /ENTRY:mainCRTStartup"
   )

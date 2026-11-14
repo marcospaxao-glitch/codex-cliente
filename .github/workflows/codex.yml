@@ -13,6 +13,10 @@ on:
         type: choice
         options: [windows, navegador, os-dois]
         default: windows
+      console:
+        description: "Windows: abrir janela de console junto (mostra os erros; use nos testes)"
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -58,7 +62,7 @@ jobs:
         with:
           configurePreset: windows-release
           buildPreset: windows-release
-          configurePresetAdditionalArgs: "['-DTOGGLE_BIN_FOLDER=ON', '-DOPTIONS_ENABLE_IPO=OFF', '-DOTCLIENT_BUILD_TESTS=OFF']"
+          configurePresetAdditionalArgs: "['-DTOGGLE_BIN_FOLDER=ON', '-DOPTIONS_ENABLE_IPO=OFF', '-DOTCLIENT_BUILD_TESTS=OFF', '-DCODEX_CONSOLE=${{ inputs.console && 'ON' || 'OFF' }}']"
 
       - name: Montar a pasta do cliente
         shell: pwsh
@@ -70,6 +74,7 @@ jobs:
           foreach ($d in @('data', 'modules', 'mods')) { if (Test-Path $d) { Copy-Item $d $out -Recurse -Force } }
           if (Test-Path "$out/otclient.exe") { Rename-Item "$out/otclient.exe" "Codex.exe" }
           Remove-Item "$out/*.pdb", "$out/*.ilk" -Force -ErrorAction SilentlyContinue  # arquivos de depuracao (~700 MB), o jogador nao precisa
+          Set-Content -Path "$out/ABRIR_COM_LOG.bat" -Value "@echo off`r`ncd /d `"%~dp0`"`r`necho Abrindo o Codex... (os erros aparecem aqui e ficam salvos em saida.txt)`r`nCodex.exe > saida.txt 2>&1`r`necho.`r`necho O Codex fechou com codigo %errorlevel%.`r`ntype saida.txt | more`r`npause"
           Set-Content -Path "$out/COLOQUE_O_SPR_AQUI.txt" -Value "Copie o seu Tibia.spr para data\things\1098\ (ele nao vai no GitHub por ser grande demais)."
           Get-ChildItem $out | Format-Table Name, Length
 
