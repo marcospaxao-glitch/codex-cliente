@@ -73,7 +73,9 @@ jobs:
           foreach ($p in @('init.lua', 'otclientrc.lua', 'config.ini', 'cacert.pem')) { if (Test-Path $p) { Copy-Item $p $out -Force } }
           foreach ($d in @('data', 'modules', 'mods')) { if (Test-Path $d) { Copy-Item $d $out -Recurse -Force } }
           if (Test-Path "$out/otclient.exe") { Rename-Item "$out/otclient.exe" "Codex.exe" }
-          Remove-Item "$out/*.pdb", "$out/*.ilk" -Force -ErrorAction SilentlyContinue  # arquivos de depuracao (~700 MB), o jogador nao precisa
+          Remove-Item "$out/*.ilk" -Force -ErrorAction SilentlyContinue
+          # .pdb (nomes das funcoes para o crashreport.log): so na versao de teste (console)
+          if ("${{ inputs.console }}" -ne "true") { Remove-Item "$out/*.pdb" -Force -ErrorAction SilentlyContinue }
           Set-Content -Path "$out/ABRIR_COM_LOG.bat" -Value "@echo off`r`ncd /d `"%~dp0`"`r`necho Abrindo o Codex... (os erros aparecem aqui e ficam salvos em saida.txt)`r`nCodex.exe > saida.txt 2>&1`r`necho.`r`necho O Codex fechou com codigo %errorlevel%.`r`ntype saida.txt | more`r`npause"
           Set-Content -Path "$out/COLOQUE_O_SPR_AQUI.txt" -Value "Copie o seu Tibia.spr para data\things\1098\ (ele nao vai no GitHub por ser grande demais)."
           Get-ChildItem $out | Format-Table Name, Length

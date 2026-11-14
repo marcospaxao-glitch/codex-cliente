@@ -236,10 +236,14 @@ void GraphicalApplication::run()
                 continue;
             }
 
+            static int codexOn = 0;
+            const bool codexL = g_game.isOnline() && codexOn < 6;
+            if (codexL) { ++codexOn; codexPasso("jogo: preLoad"); }
             if (g_game.isOnline()) {
                 AutoStat s(STATS_RENDER, "DrawPreload");
                 m_drawEvents->preLoad();
             }
+            if (codexL) codexPasso("jogo: preLoad ok");
 
             bool canDrawForeground = !g_drawPool.isDrawing(DrawPoolType::FOREGROUND) && m_drawEvents->canDraw(DrawPoolType::FOREGROUND);
 
@@ -264,13 +268,16 @@ void GraphicalApplication::run()
                     }
                 }
 
+                if (codexL) codexPasso("jogo: draw map");
                 {
                     AutoStat s(STATS_RENDER, "DrawMap");
                     m_drawEvents->draw(DrawPoolType::MAP);
                 }
+                if (codexL) codexPasso("jogo: draw map ok");
 
                 tasks.wait();
                 tasks.clear();
+                if (codexL) codexPasso("jogo: tarefas ok");
             }
 
             m_mapProcessFrameCounter.update();
@@ -306,6 +313,10 @@ void GraphicalApplication::run()
             g_window.swapBuffers();
         }
         if (codexLog) { codexPasso("run: quadro - ok"); ++codexQuadros; }
+        {
+            static int codexTela = 0;
+            if (g_game.isOnline() && codexTela < 6) { ++codexTela; codexPasso("jogo: quadro na tela ok"); }
+        }
 
         if (m_graphicFrameCounter.update()) {
             g_dispatcher.addEvent([this, fps = FPS()] {

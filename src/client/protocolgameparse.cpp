@@ -20,6 +20,7 @@
 * THE SOFTWARE.
 */
 
+#include "framework/core/codexpassos.h"
 #include "animatedtext.h"
 #include "attachedeffect.h"
 #include "attachedeffectmanager.h"
@@ -56,6 +57,13 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
         while (!msg->eof()) {
             opcode = msg->getU8();
             AutoStat s(STATS_PACKETS, fmt::format("{} (0x{:02X})", opcode, opcode));
+            {   // CODEX diagnostico: primeiros pacotes depois de entrar no jogo
+                static int codexPacotes = 0;
+                if (codexPacotes < 400) {
+                    ++codexPacotes;
+                    codexPasso(fmt::format("pacote 0x{:02X} (pos {}/{})", opcode, msg->getReadPos(), msg->getMessageSize()).c_str());
+                }
+            }
 
             // must be > so extended will be enabled before GameStart.
             if (!g_game.getFeature(Otc::GameLoginPending)) {
