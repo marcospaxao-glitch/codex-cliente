@@ -36,8 +36,7 @@ void ProtocolGame::login(const std::string_view accountName, const std::string_v
 #ifndef __EMSCRIPTEN__
     connect(host, port);
 #else
-    if (port == 7172)
-        port = 443;
+    // CODEX: mantem a porta do jogo (vira wss://site/ws/7172 no WebConnection)
     connect(host, port, true);
 #endif
 }
