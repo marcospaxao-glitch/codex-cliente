@@ -189,13 +189,12 @@ local function applyInfo(list, body)
 end
 
 local function loadCardInfo(list, characters)
-  if infoRequest then
-    pcall(function() infoRequest:disconnect() end)
-    infoRequest = nil
-  end
-  if not EnterGame or not EnterGame.getSiteUrl or not ProtocolHttp then return end
-  local host, port, path = parseSite(EnterGame.getSiteUrl())
-  if not host or #characters == 0 then return end
+  -- CODEX (Redemption): usa o HTTP nativo do cliente (HTTP.get) no lugar do antigo ProtocolHttp
+  infoRequest = nil
+  if not EnterGame or not EnterGame.getSiteUrl or not HTTP or not g_http then return end
+  local site = EnterGame.getSiteUrl() or ''
+  if site == '' or #characters == 0 then return end
+  if site:sub(-1) ~= '/' then site = site .. '/' end
 
   local names = {}
   for i, info in ipairs(characters) do
@@ -203,36 +202,16 @@ local function loadCardInfo(list, characters)
     names[#names + 1] = info.name
   end
 
-  local http = ProtocolHttp.create()
-  infoRequest = http
-  local stage = 0
-  local function finish(body)
-    if infoRequest ~= http then return end
-    infoRequest = nil
-    pcall(function() http:disconnect() end)
-    if body then applyInfo(list, body) end
-  end
-  http.onConnect = function()
-    http:send('GET ' .. path .. 'codex_api/chars.php?names=' .. urlEncode(table.concat(names, ',')) .. ' HTTP/1.0\r\n' ..
-              'Host: ' .. host .. '\r\nConnection: close\r\n\r\n')
-    http:recv()
-  end
-  http.onRecv = function(self, data)
-    stage = stage + 1
-    if stage == 1 then
-      if not data:match('^HTTP/%d%.%d 200') then
-        finish(nil)
-        return
-      end
-      http:recv()
-    else
-      finish(data:gsub('\r\n\r\n$', ''))
-    end
-  end
-  http.onError = function()
-    finish(nil)
-  end
-  http:connect(host, port)
+  local pedido = {}
+  infoRequest = pedido
+  local ok = pcall(function()
+    HTTP.get(site .. 'codex_api/chars.php?names=' .. urlEncode(table.concat(names, ',')), function(data, err)
+      if infoRequest ~= pedido then return end
+      infoRequest = nil
+      if not err and data and data ~= '' then applyInfo(list, data) end
+    end)
+  end)
+  if not ok then infoRequest = nil end
 end
 
 -- public functions
@@ -251,10 +230,6 @@ function CharacterList.init()
 end
 
 function CharacterList.terminate()
-  if infoRequest then
-    pcall(function() infoRequest:disconnect() end)
-    infoRequest = nil
-  end
   disconnect(g_game, { onLoginError = onGameLoginError })
   disconnect(g_game, { onLoginToken = onGameLoginToken })
   disconnect(g_game, { onUpdateNeeded = onGameUpdateNeeded })
