@@ -197,13 +197,13 @@ function terminate()
   --g_keyboard.unbindKeyDown('Ctrl+T')
   g_logger.setOnLog(nil)
   terminalWindow:destroy()
-  terminalButton:destroy()
+  if terminalButton then terminalButton:destroy() end
   commandEnv = nil
   _G.terminalLines = allLines
 end
 
 function hideButton()
-  terminalButton:hide()
+  if terminalButton then terminalButton:hide() end
 end
 
 function popWindow()
@@ -265,7 +265,7 @@ function hide()
 end
 
 function disable()
-  terminalButton:hide()
+  if terminalButton then terminalButton:hide() end
   --g_keyboard.unbindKeyDown('Ctrl+T')
   disabled = true
 end

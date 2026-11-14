@@ -22,3 +22,6 @@ Module
     dofile 'tile'
     dofile 'items'
     dofiles 'ui'
+
+  load-later:
+    - game_things

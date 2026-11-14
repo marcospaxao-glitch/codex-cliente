@@ -68,8 +68,10 @@ function init()
   if userLocaleName ~= 'false' and setLocale(userLocaleName) then
     pdebug('Using configured locale: ' .. userLocaleName)
   else
-    setLocale(defaultLocaleName)
-    connect(g_app, { onRun = createWindow })
+    -- CODEX: o Codex e em portugues; sem janela de escolha na primeira vez
+    -- (escolher la recarregava todos os modulos e quebrava os opcodes)
+    if not setLocale('pt') then setLocale(defaultLocaleName) end
+    g_settings.set('locale', currentLocale.name)
   end
 
   ProtocolGame.registerExtendedOpcode(ExtendedIds.Locale, onExtendedLocales)
