@@ -66,12 +66,12 @@ bool Module::load()
         if (m_sandboxed)
             g_lua.setGlobalEnvironment(m_sandboxEnv);
 
-        codexPasso(("modulo " + m_name + ": scripts").c_str());
+        if (codexDebugAtivo()) codexPasso(("modulo " + m_name + ": scripts").c_str());
         for (const auto& script : m_scripts) {
             g_lua.loadScript(script);
             g_lua.safeCall(0, 0);
         }
-        codexPasso(("modulo " + m_name + ": onLoad").c_str());
+        if (codexDebugAtivo()) codexPasso(("modulo " + m_name + ": onLoad").c_str());
 
         const auto& onLoadBuffer = std::get<0>(m_onLoadFunc);
         const auto& onLoadSource = std::get<1>(m_onLoadFunc);
@@ -88,7 +88,7 @@ bool Module::load()
             g_lua.resetGlobalEnvironment();
 
         m_loaded = true;
-        codexPasso(("modulo " + m_name + ": ok").c_str());
+        if (codexDebugAtivo()) codexPasso(("modulo " + m_name + ": ok").c_str());
 
         g_logger.debug("Loaded module '{}' ({:.2f}s)", m_name, (stdext::millis() - startTime) / 1000.0
         );

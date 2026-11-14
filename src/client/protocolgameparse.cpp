@@ -59,7 +59,7 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
             AutoStat s(STATS_PACKETS, fmt::format("{} (0x{:02X})", opcode, opcode));
             {   // CODEX diagnostico: primeiros pacotes depois de entrar no jogo
                 static int codexPacotes = 0;
-                if (codexPacotes < 400) {
+                if (codexDebugAtivo() && codexPacotes < 400) {
                     ++codexPacotes;
                     codexPasso(fmt::format("pacote 0x{:02X} (pos {}/{})", opcode, msg->getReadPos(), msg->getMessageSize()).c_str());
                 }

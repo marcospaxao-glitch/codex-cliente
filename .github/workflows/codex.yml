@@ -14,9 +14,9 @@ on:
         options: [windows, navegador, os-dois]
         default: windows
       console:
-        description: "Windows: abrir janela de console junto (mostra os erros; use nos testes)"
+        description: "Windows: abrir janela de console junto (versao de teste)"
         type: boolean
-        default: true
+        default: false
 
 permissions:
   contents: read
@@ -76,7 +76,8 @@ jobs:
           Remove-Item "$out/*.ilk" -Force -ErrorAction SilentlyContinue
           # .pdb (nomes das funcoes para o crashreport.log): so na versao de teste (console)
           if ("${{ inputs.console }}" -ne "true") { Remove-Item "$out/*.pdb" -Force -ErrorAction SilentlyContinue }
-          Set-Content -Path "$out/ABRIR_COM_LOG.bat" -Value "@echo off`r`ncd /d `"%~dp0`"`r`necho Abrindo o Codex... (os erros aparecem aqui e ficam salvos em saida.txt)`r`nCodex.exe > saida.txt 2>&1`r`necho.`r`necho O Codex fechou com codigo %errorlevel%.`r`ntype saida.txt | more`r`npause"
+          Set-Content -Path "$out/LEIA_DIAGNOSTICO.txt" -Value "Se o cliente fechar sozinho: crie um arquivo vazio chamado codex_debug.txt nesta pasta e abra de novo. Ele vai gravar codex_passos.txt com cada passo da abertura."
+          if ("${{ inputs.console }}" -eq "true") { Set-Content -Path "$out/ABRIR_COM_LOG.bat" -Value "@echo off`r`ncd /d `"%~dp0`"`r`necho Abrindo o Codex... (os erros aparecem aqui e ficam salvos em saida.txt)`r`nCodex.exe > saida.txt 2>&1`r`necho.`r`necho O Codex fechou com codigo %errorlevel%.`r`ntype saida.txt | more`r`npause" }
           Set-Content -Path "$out/COLOQUE_O_SPR_AQUI.txt" -Value "Copie o seu Tibia.spr para data\things\1098\ (ele nao vai no GitHub por ser grande demais)."
           Get-ChildItem $out | Format-Table Name, Length
 

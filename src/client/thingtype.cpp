@@ -859,6 +859,10 @@ void ThingType::loadTexture(const int animationPhase)
     if (textureData.source)
         return;
 
+    // [codex] navegador: pede todos os blocos deste objeto de uma vez
+    if (g_sprites.isRemote() && !g_game.isUsingProtobuf() && !g_sprites.prefetchSprites(m_spritesIndex))
+        return;
+
     // we don't need layers in common items, they will be pre-drawn
     int textureLayers = 1;
     int numLayers = m_layers;

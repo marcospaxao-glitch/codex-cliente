@@ -33,6 +33,20 @@
 #include <framework/core/eventdispatcher.h>
 
 #include <emscripten/threading.h>
+#include <emscripten/em_js.h>
+
+// CODEX: "wss://host" (ou "ws://host" em http) da pagina que abriu o cliente
+EM_JS_DEPS(codex_webconnection, "$stringToUTF8,$lengthBytesUTF8");
+EM_JS(int, codexHostDaPagina, (char* destino, int tamanho), {
+    try {
+        var loc = (typeof self !== 'undefined' && self.location) ? self.location : null;
+        if (!loc || !loc.host) return 0;
+        var s = (loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host;
+        if (lengthBytesUTF8(s) + 1 > tamanho) return 0;
+        stringToUTF8(s, destino, tamanho);
+        return 1;
+    } catch (e) { return 0; }
+});
 
 std::list<std::shared_ptr<asio::streambuf>> WebConnection::m_outputStreams;
 WebConnection::WebConnection()
@@ -92,15 +106,20 @@ void WebConnection::connect(const std::string_view host, uint16_t port, const st
     std::string ip = std::string(host);
     ip.length() == 0 ? ip = "localhost" : ip;
 
-#ifdef NDEBUG
-    const std::string prefix = "wss://";
-#else
-    const std::string prefix = "ws://";
-#endif
-
     m_pthread = pthread_self();
 
-    const std::string url = prefix + ip + ":" + std::to_string(port);
+    // CODEX: o navegador conecta pelo proprio site que abriu a pagina
+    // (wss://codexpoketibia.com.br/ws/7171 e /ws/7172). O endereco que veio do
+    // servidor (jogo.codexpoketibia.com.br / IP) e ignorado aqui: quem leva ate o
+    // TFS e o Apache + websockify da VPS. Assim nao precisa de porta extra nem de
+    // certificado proprio, e o IP da VPS continua escondido atras do Cloudflare.
+    char pagina[512] = {};
+    std::string url;
+    if (codexHostDaPagina(pagina, sizeof(pagina)) == 1 && pagina[0]) {
+        url = std::string(pagina) + "/ws/" + std::to_string(port);
+    } else {
+        url = "wss://" + ip + ":" + std::to_string(port);
+    }
     EmscriptenWebSocketCreateAttributes attributes =
     {
         url.c_str(),

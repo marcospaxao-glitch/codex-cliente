@@ -83,6 +83,7 @@ void Application::registerLuaFunctions()
     // on a class table, which no metamethod can observe.
     g_lua.bindGlobalFunction("invalidateEventCache", [] { LuaObject::invalidateEventCache(); });
     g_lua.bindGlobalFunction("codexPasso", [](const std::string& passo) { codexPasso(("lua: " + passo).c_str()); }); // CODEX diagnostico
+    g_lua.bindGlobalFunction("codexDebugAtivo", [] { return codexDebugAtivo(); });
 
     // conversion globals
     g_lua.bindGlobalFunction("torect", [](const std::string_view v) { return stdext::from_string<Rect>(v); });

@@ -31,6 +31,11 @@
 #include "framework/core/resourcemanager.h"
 #include "framework/graphics/image.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten/fetch.h>
+#include <thread>
+#endif
+
 SpriteManager g_sprites;
 
 FileMetadata::FileMetadata(const FileStreamPtr& file) {
@@ -67,6 +72,7 @@ bool SpriteManager::loadSpr(std::string file)
     m_signature = 0;
     m_loaded = false;
     m_spritesHd = false;
+    m_remote = false;
 
     const auto cwmFile = g_resources.guessFilePath(file, "cwm");
     if (g_resources.fileExists(cwmFile)) {
@@ -79,7 +85,12 @@ bool SpriteManager::loadSpr(std::string file)
         return loadRegularSpr(sprFile);
     }
 
+#ifdef __EMSCRIPTEN__
+    // [codex] sem Tibia.spr local: baixa sob demanda do site
+    return loadRemoteSpr();
+#else
     return false;
+#endif
 }
 
 bool SpriteManager::loadRegularSpr(std::string file)
@@ -219,6 +230,13 @@ ImagePtr SpriteManager::getSpriteImage(const int id, bool& isLoading)
         return g_spriteAppearances.getSpriteImage(id, isLoading);
     }
 
+#ifdef __EMSCRIPTEN__
+    if (m_remote)
+        return getRemoteSpriteImage(id, isLoading);
+#endif
+    if (m_spritesFiles.empty())
+        return nullptr;
+
     const auto threadId = g_app.isLoadingAsyncTexture() ? stdext::getThreadId() : 0;
     if (const auto& sf = m_spritesFiles[threadId % m_spritesFiles.size()]) {
         if (sf->m_loadingState.exchange(SpriteLoadState::LOADING, std::memory_order_acq_rel) == SpriteLoadState::LOADING) {
@@ -273,16 +291,27 @@ ImagePtr SpriteManager::getSpriteImage(const int id, const FileStreamPtr& file)
         file->skip(3); // Skip RGB color key
 
         const uint16_t pixelDataSize = file->getU16();
+
+        static thread_local std::vector<uint8_t> spriteBuffer;
+        spriteBuffer.resize(pixelDataSize);
+        file->read(spriteBuffer.data(), pixelDataSize);
+
+        return decodeSprite(id, spriteBuffer.data(), pixelDataSize);
+    } catch (const stdext::exception& e) {
+        g_logger.error("Failed to get sprite id {}: {}", id, e.what());
+        return nullptr;
+    }
+}
+
+ImagePtr SpriteManager::decodeSprite(const int /*id*/, const uint8_t* spriteData, const uint16_t pixelDataSize)
+{
+    {
         const int spriteSize = g_gameConfig.getSpriteSize();
         const int totalPixels = spriteSize * spriteSize;
         const int maxWriteSize = totalPixels * 4;
 
         const bool useAlpha = g_game.getFeature(Otc::GameSpritesAlphaChannel);
         const uint8_t channels = useAlpha ? 4 : 3;
-
-        static thread_local std::vector<uint8_t> spriteBuffer;
-        spriteBuffer.resize(pixelDataSize);
-        file->read(spriteBuffer.data(), pixelDataSize);
 
         size_t offset = 0;
         auto image = std::make_shared<Image>(Size(spriteSize));
@@ -295,8 +324,8 @@ ImagePtr SpriteManager::getSpriteImage(const int id, const FileStreamPtr& file)
         static thread_local uint8_t tempBuffer[MAX_PIXEL_BLOCK * 4];
 
         while (offset + 4 <= pixelDataSize && writePos < maxWriteSize) {
-            const uint16_t transparentPixels = readU16FromBuffer(spriteBuffer.data(), offset);
-            const uint16_t coloredPixels = readU16FromBuffer(spriteBuffer.data(), offset);
+            const uint16_t transparentPixels = readU16FromBuffer(spriteData, offset);
+            const uint16_t coloredPixels = readU16FromBuffer(spriteData, offset);
 
             transparentCount += transparentPixels;
 
@@ -313,7 +342,7 @@ ImagePtr SpriteManager::getSpriteImage(const int id, const FileStreamPtr& file)
             if (offset + bytesToRead > pixelDataSize)
                 break;
 
-            std::memcpy(tempBuffer, spriteBuffer.data() + offset, bytesToRead);
+            std::memcpy(tempBuffer, spriteData + offset, bytesToRead);
             offset += bytesToRead;
 
             if (useAlpha) {
@@ -349,8 +378,231 @@ ImagePtr SpriteManager::getSpriteImage(const int id, const FileStreamPtr& file)
             image->setTransparentPixel(true);
 
         return image;
-    } catch (const stdext::exception& e) {
-        g_logger.error("Failed to get sprite id {}: {}", id, e.what());
-        return nullptr;
     }
 }
+
+// ---------------------------------------------------------------------------
+// [codex] Sprites sob demanda para a versao navegador.
+// O site guarda o Tibia.spr fatiado:
+//   spr/indice.bin                 "CDXS" + u32 tamanhoBloco + u32 tamanhoArquivo + cabecalho original do spr
+//   spr/<assinatura hex>/<n>.bin   blocos de tamanhoBloco bytes do spr original
+// ---------------------------------------------------------------------------
+bool SpriteManager::prefetchSprites(const std::vector<uint32_t>& ids)
+{
+#ifdef __EMSCRIPTEN__
+    if (!m_remote)
+        return true;
+    bool pronto = true;
+    for (const uint32_t id : ids) {
+        if (id != 0 && !spriteBlocksReady(id, true))
+            pronto = false;
+    }
+    return pronto;
+#else
+    (void)ids;
+    return true;
+#endif
+}
+
+#ifdef __EMSCRIPTEN__
+namespace {
+    bool codexBaixar(const std::string& url, std::vector<uint8_t>& out)
+    {
+        emscripten_fetch_attr_t attr;
+        emscripten_fetch_attr_init(&attr);
+        strcpy(attr.requestMethod, "GET");
+        attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY | EMSCRIPTEN_FETCH_SYNCHRONOUS | EMSCRIPTEN_FETCH_REPLACE;
+        emscripten_fetch_t* f = emscripten_fetch(&attr, url.c_str());
+        if (!f)
+            return false;
+        const bool ok = f->status == 200 && f->numBytes > 0;
+        if (ok)
+            out.assign(reinterpret_cast<const uint8_t*>(f->data), reinterpret_cast<const uint8_t*>(f->data) + f->numBytes);
+        emscripten_fetch_close(f);
+        return ok;
+    }
+
+    uint32_t lerU32(const uint8_t* p) { return p[0] | (p[1] << 8) | (p[2] << 16) | (static_cast<uint32_t>(p[3]) << 24); }
+
+    constexpr size_t CODEX_CACHE_MAX = 256u * 1024u * 1024u;
+    constexpr uint32_t CODEX_SPRITE_MAX = 5 + 8200; // cabecalho + pior caso RLE 32x32 RGBA
+    constexpr int CODEX_THREADS = 6;
+}
+
+bool SpriteManager::loadRemoteSpr()
+{
+    std::vector<uint8_t> idx;
+    if (!codexBaixar("spr/indice.bin", idx) || idx.size() < 20 || memcmp(idx.data(), "CDXS", 4) != 0) {
+        g_logger.error("[codex] nao consegui baixar spr/indice.bin");
+        return false;
+    }
+
+    m_remoteBlockSize = lerU32(&idx[4]);
+    m_remoteFileSize = lerU32(&idx[8]);
+    const uint8_t* h = &idx[12];
+    const size_t hsize = idx.size() - 12;
+
+    m_signature = lerU32(h);
+    size_t pos = 4;
+    if (g_game.getFeature(Otc::GameSpritesU32)) {
+        m_spritesCount = lerU32(h + pos);
+        pos += 4;
+    } else {
+        m_spritesCount = h[pos] | (h[pos + 1] << 8);
+        pos += 2;
+    }
+    m_spritesOffset = pos;
+
+    if (m_remoteBlockSize == 0 || hsize < pos + static_cast<size_t>(m_spritesCount) * 4) {
+        g_logger.error("[codex] indice de sprites incompleto");
+        return false;
+    }
+
+    m_remoteAddr.resize(m_spritesCount);
+    for (uint32_t i = 0; i < m_spritesCount; ++i)
+        m_remoteAddr[i] = lerU32(h + pos + i * 4);
+
+    m_remoteBase = fmt::format("spr/{:08x}/", m_signature);
+
+    {
+        std::lock_guard lock(m_remoteMutex);
+        m_remoteBlocks.clear();
+        m_remoteOrder.clear();
+        m_remoteQueue.clear();
+        m_remotePending.clear();
+        m_remoteBytes = 0;
+    }
+
+    if (!m_remoteThreads) {
+        m_remoteThreads = true;
+        for (int i = 0; i < CODEX_THREADS; ++i)
+            std::thread([this] { remoteWorker(); }).detach();
+    }
+
+    m_lastFileName.clear();
+    m_spritesFiles.clear();
+    m_remote = true;
+    m_loaded = true;
+    g_logger.info("[codex] sprites remotos: {} sprites, assinatura {:08x}", m_spritesCount, m_signature);
+    g_lua.callGlobalField("g_sprites", "onLoadSpr", std::string("remoto"));
+    return true;
+}
+
+void SpriteManager::remoteWorker()
+{
+    for (;;) {
+        uint32_t n;
+        std::string base;
+        {
+            std::unique_lock lock(m_remoteMutex);
+            m_remoteCv.wait(lock, [this] { return !m_remoteQueue.empty(); });
+            n = m_remoteQueue.front();
+            m_remoteQueue.pop_front();
+            base = m_remoteBase;
+        }
+
+        auto data = std::make_shared<std::vector<uint8_t>>();
+        bool ok = false;
+        for (int tentativa = 0; tentativa < 3 && !ok; ++tentativa) {
+            ok = codexBaixar(base + std::to_string(n) + ".bin", *data);
+            if (!ok)
+                std::this_thread::sleep_for(std::chrono::milliseconds(500 * (tentativa + 1)));
+        }
+
+        std::lock_guard lock(m_remoteMutex);
+        m_remotePending.erase(n);
+        if (!ok) {
+            g_logger.warning("[codex] falha ao baixar bloco de sprites {}", n);
+            continue;
+        }
+        m_remoteBytes += data->size();
+        m_remoteBlocks[n] = std::move(data);
+        m_remoteOrder.push_back(n);
+        while (m_remoteBytes > CODEX_CACHE_MAX && !m_remoteOrder.empty()) {
+            const uint32_t velho = m_remoteOrder.front();
+            m_remoteOrder.pop_front();
+            if (const auto it = m_remoteBlocks.find(velho); it != m_remoteBlocks.end()) {
+                m_remoteBytes -= it->second->size();
+                m_remoteBlocks.erase(it);
+            }
+        }
+    }
+}
+
+std::shared_ptr<std::vector<uint8_t>> SpriteManager::getBlock(const uint32_t n)
+{
+    const auto it = m_remoteBlocks.find(n);
+    return it == m_remoteBlocks.end() ? nullptr : it->second;
+}
+
+bool SpriteManager::spriteBlocksReady(const uint32_t id, const bool queue)
+{
+    if (id == 0 || id > m_remoteAddr.size())
+        return true;
+    const uint32_t addr = m_remoteAddr[id - 1];
+    if (addr == 0 || addr >= m_remoteFileSize)
+        return true;
+
+    const uint32_t fim = std::min<uint32_t>(addr + CODEX_SPRITE_MAX, m_remoteFileSize) - 1;
+    const uint32_t b0 = addr / m_remoteBlockSize;
+    const uint32_t b1 = fim / m_remoteBlockSize;
+
+    bool pronto = true;
+    std::lock_guard lock(m_remoteMutex);
+    for (uint32_t b = b0; b <= b1; ++b) {
+        if (m_remoteBlocks.count(b))
+            continue;
+        pronto = false;
+        if (queue && m_remotePending.insert(b).second) {
+            m_remoteQueue.push_back(b);
+            m_remoteCv.notify_one();
+        }
+    }
+    return pronto;
+}
+
+ImagePtr SpriteManager::getRemoteSpriteImage(const int id, bool& isLoading)
+{
+    if (id <= 0 || static_cast<uint32_t>(id) > m_remoteAddr.size())
+        return nullptr;
+    const uint32_t addr = m_remoteAddr[id - 1];
+    if (addr == 0 || addr >= m_remoteFileSize)
+        return nullptr;
+
+    if (!spriteBlocksReady(id, true)) {
+        isLoading = true;
+        return nullptr;
+    }
+
+    // monta os bytes do sprite (pode atravessar 2 blocos)
+    static thread_local std::vector<uint8_t> buf;
+    const uint32_t fim = std::min<uint32_t>(addr + CODEX_SPRITE_MAX, m_remoteFileSize);
+    buf.resize(fim - addr);
+    {
+        std::lock_guard lock(m_remoteMutex);
+        uint32_t copiado = 0;
+        while (copiado < buf.size()) {
+            const uint32_t p = addr + copiado;
+            const auto bloco = getBlock(p / m_remoteBlockSize);
+            if (!bloco) { // descartado do cache no meio do caminho
+                isLoading = true;
+                return nullptr;
+            }
+            const uint32_t dentro = p % m_remoteBlockSize;
+            if (dentro >= bloco->size())
+                break;
+            const uint32_t n = std::min<uint32_t>(static_cast<uint32_t>(bloco->size()) - dentro, static_cast<uint32_t>(buf.size()) - copiado);
+            memcpy(buf.data() + copiado, bloco->data() + dentro, n);
+            copiado += n;
+        }
+        buf.resize(copiado);
+    }
+
+    if (buf.size() < 5)
+        return nullptr;
+    const uint16_t pixelDataSize = buf[3] | (buf[4] << 8);
+    if (5u + pixelDataSize > buf.size())
+        return nullptr;
+    return decodeSprite(id, buf.data() + 5, pixelDataSize);
+}
+#endif

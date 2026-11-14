@@ -43,11 +43,12 @@ if UICreature then
 end
 
 -- ============================================================
--- DIAGNOSTICO (temporario): ao entrar no jogo, grava em codex_passos.txt
+-- DIAGNOSTICO: ao entrar no jogo, grava em codex_passos.txt
 -- cada funcao de modulo chamada pelos eventos (onGameStart etc.), para achar
 -- qual modulo derruba o cliente. Desliga sozinho depois de 800 chamadas.
+-- So liga com o arquivo codex_debug.txt na pasta do cliente.
 -- ============================================================
-if codexPasso and signalcall then
+if codexPasso and codexDebugAtivo and codexDebugAtivo() and signalcall then
   local rastrear, chamadas = false, 0
   local function nome(f)
     local ok, info = pcall(debug.getinfo, f, 'S')
