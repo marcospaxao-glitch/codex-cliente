@@ -166,7 +166,9 @@
               0,
               window.location.pathname.lastIndexOf("/")
             );
-          return baseURL + "/" + path;
+          // CODEX: versao colocada pelo instalar_web.sh (evita misturar arquivos de versoes diferentes)
+          const v = "__CODEX_V__";
+          return baseURL + "/" + path + (v.indexOf("__") === 0 ? "" : "?v=" + v);
         },
         preRun: [
           function () {
