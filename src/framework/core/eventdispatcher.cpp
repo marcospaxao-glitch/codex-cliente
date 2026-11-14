@@ -20,6 +20,8 @@
  * THE SOFTWARE.
  */
 
+#include "framework/core/logger.h"
+#include "framework/core/codexpassos.h"
 #include "asyncdispatcher.h"
 #include "eventdispatcher.h"
 #include <framework/util/stats.h>
@@ -53,10 +55,16 @@ void EventDispatcher::shutdown()
 void EventDispatcher::poll()
 {
     AutoStat s(this == &g_dispatcher ? STATS_MAIN : STATS_RENDER, "PollDispatcher");
+    static int codexPolls = 0;
+    const bool codexLog = this == &g_dispatcher && codexPolls < 4;
+    if (codexLog) { ++codexPolls; codexPasso("dispatcher: eventos"); }
     mergeEvents();
     executeEvents();
+    if (codexLog) codexPasso("dispatcher: agendados");
     executeScheduledEvents();
+    if (codexLog) codexPasso("dispatcher: layout (defer)");
     executeDeferEvents();
+    if (codexLog) codexPasso("dispatcher: ok");
 }
 
 ScheduledEventPtr EventDispatcher::scheduleEvent(const std::function<void()>& callback, int delay)
@@ -147,7 +155,23 @@ void EventDispatcher::executeDeferEvents() {
     dispacherContext.group = TaskGroup::Serial;
     dispacherContext.type = DispatcherType::DeferEvent;
 
+    // CODEX: no maximo N rodadas por poll. Layouts antigos (OTClient 2019) que
+    // se redimensionam um ao outro (onResize -> resize -> onResize...) prendiam o
+    // cliente aqui para sempre; o que sobrar roda no proximo quadro, como no antigo.
+    int codexRodadas = 0;
     do {
+        if (++codexRodadas > 64) {
+            static int codexAvisos = 0;
+            if (codexAvisos++ < 5)
+                g_logger.warning("[codex] eventos de layout em ciclo ({} pendentes): adiado para o proximo quadro", m_deferEventList.size());
+            {
+                const auto& thread = getThreadTask();
+                SpinLock::Guard guard(thread->lock);
+                thread->deferEvents.insert(thread->deferEvents.begin(), make_move_iterator(m_deferEventList.begin()), make_move_iterator(m_deferEventList.end()));
+            }
+            m_deferEventList.clear();
+            break;
+        }
         for (auto& event : m_deferEventList) {
             AutoStat s(STATS_DISPATCHER, event.getFunction());
             event.execute();
