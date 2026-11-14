@@ -26,11 +26,12 @@
 #include "framework/core/resourcemanager.h"
 #include "framework/luaengine/luainterface.h"
 #include "framework/platform/platform.h"
+#include "framework/core/codexpassos.h"
 #ifdef ANDROID
 #include <android/log.h>
 #define ALOGD(...) __android_log_print(ANDROID_LOG_DEBUG, "OTClientMobile", __VA_ARGS__)
 #else
-#define ALOGD(...)
+#define ALOGD(...) codexPasso(#__VA_ARGS__)
 #endif
 #ifdef FRAMEWORK_EDITOR
 #include "tools/datdump.h"
@@ -111,6 +112,7 @@ std::string buildStartupTimestamp()
 int main(const int argc, const char* argv[])
 {
     std::vector<std::string> args(argv, argv + argc);
+    codexPasso("main: inicio");
     g_logger.info("Application started at {}", buildStartupTimestamp());
 
     // process args encoding
@@ -148,6 +150,7 @@ int main(const int argc, const char* argv[])
     }
 #endif
 
+    ALOGD("main: launchCorrect");
     if (g_resources.launchCorrect(args)) {
         return 0; // started other executable
     }
@@ -197,6 +200,7 @@ int main(const int argc, const char* argv[])
 
     ALOGD("main: initializing client...");
     g_client.init(args);
+    ALOGD("main: client init ok");
 #ifdef FRAMEWORK_NET
     g_http.init();
 #endif
@@ -207,6 +211,7 @@ int main(const int argc, const char* argv[])
     ALOGD("main: init.lua executed successfully");
 
     // the run application main loop
+    codexPasso("main: g_app.run");
     g_app.run();
 
     // unload modules

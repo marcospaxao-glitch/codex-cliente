@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#include "framework/core/codexpassos.h"
 #include "graphicalapplication.h"
 
 #include "asyncdispatcher.h"
@@ -51,16 +52,20 @@ GraphicalApplication g_app;
 
 void GraphicalApplication::init(std::vector<std::string>& args, ApplicationContext* context)
 {
+    codexPasso("app: Application::init(args, context);");
     Application::init(args, context);
 
     auto graphicalContext = static_cast<GraphicalApplicationContext*>(context);
     setDrawEvents(graphicalContext->getDrawEvents());
 
     // setup platform window
+    codexPasso("app: g_window.init();");
     g_window.init();
+    codexPasso("app: g_window.hide();");
     g_window.hide();
 
     // set the window title color
+    codexPasso("app: g_window.setTitleBarColor(Color::black);");
     g_window.setTitleBarColor(Color::black);
 
     g_window.setOnResize([this](auto&& PH1) {
@@ -75,25 +80,33 @@ void GraphicalApplication::init(std::vector<std::string>& args, ApplicationConte
 
     g_window.setOnClose([this] { g_dispatcher.addEvent([this] { close(); }); });
 
+    codexPasso("app: g_mouse.init();");
     g_mouse.init();
 
     // initialize ui
+    codexPasso("app: g_ui.init();");
     g_ui.init();
 
     // initialize graphics
+    codexPasso("app: g_graphics.init();");
     g_graphics.init();
+    codexPasso("app: g_drawPool.init(graphicalContext->getSpriteSize());");
     g_drawPool.init(graphicalContext->getSpriteSize());
 
     // fire first resize event
+    codexPasso("app: resize(g_window.getSize());");
     resize(g_window.getSize());
 
 #ifdef FRAMEWORK_SOUND
     // initialize sound
+    codexPasso("app: g_sounds.init();");
     g_sounds.init();
 #endif
 
     m_mapProcessFrameCounter.init();
+    codexPasso("app: m_graphicFrameCounter.init();");
     m_graphicFrameCounter.init();
+    codexPasso("app: init ok");
 }
 
 void GraphicalApplication::deinit()
