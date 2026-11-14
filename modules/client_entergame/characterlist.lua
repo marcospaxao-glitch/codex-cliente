@@ -191,7 +191,10 @@ end
 local function loadCardInfo(list, characters)
   -- CODEX (Redemption): usa o HTTP nativo do cliente (HTTP.get) no lugar do antigo ProtocolHttp
   infoRequest = nil
-  if not EnterGame or not EnterGame.getSiteUrl or not HTTP or not g_http then return end
+  if not EnterGame or not EnterGame.getSiteUrl or not HTTP or not g_http then
+    g_logger.warning('[codex] cartoes dos personagens: HTTP indisponivel')
+    return
+  end
   local site = EnterGame.getSiteUrl() or ''
   if site == '' or #characters == 0 then return end
   if site:sub(-1) ~= '/' then site = site .. '/' end
@@ -202,16 +205,27 @@ local function loadCardInfo(list, characters)
     names[#names + 1] = info.name
   end
 
+  -- no navegador pede no proprio site que abriu a pagina (funciona com e sem www)
+  local base = site
+  if g_platform.isBrowser and g_platform.isBrowser() then base = '/' end
+
   local pedido = {}
   infoRequest = pedido
-  local ok = pcall(function()
-    HTTP.get(site .. 'codex_api/chars.php?names=' .. urlEncode(table.concat(names, ',')), function(data, err)
+  local antigo = HTTP.timeout
+  HTTP.timeout = 10
+  local ok, erro = pcall(function()
+    HTTP.get(base .. 'codex_api/chars.php?names=' .. urlEncode(table.concat(names, ',')), function(data, err)
       if infoRequest ~= pedido then return end
       infoRequest = nil
-      if not err and data and data ~= '' then applyInfo(list, data) end
+      if err then g_logger.warning('[codex] cartoes dos personagens: ' .. tostring(err)) return end
+      if data and data ~= '' then applyInfo(list, data) end
     end)
   end)
-  if not ok then infoRequest = nil end
+  HTTP.timeout = antigo
+  if not ok then
+    infoRequest = nil
+    g_logger.warning('[codex] cartoes dos personagens: ' .. tostring(erro))
+  end
 end
 
 -- public functions
