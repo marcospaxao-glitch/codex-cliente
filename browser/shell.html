@@ -64,6 +64,54 @@
         display: none;
       }
       #start:hover { background: #ff4a1f; }
+      /* CODEX celular */
+      #codexTecladoBtn {
+        position: absolute;
+        right: 10px;
+        top: 46%;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.35);
+        background: rgba(10, 16, 32, 0.55);
+        color: #fff;
+        font-size: 22px;
+        z-index: 5;
+        display: none;
+        touch-action: none;
+      }
+      #codexTecladoBtn.ativo { background: rgba(227, 53, 13, 0.75); }
+      #codexTeclado {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        border: 0;
+        padding: 0;
+        font-size: 16px; /* evita zoom automatico no iPhone */
+        z-index: 0;
+      }
+      #codexGire {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 14px;
+        background: #070b16;
+        color: #fff;
+        font: 600 18px "Roboto", Helvetica, sans-serif;
+        text-align: center;
+        padding: 24px;
+      }
+      #codexGire span { font-size: 54px; }
+      @media (orientation: portrait) and (pointer: coarse) {
+        #codexGire { display: flex; }
+      }
       #aviso {
         position: absolute;
         left: 50%;
@@ -86,6 +134,9 @@
     ></div>
     <button id="start" onclick="startGame()">Jogar</button>
     <div id="aviso">Codex Pokétibia — primeira abertura baixa os arquivos do jogo; nas próximas abre mais rápido.</div>
+    <div id="codexGire"><span>📱↻</span>Gire o celular para jogar na horizontal</div>
+    <button id="codexTecladoBtn" aria-label="Teclado">⌨</button>
+    <input id="codexTeclado" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
     <canvas
       class="backbuffer"
       id="canvas"
@@ -122,24 +173,31 @@
       function startGame() {
         document.getElementById("start").style.display = "none";
         document.getElementById("aviso").style.display = "none";
+        if (CODEX_CELULAR) document.getElementById("codexTecladoBtn").style.display = "block";
+        if (CODEX_CELULAR) codexTelaCheia();
         callMain();
         document.addEventListener("touchstart", function (ev) {
+          if (codexEhNosso(ev.target)) return;
           ev.preventDefault();
           ev.stopPropagation();
-        });
+        }, { passive: false });
         document.addEventListener("touchmove", function (ev) {
+          if (codexEhNosso(ev.target)) return;
           ev.preventDefault();
           ev.stopPropagation();
-        });
+        }, { passive: false });
         document.addEventListener("touchend", function (ev) {
+          if (codexEhNosso(ev.target)) return;
           ev.preventDefault();
           ev.stopPropagation();
-        });
+        }, { passive: false });
         document.addEventListener("keyup", function (ev) {
+          if (codexEhNosso(ev.target)) return;
           ev.preventDefault();
           ev.stopPropagation();
         });
         document.addEventListener("keydown", function (ev) {
+          if (codexEhNosso(ev.target)) return;
           if (
             !ev.ctrlKey &&
             ev.key !== "Enter" &&
@@ -158,6 +216,92 @@
           ev.stopPropagation();
         });
       }
+      // ===== CODEX: celular =====
+      var CODEX_CELULAR = (function () {
+        try {
+          return (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) ||
+            /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+        } catch (e) { return false; }
+      })();
+      function codexEhNosso(el) {
+        return el && (el.id === "codexTeclado" || el.id === "codexTecladoBtn" || el.id === "start");
+      }
+      function codexTelaCheia() {
+        try {
+          var el = document.documentElement;
+          var p = el.requestFullscreen ? el.requestFullscreen({ navigationUI: "hide" }) :
+            (el.webkitRequestFullscreen ? el.webkitRequestFullscreen() : null);
+          if (p && p.then) {
+            p.then(function () {
+              if (screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(function () {});
+            }).catch(function () {});
+          }
+        } catch (e) {}
+      }
+      // envia teclas para o jogo (o cliente escuta o window)
+      function codexTecla(tipo, key, code, keyCode) {
+        window.dispatchEvent(new KeyboardEvent(tipo, { key: key, code: code, keyCode: keyCode, which: keyCode, charCode: tipo === "keypress" ? keyCode : 0, bubbles: true }));
+      }
+      function codexEnviarTexto(txt) {
+        for (const ch of txt) codexTecla("keypress", ch, "", ch.codePointAt(0));
+      }
+      function codexEnter() {
+        codexTecla("keydown", "Enter", "Enter", 13);
+        codexTecla("keypress", "Enter", "Enter", 13);
+        codexTecla("keyup", "Enter", "Enter", 13);
+      }
+      function codexApagar() {
+        codexTecla("keydown", "Backspace", "Backspace", 8);
+        codexTecla("keyup", "Backspace", "Backspace", 8);
+      }
+      window.codexAbrirTeclado = function () {
+        var inp = document.getElementById("codexTeclado");
+        if (!inp) return;
+        inp.value = " ";
+        inp.focus({ preventScroll: true });
+        try { inp.setSelectionRange(1, 1); } catch (e) {}
+        document.getElementById("codexTecladoBtn").classList.add("ativo");
+      };
+      function codexFecharTeclado() {
+        var inp = document.getElementById("codexTeclado");
+        if (inp) inp.blur();
+        document.getElementById("codexTecladoBtn").classList.remove("ativo");
+      }
+      window.addEventListener("DOMContentLoaded", function () {
+        var btn = document.getElementById("codexTecladoBtn");
+        var inp = document.getElementById("codexTeclado");
+        if (!CODEX_CELULAR) return;
+        btn.addEventListener("touchend", function (ev) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          if (document.activeElement === inp) codexFecharTeclado(); else window.codexAbrirTeclado();
+        }, { passive: false });
+        btn.addEventListener("click", function () {
+          if (document.activeElement === inp) codexFecharTeclado(); else window.codexAbrirTeclado();
+        });
+        inp.addEventListener("beforeinput", function (ev) {
+          var t = ev.inputType || "";
+          if (t === "insertText" || t === "insertReplacementText" || t === "insertCompositionText") {
+            if (ev.data && t !== "insertCompositionText") codexEnviarTexto(ev.data);
+          } else if (t === "deleteContentBackward") {
+            codexApagar();
+          } else if (t === "insertLineBreak" || t === "insertParagraph") {
+            codexEnter();
+          }
+          if (t !== "insertCompositionText") ev.preventDefault();
+        });
+        // teclados que digitam por composicao (Android): manda a palavra quando termina
+        inp.addEventListener("compositionend", function (ev) {
+          if (ev.data) codexEnviarTexto(ev.data);
+          inp.value = " ";
+          try { inp.setSelectionRange(1, 1); } catch (e) {}
+        });
+        inp.addEventListener("keydown", function (ev) {
+          if (ev.key === "Enter") { ev.preventDefault(); codexEnter(); }
+        });
+        inp.addEventListener("blur", function () { btn.classList.remove("ativo"); });
+      });
+
       var Module = {
         locateFile: function (path) {
           const baseURL =

@@ -77,6 +77,10 @@
 #include "net/inputmessage.h"
 #include "net/outputmessage.h"
 
+#ifdef __EMSCRIPTEN__
+bool codexCelular(); // platform/browserwindow.cpp
+#endif
+
 void Application::registerLuaFunctions()
 {
     // Lets corelib's connect() tell the engine that a handler may have appeared
@@ -84,6 +88,11 @@ void Application::registerLuaFunctions()
     g_lua.bindGlobalFunction("invalidateEventCache", [] { LuaObject::invalidateEventCache(); });
     g_lua.bindGlobalFunction("codexPasso", [](const std::string& passo) { codexPasso(("lua: " + passo).c_str()); }); // CODEX diagnostico
     g_lua.bindGlobalFunction("codexDebugAtivo", [] { return codexDebugAtivo(); });
+#ifdef __EMSCRIPTEN__
+    g_lua.bindGlobalFunction("codexCelular", [] { return codexCelular(); }); // CODEX: navegador em celular/tablet
+#else
+    g_lua.bindGlobalFunction("codexCelular", [] { return false; });
+#endif
 
     // conversion globals
     g_lua.bindGlobalFunction("torect", [](const std::string_view v) { return stdext::from_string<Rect>(v); });

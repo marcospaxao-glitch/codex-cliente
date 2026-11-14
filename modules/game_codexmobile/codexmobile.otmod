@@ -1,0 +1,11 @@
+Module
+  name: game_codexmobile
+  description: Codex - controles de celular (joystick) na versao navegador
+  author: Codex
+  website: codexpoketibia.com.br
+  autoload: true
+  autoload-priority: 1001
+  sandboxed: true
+  scripts: [ codexmobile ]
+  @onLoad: init()
+  @onUnload: terminate()

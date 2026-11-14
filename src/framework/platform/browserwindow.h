@@ -72,6 +72,11 @@ public:
     void updateTouchPosition(const EmscriptenTouchEvent* event);
     void processLongTouch(const EmscriptenTouchEvent* event);
 
+    // CODEX: celular (toque + escala da interface)
+    bool isCelular() const { return m_celular; }
+    float getCssScale() const { return m_cssScale; }
+    void applyCanvasSize();
+
     Size getDisplaySize() override;
     std::string getClipboardText() override;
     std::string getPlatformType() override;
@@ -82,6 +87,20 @@ private:
     bool m_running;
     Timer m_clickTimer;
     bool m_usingTouch = false;
+
+    // CODEX: estado do toque (copiado por valor, o evento do navegador e temporario)
+    void onTouch(int eventType, const Point& pos, int id);
+    void sendMouse(Fw::InputEventType type, Fw::MouseButton button, const Point& pos);
+    bool m_celular = false;
+    float m_cssScale = 1.f;
+    float m_pixelRatio = 1.f;
+    int m_touchId = -1;
+    int m_touchSeq = 0;
+    bool m_touchDown = false;
+    bool m_touchDragging = false;
+    bool m_touchLong = false;
+    Point m_touchStart;
+    Point m_touchLast;
     std::vector<std::pair<char const*, Fw::Key>> web_keymap;
     std::string m_clipboardText;
     std::vector<std::string> m_cursors;

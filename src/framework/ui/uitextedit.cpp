@@ -1667,7 +1667,10 @@ bool UITextEdit::onMousePress(const Point& mousePos, const Fw::MouseButton butto
 #ifdef __EMSCRIPTEN__
         if (g_window.isVisible()) {
             MAIN_THREAD_ASYNC_EM_ASM({
-                if (navigator && "virtualKeyboard" in navigator) {
+                // CODEX: campo de texto do proprio shell (funciona no Android e no iPhone)
+                if (window.CODEX_CELULAR && window.codexAbrirTeclado) {
+                    window.codexAbrirTeclado();
+                } else if (navigator && "virtualKeyboard" in navigator) {
                     document.getElementById("title-text").focus();
                     navigator.virtualKeyboard.show();
                 }

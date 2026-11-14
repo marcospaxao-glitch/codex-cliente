@@ -30,7 +30,31 @@
 #include <framework/util/crypt.h>
 #include "framework/core/graphicalapplication.h"
 
+#include <algorithm>
+#include <cmath>
+
 BrowserWindow& g_browserWindow = (BrowserWindow&)g_window;
+
+// CODEX: celular/tablet = tela de toque sem mouse
+static bool codexEhCelular() {
+    // clang-format off
+    return MAIN_THREAD_EM_ASM_INT({
+        try {
+            var toque = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+            var ua = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+            return (toque || ua) ? 1 : 0;
+        } catch (e) { return 0; }
+    }) == 1;
+    // clang-format on
+}
+
+static double codexPixelRatio() {
+    // clang-format off
+    return MAIN_THREAD_EM_ASM_DOUBLE({ return window.devicePixelRatio || 1; });
+    // clang-format on
+}
+
+bool codexCelular() { return g_browserWindow.isCelular(); }
 
 stdext::map<char, Fw::Key> m_keyMapStr;
 EmscriptenWebGLContextAttributes attr;
@@ -158,6 +182,7 @@ void BrowserWindow::terminate() {
     emscripten_set_touchend_callback("#canvas", this, EM_TRUE, nullptr);
     emscripten_set_touchstart_callback("#canvas", this, EM_TRUE, nullptr);
     emscripten_set_touchmove_callback("#canvas", this, EM_TRUE, nullptr);
+    emscripten_set_touchcancel_callback("#canvas", this, EM_TRUE, nullptr);
     EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx = emscripten_webgl_get_current_context();
     emscripten_webgl_destroy_context(ctx);
 
@@ -165,7 +190,33 @@ void BrowserWindow::terminate() {
     m_running = false;
 }
 
+// CODEX: no celular desenha em resolucao real (nitido) e encolhe a interface
+// para caber numa tela pequena; no computador fica tudo como antes.
+void BrowserWindow::applyCanvasSize() {
+    double w, h;
+    emscripten_get_element_css_size("#canvas", &w, &h);
+    if (w < 1) w = 1;
+    if (h < 1) h = 1;
+
+    if (m_celular) {
+        m_pixelRatio = std::clamp<float>(static_cast<float>(codexPixelRatio()), 1.f, 2.f);
+        // area minima da interface do Codex: ~1180 x 600
+        m_cssScale = std::clamp<float>(static_cast<float>(std::min(w / 1180.0, h / 600.0)), 0.45f, 1.f);
+    } else {
+        m_pixelRatio = 1.f;
+        m_cssScale = 1.f;
+    }
+
+    const int pw = static_cast<int>(w * m_pixelRatio);
+    const int ph = static_cast<int>(h * m_pixelRatio);
+    emscripten_set_canvas_element_size("#canvas", pw, ph);
+    glViewport(0, 0, pw, ph);
+    m_size = Size(pw, ph);
+    m_displayDensity = m_pixelRatio * m_cssScale;
+}
+
 void BrowserWindow::internalInitGL() {
+    m_celular = codexEhCelular();
     double w, h;
     emscripten_get_element_css_size("#canvas", &w, &h);
     m_size = Size(int(w), int(h));
@@ -181,6 +232,7 @@ void BrowserWindow::internalInitGL() {
 
 
     glViewport(0, 0, int(w), int(h));
+    applyCanvasSize();
 }
 
 void BrowserWindow::poll() {
@@ -240,6 +292,10 @@ void BrowserWindow::poll() {
             return EM_TRUE;
         }));
         emscripten_set_touchmove_callback("#canvas", this, EM_TRUE, ([](int eventType, const EmscriptenTouchEvent* event, void* userData) -> EM_BOOL {
+            static_cast<BrowserWindow*>(userData)->handleTouchCallback(eventType, event);
+            return EM_TRUE;
+        }));
+        emscripten_set_touchcancel_callback("#canvas", this, EM_TRUE, ([](int eventType, const EmscriptenTouchEvent* event, void* userData) -> EM_BOOL {
             static_cast<BrowserWindow*>(userData)->handleTouchCallback(eventType, event);
             return EM_TRUE;
         }));
@@ -350,10 +406,11 @@ void BrowserWindow::handleMouseCallback(int eventType, const EmscriptenMouseEven
 
 void BrowserWindow::handleMouseWheelCallback(const EmscriptenWheelEvent* event) {
     if (event->mouse.screenX != 0 && event->mouse.screenY != 0 && event->mouse.clientX != 0 && event->mouse.clientY != 0 && event->mouse.targetX != 0 && event->mouse.targetY != 0) {
-        g_dispatcher.addEvent([this, event] {
+        const bool descer = event->deltaY > 0;
+        g_dispatcher.addEvent([this, descer] {
             m_inputEvent.reset();
             m_inputEvent.type = Fw::MouseReleaseInputEvent;
-            event->deltaY > 0 ? m_inputEvent.wheelDirection = Fw::MouseWheelDown : m_inputEvent.wheelDirection = Fw::MouseWheelUp;
+            descer ? m_inputEvent.wheelDirection = Fw::MouseWheelDown : m_inputEvent.wheelDirection = Fw::MouseWheelUp;
             m_inputEvent.type = Fw::MouseWheelInputEvent;
             m_inputEvent.mouseButton = Fw::MouseMidButton;
             if (m_inputEvent.type != Fw::NoInputEvent && m_onInputEvent)
@@ -364,85 +421,131 @@ void BrowserWindow::handleMouseWheelCallback(const EmscriptenWheelEvent* event) 
 
 
 void BrowserWindow::handleResizeCallback(const EmscriptenUiEvent* event) {
-    double w, h;
-    emscripten_get_element_css_size("#canvas", &w, &h);
-    if (m_size.width() != int(w) || m_size.height() != int(h)) {
-        emscripten_set_canvas_element_size("#canvas", int(w), int(h));
-        glViewport(0, 0, int(w), int(h));
-        m_size = Size(int(w), int(h));
+    const Size antes = m_size;
+    const float densAntes = m_displayDensity;
+    applyCanvasSize();
+    if (antes != m_size || densAntes != m_displayDensity)
         m_onResize(m_size);
-    }
 }
 
 void BrowserWindow::handleMouseMotionCallback(const EmscriptenMouseEvent* mouseEvent) {
     m_inputEvent.reset();
     m_inputEvent.type = Fw::MouseMoveInputEvent;
-    Point newMousePos(mouseEvent->clientX / m_displayDensity, mouseEvent->clientY / m_displayDensity);
+    Point newMousePos(mouseEvent->clientX / m_cssScale, mouseEvent->clientY / m_cssScale);
     m_inputEvent.mouseMoved = newMousePos - m_inputEvent.mousePos;
     m_inputEvent.mousePos = newMousePos;
     if (m_onInputEvent)
         m_onInputEvent(m_inputEvent);
 }
 
+// CODEX: toque reescrito.
+//  - toque rapido            -> clique esquerdo (andar, usar botao)
+//  - arrastar                -> segurar o botao esquerdo e mover (joystick, arrastar item, barra de rolagem)
+//  - segurar parado ~0,45 s  -> clique direito (menu / usar)
+// Os dados do navegador sao copiados na hora (o ponteiro do evento nao vale depois).
 void BrowserWindow::handleTouchCallback(int eventType, const EmscriptenTouchEvent* event) {
     m_usingTouch = true;
-    if (event->touches->screenX != 0 && event->touches->screenY != 0 && event->touches->clientX != 0 && event->touches->clientY != 0 && event->touches->targetX != 0 && event->touches->targetY != 0) {
-        updateTouchPosition(event);
-        if (eventType == EMSCRIPTEN_EVENT_TOUCHMOVE) {
-            m_clickTimer.stop();
-            return;
-        };
-        g_dispatcher.addEvent([this, eventType, event] {
-            m_inputEvent.reset();
-            Point newMousePos(event->touches->targetX / m_displayDensity, event->touches->targetY / m_displayDensity);
-            m_inputEvent.mouseButton = Fw::MouseLeftButton;
-            if (eventType == EMSCRIPTEN_EVENT_TOUCHSTART) {
-                m_clickTimer.restart();
-                m_inputEvent.type = Fw::MousePressInputEvent;
-                m_mouseButtonStates |= 1 << Fw::MouseLeftButton;
-            } else if (eventType == EMSCRIPTEN_EVENT_TOUCHEND) {
-                m_inputEvent.type = Fw::MouseReleaseInputEvent;
-                g_dispatcher.addEvent([this] { m_mouseButtonStates &= ~(1 << Fw::MouseLeftButton); });
-                if (m_clickTimer.running() && m_clickTimer.ticksElapsed() >= 200) {
-                    processLongTouch(event);
-                }
-                m_clickTimer.stop();
-            }
-            if (m_inputEvent.type != Fw::NoInputEvent && m_onInputEvent)
-                m_onInputEvent(m_inputEvent);
-        });
+    if (!event || event->numTouches <= 0)
+        return;
+
+    const EmscriptenTouchPoint* t = nullptr;
+    for (int i = 0; i < event->numTouches; ++i) {
+        if (event->touches[i].isChanged) {
+            t = &event->touches[i];
+            break;
+        }
     }
+    if (!t)
+        t = &event->touches[0];
+
+    const Point pos(static_cast<int>(t->targetX / m_cssScale), static_cast<int>(t->targetY / m_cssScale));
+    const int id = t->identifier;
+    g_dispatcher.addEvent([this, eventType, pos, id] { onTouch(eventType, pos, id); });
 }
 
-void BrowserWindow::updateTouchPosition(const EmscriptenTouchEvent* event) {
-    g_dispatcher.addEvent([this, event] {
+void BrowserWindow::sendMouse(Fw::InputEventType type, Fw::MouseButton button, const Point& pos) {
+    if (!m_onInputEvent)
+        return;
+    if (pos != m_inputEvent.mousePos) {
         m_inputEvent.reset();
-        Point newMousePos(event->touches->targetX / m_displayDensity, event->touches->targetY / m_displayDensity);
-        m_inputEvent.mouseMoved = newMousePos - m_inputEvent.mousePos;
-        m_inputEvent.mousePos = newMousePos;
+        m_inputEvent.mouseMoved = pos - m_inputEvent.mousePos;
+        m_inputEvent.mousePos = pos;
         m_inputEvent.type = Fw::MouseMoveInputEvent;
-        if (m_onInputEvent)
-            m_onInputEvent(m_inputEvent);
-    });
+        m_onInputEvent(m_inputEvent);
+    }
+    if (type == Fw::MouseMoveInputEvent)
+        return;
+
+    m_inputEvent.reset();
+    m_inputEvent.type = type;
+    m_inputEvent.mouseButton = button;
+    if (type == Fw::MousePressInputEvent)
+        m_mouseButtonStates |= 1 << button;
+    else
+        m_mouseButtonStates &= ~(1 << button);
+    m_onInputEvent(m_inputEvent);
 }
 
-void BrowserWindow::processLongTouch(const EmscriptenTouchEvent* event) {
-    m_clickTimer.stop();
-    g_dispatcher.addEvent([this, event] {
-        m_inputEvent.reset();
-        m_inputEvent.mouseButton = Fw::MouseRightButton;
-        m_inputEvent.type = Fw::MousePressInputEvent;
-        if (m_onInputEvent)
-            m_onInputEvent(m_inputEvent);
-    });
-    g_dispatcher.addEvent([this, event] {
-        m_inputEvent.reset();
-        m_inputEvent.mouseButton = Fw::MouseRightButton;
-        m_inputEvent.type = Fw::MouseReleaseInputEvent;
-        if (m_onInputEvent)
-            m_onInputEvent(m_inputEvent);
-    });
+void BrowserWindow::onTouch(int eventType, const Point& pos, int id) {
+    static constexpr int DISTANCIA_ARRASTE = 10;
+    static constexpr int TEMPO_SEGURAR = 450;
+
+    if (eventType == EMSCRIPTEN_EVENT_TOUCHSTART) {
+        if (m_touchDown)
+            return; // segundo dedo: ignorado
+        m_touchDown = true;
+        m_touchId = id;
+        m_touchDragging = false;
+        m_touchLong = false;
+        m_touchStart = m_touchLast = pos;
+        sendMouse(Fw::MouseMoveInputEvent, Fw::MouseLeftButton, pos);
+
+        const int seq = ++m_touchSeq;
+        g_dispatcher.scheduleEvent([this, seq] {
+            if (!m_touchDown || seq != m_touchSeq || m_touchDragging || m_touchLong)
+                return;
+            m_touchLong = true;
+            sendMouse(Fw::MousePressInputEvent, Fw::MouseRightButton, m_touchLast);
+            sendMouse(Fw::MouseReleaseInputEvent, Fw::MouseRightButton, m_touchLast);
+        }, TEMPO_SEGURAR);
+        return;
+    }
+
+    if (!m_touchDown || id != m_touchId)
+        return;
+
+    m_touchLast = pos;
+
+    if (eventType == EMSCRIPTEN_EVENT_TOUCHMOVE) {
+        if (m_touchLong)
+            return;
+        if (!m_touchDragging) {
+            const Point d = pos - m_touchStart;
+            if (std::abs(d.x) + std::abs(d.y) < DISTANCIA_ARRASTE)
+                return;
+            m_touchDragging = true;
+            sendMouse(Fw::MousePressInputEvent, Fw::MouseLeftButton, m_touchStart);
+        }
+        sendMouse(Fw::MouseMoveInputEvent, Fw::MouseLeftButton, pos);
+        return;
+    }
+
+    // fim do toque (TOUCHEND ou TOUCHCANCEL)
+    m_touchDown = false;
+    m_touchId = -1;
+    ++m_touchSeq;
+    if (m_touchDragging) {
+        sendMouse(Fw::MouseReleaseInputEvent, Fw::MouseLeftButton, pos);
+    } else if (!m_touchLong && eventType == EMSCRIPTEN_EVENT_TOUCHEND) {
+        sendMouse(Fw::MousePressInputEvent, Fw::MouseLeftButton, pos);
+        sendMouse(Fw::MouseReleaseInputEvent, Fw::MouseLeftButton, pos);
+    }
+    m_touchDragging = false;
+    m_touchLong = false;
 }
+
+void BrowserWindow::updateTouchPosition(const EmscriptenTouchEvent*) {}
+void BrowserWindow::processLongTouch(const EmscriptenTouchEvent*) {}
 
 size_t number_of_characters_in_utf8_string(const char* str) {
     if (!str) return 0;
