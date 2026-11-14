@@ -33,6 +33,7 @@
 #include <fmt/format.h>
 #include <ixwebsocket/IXNetSystem.h>
 #endif
+#include <thread>
 #include <utility>
 #include <vector>
 
@@ -309,15 +310,17 @@ int Http::get(const std::string& url, int timeout)
     attr.timeoutMSecs = timeout * 1000;
     attr.requestHeaders = context->headerPointers.data();
     attr.userData = context.get();
-    attr.onsuccess = &Http::onFetchSuccess;
-    attr.onerror = &Http::onFetchError;
-    attr.onprogress = &Http::onFetchProgress;
-
-    if (!emscripten_fetch(&attr, url.c_str())) {
-        completeFetch(context.release(), nullptr, "http_error::queue");
-    } else {
-        context.release();
-    }
+    // CODEX: o fetch assincrono nunca saia no navegador (a thread do jogo nao
+    // devolve o controle ao navegador). Faz o pedido sincrono numa thread propria,
+    // igual ao indice de sprites, e entrega o resultado pelo dispatcher.
+    attr.attributes |= EMSCRIPTEN_FETCH_SYNCHRONOUS;
+    attr.onsuccess = nullptr;
+    attr.onerror = nullptr;
+    attr.onprogress = nullptr;
+    std::thread([this, ctx = context.release(), attr, url = std::string(url)]() mutable {
+        emscripten_fetch_t* f = emscripten_fetch(&attr, url.c_str());
+        completeFetch(ctx, f, f ? std::string() : std::string("http_error::queue"));
+    }).detach();
 
     return operationId;
 }
@@ -368,15 +371,17 @@ int Http::post(const std::string& url, const std::string& data, int timeout, boo
     attr.requestData = context->body.data();
     attr.requestDataSize = context->body.size();
     attr.userData = context.get();
-    attr.onsuccess = &Http::onFetchSuccess;
-    attr.onerror = &Http::onFetchError;
-    attr.onprogress = &Http::onFetchProgress;
-
-    if (!emscripten_fetch(&attr, url.c_str())) {
-        completeFetch(context.release(), nullptr, "http_error::queue");
-    } else {
-        context.release();
-    }
+    // CODEX: o fetch assincrono nunca saia no navegador (a thread do jogo nao
+    // devolve o controle ao navegador). Faz o pedido sincrono numa thread propria,
+    // igual ao indice de sprites, e entrega o resultado pelo dispatcher.
+    attr.attributes |= EMSCRIPTEN_FETCH_SYNCHRONOUS;
+    attr.onsuccess = nullptr;
+    attr.onerror = nullptr;
+    attr.onprogress = nullptr;
+    std::thread([this, ctx = context.release(), attr, url = std::string(url)]() mutable {
+        emscripten_fetch_t* f = emscripten_fetch(&attr, url.c_str());
+        completeFetch(ctx, f, f ? std::string() : std::string("http_error::queue"));
+    }).detach();
 
     return operationId;
 }
@@ -417,15 +422,17 @@ int Http::download(const std::string& url, const std::string& path, int timeout)
     attr.timeoutMSecs = timeout * 1000;
     attr.requestHeaders = context->headerPointers.data();
     attr.userData = context.get();
-    attr.onsuccess = &Http::onFetchSuccess;
-    attr.onerror = &Http::onFetchError;
-    attr.onprogress = &Http::onFetchProgress;
-
-    if (!emscripten_fetch(&attr, url.c_str())) {
-        completeFetch(context.release(), nullptr, "http_error::queue");
-    } else {
-        context.release();
-    }
+    // CODEX: o fetch assincrono nunca saia no navegador (a thread do jogo nao
+    // devolve o controle ao navegador). Faz o pedido sincrono numa thread propria,
+    // igual ao indice de sprites, e entrega o resultado pelo dispatcher.
+    attr.attributes |= EMSCRIPTEN_FETCH_SYNCHRONOUS;
+    attr.onsuccess = nullptr;
+    attr.onerror = nullptr;
+    attr.onprogress = nullptr;
+    std::thread([this, ctx = context.release(), attr, url = std::string(url)]() mutable {
+        emscripten_fetch_t* f = emscripten_fetch(&attr, url.c_str());
+        completeFetch(ctx, f, f ? std::string() : std::string("http_error::queue"));
+    }).detach();
 
     return operationId;
 }
