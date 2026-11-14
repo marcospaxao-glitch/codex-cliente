@@ -56,14 +56,18 @@ g_html.addGlobalStyle('/data/styles/custom.css')
 g_resources.addSearchPath(g_resources.getWorkDir() .. 'mods', true)
 
 -- setup directory for saving configurations
+g_logger.info('[codex] passo: setupUserWriteDir')
 g_resources.setupUserWriteDir(('%s/'):format(g_app.getCompactName()))
 
 -- search all packages
+g_logger.info('[codex] passo: searchAndAddPackages')
 g_resources.searchAndAddPackages('/', '.otpkg', true)
 
 -- load settings
+g_logger.info('[codex] passo: loadSettings')
 g_configs.loadSettings('/configdash.otml')
 
+g_logger.info('[codex] passo: discoverModules')
 g_modules.discoverModules()
 
 -- libraries modules 0-99
