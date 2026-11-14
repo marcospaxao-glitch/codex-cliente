@@ -139,17 +139,24 @@ local function onAppear(creature) aplicar(creature) end
 local function varrer()
   local player = g_game.getLocalPlayer()
   if not player then return end
-  for _, c in ipairs(g_map.getSpectators(player:getPosition(), true)) do aplicar(c) end
+  local pos = player:getPosition()
+  -- no inicio do jogo a posicao ainda e invalida (65535,65535,255)
+  if not pos or pos.z > 15 or pos.x >= 65535 then return end
+  for _, c in ipairs(g_map.getSpectators(pos, true)) do aplicar(c) end
+end
+
+local function varrerDepois()
+  scheduleEvent(varrer, 1000)
 end
 
 function init()
   registrar() -- cria os shaders ja na entrada (ficam prontos antes de logar)
   connect(Creature, { onSkullChange = onSkullChange, onAppear = onAppear })
-  connect(g_game, { onGameStart = varrer })
+  connect(g_game, { onGameStart = varrerDepois })
   if g_game.isOnline() then varrer() end
 end
 
 function terminate()
   disconnect(Creature, { onSkullChange = onSkullChange, onAppear = onAppear })
-  disconnect(g_game, { onGameStart = varrer })
+  disconnect(g_game, { onGameStart = varrerDepois })
 end
