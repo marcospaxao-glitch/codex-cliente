@@ -310,9 +310,49 @@
         var btn = document.getElementById("codexTecladoBtn");
         var inp = document.getElementById("codexTeclado");
         if (!CODEX_CELULAR) return;
+        // arrastar o botao muda ele de lugar (fica salvo); toque rapido abre/fecha o teclado
+        var CHAVE_BTN = "codexTecladoPos";
+        function colocarBtn(x, y) {
+          var w = btn.offsetWidth || 46, h = btn.offsetHeight || 46;
+          x = Math.max(0, Math.min(x, window.innerWidth - w));
+          y = Math.max(0, Math.min(y, window.innerHeight - h));
+          btn.style.left = x + "px";
+          btn.style.top = y + "px";
+          btn.style.bottom = "auto";
+          btn.style.right = "auto";
+        }
+        try {
+          var salvo = JSON.parse(localStorage.getItem(CHAVE_BTN) || "null");
+          if (salvo && typeof salvo.x === "number") colocarBtn(salvo.x, salvo.y);
+        } catch (e) {}
+        var arraste = null;
+        btn.addEventListener("touchstart", function (ev) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          var t = ev.changedTouches[0], r = btn.getBoundingClientRect();
+          arraste = { sx: t.clientX, sy: t.clientY, dx: t.clientX - r.left, dy: t.clientY - r.top, movendo: false };
+        }, { passive: false });
+        btn.addEventListener("touchmove", function (ev) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          if (!arraste) return;
+          var t = ev.changedTouches[0];
+          if (!arraste.movendo && Math.abs(t.clientX - arraste.sx) + Math.abs(t.clientY - arraste.sy) < 10) return;
+          arraste.movendo = true;
+          colocarBtn(t.clientX - arraste.dx, t.clientY - arraste.dy);
+        }, { passive: false });
         btn.addEventListener("touchend", function (ev) {
           ev.preventDefault();
           ev.stopPropagation();
+          var a = arraste;
+          arraste = null;
+          if (a && a.movendo) {
+            try {
+              var r = btn.getBoundingClientRect();
+              localStorage.setItem(CHAVE_BTN, JSON.stringify({ x: r.left, y: r.top }));
+            } catch (e) {}
+            return;
+          }
           if (document.activeElement === inp) codexFecharTeclado(); else window.codexAbrirTeclado();
         }, { passive: false });
         btn.addEventListener("click", function () {

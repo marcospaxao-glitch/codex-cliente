@@ -49,6 +49,18 @@ UIWidget
     focusable: false
     visible: false
 
+    UIWidget
+      id: mover
+      size: 34 34
+      image-source: /game_codexmobile/images/mover
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 40
+      margin-left: 155
+      draggable: true
+      focusable: false
+      opacity: 0.8
+
     CodexBotaoMobile
       id: m1
       text: M1

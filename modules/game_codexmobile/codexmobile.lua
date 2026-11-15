@@ -194,11 +194,34 @@ local function pokemon()
   end
 end
 
+-- posicao escolhida pelo jogador (arrastando a alca); nil = lugar padrao
+local CHAVE_POS = 'codexMobileAcoes'
+local function posSalva()
+  local p = g_settings.getNode(CHAVE_POS)
+  if type(p) == 'table' and tonumber(p.x) and tonumber(p.y) then
+    return { x = tonumber(p.x), y = tonumber(p.y) }
+  end
+  return nil
+end
+
+local function aplicarPos(x, y)
+  local root = g_ui.getRootWidget()
+  x = math.max(0, math.min(x, root:getWidth() - acoes:getWidth()))
+  y = math.max(0, math.min(y, root:getHeight() - acoes:getHeight()))
+  acoes:setMarginLeft(x)
+  acoes:setMarginTop(y)
+end
+
 -- coloca os botoes no canto inferior direito da area do mapa
 local function posicionar()
   removeEvent(eventoPosicao)
   eventoPosicao = nil
   if not acoes or not acoes:isVisible() then return end
+  local salva = posSalva()
+  if salva then
+    aplicarPos(salva.x, salva.y)
+    return
+  end
   local gi = modules.game_interface
   local mapa = gi and gi.getMapPanel and gi.getMapPanel()
   local root = g_ui.getRootWidget()
@@ -256,6 +279,34 @@ function init()
   acoes:getChildById('atacar').onClick = atacarProximo
   acoes:getChildById('usar').onClick = usarFrente
   acoes:getChildById('poke').onClick = pokemon
+
+  -- alca: arrasta o grupo de botoes; segurar parado = voltar ao lugar padrao
+  local mover = acoes:getChildById('mover')
+  local ref = nil
+  mover.onDragEnter = function(self, mousePos)
+    ref = { x = mousePos.x - acoes:getX(), y = mousePos.y - acoes:getY() }
+    return true
+  end
+  mover.onDragMove = function(self, mousePos)
+    if not ref then return false end
+    aplicarPos(mousePos.x - ref.x, mousePos.y - ref.y)
+    return true
+  end
+  mover.onDragLeave = function()
+    ref = nil
+    g_settings.setNode(CHAVE_POS, { x = acoes:getMarginLeft(), y = acoes:getMarginTop() })
+    return true
+  end
+  mover.onMouseRelease = function(self, mousePos, button)
+    if button ~= MouseRightButton then return false end
+    local menu = g_ui.createWidget('PopupMenu')
+    menu:addOption('Voltar os botoes ao lugar padrao', function()
+      g_settings.remove(CHAVE_POS)
+      posicionar()
+    end)
+    menu:display(mousePos)
+    return true
+  end
   connect(g_ui.getRootWidget(), { onGeometryChange = posicionarDepois })
   connect(g_game, { onGameStart = onGameStart, onGameEnd = onGameEnd })
   if g_game.isOnline() then onGameStart() end
