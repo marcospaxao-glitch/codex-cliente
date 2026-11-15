@@ -9,7 +9,7 @@ local enterGameButton
 local clientBox
 local protocolLogin
 local motdEnabled = false
-local serverIp = CODEX_SERVIDOR or '127.0.0.1' -- CODEX: muda no init.lua
+local serverIp = CODEX_SERVIDOR or 'jogo.codexpoketibia.com.br' -- CODEX: muda no init.lua
 local SITE_URL = 'http://codexpoketibia.com.br/' -- endereco do site (botoes Criar conta / Esqueci a senha)
 -- no navegador a pagina e https: precisa pedir em https (senao o navegador bloqueia)
 if g_platform.isBrowser and g_platform.isBrowser() then SITE_URL = 'https://codexpoketibia.com.br/' end

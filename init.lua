@@ -7,7 +7,7 @@
 -- Endereco do servidor de jogo:
 --   teste no PC de casa: '127.0.0.1'
 --   servidor oficial:    'jogo.codexpoketibia.com.br'
-CODEX_SERVIDOR = '127.0.0.1'
+CODEX_SERVIDOR = 'jogo.codexpoketibia.com.br'
 CODEX_PORTA = 7171
 CODEX_VERSAO = 1098
 
