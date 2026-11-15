@@ -304,7 +304,7 @@ void MapView::drawForeground(const Rect& rect)
             continue;
 
         Point p = transformPositionTo2D(pos) - m_posInfo.drawOffset;
-        p.y -= 20; // CODEX: fala acima do titulo + nome (nao embola com eles)
+        p.y -= 34; // CODEX: fala acima do titulo + nome (nao embola com eles)
         p.x *= m_posInfo.horizontalStretchFactor;
         p.y *= m_posInfo.verticalStretchFactor;
         p += rect.topLeft();
