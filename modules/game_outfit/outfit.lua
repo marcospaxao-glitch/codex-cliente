@@ -20,6 +20,7 @@ currentClotheButtonBox = nil
 colorBoxes = {}
 
 mount = nil
+montariaAtual = 0 -- CODEX: montaria que o personagem usava ao abrir a janela
 mounts = nil
 mountCreature = nil
 currentMount = 1
@@ -47,6 +48,7 @@ function updateMount()
   nameMountWidget:setText(mounts[currentMount][2])
 
   mount.type = mounts[currentMount][1]
+  mount.mount = 0 -- CODEX: quadro da montaria mostra so a montaria
   mountCreature:setOutfit(mount)
 end
 
@@ -68,6 +70,10 @@ function create(creatureOutfit, outfitList, creatureMount, mountList)
   local outfitCreatureBox = outfitWindow:getChildById('outfitCreatureBox')
   if outfitCreature then
     outfit = outfitCreature:getOutfit()
+    -- CODEX: quadro da roupa mostra so o personagem (a montaria vai no outro quadro)
+    montariaAtual = outfit.mount or 0
+    outfit.mount = 0
+    outfitCreature:setOutfit(outfit)
     outfitCreatureBox:setCreature(outfitCreature)
   else
     outfitCreatureBox:hide()
@@ -179,7 +185,7 @@ function randomize()
 end
 
 function accept()
-  if mount then outfit.mount = mount.type end
+  if mount then outfit.mount = mount.type else outfit.mount = montariaAtual or 0 end
   g_game.changeOutfit(outfit)
   destroy()
 end
