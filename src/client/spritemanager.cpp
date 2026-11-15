@@ -59,8 +59,12 @@ void SpriteManager::reload() {
 }
 
 void SpriteManager::load() {
-    m_spritesFiles.resize(g_asyncDispatcher->get_thread_count());
-    if (g_app.isLoadingAsyncTexture()) {
+    // CODEX: dentro do codex.dat o spr e criptografado e vira arquivo em memoria;
+    // uma copia so (uma por thread estouraria a memoria)
+    const bool umaCopia = g_resources.isPackaged();
+    m_spritesFiles.clear();
+    m_spritesFiles.resize(umaCopia ? 1 : g_asyncDispatcher->get_thread_count());
+    if (g_app.isLoadingAsyncTexture() && !umaCopia) {
         for (auto& file : m_spritesFiles)
             file = std::make_unique<FileStream_m>(g_resources.openFile(m_lastFileName));
     } else (m_spritesFiles[0] = std::make_unique<FileStream_m>(g_resources.openFile(m_lastFileName)))->file->cache(true);

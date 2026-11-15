@@ -30,6 +30,9 @@
 #include "framework/net/protocolhttp.h"
 #include "framework/platform/platform.h"
 #include "framework/util/crypt.h"
+#include "packcrypt.h"
+#include "pkmerge.h"
+#include "updater.h"
 
 #ifndef USE_PRECOMPILED_HEADERS
 #include <array>
@@ -319,11 +322,161 @@ void ResourceManager::init(const char* argv0)
 
 void ResourceManager::terminate()
 {
+    g_updater.terminate();
     PHYSFS_deinit();
+}
+
+// ---------------------------------------------------------------------------
+// CODEX: pacote do cliente (codex.dat gerado pelo pkpacker) + pasta "updates"
+// O init.lua faz addSearchPath(workDir .. "data") e (workDir .. "modules").
+// Essas pastas nao existem no disco: cada uma vira uma montagem extra do
+// mesmo pacote com a raiz na subpasta (PHYSFS_setRoot).
+// ---------------------------------------------------------------------------
+#ifndef CLIENT_PACKAGE_NAME
+#define CLIENT_PACKAGE_NAME "codex.dat"
+#endif
+
+bool ResourceManager::mountPackage(const std::string& subdir, const bool pushFront)
+{
+    const std::string mountName = "pkg:" + m_packageFile + ":" + subdir;
+    PHYSFS_File* file = PHYSFS_openRead(m_packageFile.c_str());
+    if (!file)
+        return false;
+    if (!PHYSFS_mountHandle(file, mountName.c_str(), nullptr, pushFront ? 0 : 1)) {
+        PHYSFS_close(file);
+        return false;
+    }
+    if (!subdir.empty() && !PHYSFS_setRoot(mountName.c_str(), ("/" + subdir).c_str())) {
+        PHYSFS_unmount(mountName.c_str());
+        return false;
+    }
+    return true;
+}
+
+std::string ResourceManager::getUpdatesDir()
+{
+    if (isPackaged())
+        return getBaseDir() + "updates/";
+    if (!m_writeDir.empty()) {
+        std::string w = m_writeDir;
+        if (w.back() != '/' && w.back() != '\\')
+            w += '/';
+        return w + "updates/";
+    }
+    return "";
+}
+
+bool ResourceManager::mountUpdates(const std::string& subdir, const bool pushFront)
+{
+    std::string dir = getBaseDir() + "updates";
+    if (!subdir.empty())
+        dir += "/" + subdir;
+    return PHYSFS_mount(dir.c_str(), nullptr, pushFront ? 0 : 1) != 0;
+}
+
+// navegador / Android (sem codex.dat): arquivos baixados pelo atualizador ficam
+// na pasta de escrita e valem por cima dos que vieram com o cliente
+void ResourceManager::mountUserUpdates()
+{
+    const std::string dir = getUpdatesDir();
+    if (dir.empty())
+        return;
+    for (const char* sub : { "mods", "modules", "data" }) {
+        const std::string path = dir + sub;
+        std::error_code ec;
+        if (std::filesystem::is_directory(path, ec))
+            PHYSFS_mount(path.c_str(), nullptr, 0);
+    }
+}
+
+bool ResourceManager::mountClientPackage(const std::string& existentFile)
+{
+#if defined(ANDROID) || defined(__EMSCRIPTEN__)
+    (void)existentFile;
+    return false;
+#else
+    const std::string baseDir = getBaseDir();
+
+    // atualizacoes baixadas na ultima vez entram para dentro do pacote
+    {
+        std::string mergeError;
+        if (PkMerge::mergeUpdates(baseDir, CLIENT_PACKAGE_NAME, &mergeError))
+            g_logger.info("Atualizacoes incorporadas ao pacote do cliente.");
+        else if (!mergeError.empty())
+            g_logger.warning("Atualizacoes ficaram na pasta updates: {}", mergeError);
+    }
+
+    // a pasta do .exe fica montada por ultimo (o pacote tem prioridade)
+    if (!PHYSFS_mount(baseDir.c_str(), nullptr, 1))
+        return false;
+
+    if (!PHYSFS_exists(CLIENT_PACKAGE_NAME) || PHYSFS_isDirectory(CLIENT_PACKAGE_NAME)) {
+        PHYSFS_unmount(baseDir.c_str());
+        return false;
+    }
+
+    m_packageFile = CLIENT_PACKAGE_NAME;
+    if (!mountPackage("", true)) {
+        m_packageFile.clear();
+        PHYSFS_unmount(baseDir.c_str());
+        return false;
+    }
+    const std::string mountName = "pkg:" + m_packageFile + ":";
+    const char* realDir = PHYSFS_getRealDir(existentFile.c_str());
+    if (!realDir || mountName != realDir) {
+        PHYSFS_unmount(mountName.c_str());
+        m_packageFile.clear();
+        PHYSFS_unmount(baseDir.c_str());
+        return false;
+    }
+
+    g_logger.info("[codex] pacote do cliente: {}", m_packageFile);
+    m_workDir = baseDir;
+    m_packageDirs.clear();
+    char** list = PHYSFS_enumerateFiles("/");
+    for (char** i = list; list && *i; ++i) {
+        const std::string entry = std::string("/") + *i;
+        const char* dir = PHYSFS_getRealDir(entry.c_str());
+        PHYSFS_Stat st;
+        if (dir && mountName == dir && PHYSFS_stat(entry.c_str(), &st) && st.filetype == PHYSFS_FILETYPE_DIRECTORY)
+            m_packageDirs.insert(*i);
+    }
+    if (list)
+        PHYSFS_freeList(list);
+    mountUpdates("", true);
+    return true;
+#endif
+}
+
+// cliente antigo guardava as configuracoes em %USERPROFILE%\\codex\\ ; o novo usa a pasta do Windows (AppData).
+// Na primeira vez copia o que existir para nao perder hotkeys e opcoes.
+void ResourceManager::migrateOldSettings(const std::string& writeDir)
+{
+#ifdef WIN32
+    std::error_code ec;
+    const auto novo = std::filesystem::u8path(writeDir);
+    if (std::filesystem::exists(novo / "configdash.otml", ec))
+        return;
+    const wchar_t* home = _wgetenv(L"USERPROFILE");
+    if (!home)
+        return;
+    const auto antigo = std::filesystem::path(home) / L"codex";
+    if (!std::filesystem::is_directory(antigo, ec) || !std::filesystem::exists(antigo / "configdash.otml", ec))
+        return;
+    std::filesystem::create_directories(novo, ec);
+    std::filesystem::copy(antigo, novo, std::filesystem::copy_options::recursive | std::filesystem::copy_options::skip_existing, ec);
+    if (!ec)
+        g_logger.info("[codex] configuracoes do cliente antigo copiadas");
+#else
+    (void)writeDir;
+#endif
 }
 
 bool ResourceManager::discoverWorkDir(const std::string& existentFile)
 {
+    if (mountClientPackage(existentFile))
+        return true;
+
     // search for modules directory
     const auto tryMountWorkDir = [&](const std::string& dir) {
         if (!PHYSFS_mount(dir.c_str(), nullptr, 0))
@@ -399,6 +552,7 @@ bool ResourceManager::setupUserWriteDir(const std::string& appWriteDirName)
     dirName = appWriteDirName;
 #endif
     const std::string writeDir = userDir + dirName;
+    migrateOldSettings(writeDir);
 
     if (!PHYSFS_setWriteDir(writeDir.c_str())) {
         if (!PHYSFS_setWriteDir(userDir.c_str()) || !PHYSFS_mkdir(dirName.c_str())) {
@@ -410,7 +564,10 @@ bool ResourceManager::setupUserWriteDir(const std::string& appWriteDirName)
             return false;
         }
     }
-    return setWriteDir(writeDir);
+    const bool ok = setWriteDir(writeDir);
+    if (ok && !isPackaged())
+        mountUserUpdates();
+    return ok;
 }
 
 bool ResourceManager::setWriteDir(const std::string& writeDir, bool)
@@ -438,6 +595,28 @@ bool ResourceManager::setWriteDir(const std::string& writeDir, bool)
 bool ResourceManager::addSearchPath(const std::string& path, const bool pushFront)
 {
     std::string savePath = path;
+    // CODEX: pasta que so existe dentro do pacote (ex: workDir .. "data")
+    if (!m_packageFile.empty() && !m_workDir.empty() && path.starts_with(m_workDir)) {
+        std::string subdir = path.substr(m_workDir.length());
+        while (!subdir.empty() && (subdir.back() == '/' || subdir.back() == '\\'))
+            subdir.pop_back();
+        if (m_packageDirs.count(subdir)) {
+            if (pushFront) {
+                if (!mountPackage(subdir, true))
+                    return false;
+                mountUpdates(subdir, true);
+            } else {
+                mountUpdates(subdir, false);
+                if (!mountPackage(subdir, false))
+                    return false;
+            }
+            if (pushFront)
+                m_searchPaths.push_front(path);
+            else
+                m_searchPaths.push_back(path);
+            return true;
+        }
+    }
     if (!PHYSFS_mount(path.c_str(), nullptr, pushFront ? 0 : 1)) {
         bool found = false;
         for (const auto& searchPath : m_searchPaths) {
@@ -556,6 +735,15 @@ std::string ResourceManager::readFileContents(const std::string& fileName)
     PHYSFS_readBytes(file, &buffer[0], fileSize);
     PHYSFS_close(file);
 
+    // CODEX: arquivo criptografado pelo pkpacker
+    if (PackCrypt::isEncrypted(buffer)) {
+        try {
+            return PackCrypt::decrypt(buffer);
+        } catch (const std::exception& e) {
+            throw Exception("unable to decrypt file '{}': {}", fullPath, e.what());
+        }
+    }
+
 #if ENABLE_ENCRYPTION == 1
     const std::string encHeader(ENCRYPTION_HEADER);
     if (buffer.size() >= encHeader.size() &&
@@ -631,6 +819,16 @@ FileStreamPtr ResourceManager::openFile(const std::string& fileName)
     PHYSFS_File* file = PHYSFS_openRead(fullPath.c_str());
     if (!file)
         throw Exception("unable to open file '{}': {}", fullPath, PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
+
+    // CODEX: arquivo criptografado: le inteiro, descriptografa e entrega da memoria
+    char header[PackCrypt::HEADER_SIZE];
+    const auto got = PHYSFS_readBytes(file, header, PackCrypt::HEADER_SIZE);
+    if (got == static_cast<PHYSFS_sint64>(PackCrypt::HEADER_SIZE) && PackCrypt::isEncrypted(header, PackCrypt::HEADER_SIZE)) {
+        PHYSFS_close(file);
+        const std::string plain = readFileContents(fileName);
+        return { std::make_shared<FileStream>(fullPath, std::string_view(plain)) };
+    }
+    PHYSFS_seek(file, 0);
     return { std::make_shared<FileStream>(fullPath, file, false) };
 }
 

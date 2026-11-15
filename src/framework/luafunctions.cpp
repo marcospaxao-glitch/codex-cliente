@@ -80,6 +80,7 @@
 #ifdef __EMSCRIPTEN__
 bool codexCelular(); // platform/browserwindow.cpp
 #endif
+#include "core/updater.h"
 
 void Application::registerLuaFunctions()
 {
@@ -88,6 +89,20 @@ void Application::registerLuaFunctions()
     g_lua.bindGlobalFunction("invalidateEventCache", [] { LuaObject::invalidateEventCache(); });
     g_lua.bindGlobalFunction("codexPasso", [](const std::string& passo) { codexPasso(("lua: " + passo).c_str()); }); // CODEX diagnostico
     g_lua.bindGlobalFunction("codexDebugAtivo", [] { return codexDebugAtivo(); });
+
+    // CODEX: atualizador automatico (mesmo manifest.txt do cliente antigo)
+    g_lua.registerSingletonClass("g_updater");
+    g_lua.bindSingletonFunction("g_updater", "start", &Updater::start, &g_updater);
+    g_lua.bindSingletonFunction("g_updater", "restart", &Updater::restart, &g_updater);
+    g_lua.bindSingletonFunction("g_updater", "getState", &Updater::getState, &g_updater);
+    g_lua.bindSingletonFunction("g_updater", "getError", &Updater::getError, &g_updater);
+    g_lua.bindSingletonFunction("g_updater", "getCurrentFile", &Updater::getCurrentFile, &g_updater);
+    g_lua.bindSingletonFunction("g_updater", "getBytesDone", &Updater::getBytesDone, &g_updater);
+    g_lua.bindSingletonFunction("g_updater", "getBytesTotal", &Updater::getBytesTotal, &g_updater);
+    g_lua.bindSingletonFunction("g_updater", "getFilesDone", &Updater::getFilesDone, &g_updater);
+    g_lua.bindSingletonFunction("g_updater", "getFilesTotal", &Updater::getFilesTotal, &g_updater);
+    g_lua.bindSingletonFunction("g_updater", "needsRestart", &Updater::needsRestart, &g_updater);
+    g_lua.bindSingletonFunction("g_updater", "getUrl", &Updater::getUrl, &g_updater);
 #ifdef __EMSCRIPTEN__
     g_lua.bindGlobalFunction("codexCelular", [] { return codexCelular(); }); // CODEX: navegador em celular/tablet
 #else

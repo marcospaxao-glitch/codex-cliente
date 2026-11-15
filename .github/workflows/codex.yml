@@ -73,6 +73,8 @@ jobs:
           foreach ($p in @('init.lua', 'otclientrc.lua', 'config.ini', 'cacert.pem')) { if (Test-Path $p) { Copy-Item $p $out -Force } }
           foreach ($d in @('data', 'modules', 'mods')) { if (Test-Path $d) { Copy-Item $d $out -Recurse -Force } }
           if (Test-Path "$out/otclient.exe") { Rename-Item "$out/otclient.exe" "Codex.exe" }
+          New-Item -ItemType Directory -Force -Path "$out/ferramentas" | Out-Null
+          if (Test-Path "$out/pkpacker.exe") { Move-Item "$out/pkpacker.exe" "$out/ferramentas/pkpacker.exe" -Force }
           Remove-Item "$out/*.ilk" -Force -ErrorAction SilentlyContinue
           # .pdb (nomes das funcoes para o crashreport.log): so na versao de teste (console)
           if ("${{ inputs.console }}" -ne "true") { Remove-Item "$out/*.pdb" -Force -ErrorAction SilentlyContinue }

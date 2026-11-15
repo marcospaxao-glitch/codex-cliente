@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <set>
+
 #include "declarations.h"
 
  // @bindsingleton g_resources
@@ -107,7 +109,16 @@ public:
 
     std::string getBinaryPath() { return m_binaryPath.string(); }
 
+    // CODEX: pacote codex.dat (arquivos PKF1) + pasta updates do atualizador
+    bool isPackaged() { return !m_packageFile.empty(); }
+    std::string getUpdatesDir();
+
 protected:
+    bool mountClientPackage(const std::string& existentFile);
+    bool mountPackage(const std::string& subdir, bool pushFront);
+    bool mountUpdates(const std::string& subdir, bool pushFront);
+    void mountUserUpdates();
+    void migrateOldSettings(const std::string& writeDir);
     std::vector<std::string> discoverPath(const std::filesystem::path& path, bool filenameOnly, bool recursive);
 
 private:
@@ -116,6 +127,8 @@ private:
     std::string m_userDirOverride;
     std::filesystem::path m_binaryPath;
     std::deque<std::string> m_searchPaths;
+    std::string m_packageFile;
+    std::set<std::string> m_packageDirs;
 };
 
 extern ResourceManager g_resources;

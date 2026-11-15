@@ -346,6 +346,11 @@ set(SOURCE_FILES
         framework/core/module.cpp
         framework/core/modulemanager.cpp
         framework/core/resourcemanager.cpp
+        framework/core/packcrypt.cpp
+        framework/core/pkmerge.cpp
+        framework/core/updater.cpp
+        framework/core/pknet_win.cpp
+        framework/core/pknet_posix.cpp
         framework/core/scheduledevent.cpp
         framework/core/unzipper.cpp
         framework/core/unzipper.h
@@ -578,6 +583,18 @@ else()
   message(STATUS "Use precompiled header: OFF")
 endif(TOGGLE_PRE_COMPILED_HEADER)
 
+# CODEX: pacote/atualizador (windows.h, nomes locais) fora do unity build e do PCH
+set_source_files_properties(
+  framework/core/packcrypt.cpp
+  framework/core/pkmerge.cpp
+  framework/core/updater.cpp
+  framework/core/pknet_win.cpp
+  framework/core/pknet_posix.cpp
+  PROPERTIES
+    SKIP_PRECOMPILE_HEADERS ON
+    SKIP_UNITY_BUILD_INCLUSION ON
+)
+
 # Exclude vendored minizip C files from PCH and unity build (C files cannot use C++ PCH)
 if(NOT WASM)
   set_source_files_properties(
@@ -762,6 +779,7 @@ if(MSVC)
           ${LIBARCHIVE_LIBRARY}
           winmm.lib
           bcrypt.lib
+          wininet.lib
           pugixml::pugixml
           ixwebsocket::ixwebsocket
           ${OTCLIENT_FMT_TARGET}
@@ -1141,4 +1159,15 @@ else()
           PROPERTIES
           RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/"
   )
+endif()
+
+# *****************************************************************************
+# CODEX: pkpacker (empacota/publica o cliente: codex.dat e pasta de atualizacao)
+# *****************************************************************************
+if(WIN32 AND NOT WASM)
+  add_executable(pkpacker tools/pkpacker.cpp framework/core/packcrypt.cpp)
+  target_compile_features(pkpacker PRIVATE cxx_std_20)
+  target_link_libraries(pkpacker PRIVATE ${OPENSSL_LIBRARIES} ZLIB::ZLIB crypt32.lib ws2_32.lib advapi32.lib user32.lib)
+  target_include_directories(pkpacker PRIVATE ${OPENSSL_INCLUDE_DIR})
+  set_target_properties(pkpacker PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 endif()
