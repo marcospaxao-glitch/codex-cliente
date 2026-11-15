@@ -1,6 +1,6 @@
 CodexBotaoMobile < UIButton
   size: 56 56
-  image-source: /modules/game_codexmobile/images/normal
+  image-source: /game_codexmobile/images/normal
   font: verdana-11px-rounded
   color: #ffffff
   text-offset: 0 -1
@@ -8,7 +8,7 @@ CodexBotaoMobile < UIButton
   opacity: 0.85
 
   $pressed:
-    image-source: /modules/game_codexmobile/images/normal_on
+    image-source: /game_codexmobile/images/normal_on
 
 UIWidget
   anchors.fill: parent
@@ -93,22 +93,22 @@ UIWidget
       id: poke
       text: POKÉ
       color: #1a1a1a
-      image-source: /modules/game_codexmobile/images/poke
+      image-source: /game_codexmobile/images/poke
       anchors.top: parent.top
       anchors.left: parent.left
       margin-top: 0
       margin-left: 200
       $pressed:
-        image-source: /modules/game_codexmobile/images/poke_on
+        image-source: /game_codexmobile/images/poke_on
 
     CodexBotaoMobile
       id: atacar
       text: ATACAR
       size: 76 76
-      image-source: /modules/game_codexmobile/images/grande
+      image-source: /game_codexmobile/images/grande
       anchors.top: parent.top
       anchors.left: parent.left
       margin-top: 64
       margin-left: 190
       $pressed:
-        image-source: /modules/game_codexmobile/images/grande_on
+        image-source: /game_codexmobile/images/grande_on

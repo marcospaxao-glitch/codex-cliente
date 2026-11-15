@@ -82,3 +82,26 @@ if codexPasso and codexDebugAtivo and codexDebugAtivo() and signalcall then
   end
   connect(g_game, { onEnterGame = function() rastrear = true; chamadas = 0; codexPasso('lua: onEnterGame') end }, true)
 end
+
+
+-- ------------------------------------------------------------
+-- Texto em cima do personagem (fala no chat) e textos animados:
+-- o cliente antigo usava g_map.addThing(texto, pos, -1); na base nova
+-- e g_map.addStaticText / g_map.addAnimatedText.
+-- ------------------------------------------------------------
+if g_map and g_map.addThing and not g_map.__codexAddThing then
+  g_map.__codexAddThing = g_map.addThing
+  g_map.addThing = function(thing, pos, stackPos)
+    local cls
+    if thing and thing.getClassName then
+      pcall(function() cls = thing:getClassName() end)
+    end
+    cls = tostring(cls or '')
+    if cls:find('StaticText') and g_map.addStaticText then
+      return g_map.addStaticText(thing, pos)
+    elseif cls:find('AnimatedText') and g_map.addAnimatedText then
+      return g_map.addAnimatedText(thing, pos)
+    end
+    return g_map.__codexAddThing(thing, pos, stackPos)
+  end
+end

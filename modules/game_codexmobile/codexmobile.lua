@@ -204,8 +204,13 @@ local function posicionar()
     direita = root:getWidth()
     baixo = root:getHeight()
   end
+  -- fica acima do chat quando o chat esta aberto por cima do mapa
+  local fundo = gi and gi.getBottomPanel and gi.getBottomPanel()
+  if fundo and fundo:isVisible() and fundo:getHeight() > 0 and fundo:getY() < baixo then
+    baixo = fundo:getY()
+  end
   acoes:setMarginLeft(math.max(0, direita - acoes:getWidth() - 12))
-  acoes:setMarginTop(math.max(0, baixo - acoes:getHeight() - 12))
+  acoes:setMarginTop(math.max(0, baixo - acoes:getHeight() - 8))
 end
 
 local function posicionarDepois()

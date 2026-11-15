@@ -381,9 +381,12 @@ void ResourceManager::mountUserUpdates()
     const std::string dir = getUpdatesDir();
     if (dir.empty())
         return;
+    std::error_code ec;
+    // a pasta inteira tambem: caminhos "/modules/..." e "/data/..." usados pelos modulos
+    if (std::filesystem::is_directory(dir, ec))
+        PHYSFS_mount(dir.c_str(), nullptr, 0);
     for (const char* sub : { "mods", "modules", "data" }) {
         const std::string path = dir + sub;
-        std::error_code ec;
         if (std::filesystem::is_directory(path, ec))
             PHYSFS_mount(path.c_str(), nullptr, 0);
     }
