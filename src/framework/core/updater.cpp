@@ -13,6 +13,7 @@
 #include <framework/pch.h>
 #include <framework/core/resourcemanager.h>
 #include <framework/core/application.h>
+#include <framework/core/graphicalapplication.h>
 #include <framework/platform/platform.h>
 #endif
 #ifdef __EMSCRIPTEN__
@@ -146,6 +147,9 @@ void Updater::start()
 #if defined(__EMSCRIPTEN__) || defined(ANDROID)
     // CODEX: navegador/Android: a base sao os arquivos que vieram com o cliente
     m_local = true;
+#if defined(__EMSCRIPTEN__)
+    url = "/updates/"; // mesmo site da pagina (com ou sem www)
+#endif
     std::string baseDir = g_resources.getWriteDir();
     if(baseDir.empty()) {
         m_state = Disabled;
@@ -227,7 +231,7 @@ std::string Updater::getCurrentFile()
 
 std::string Updater::getUrl()
 {
-    return CLIENT_UPDATE_URL;
+    return m_url.empty() ? std::string(CLIENT_UPDATE_URL) : m_url;
 }
 
 bool Updater::fail(const std::string& msg)
