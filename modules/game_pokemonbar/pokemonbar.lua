@@ -132,6 +132,16 @@ function usePoke(order)
   g_game.talk('!p ' .. order)
 end
 
+-- CODEX celular: um botao so. Recolhe o Pokemon que esta fora; se nenhum
+-- estiver fora, solta o primeiro da equipe.
+function codexAlternarPokemon()
+  for _, e in ipairs(entries) do
+    if e.inUse then usePoke(e.order) return end
+  end
+  local primeiro = entries[1]
+  usePoke(primeiro and primeiro.order or 1)
+end
+
 local function useRevive(entry)
   if reviveClientId <= 0 or reviveCount <= 0 then
     modules.game_textmessage.displayFailureMessage('Voce nao tem ' .. REVIVE_NAMES[reviveChoice()] .. '. Botao direito no revive para trocar.')

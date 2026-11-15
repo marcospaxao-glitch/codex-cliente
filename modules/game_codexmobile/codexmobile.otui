@@ -1,3 +1,15 @@
+CodexBotaoMobile < UIButton
+  size: 56 56
+  image-source: /modules/game_codexmobile/images/normal
+  font: verdana-11px-rounded
+  color: #ffffff
+  text-offset: 0 -1
+  focusable: false
+  opacity: 0.85
+
+  $pressed:
+    image-source: /modules/game_codexmobile/images/normal_on
+
 UIWidget
   anchors.fill: parent
   focusable: false
@@ -27,3 +39,76 @@ UIWidget
       image-fixed-ratio: true
       phantom: true
       focusable: false
+
+  UIWidget
+    id: acoes
+    size: 266 140
+    anchors.top: parent.top
+    anchors.left: parent.left
+    phantom: true
+    focusable: false
+    visible: false
+
+    CodexBotaoMobile
+      id: m1
+      text: M1
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 20
+      margin-left: 0
+
+    CodexBotaoMobile
+      id: m2
+      text: M2
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 20
+      margin-left: 62
+
+    CodexBotaoMobile
+      id: m3
+      text: M3
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 84
+      margin-left: 0
+
+    CodexBotaoMobile
+      id: m4
+      text: M4
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 84
+      margin-left: 62
+
+    CodexBotaoMobile
+      id: usar
+      text: USAR
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 84
+      margin-left: 126
+
+    CodexBotaoMobile
+      id: poke
+      text: POKÉ
+      color: #1a1a1a
+      image-source: /modules/game_codexmobile/images/poke
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 0
+      margin-left: 200
+      $pressed:
+        image-source: /modules/game_codexmobile/images/poke_on
+
+    CodexBotaoMobile
+      id: atacar
+      text: ATACAR
+      size: 76 76
+      image-source: /modules/game_codexmobile/images/grande
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 64
+      margin-left: 190
+      $pressed:
+        image-source: /modules/game_codexmobile/images/grande_on
