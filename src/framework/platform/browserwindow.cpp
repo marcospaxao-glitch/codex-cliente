@@ -378,8 +378,15 @@ extern "C" {
 void BrowserWindow::handleMouseCallback(int eventType, const EmscriptenMouseEvent* mouseEvent) {
     if (!m_usingTouch && mouseEvent->screenX != 0 && mouseEvent->screenY != 0 && mouseEvent->clientX != 0 && mouseEvent->clientY != 0 && mouseEvent->targetX != 0 && mouseEvent->targetY != 0) {
         int button = mouseEvent->button;
-        g_dispatcher.addEvent([this, eventType, button] {
+        // CODEX: Ctrl/Shift/Alt vem junto com o clique (Ctrl+clique do controle classico)
+        int mods = 0;
+        if (mouseEvent->ctrlKey) mods |= Fw::KeyboardCtrlModifier | Fw::KeyboardPrimaryModifier;
+        if (mouseEvent->shiftKey) mods |= Fw::KeyboardShiftModifier;
+        if (mouseEvent->altKey) mods |= Fw::KeyboardAltModifier;
+        if (mouseEvent->metaKey) mods |= Fw::KeyboardMetaModifier;
+        g_dispatcher.addEvent([this, eventType, button, mods] {
             m_inputEvent.reset();
+            m_inputEvent.keyboardModifiers = mods;
             m_inputEvent.type = (eventType == EMSCRIPTEN_EVENT_MOUSEDOWN) ? Fw::MousePressInputEvent : Fw::MouseReleaseInputEvent;
             switch (button) {
                 case 0:

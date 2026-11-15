@@ -33,6 +33,9 @@
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten/fetch.h>
+#include <atomic>
+#include <framework/core/eventdispatcher.h>
+#include <framework/graphics/drawpoolmanager.h>
 #include <thread>
 #endif
 
@@ -521,6 +524,15 @@ void SpriteManager::remoteWorker()
         }
         m_remoteBytes += data->size();
         m_remoteBlocks[n] = std::move(data);
+        // CODEX: a interface (janela de outfit, itens) so redesenha quando pedem: avisa que chegou sprite
+        static std::atomic_bool avisoPendente{ false };
+        if (!avisoPendente.exchange(true)) {
+            g_dispatcher.scheduleEvent([] {
+                avisoPendente = false;
+                g_drawPool.repaint(DrawPoolType::FOREGROUND);
+                g_drawPool.repaint(DrawPoolType::MAP);
+            }, 50);
+        }
         m_remoteOrder.push_back(n);
         while (m_remoteBytes > CODEX_CACHE_MAX && !m_remoteOrder.empty()) {
             const uint32_t velho = m_remoteOrder.front();
