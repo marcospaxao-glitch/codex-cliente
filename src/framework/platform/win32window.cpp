@@ -285,7 +285,10 @@ void WIN32Window::internalCreateWindow()
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
     wc.hInstance = m_instance;
-    wc.hIcon = LoadIcon(nullptr, IDI_WINLOGO);
+    // CODEX: icone do proprio .exe (recurso IDI_ICON1 do otcicon.rc)
+    wc.hIcon = LoadIconA(m_instance, "IDI_ICON1");
+    if (!wc.hIcon)
+        wc.hIcon = LoadIcon(nullptr, IDI_WINLOGO);
     wc.hCursor = m_defaultCursor;
     wc.hbrBackground = static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
     wc.lpszMenuName = nullptr;

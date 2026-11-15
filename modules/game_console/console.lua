@@ -1461,6 +1461,12 @@ function online()
       end
     end
   end
+  -- CODEX: World Chat sempre aberto junto com Padrao e Registro do servidor
+  local WORLD_CHAT = 3
+  if not table.find(channels, WORLD_CHAT) and not table.find(ignoredChannels, WORLD_CHAT) then
+    g_game.joinChannel(WORLD_CHAT)
+    table.insert(ignoredChannels, WORLD_CHAT)
+  end
   scheduleEvent(function() ignoredChannels = {} end, 3000)
 end
 
