@@ -109,6 +109,9 @@ function init()
   channels = {}
 
   consolePanel.onKeyPress = function(self, keyCode, keyboardModifiers)
+    if bit.band(keyboardModifiers, KeyboardCtrlModifier) ~= 0 then -- CODEX: Ctrl vem com "Primary"
+      keyboardModifiers = bit.band(keyboardModifiers, bit.bnot(KeyboardPrimaryModifier))
+    end
     if not (keyboardModifiers == KeyboardCtrlModifier and keyCode == KeyC) then return false end
 
     local tab = consoleTabBar:getCurrentTab()

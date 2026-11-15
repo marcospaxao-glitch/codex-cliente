@@ -672,6 +672,10 @@ end
 
 function processMouseAction(menuPosition, mouseButton, autoWalkPos, lookThing, useThing, creatureThing, attackCreature)
   local keyboardModifiers = g_keyboard.getModifiers()
+  -- CODEX: na base nova o Ctrl vem junto com "Primary" (Cmd do Mac); tira para as comparacoes abaixo
+  if bit.band(keyboardModifiers, KeyboardCtrlModifier) ~= 0 then
+    keyboardModifiers = bit.band(keyboardModifiers, bit.bnot(KeyboardPrimaryModifier))
+  end
 
   if not modules.client_options.getOption('classicControl') then
     if keyboardModifiers == KeyboardNoModifier and mouseButton == MouseRightButton then

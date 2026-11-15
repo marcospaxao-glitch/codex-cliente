@@ -33,8 +33,10 @@ void UICreature::drawSelf(const DrawPoolType drawPane)
     UIWidget::drawSelf(drawPane);
 
     if (m_creature) {
+        // CODEX: os modulos trocam a roupa direto no personagem (creature:setOutfit);
+        // o quadro acompanha em vez de desfazer a troca
         if (m_creature->getOutfit() != m_outfit) {
-            m_creature->setOutfit(m_outfit, false);
+            m_outfit = m_creature->getOutfit();
         }
 
         m_creature->setMarked(m_imageColor);
