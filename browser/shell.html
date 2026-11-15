@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, interactive-widget=resizes-visual"
     />
     <title>Codex Pokétibia</title>
     <style>
@@ -82,9 +82,9 @@
       }
       #codexTecladoBtn.ativo { background: rgba(227, 53, 13, 0.75); }
       #codexTeclado {
-        position: absolute;
+        position: fixed;
         left: 0;
-        bottom: 0;
+        top: 0;
         width: 1px;
         height: 1px;
         opacity: 0;
@@ -254,9 +254,48 @@
         codexTecla("keydown", "Backspace", "Backspace", 8);
         codexTecla("keyup", "Backspace", "Backspace", 8);
       }
-      window.codexAbrirTeclado = function () {
+      // Teclado aberto: a tela do jogo NAO encolhe (senao tudo se redesenha espremido).
+      // Ela fica do mesmo tamanho e sobe so o necessario para o campo de texto aparecer.
+      var codexTela = null;   // tamanho da tela quando o teclado abriu
+      var codexCampo = null;  // parte de baixo do campo de texto (px da tela)
+      function codexReposicionar() {
+        var c = document.getElementById("canvas");
+        if (!codexTela || !c) return;
+        var vv = window.visualViewport;
+        var visivel = vv ? vv.height : window.innerHeight;
+        var topo = vv ? vv.offsetTop : 0;
+        var desloc = Math.max(0, Math.min(codexTela.h - visivel, codexCampo + 12 - visivel));
+        c.style.transform = "translateY(" + (topo - desloc) + "px)";
+      }
+      function codexCongelarTela(campo) {
+        if (!CODEX_CELULAR) return;
+        var c = document.getElementById("canvas");
+        if (!c) return;
+        if (!codexTela) {
+          var r = c.getBoundingClientRect();
+          codexTela = { w: r.width, h: r.height };
+          c.style.width = r.width + "px";
+          c.style.height = r.height + "px";
+        }
+        codexCampo = typeof campo === "number" && campo > 0 ? campo : codexTela.h; // sem campo: chat (embaixo)
+        codexReposicionar();
+        setTimeout(codexReposicionar, 350); // depois que o teclado termina de abrir
+      }
+      function codexSoltarTela() {
+        var c = document.getElementById("canvas");
+        codexTela = null;
+        codexCampo = null;
+        if (c) { c.style.width = ""; c.style.height = ""; c.style.transform = ""; }
+        window.scrollTo(0, 0);
+      }
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", codexReposicionar);
+        window.visualViewport.addEventListener("scroll", codexReposicionar);
+      }
+      window.codexAbrirTeclado = function (campo) {
         var inp = document.getElementById("codexTeclado");
         if (!inp) return;
+        codexCongelarTela(campo);
         inp.value = " ";
         inp.focus({ preventScroll: true });
         try { inp.setSelectionRange(1, 1); } catch (e) {}
@@ -296,10 +335,20 @@
           inp.value = " ";
           try { inp.setSelectionRange(1, 1); } catch (e) {}
         });
+        // as teclas "de verdade" do teclado do celular NAO podem subir ate a janela:
+        // o jogo escuta a janela e ai cada letra entrava duas vezes
         inp.addEventListener("keydown", function (ev) {
+          ev.stopPropagation();
           if (ev.key === "Enter") { ev.preventDefault(); codexEnter(); }
         });
-        inp.addEventListener("blur", function () { btn.classList.remove("ativo"); });
+        inp.addEventListener("keypress", function (ev) { ev.stopPropagation(); });
+        inp.addEventListener("keyup", function (ev) { ev.stopPropagation(); });
+        inp.addEventListener("blur", function () {
+          btn.classList.remove("ativo");
+          setTimeout(function () {
+            if (document.activeElement !== inp) codexSoltarTela();
+          }, 150);
+        });
       });
 
       var Module = {

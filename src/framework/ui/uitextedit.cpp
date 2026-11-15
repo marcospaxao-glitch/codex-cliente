@@ -32,6 +32,7 @@
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten/emscripten.h>
+#include <framework/platform/browserwindow.h>
 #endif
 #include <framework/platform/platformwindow.h>
 #ifdef ANDROID
@@ -1666,15 +1667,17 @@ bool UITextEdit::onMousePress(const Point& mousePos, const Fw::MouseButton butto
         }
 #ifdef __EMSCRIPTEN__
         if (g_window.isVisible()) {
+            // CODEX: parte de baixo do campo, em px da pagina (a tela sobe ate ele aparecer)
+            const double campoCss = getRect().bottom() * g_browserWindow.getCssScale();
             MAIN_THREAD_ASYNC_EM_ASM({
                 // CODEX: campo de texto do proprio shell (funciona no Android e no iPhone)
                 if (window.CODEX_CELULAR && window.codexAbrirTeclado) {
-                    window.codexAbrirTeclado();
+                    window.codexAbrirTeclado($0);
                 } else if (navigator && "virtualKeyboard" in navigator) {
                     document.getElementById("title-text").focus();
                     navigator.virtualKeyboard.show();
                 }
-            });
+            }, campoCss);
         }
 #endif
         return true;
