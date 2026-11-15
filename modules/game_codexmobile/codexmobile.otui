@@ -1,5 +1,5 @@
 CodexBotaoMobile < UIButton
-  size: 56 56
+  size: 64 64
   image-source: /game_codexmobile/images/normal
   font: verdana-11px-rounded
   color: #ffffff
@@ -42,7 +42,7 @@ UIWidget
 
   UIWidget
     id: acoes
-    size: 266 140
+    size: 300 160
     anchors.top: parent.top
     anchors.left: parent.left
     phantom: true
@@ -54,7 +54,7 @@ UIWidget
       text: M1
       anchors.top: parent.top
       anchors.left: parent.left
-      margin-top: 20
+      margin-top: 24
       margin-left: 0
 
     CodexBotaoMobile
@@ -62,15 +62,15 @@ UIWidget
       text: M2
       anchors.top: parent.top
       anchors.left: parent.left
-      margin-top: 20
-      margin-left: 62
+      margin-top: 24
+      margin-left: 70
 
     CodexBotaoMobile
       id: m3
       text: M3
       anchors.top: parent.top
       anchors.left: parent.left
-      margin-top: 84
+      margin-top: 96
       margin-left: 0
 
     CodexBotaoMobile
@@ -78,16 +78,16 @@ UIWidget
       text: M4
       anchors.top: parent.top
       anchors.left: parent.left
-      margin-top: 84
-      margin-left: 62
+      margin-top: 96
+      margin-left: 70
 
     CodexBotaoMobile
       id: usar
       text: USAR
       anchors.top: parent.top
       anchors.left: parent.left
-      margin-top: 84
-      margin-left: 126
+      margin-top: 96
+      margin-left: 140
 
     CodexBotaoMobile
       id: poke
@@ -97,18 +97,18 @@ UIWidget
       anchors.top: parent.top
       anchors.left: parent.left
       margin-top: 0
-      margin-left: 200
+      margin-left: 226
       $pressed:
         image-source: /game_codexmobile/images/poke_on
 
     CodexBotaoMobile
       id: atacar
       text: ATACAR
-      size: 76 76
+      size: 88 88
       image-source: /game_codexmobile/images/grande
       anchors.top: parent.top
       anchors.left: parent.left
-      margin-top: 64
-      margin-left: 190
+      margin-top: 72
+      margin-left: 212
       $pressed:
         image-source: /game_codexmobile/images/grande_on

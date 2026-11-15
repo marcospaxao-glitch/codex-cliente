@@ -60,7 +60,7 @@ local savedPos = nil
 local dragOffset = nil
 local userHidden = false   -- escondida pelo botao do topmenu (fica salvo)
 local topButton = nil
-local HANDLE = 8
+local HANDLE = (type(codexCelular) == 'function' and codexCelular()) and 20 or 8 -- CODEX: alca maior no celular (dedo)
 
 -- ============================================================
 -- util

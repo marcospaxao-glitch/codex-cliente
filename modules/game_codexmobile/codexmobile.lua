@@ -176,7 +176,13 @@ local function usarFrente()
 end
 
 local function golpe(n)
-  if g_game.isOnline() then g_game.talk('m' .. n) end
+  -- mesma acao da barra de golpes (respeita nivel e recarga)
+  local pm = modules.game_pokemonmoves
+  if pm and pm.useSpell then
+    pm.useSpell(n)
+  elseif g_game.isOnline() then
+    g_game.talk('m' .. n)
+  end
 end
 
 local function pokemon()

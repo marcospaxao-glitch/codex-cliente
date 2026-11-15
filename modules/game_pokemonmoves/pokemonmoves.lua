@@ -127,7 +127,7 @@ end
 -- ============================================================
 -- arrastar: pela alca (pontinhos na ponta da barra)
 -- ============================================================
-local HANDLE = 12
+local HANDLE = (type(codexCelular) == 'function' and codexCelular()) and 24 or 12 -- CODEX: alca maior no celular (dedo)
 local dragRef = nil
 
 local function setupHandle()
