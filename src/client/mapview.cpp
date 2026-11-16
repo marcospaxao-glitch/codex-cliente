@@ -329,12 +329,12 @@ void MapView::drawForeground(const Rect& rect)
         p.y *= m_posInfo.verticalStretchFactor;
         p += rect.topLeft();
         // CODEX: fala acima do titulo + nome. Altura fixa de tela (o nome e o titulo
-        // tem tamanho fixo), aplicada depois do zoom do mapa. O nome acompanha a
-        // roupa (deslocamento do desenho) e o passo: a fala vai junto.
+        // tem tamanho fixo), aplicada depois do zoom do mapa. A fala acompanha o
+        // passo de quem falou (antes ficava parada no piso e embaralhava no nome).
         p.y -= 36;
         if (quem) {
-            const int dispY = g_game.getFeature(Otc::GameNegativeOffset) ? 0 : quem->getDisplacementY();
-            const float dy = (8 - dispY + quem->getDrawOffset().y - std::round(quem->getJumpOffset().y)) * m_posInfo.scaleFactor;
+            // so o passo/pulo (a altura do nome nao muda com a roupa: os prints mostraram)
+            const float dy = (quem->getDrawOffset().y - std::round(quem->getJumpOffset().y)) * m_posInfo.scaleFactor;
             const float dx = (quem->getDrawOffset().x - std::round(quem->getJumpOffset().x)) * m_posInfo.scaleFactor;
             p.y += static_cast<int>(dy * m_posInfo.verticalStretchFactor);
             p.x += static_cast<int>(dx * m_posInfo.horizontalStretchFactor);
