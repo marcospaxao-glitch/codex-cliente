@@ -242,6 +242,23 @@ function codexModoCelular(y)
   placeWindow()
 end
 
+-- CODEX celular (HUD novo): barra na horizontal, centralizada, logo acima do chat.
+-- Faz uma vez por aparelho, quando os golpes ja chegaram (largura certa).
+function codexModoCelularV2(y)
+  if not sbw or g_settings.getBoolean('codexMovesV2') then return end
+  local root = sbw:getParent()
+  if not root then return end
+  if options.side ~= 'horizontal' then
+    options.side = 'horizontal'
+    pcall(getSpells, spells)
+  end
+  if sbw:getWidth() < 80 then return end -- golpes ainda nao chegaram
+  options.pos = { x = math.floor((root:getWidth() - sbw:getWidth()) / 2), y = math.max(0, y - sbw:getHeight()) }
+  saveOptions()
+  placeWindow()
+  g_settings.set('codexMovesV2', true)
+end
+
 local function prettyName(words)
   return (tostring(words or ''):gsub("(%a)([%w']*)", function(first, rest) return first:upper() .. rest end))
 end

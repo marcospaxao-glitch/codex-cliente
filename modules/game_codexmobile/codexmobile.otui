@@ -1,48 +1,69 @@
-CodexBotaoMobile < UIButton
-  size: 64 64
-  image-source: /game_codexmobile/images/normal
-  font: verdana-11px-rounded
-  color: #ffffff
-  text-offset: 0 -1
+// HUD do celular (so aparece quando codexCelular() e verdadeiro)
+CodexImgBotao < UIButton
   focusable: false
-  opacity: 0.85
+  text:
+  image-color: #ffffffff
 
-  $pressed:
-    image-source: /game_codexmobile/images/normal_on
+CodexTopoIcone < CodexImgBotao
+  size: 44 44
+  anchors.verticalCenter: parent.verticalCenter
+  anchors.left: prev.right
+  margin-left: 4
+
+CodexPilula < CodexImgBotao
+  size: 124 44
+  anchors.verticalCenter: parent.verticalCenter
+  anchors.right: prev.left
+  margin-right: 8
+
+CodexMapaBotao < CodexImgBotao
+  size: 40 40
+  anchors.right: parent.right
+  margin-right: 4
 
 UIWidget
   anchors.fill: parent
   focusable: false
   phantom: true
 
+  // ===== joystick (embaixo, esquerda) =====
   UIWidget
     id: keypad
-    size: 170 150
+    size: 176 176
     anchors.bottom: parent.bottom
     anchors.left: parent.left
     margin-left: 14
-    margin-bottom: 24
+    margin-bottom: 12
     phantom: false
     focusable: false
     visible: false
-    opacity: 0.9
-    image-source: /images/game/mobile/keypad
-    image-fixed-ratio: true
-    image-rect: 12 0 150 150
+    image-source: /game_codexmobile/images/joy_base
 
     UIWidget
       id: pointer
-      size: 49 49
+      size: 62 62
       anchors.verticalCenter: parent.verticalCenter
       anchors.horizontalCenter: parent.horizontalCenter
-      image-source: /images/game/mobile/keypad_pointer
-      image-fixed-ratio: true
+      image-source: /game_codexmobile/images/joy_bola
       phantom: true
       focusable: false
 
+  CodexImgBotao
+    id: montaria
+    size: 68 68
+    anchors.bottom: parent.bottom
+    anchors.left: keypad.right
+    margin-left: -6
+    margin-bottom: 4
+    image-source: /game_codexmobile/images/montaria
+    visible: false
+    $pressed:
+      image-source: /game_codexmobile/images/montaria_on
+
+  // ===== trocar alvo + ATACAR (arrastaveis pela alca) =====
   UIWidget
     id: acoes
-    size: 190 168
+    size: 150 232
     anchors.top: parent.top
     anchors.left: parent.left
     phantom: true
@@ -51,78 +72,135 @@ UIWidget
 
     UIWidget
       id: mover
-      size: 34 34
+      size: 30 30
       image-source: /game_codexmobile/images/mover
       anchors.top: parent.top
       anchors.left: parent.left
-      margin-top: 30
-      margin-left: 30
+      margin-top: 22
+      margin-left: 4
       draggable: true
       focusable: false
-      opacity: 0.8
+      opacity: 0.7
 
-    CodexBotaoMobile
-      id: poke
-      text: POKE
-      color: #1a1a1a
-      image-source: /game_codexmobile/images/poke
+    CodexImgBotao
+      id: trocar
+      size: 68 68
       anchors.top: parent.top
       anchors.left: parent.left
       margin-top: 0
-      margin-left: 114
+      margin-left: 56
+      image-source: /game_codexmobile/images/trocar
       $pressed:
-        image-source: /game_codexmobile/images/poke_on
+        image-source: /game_codexmobile/images/trocar_on
 
-    CodexBotaoMobile
-      id: usar
-      text: USAR
-      anchors.top: parent.top
-      anchors.left: parent.left
-      margin-top: 100
-      margin-left: 6
-
-    CodexBotaoMobile
+    CodexImgBotao
       id: atacar
-      text: ATACAR
-      size: 88 88
-      image-source: /game_codexmobile/images/grande
+      size: 136 136
       anchors.top: parent.top
       anchors.left: parent.left
-      margin-top: 78
-      margin-left: 100
+      margin-top: 92
+      margin-left: 10
+      image-source: /game_codexmobile/images/atacar
       $pressed:
-        image-source: /game_codexmobile/images/grande_on
+        image-source: /game_codexmobile/images/atacar_on
 
-  // ===== cartao do jogador (canto superior esquerdo) =====
+  // ===== barra do topo =====
   UIWidget
-    id: cartao
-    size: 250 74
+    id: topo
+    height: 56
     anchors.top: parent.top
     anchors.left: parent.left
-    margin-top: 6
+    anchors.right: parent.right
+    image-source: /game_codexmobile/images/topo_fundo
+    phantom: false
+    focusable: false
+    visible: false
+
+    CodexImgBotao
+      id: btnSair
+      size: 44 44
+      anchors.verticalCenter: parent.verticalCenter
+      anchors.left: parent.left
+      margin-left: 12
+      image-source: /game_codexmobile/images/ic_sair
+      $pressed:
+        image-source: /game_codexmobile/images/ic_sair_on
+
+    CodexTopoIcone
+      id: btnOpcoes
+      image-source: /game_codexmobile/images/ic_opcoes
+      $pressed:
+        image-source: /game_codexmobile/images/ic_opcoes_on
+
+    CodexTopoIcone
+      id: btnSom
+      image-source: /game_codexmobile/images/ic_som
+
+    CodexTopoIcone
+      id: btnTrava
+      image-source: /game_codexmobile/images/ic_destrava
+
+    UIWidget
+      id: logo
+      size: 136 66
+      anchors.horizontalCenter: parent.horizontalCenter
+      anchors.top: parent.top
+      margin-top: -1
+      image-source: /game_codexmobile/images/logo
+      image-fixed-ratio: true
+      phantom: true
+
+    CodexImgBotao
+      id: btnMenu
+      size: 124 44
+      anchors.verticalCenter: parent.verticalCenter
+      anchors.right: parent.right
+      margin-right: 10
+      image-source: /game_codexmobile/images/pil_menu
+      $pressed:
+        image-source: /game_codexmobile/images/pil_menu_on
+
+    CodexPilula
+      id: btnPokemon
+      image-source: /game_codexmobile/images/pil_poke
+      $pressed:
+        image-source: /game_codexmobile/images/pil_poke_on
+
+    CodexPilula
+      id: btnMochila
+      image-source: /game_codexmobile/images/pil_bolsa
+      $pressed:
+        image-source: /game_codexmobile/images/pil_bolsa_on
+
+  // ===== cartao do jogador =====
+  UIWidget
+    id: cartao
+    size: 300 86
+    anchors.top: topo.bottom
+    anchors.left: parent.left
+    margin-top: 4
     margin-left: 6
-    background-color: #0c1828e6
-    border-width: 2
-    border-color: #2d6cb5
+    image-source: /game_codexmobile/images/cartao
     phantom: true
     focusable: false
     visible: false
 
     UICreature
       id: retrato
-      size: 60 60
+      size: 64 64
+      anchors.top: parent.top
       anchors.left: parent.left
-      anchors.verticalCenter: parent.verticalCenter
-      margin-left: 6
+      margin-top: 10
+      margin-left: 10
       phantom: true
       focusable: false
 
     Label
       id: nome
       anchors.top: parent.top
-      anchors.left: retrato.right
-      margin-top: 6
-      margin-left: 6
+      anchors.left: parent.left
+      margin-top: 13
+      margin-left: 96
       font: verdana-11px-rounded
       color: #ffffff
       text-auto-resize: true
@@ -132,25 +210,24 @@ UIWidget
       id: nivel
       anchors.top: parent.top
       anchors.right: parent.right
-      margin-top: 6
-      margin-right: 8
+      margin-top: 13
+      margin-right: 14
       font: verdana-11px-rounded
-      color: #f2c400
+      color: #f5c518
       text-auto-resize: true
       phantom: true
 
     UIWidget
       id: vidaFundo
-      height: 14
-      anchors.top: nome.bottom
-      anchors.left: retrato.right
+      height: 18
+      anchors.top: parent.top
+      anchors.left: parent.left
       anchors.right: parent.right
-      margin-top: 6
-      margin-left: 6
-      margin-right: 8
-      background-color: #08111d
-      border-width: 1
-      border-color: #1d3557
+      margin-top: 33
+      margin-left: 94
+      margin-right: 12
+      image-source: /game_codexmobile/images/barra_fundo
+      image-border: 8
       phantom: true
 
       UIWidget
@@ -158,9 +235,9 @@ UIWidget
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        margin: 1
         width: 10
-        background-color: #34c759
+        image-source: /game_codexmobile/images/barra_vida
+        image-border: 8
         phantom: true
 
       Label
@@ -173,16 +250,13 @@ UIWidget
 
     UIWidget
       id: xpFundo
-      height: 10
+      height: 18
       anchors.top: vidaFundo.bottom
-      anchors.left: retrato.right
-      anchors.right: parent.right
-      margin-top: 5
-      margin-left: 6
-      margin-right: 8
-      background-color: #08111d
-      border-width: 1
-      border-color: #1d3557
+      anchors.left: vidaFundo.left
+      anchors.right: vidaFundo.right
+      margin-top: 4
+      image-source: /game_codexmobile/images/barra_fundo
+      image-border: 8
       phantom: true
 
       UIWidget
@@ -190,69 +264,63 @@ UIWidget
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        margin: 1
         width: 10
-        background-color: #3b82f6
+        image-source: /game_codexmobile/images/barra_xp
+        image-border: 8
         phantom: true
 
-  // ===== botoes do topo (canto superior direito) =====
-  UIWidget
-    id: menuTopo
-    size: 300 58
-    anchors.top: parent.top
-    anchors.right: parent.right
-    margin-top: 6
-    margin-right: 6
-    phantom: true
-    focusable: false
-    visible: false
-    layout:
-      type: horizontalBox
-      spacing: 6
+      Label
+        id: xpTexto
+        anchors.centerIn: parent
+        font: verdana-11px-rounded
+        color: #ffffff
+        text-auto-resize: true
+        phantom: true
 
-    CodexBotaoMobile
-      id: btnMenu
-      size: 54 54
-      text: MENU
-      font: verdana-11px-rounded
-
-    CodexBotaoMobile
-      id: btnMochila
-      size: 54 54
-      text: BOLSA
-
-    CodexBotaoMobile
-      id: btnPokemon
-      size: 54 54
-      text: POKE
-      color: #1a1a1a
-      image-source: /game_codexmobile/images/poke
-      $pressed:
-        image-source: /game_codexmobile/images/poke_on
-
-    CodexBotaoMobile
-      id: btnLoot
-      size: 54 54
-      text: LOOT
-
-    CodexBotaoMobile
-      id: btnPainel
-      size: 54 54
-      text: PAINEL
-
-  // ===== minimapa compacto (abaixo dos botoes) =====
+  // ===== minimapa =====
   UIWidget
     id: miniMapa
-    size: 180 140
-    anchors.top: menuTopo.bottom
+    size: 230 210
+    anchors.top: topo.bottom
     anchors.right: parent.right
-    margin-top: 6
+    margin-top: 4
     margin-right: 6
-    background-color: #0c1828e6
-    border-width: 2
-    border-color: #2d6cb5
+    image-source: /game_codexmobile/images/mapa_moldura
+    image-border: 14
     focusable: false
     visible: false
+
+    UIWidget
+      id: pino
+      size: 20 20
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 10
+      margin-left: 12
+      image-source: /game_codexmobile/images/pino_dourado
+      phantom: true
+
+    Label
+      id: titulo
+      text: Minimapa
+      anchors.verticalCenter: pino.verticalCenter
+      anchors.left: pino.right
+      margin-left: 6
+      font: verdana-11px-rounded
+      color: #ffffff
+      text-auto-resize: true
+      phantom: true
+
+    CodexImgBotao
+      id: expandir
+      size: 32 30
+      anchors.top: parent.top
+      anchors.right: parent.right
+      margin-top: 6
+      margin-right: 8
+      image-source: /game_codexmobile/images/mapa_expandir
+      $pressed:
+        image-source: /game_codexmobile/images/mapa_expandir_on
 
     Minimap
       id: mapa
@@ -260,16 +328,56 @@ UIWidget
       anchors.left: parent.left
       anchors.right: parent.right
       anchors.bottom: coords.top
-      margin: 3
+      margin-top: 40
+      margin-left: 10
+      margin-right: 50
+      margin-bottom: 2
+
+    CodexMapaBotao
+      id: zoomMais
+      anchors.top: parent.top
+      margin-top: 40
+      image-source: /game_codexmobile/images/mapa_mais
+      $pressed:
+        image-source: /game_codexmobile/images/mapa_mais_on
+
+    CodexMapaBotao
+      id: zoomMenos
+      anchors.top: prev.bottom
+      margin-top: 2
+      image-source: /game_codexmobile/images/mapa_menos
+      $pressed:
+        image-source: /game_codexmobile/images/mapa_menos_on
+
+    CodexMapaBotao
+      id: centralizar
+      anchors.top: prev.bottom
+      margin-top: 2
+      image-source: /game_codexmobile/images/mapa_centro
+      $pressed:
+        image-source: /game_codexmobile/images/mapa_centro_on
 
     Label
       id: coords
-      height: 16
+      height: 22
       anchors.bottom: parent.bottom
       anchors.left: parent.left
       anchors.right: parent.right
-      margin-bottom: 2
+      margin-bottom: 6
       text-align: center
       font: verdana-11px-rounded
       color: #ffffff
       phantom: true
+
+  // ===== LOOT (embaixo do minimapa) =====
+  CodexImgBotao
+    id: loot
+    size: 78 78
+    anchors.top: miniMapa.bottom
+    anchors.right: parent.right
+    margin-top: 10
+    margin-right: 22
+    image-source: /game_codexmobile/images/loot
+    visible: false
+    $pressed:
+      image-source: /game_codexmobile/images/loot_on

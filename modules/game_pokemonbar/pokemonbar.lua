@@ -317,6 +317,22 @@ end
 
 -- CODEX celular: na primeira vez a barra vai para a esquerda, na vertical e compacta.
 -- Se o jogador ja arrastou a barra neste aparelho, respeita a posicao dele.
+-- CODEX celular (HUD novo): barra na horizontal, compacta, centralizada no alto.
+-- Faz uma vez por aparelho, quando a equipe ja chegou (largura certa).
+function codexModoCelularV2(y)
+  if not pkb or g_settings.getBoolean('codexPkbV2') then return end
+  if #entries == 0 then return end
+  side = 'horizontal'
+  mode = 'compact'
+  savedPos = nil
+  refreshBar()
+  local root = pkb:getParent()
+  savedPos = { x = math.floor(((root and root:getWidth() or 800) - pkb:getWidth()) / 2), y = y }
+  saveOptions()
+  refreshBar()
+  g_settings.set('codexPkbV2', true)
+end
+
 function codexModoCelular(x, y)
   if savedPos then return end
   side = 'vertical'
