@@ -483,7 +483,8 @@ local function arrumarChat()
       campo:setImageSource('/game_codexmobile/images/chat_campo')
       campo:setImageBorder(8)
       campo:setTextOffset({ x = 6, y = 9 })
-      pcall(function() campo:setPlaceholder('Digite uma mensagem...') end)
+      campo:setColor('#ffffff')
+      pcall(function() campo:setPlaceholder('Toque aqui para digitar...') end)
     end
     local conteudo = painel:getChildById('consoleContentPanel')
     if conteudo then

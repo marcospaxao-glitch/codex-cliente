@@ -674,9 +674,25 @@ end
 -- CODEX celular: os sistemas separados por grupo, para o menu proprio do celular
 function codexGruposMenu()
   local grupos = {}
+  -- no celular: Autoloot junto dos sistemas de Pokemon; Hotbar e Hotkeys (teclado do PC) saem
+  local MOVER = { ['Autoloot'] = 'left' }
+  local FORA = { ['Hotbar'] = true, ['Hotkeys'] = true }
   local function add(nome, icone, where)
     local itens = {}
-    for _, it in ipairs(entriesOf(where, '')) do
+    local lista = {}
+    for _, it in ipairs(entriesOf('*', '')) do
+      local a = assign[it.id]
+      local label = labelOf(it.id)
+      local lugar = MOVER[label] or (a and a.where)
+      if lugar == where and not FORA[label] then lista[#lista + 1] = it end
+    end
+    table.sort(lista, function(x, y)
+      local ax, ay = assign[x.id], assign[y.id]
+      local px, py = (ax.where == where) and 0 or 1, (ay.where == where) and 0 or 1
+      if px ~= py then return px < py end
+      return ax.n < ay.n
+    end)
+    for _, it in ipairs(lista) do
       local e = pool[it.id]
       itens[#itens + 1] = { label = labelOf(it.id), icon = e.iconPath, run = e.callback }
     end
