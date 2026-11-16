@@ -1666,7 +1666,9 @@ bool UITextEdit::onMousePress(const Point& mousePos, const Fw::MouseButton butto
             }
         }
 #ifdef __EMSCRIPTEN__
-        if (g_window.isVisible()) {
+        // CODEX: so campo de digitar abre o teclado (as linhas do chat tambem sao
+        // UITextEdit, mas so de leitura: tocar nelas abria o teclado toda hora)
+        if (g_window.isVisible() && getProp(PropEditable) && isEnabled() && isVisible()) {
             // CODEX: parte de baixo do campo, em px da pagina (a tela sobe ate ele aparecer)
             const double campoCss = getRect().bottom() * g_browserWindow.getCssScale();
             MAIN_THREAD_ASYNC_EM_ASM({
