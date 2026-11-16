@@ -124,3 +124,184 @@ UIWidget
       margin-left: 212
       $pressed:
         image-source: /game_codexmobile/images/grande_on
+
+  // ===== cartao do jogador (canto superior esquerdo) =====
+  UIWidget
+    id: cartao
+    size: 250 74
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 6
+    margin-left: 6
+    background-color: #0c1828e6
+    border-width: 2
+    border-color: #2d6cb5
+    phantom: true
+    focusable: false
+    visible: false
+
+    UICreature
+      id: retrato
+      size: 60 60
+      anchors.left: parent.left
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 6
+      phantom: true
+      focusable: false
+
+    Label
+      id: nome
+      anchors.top: parent.top
+      anchors.left: retrato.right
+      margin-top: 6
+      margin-left: 6
+      font: verdana-11px-rounded
+      color: #ffffff
+      text-auto-resize: true
+      phantom: true
+
+    Label
+      id: nivel
+      anchors.top: parent.top
+      anchors.right: parent.right
+      margin-top: 6
+      margin-right: 8
+      font: verdana-11px-rounded
+      color: #f2c400
+      text-auto-resize: true
+      phantom: true
+
+    UIWidget
+      id: vidaFundo
+      height: 14
+      anchors.top: nome.bottom
+      anchors.left: retrato.right
+      anchors.right: parent.right
+      margin-top: 6
+      margin-left: 6
+      margin-right: 8
+      background-color: #08111d
+      border-width: 1
+      border-color: #1d3557
+      phantom: true
+
+      UIWidget
+        id: vida
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        margin: 1
+        width: 10
+        background-color: #34c759
+        phantom: true
+
+      Label
+        id: vidaTexto
+        anchors.centerIn: parent
+        font: verdana-11px-rounded
+        color: #ffffff
+        text-auto-resize: true
+        phantom: true
+
+    UIWidget
+      id: xpFundo
+      height: 10
+      anchors.top: vidaFundo.bottom
+      anchors.left: retrato.right
+      anchors.right: parent.right
+      margin-top: 5
+      margin-left: 6
+      margin-right: 8
+      background-color: #08111d
+      border-width: 1
+      border-color: #1d3557
+      phantom: true
+
+      UIWidget
+        id: xp
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        margin: 1
+        width: 10
+        background-color: #3b82f6
+        phantom: true
+
+  // ===== botoes do topo (canto superior direito) =====
+  UIWidget
+    id: menuTopo
+    size: 300 58
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 6
+    margin-right: 6
+    phantom: true
+    focusable: false
+    visible: false
+    layout:
+      type: horizontalBox
+      spacing: 6
+
+    CodexBotaoMobile
+      id: btnMenu
+      size: 54 54
+      text: MENU
+      font: verdana-11px-rounded
+
+    CodexBotaoMobile
+      id: btnMochila
+      size: 54 54
+      text: BOLSA
+
+    CodexBotaoMobile
+      id: btnPokemon
+      size: 54 54
+      text: POKÉ
+      color: #1a1a1a
+      image-source: /game_codexmobile/images/poke
+      $pressed:
+        image-source: /game_codexmobile/images/poke_on
+
+    CodexBotaoMobile
+      id: btnLoot
+      size: 54 54
+      text: LOOT
+
+    CodexBotaoMobile
+      id: btnPainel
+      size: 54 54
+      text: PAINEL
+
+  // ===== minimapa compacto (abaixo dos botoes) =====
+  UIWidget
+    id: miniMapa
+    size: 180 140
+    anchors.top: menuTopo.bottom
+    anchors.right: parent.right
+    margin-top: 6
+    margin-right: 6
+    background-color: #0c1828e6
+    border-width: 2
+    border-color: #2d6cb5
+    focusable: false
+    visible: false
+
+    Minimap
+      id: mapa
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: coords.top
+      margin: 3
+
+    Label
+      id: coords
+      height: 16
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-bottom: 2
+      text-align: center
+      font: verdana-11px-rounded
+      color: #ffffff
+      phantom: true

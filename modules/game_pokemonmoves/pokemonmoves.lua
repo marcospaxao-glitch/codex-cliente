@@ -232,6 +232,16 @@ local function placeWindow()
   end
 end
 
+-- CODEX celular: na primeira vez a barra vai para o alto, centralizada.
+-- Se o jogador ja arrastou a barra neste aparelho, respeita a posicao dele.
+function codexModoCelular(y)
+  if not sbw or options.pos then return end
+  local root = sbw:getParent()
+  if not root then return end
+  options.pos = { x = math.floor((root:getWidth() - sbw:getWidth()) / 2), y = y or 6 }
+  placeWindow()
+end
+
 local function prettyName(words)
   return (tostring(words or ''):gsub("(%a)([%w']*)", function(first, rest) return first:upper() .. rest end))
 end

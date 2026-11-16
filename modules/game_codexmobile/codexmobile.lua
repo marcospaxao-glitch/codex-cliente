@@ -235,7 +235,9 @@ local function posicionar()
   end
   -- fica acima do chat quando o chat esta aberto por cima do mapa
   local fundo = gi and gi.getBottomPanel and gi.getBottomPanel()
-  if fundo and fundo:isVisible() and fundo:getHeight() > 0 and fundo:getY() < baixo then
+  -- (so se o chat estiver embaixo dos botoes; no celular ele fica no centro)
+  if fundo and fundo:isVisible() and fundo:getHeight() > 0 and fundo:getY() < baixo
+      and fundo:getX() + fundo:getWidth() > direita - acoes:getWidth() - 12 then
     baixo = fundo:getY()
   end
   acoes:setMarginLeft(math.max(0, direita - acoes:getWidth() - 12))
@@ -247,6 +249,104 @@ local function posicionarDepois()
   eventoPosicao = scheduleEvent(posicionar, 100)
 end
 
+-- ============================================================
+-- HUD do celular: cartao do jogador, botoes do topo, minimapa,
+-- gaveta da direita e chat compacto (so no celular)
+-- ============================================================
+local cartao, menuTopo, miniMapa
+local gavetaAberta = false
+
+local function botaoDoTopo(id)
+  local tm = modules.client_topmenu
+  local b = tm and tm.getButton and tm.getButton(id)
+  if not b then
+    b = g_ui.getRootWidget():recursiveGetChildById(id)
+  end
+  if b and b.onClick then
+    b:onClick()
+    return true
+  end
+  return false
+end
+
+local function atualizarCartao()
+  local player = g_game.getLocalPlayer()
+  if not cartao or not player then return end
+  cartao:getChildById('nome'):setText(player:getName())
+  cartao:getChildById('nivel'):setText('Lv ' .. player:getLevel())
+  local vida, maxVida = player:getHealth(), math.max(1, player:getMaxHealth())
+  local fundo = cartao:getChildById('vidaFundo')
+  local barra = fundo:getChildById('vida')
+  barra:setWidth(math.max(0, math.floor((fundo:getWidth() - 2) * vida / maxVida)))
+  fundo:getChildById('vidaTexto'):setText(vida .. ' / ' .. maxVida)
+  local xpFundo = cartao:getChildById('xpFundo')
+  local pct = 0
+  pcall(function() pct = player:getLevelPercent() end)
+  xpFundo:getChildById('xp'):setWidth(math.max(0, math.floor((xpFundo:getWidth() - 2) * pct / 100)))
+  pcall(function() cartao:getChildById('retrato'):setOutfit(player:getOutfit()) end)
+end
+
+local function atualizarMapa()
+  local player = g_game.getLocalPlayer()
+  if not miniMapa or not player then return end
+  local pos = player:getPosition()
+  if not pos then return end
+  pcall(function() miniMapa:getChildById('mapa'):setCameraPosition(pos) end)
+  miniMapa:getChildById('coords'):setText(pos.x .. ', ' .. pos.y .. ', ' .. pos.z)
+end
+
+-- gaveta = coluna da direita do PC (batalha, mochila, janelas). Fica escondida
+-- por cima do mapa e abre pelos botoes do topo.
+local function abrirGaveta(abrir)
+  local gi = modules.game_interface
+  local direita = gi and gi.getRightPanel and gi.getRightPanel()
+  if not direita then return end
+  gavetaAberta = abrir
+  direita:setVisible(abrir)
+  if abrir then direita:raise() end
+  -- os botoes do topo andam para a esquerda da gaveta; minimapa e acoes saem da frente
+  if menuTopo then menuTopo:setMarginRight(abrir and (direita:getWidth() + 6) or 6) end
+  if miniMapa then miniMapa:setVisible(not abrir) end
+  if acoes then acoes:setVisible(not abrir) end
+  if overlay then overlay:raise() end
+end
+
+local function organizarTela()
+  local gi = modules.game_interface
+  if not gi then return end
+  local root = g_ui.getRootWidget()
+  -- mapa na tela toda (modo da propria interface do Codex)
+  pcall(function() gi.setupViewMode(2) end)
+  -- barra de icones do topo escondida (abre no botao MENU)
+  local tm = modules.client_topmenu and modules.client_topmenu.getTopMenu()
+  if tm then tm:hide() end
+  local esquerda, direita = gi.getLeftPanel(), gi.getRightPanel()
+  if esquerda then esquerda:setOn(false) end
+  if direita then direita:setMarginTop(0) end
+  abrirGaveta(false)
+  -- chat compacto embaixo, no centro
+  local fundo = gi.getBottomPanel()
+  if fundo then
+    fundo:breakAnchors()
+    fundo:addAnchor(AnchorBottom, 'parent', AnchorBottom)
+    fundo:addAnchor(AnchorHorizontalCenter, 'parent', AnchorHorizontalCenter)
+    fundo:setWidth(math.max(360, math.floor(root:getWidth() * 0.46)))
+    fundo:setHeight(150)
+  end
+  if gi.bottomSplitter then gi.bottomSplitter:hide() end
+  -- barras do Codex nos lugares do celular (so na primeira vez)
+  local pb = modules.game_pokemonbar
+  if pb and pb.codexModoCelular then pcall(pb.codexModoCelular, 8, 88) end
+  local pm = modules.game_pokemonmoves
+  if pm and pm.codexModoCelular then pcall(pm.codexModoCelular, 6) end
+end
+
+local function mostrarHud(mostrar)
+  for _, w in ipairs({ cartao, menuTopo, miniMapa }) do
+    if w then w:setVisible(mostrar) end
+  end
+end
+
 local function onGameStart()
   if not keypad then return end
   overlay:raise()
@@ -255,6 +355,15 @@ local function onGameStart()
   -- a hotbar F1-F12 sai: os botoes grandes substituem
   local hb = modules.game_codexhotbar
   if hb and hb.setHidden then hb.setHidden(true) end
+  mostrarHud(true)
+  -- espera a interface do jogo terminar de montar
+  scheduleEvent(function()
+    if not g_game.isOnline() then return end
+    organizarTela()
+    atualizarCartao()
+    atualizarMapa()
+    posicionar()
+  end, 300)
   posicionarDepois()
   scheduleEvent(posicionar, 1500) -- depois que as janelas laterais terminam de abrir
 end
@@ -265,7 +374,12 @@ local function onGameEnd()
   evento = nil
   if keypad then keypad:hide() end
   if acoes then acoes:hide() end
+  mostrarHud(false)
+  gavetaAberta = false
 end
+
+local function onVida() atualizarCartao() end
+local function onPosicao() atualizarMapa() end
 
 function init()
   if not ehCelular() then return end
@@ -308,6 +422,30 @@ function init()
     return true
   end
   connect(g_ui.getRootWidget(), { onGeometryChange = posicionarDepois })
+
+  cartao = overlay:getChildById('cartao')
+  menuTopo = overlay:getChildById('menuTopo')
+  miniMapa = overlay:getChildById('miniMapa')
+  pcall(function() miniMapa:getChildById('mapa'):hideFloor() end)
+  menuTopo:getChildById('btnMenu').onClick = function()
+    if modules.client_topmenu and modules.client_topmenu.toggle then modules.client_topmenu.toggle() end
+  end
+  menuTopo:getChildById('btnMochila').onClick = function()
+    abrirGaveta(true)
+    botaoDoTopo('healthInfo_inventory')
+  end
+  menuTopo:getChildById('btnPokemon').onClick = function()
+    abrirGaveta(true)
+    botaoDoTopo('healthInfo_pokemons')
+  end
+  menuTopo:getChildById('btnLoot').onClick = function()
+    abrirGaveta(true)
+    botaoDoTopo('lootBagButton')
+  end
+  menuTopo:getChildById('btnPainel').onClick = function()
+    abrirGaveta(not gavetaAberta)
+  end
+  connect(LocalPlayer, { onHealthChange = onVida, onLevelChange = onVida, onPositionChange = onPosicao })
   connect(g_game, { onGameStart = onGameStart, onGameEnd = onGameEnd })
   if g_game.isOnline() then onGameStart() end
   g_logger.info('[codex] modo celular ligado (joystick + botoes de acao)')
@@ -319,6 +457,7 @@ function terminate()
   removeEvent(eventoPosicao)
   disconnect(g_game, { onGameStart = onGameStart, onGameEnd = onGameEnd })
   disconnect(g_ui.getRootWidget(), { onGeometryChange = posicionarDepois })
+  disconnect(LocalPlayer, { onHealthChange = onVida, onLevelChange = onVida, onPositionChange = onPosicao })
   overlay:destroy()
   overlay = nil
   keypad = nil

@@ -314,6 +314,16 @@ local function fillCard(card, entry)
   card.onClick = function() usePoke(entry.order) end
 end
 
+-- CODEX celular: na primeira vez a barra vai para a esquerda, na vertical e compacta.
+-- Se o jogador ja arrastou a barra neste aparelho, respeita a posicao dele.
+function codexModoCelular(x, y)
+  if savedPos then return end
+  side = 'vertical'
+  mode = 'compact'
+  savedPos = { x = x, y = y }
+  refreshBar()
+end
+
 function refreshBar()
   if not pkb or not listPanel then return end
   listPanel:destroyChildren()
