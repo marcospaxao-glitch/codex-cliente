@@ -1509,7 +1509,13 @@ function PokemonManager.updateStepEggUI()
     color = PokemonManager.lerpColor('#5a7ca8', '#f2c400', ratio)
   end
 
-  if icon then icon:setVisible(hasEgg) end
+  -- CODEX: 36570 e o id do SERVIDOR; o desenho usa o clientId que o servidor manda
+  -- junto da lista da Creche (INCUBATOR_CRECHE_LIST). Sem ele, nao mostra sprite errado.
+  local eggClientId = tonumber(PokemonManager.pokeEggClientId) or 0
+  if icon then
+    if eggClientId > 0 then icon:setItemId(eggClientId) end
+    icon:setVisible(hasEgg and eggClientId > 0)
+  end
   if iconFrame then iconFrame:setBorderColor(hasEgg and color or '#1c3350') end
   if accent then accent:setBackgroundColor(color) end
   if fill then
@@ -5537,6 +5543,7 @@ function PokemonManager.onExtendedOpcode(protocol,opcode,buffer)
       end
     end
     PokemonManager.updateIncubEggPicker()
+    PokemonManager.updateStepEggUI() -- CODEX: agora sabe o sprite certo do ovo
     return
   end
   if command=='INCUBATOR_EGG_COUNT' then
