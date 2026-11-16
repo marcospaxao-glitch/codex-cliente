@@ -2995,6 +2995,16 @@ function PokemonManager.show()
   if close then close.onClick=function() PokemonManager.hide() end end
   local root=modules.game_interface and modules.game_interface.getRootPanel() or rootWidget
   result:setParent(root,true); result:addAnchor(AnchorCenter,'parent',AnchorCenter)
+  -- CODEX celular: cabecalho baixo e sem o logo do menu (cabe na altura da tela)
+  if type(codexCelular)=='function' and codexCelular() then
+    pcall(function()
+      local header=result:recursiveGetChildById('header'); if header then header:setHeight(36) end
+      local close=result:recursiveGetChildById('btnClose'); if close then close:setMarginTop(3) end
+      local logo=result:recursiveGetChildById('managerLogo'); if logo then logo:setHeight(0); logo:setMarginTop(0); logo:hide() end
+      local body=result:recursiveGetChildById('body'); if body then body:setMarginTop(4); body:setMarginBottom(4) end
+      result:setHeight(math.min(result:getHeight(), root:getHeight() - 4))
+    end)
+  end
   PokemonManager.bindTeamCards()
   PokemonManager.bindPartyBar()
   PokemonManager.bindDashboardCards()

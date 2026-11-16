@@ -305,6 +305,7 @@ end
 -- ============================================================
 local topo, cartao, miniMapa, botaoLoot, botaoMontaria
 local gavetaAberta = false
+local hudEscondido = false
 local chatGrande = false
 local ALTURA_CHAT, ALTURA_CHAT_GRANDE = 150, 290
 local TOPO_ALTURA = 56
@@ -358,7 +359,7 @@ local function abrirGaveta(abrir)
   if abrir then direita:raise() end
   -- o que fica embaixo da gaveta sai da frente
   for _, w in ipairs({ miniMapa, botaoLoot, acoes }) do
-    if w then w:setVisible(not abrir) end
+    if w then w:setVisible(not abrir and not hudEscondido) end
   end
   if topo then topo:raise() end
 end
@@ -599,7 +600,6 @@ end
 -- ============================================================
 local eventoJanelas
 local janelaAberta
-local hudEscondido = false
 
 local function ehDoHud(w)
   local gi = modules.game_interface
@@ -638,7 +638,7 @@ end
 local function caberNaTela(w)
   local root = g_ui.getRootWidget()
   local W, H = root:getWidth(), root:getHeight()
-  local topoY = TOPO_ALTURA + 4
+  local topoY = 2 -- a barra do topo sai enquanto a janela esta aberta
   local largura, altura = w:getWidth(), w:getHeight()
   if altura > H - topoY - 4 then altura = H - topoY - 4 end
   if largura > W - 8 then largura = W - 8 end
@@ -651,22 +651,30 @@ local function caberNaTela(w)
   end
 end
 
+-- janela grande aberta: o HUD inteiro sai (a janela usa a tela toda) e fica so
+-- um X redondo no canto, fora da janela. Reaplica a cada volta (algo pode ter
+-- mostrado de novo).
 local function esconderHud(esconder)
-  if hudEscondido == esconder then return end
+  local mudou = hudEscondido ~= esconder
   hudEscondido = esconder
-  for _, w in ipairs({ cartao, keypad, botaoMontaria }) do
+  if not esconder and not mudou then return end
+  for _, w in ipairs({ topo, cartao, keypad, botaoMontaria }) do
     if w then w:setVisible(not esconder) end
   end
   for _, w in ipairs({ miniMapa, botaoLoot, acoes }) do
     if w then w:setVisible(not esconder and not gavetaAberta) end
   end
-  if topo then topo:getChildById('btnFechar'):setVisible(esconder) end
+  local x = overlay and overlay:getChildById('fecharJanela')
+  if x then
+    x:setVisible(esconder)
+    if esconder then x:raise() end
+  end
 end
 
 local function fecharJanela()
   local w = janelaAberta
   if not w or w:isDestroyed() then return end
-  local b = w:recursiveGetChildById('closeButton') or w:recursiveGetChildById('close')
+  local b = w:recursiveGetChildById('closeButton') or w:recursiveGetChildById('btnClose') or w:recursiveGetChildById('close')
       or w:recursiveGetChildById('closeBtn') or w:recursiveGetChildById('cancelButton')
   if b and b:isVisible() and b.onClick then
     b:onClick()
@@ -732,6 +740,7 @@ local function onGameEnd()
   eventoJanelas = nil
   hudEscondido = false
   janelaAberta = nil
+  if overlay then overlay:getChildById('fecharJanela'):hide() end
   fecharMenu()
   mostrarHud(false)
   gavetaAberta = false
@@ -796,6 +805,7 @@ local function ligarBotoes()
   end
   topo:getChildById('btnMenu').onClick = abrirMenu
   topo:getChildById('btnFechar').onClick = fecharJanela
+  overlay:getChildById('fecharJanela').onClick = fecharJanela
   menuCelular:getChildById('fechar').onClick = fecharMenu
   -- minimapa
   local mapa = miniMapa:getChildById('mapa')

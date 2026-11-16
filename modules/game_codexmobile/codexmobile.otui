@@ -482,3 +482,16 @@ UIWidget
         cell-size: 108 96
         cell-spacing: 10
         flow: true
+
+  // X redondo enquanto uma janela grande esta aberta (fora da janela, no canto)
+  CodexImgBotao
+    id: fecharJanela
+    size: 54 54
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 6
+    margin-left: 6
+    image-source: /game_codexmobile/images/fechar
+    visible: false
+    $pressed:
+      image-source: /game_codexmobile/images/fechar_on
