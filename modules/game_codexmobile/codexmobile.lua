@@ -420,7 +420,7 @@ local function arrumarChat()
     painel:setImageSource('')
     painel:setBackgroundColor('#00000000')
     for _, id in ipairs({ 'toggleChat', 'prevChannelButton', 'nextChannelButton', 'closeChannelButton',
-                          'clearChannelButton', 'ignoreButton', 'sayModeButton' }) do
+                          'clearChannelButton', 'ignoreButton', 'sayModeButton', 'channelsButton' }) do
       local w = painel:getChildById(id)
       if w then w:hide() end
     end
@@ -447,17 +447,17 @@ local function arrumarChat()
       abas:setMarginRight(6)
     end
     -- escolher canal (pessoas), embaixo a esquerda
-    local canal = painel:getChildById('channelsButton')
-    if canal then
-      canal:breakAnchors()
-      canal:addAnchor(AnchorBottom, 'parent', AnchorBottom)
-      canal:addAnchor(AnchorLeft, 'parent', AnchorLeft)
-      canal:setMarginBottom(8)
-      canal:setMarginLeft(10)
-      canal:setSize({ width = 44, height = 38 })
-      canal:setIcon('')
-      canal:setImageSource('/game_codexmobile/images/chat_canal')
-    end
+    local velho = painel:getChildById('channelsButton')
+    if velho then velho:hide() end
+    local canal = g_ui.createWidget('CodexImgBotao', painel)
+    canal:setId('codexChatCanal')
+    canal:setSize({ width = 44, height = 38 })
+    canal:addAnchor(AnchorBottom, 'parent', AnchorBottom)
+    canal:addAnchor(AnchorLeft, 'parent', AnchorLeft)
+    canal:setMarginBottom(8)
+    canal:setMarginLeft(10)
+    canal:setImageSource('/game_codexmobile/images/chat_canal')
+    canal.onClick = function() g_game.requestChannels() end
     -- enviar, embaixo a direita
     local enviar = g_ui.createWidget('CodexImgBotao', painel)
     enviar:setId('codexChatEnviar')
@@ -473,7 +473,7 @@ local function arrumarChat()
     if campo then
       campo:breakAnchors()
       campo:addAnchor(AnchorBottom, 'parent', AnchorBottom)
-      campo:addAnchor(AnchorLeft, 'channelsButton', AnchorRight)
+      campo:addAnchor(AnchorLeft, 'codexChatCanal', AnchorRight)
       campo:addAnchor(AnchorRight, 'codexChatEnviar', AnchorLeft)
       campo:setMarginBottom(10)
       campo:setMarginLeft(6)
@@ -545,8 +545,160 @@ local function atualizarSom()
   if b then b:setImageSource('/game_codexmobile/images/' .. (ligado and 'ic_som' or 'ic_mudo')) end
 end
 
+-- ============================================================
+-- menu do celular: grupos a esquerda, sistemas grandes a direita
+-- ============================================================
+local menuCelular
+local grupoAtual = 1
+
+local function fecharMenu()
+  if menuCelular then menuCelular:hide() end
+end
+
+local function mostrarGrupo(i)
+  local tm = modules.client_topmenu
+  local grupos = tm and tm.codexGruposMenu and tm.codexGruposMenu() or {}
+  if #grupos == 0 then return end
+  grupoAtual = math.max(1, math.min(i, #grupos))
+  local painelGrupos = menuCelular:getChildById('grupos')
+  local painelItens = menuCelular:getChildById('itens')
+  painelGrupos:destroyChildren()
+  painelItens:destroyChildren()
+  for gi, g in ipairs(grupos) do
+    local aba = g_ui.createWidget('CodexAba', painelGrupos)
+    aba:setText(g.nome)
+    if g.icon then aba:setIcon(g.icon) end
+    aba:setOn(gi == grupoAtual)
+    aba.onClick = function() mostrarGrupo(gi) end
+  end
+  for _, it in ipairs(grupos[grupoAtual].itens) do
+    local tile = g_ui.createWidget('CodexTile', painelItens)
+    tile:setText(it.label)
+    if it.icon then tile:setIcon(it.icon) end
+    tile.onClick = function()
+      fecharMenu()
+      if it.run then it.run() end
+    end
+  end
+  menuCelular:getChildById('titulo'):setText('MENU  -  ' .. grupos[grupoAtual].nome)
+end
+
+local function abrirMenu()
+  if not menuCelular then return end
+  if menuCelular:isVisible() then fecharMenu() return end
+  if gavetaAberta then abrirGaveta(false) end
+  mostrarGrupo(grupoAtual)
+  menuCelular:show()
+  menuCelular:raise()
+  if topo then topo:raise() end
+end
+
+-- ============================================================
+-- janelas grandes: cabem na tela (abaixo da barra do topo), o HUD sai da
+-- frente e aparece o FECHAR no topo
+-- ============================================================
+local eventoJanelas
+local janelaAberta
+local hudEscondido = false
+
+local function ehDoHud(w)
+  local gi = modules.game_interface
+  if w == overlay then return true end
+  if gi then
+    for _, f in ipairs({ 'getRootPanel', 'getMapPanel', 'getBottomPanel', 'getRightPanel', 'getLeftPanel' }) do
+      local ok, x = pcall(function() return gi[f] and gi[f]() end)
+      if ok and x == w then return true end
+    end
+  end
+  local tm = modules.client_topmenu
+  if tm and tm.getTopMenu and tm.getTopMenu() == w then return true end
+  return false
+end
+
+local function acharJanelaGrande()
+  local root = g_ui.getRootWidget()
+  local W, H = root:getWidth(), root:getHeight()
+  local achada
+  local gi = modules.game_interface
+  local listas = { root:getChildren() }
+  local raiz = gi and gi.getRootPanel and gi.getRootPanel()
+  if raiz then listas[#listas + 1] = raiz:getChildren() end
+  for _, lista in ipairs(listas) do
+    for _, w in ipairs(lista) do
+      if w:isVisible() and not w:isPhantom() and not ehDoHud(w)
+          and w:getWidth() > W * 0.4 and w:getHeight() > H * 0.4
+          and w:getWidth() < W + 400 then
+        achada = w
+      end
+    end
+  end
+  return achada
+end
+
+local function caberNaTela(w)
+  local root = g_ui.getRootWidget()
+  local W, H = root:getWidth(), root:getHeight()
+  local topoY = TOPO_ALTURA + 4
+  local largura, altura = w:getWidth(), w:getHeight()
+  if altura > H - topoY - 4 then altura = H - topoY - 4 end
+  if largura > W - 8 then largura = W - 8 end
+  local x, y = w:getX(), w:getY()
+  local fora = y < topoY or x < 0 or x + largura > W or y + altura > H
+  if altura ~= w:getHeight() or largura ~= w:getWidth() or fora then
+    w:breakAnchors()
+    w:setSize({ width = largura, height = altura })
+    w:setPosition({ x = math.floor((W - largura) / 2), y = topoY + math.floor((H - topoY - altura) / 2) })
+  end
+end
+
+local function esconderHud(esconder)
+  if hudEscondido == esconder then return end
+  hudEscondido = esconder
+  for _, w in ipairs({ cartao, keypad, botaoMontaria }) do
+    if w then w:setVisible(not esconder) end
+  end
+  for _, w in ipairs({ miniMapa, botaoLoot, acoes }) do
+    if w then w:setVisible(not esconder and not gavetaAberta) end
+  end
+  if topo then topo:getChildById('btnFechar'):setVisible(esconder) end
+end
+
+local function fecharJanela()
+  local w = janelaAberta
+  if not w or w:isDestroyed() then return end
+  local b = w:recursiveGetChildById('closeButton') or w:recursiveGetChildById('close')
+      or w:recursiveGetChildById('closeBtn') or w:recursiveGetChildById('cancelButton')
+  if b and b:isVisible() and b.onClick then
+    b:onClick()
+  elseif w.onEscape then
+    w:onEscape()
+  end
+  if w:isVisible() then w:hide() end
+end
+
+local function verJanelas()
+  if not g_game.isOnline() or not topo then return end
+  local w = acharJanelaGrande()
+  if w and w ~= janelaAberta then
+    g_logger.info('[codex celular] janela grande na tela: ' .. tostring(w:getId()))
+  end
+  janelaAberta = w
+  if w then
+    pcall(caberNaTela, w)
+    esconderHud(true)
+    if topo then topo:raise() end
+  else
+    esconderHud(false)
+  end
+end
+
+local function botaoTeclado(mostrar)
+  if type(codexBotaoTeclado) == 'function' then pcall(codexBotaoTeclado, mostrar) end
+end
+
 local function onGameStart()
   if not keypad then return end
+  botaoTeclado(false) -- no jogo, tocar no campo do chat ja abre o teclado
   overlay:raise()
   keypad:show()
   acoes:show()
@@ -565,14 +717,22 @@ local function onGameStart()
     end, atraso)
   end
   posicionarDepois()
+  removeEvent(eventoJanelas)
+  eventoJanelas = cycleEvent(verJanelas, 400)
 end
 
 local function onGameEnd()
+  botaoTeclado(true)
   segurando = false
   removeEvent(evento)
   evento = nil
   if keypad then keypad:hide() end
   if acoes then acoes:hide() end
+  removeEvent(eventoJanelas)
+  eventoJanelas = nil
+  hudEscondido = false
+  janelaAberta = nil
+  fecharMenu()
   mostrarHud(false)
   gavetaAberta = false
 end
@@ -634,10 +794,9 @@ local function ligarBotoes()
     local pk = modules.game_pokemons
     if pk and pk.toggle then pk.toggle() end
   end
-  topo:getChildById('btnMenu').onClick = function()
-    local tm = modules.client_topmenu
-    if tm and tm.codexMenuCelular then tm.codexMenuCelular() end
-  end
+  topo:getChildById('btnMenu').onClick = abrirMenu
+  topo:getChildById('btnFechar').onClick = fecharJanela
+  menuCelular:getChildById('fechar').onClick = fecharMenu
   -- minimapa
   local mapa = miniMapa:getChildById('mapa')
   pcall(function() mapa:hideFloor() end)
@@ -673,6 +832,7 @@ function init()
   miniMapa = overlay:getChildById('miniMapa')
   botaoLoot = overlay:getChildById('loot')
   botaoMontaria = overlay:getChildById('montaria')
+  menuCelular = overlay:getChildById('menuCelular')
   travado = g_settings.getBoolean(CHAVE_TRAVA)
   ligarBotoes()
 
@@ -723,6 +883,7 @@ function terminate()
   if not overlay then return end
   removeEvent(evento)
   removeEvent(eventoPosicao)
+  removeEvent(eventoJanelas)
   disconnect(g_game, { onGameStart = onGameStart, onGameEnd = onGameEnd })
   disconnect(g_ui.getRootWidget(), { onGeometryChange = posicionarDepois })
   disconnect(LocalPlayer, { onHealthChange = onVida, onLevelChange = onVida, onPositionChange = onPosicao })

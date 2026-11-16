@@ -16,6 +16,32 @@ CodexPilula < CodexImgBotao
   anchors.right: prev.left
   margin-right: 8
 
+CodexAba < CodexImgBotao
+  size: 196 48
+  image-source: /game_codexmobile/images/aba
+  icon-size: 26 26
+  icon-offset: 14 0
+  icon-align: left
+  text-align: left
+  text-offset: 50 0
+  font: verdana-11px-rounded
+  color: #ffffff
+  margin-bottom: 6
+  $on:
+    image-source: /game_codexmobile/images/aba_on
+    color: #f5c518
+
+CodexTile < CodexImgBotao
+  size: 108 96
+  image-source: /game_codexmobile/images/tile
+  icon-size: 36 36
+  icon-offset: 0 -12
+  text-offset: 0 26
+  font: verdana-11px-rounded
+  color: #ffffff
+  $pressed:
+    image-source: /game_codexmobile/images/tile_on
+
 CodexMapaBotao < CodexImgBotao
   size: 40 40
   anchors.right: parent.right
@@ -171,6 +197,13 @@ UIWidget
       image-source: /game_codexmobile/images/pil_bolsa
       $pressed:
         image-source: /game_codexmobile/images/pil_bolsa_on
+
+    CodexPilula
+      id: btnFechar
+      visible: false
+      image-source: /game_codexmobile/images/pil_fechar
+      $pressed:
+        image-source: /game_codexmobile/images/pil_fechar_on
 
   // ===== cartao do jogador =====
   UIWidget
@@ -381,3 +414,74 @@ UIWidget
     visible: false
     $pressed:
       image-source: /game_codexmobile/images/loot_on
+
+  // ===== menu do celular (grupos a esquerda, sistemas a direita) =====
+  UIWidget
+    id: menuCelular
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-top: 62
+    margin-left: 30
+    margin-right: 30
+    margin-bottom: 8
+    image-source: /game_codexmobile/images/menu_fundo
+    image-border: 18
+    phantom: false
+    focusable: false
+    visible: false
+
+    Label
+      id: titulo
+      text: MENU
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 16
+      margin-left: 22
+      font: sans-bold-16px
+      color: #f5c518
+      text-auto-resize: true
+      phantom: true
+
+    CodexImgBotao
+      id: fechar
+      size: 54 54
+      anchors.top: parent.top
+      anchors.right: parent.right
+      margin-top: 6
+      margin-right: 8
+      image-source: /game_codexmobile/images/fechar
+      $pressed:
+        image-source: /game_codexmobile/images/fechar_on
+
+    UIWidget
+      id: grupos
+      width: 196
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.bottom: parent.bottom
+      margin-top: 52
+      margin-left: 16
+      margin-bottom: 14
+      phantom: true
+      layout:
+        type: verticalBox
+        spacing: 6
+
+    UIWidget
+      id: itens
+      anchors.top: parent.top
+      anchors.left: grupos.right
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      margin-top: 64
+      margin-left: 18
+      margin-right: 14
+      margin-bottom: 14
+      phantom: true
+      layout:
+        type: grid
+        cell-size: 108 96
+        cell-spacing: 10
+        flow: true

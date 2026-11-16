@@ -79,6 +79,7 @@
 
 #ifdef __EMSCRIPTEN__
 bool codexCelular(); // platform/browserwindow.cpp
+void codexBotaoTeclado(bool mostrar);
 #endif
 #include "core/updater.h"
 
@@ -105,8 +106,10 @@ void Application::registerLuaFunctions()
     g_lua.bindSingletonFunction("g_updater", "getUrl", &Updater::getUrl, &g_updater);
 #ifdef __EMSCRIPTEN__
     g_lua.bindGlobalFunction("codexCelular", [] { return codexCelular(); }); // CODEX: navegador em celular/tablet
+    g_lua.bindGlobalFunction("codexBotaoTeclado", [](bool mostrar) { codexBotaoTeclado(mostrar); });
 #else
     g_lua.bindGlobalFunction("codexCelular", [] { return false; });
+    g_lua.bindGlobalFunction("codexBotaoTeclado", [](bool) {});
 #endif
 
     // conversion globals

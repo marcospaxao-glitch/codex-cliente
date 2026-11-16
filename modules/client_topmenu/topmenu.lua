@@ -671,6 +671,23 @@ function codexMenuCelular()
   drawer:raise()
 end
 
+-- CODEX celular: os sistemas separados por grupo, para o menu proprio do celular
+function codexGruposMenu()
+  local grupos = {}
+  local function add(nome, icone, where)
+    local itens = {}
+    for _, it in ipairs(entriesOf(where, '')) do
+      local e = pool[it.id]
+      itens[#itens + 1] = { label = labelOf(it.id), icon = e.iconPath, run = e.callback }
+    end
+    if #itens > 0 then grupos[#grupos + 1] = { nome = nome, icon = icone, itens = itens } end
+  end
+  add('Pokemon', ICON_DIR .. 'pokeball', 'left')
+  for _, c in ipairs(LAYOUT.cats) do add(c.name, ICON_DIR .. c.icon, c.id) end
+  add('Servidor', ICON_DIR .. 'info', 'right')
+  return grupos
+end
+
 function codexFecharMenu()
   closeDrawer()
 end

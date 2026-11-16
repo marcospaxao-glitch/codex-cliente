@@ -57,6 +57,14 @@ static double codexPixelRatio() {
 
 bool codexCelular() { return g_browserWindow.isCelular(); }
 
+// CODEX: mostra/esconde o botao de teclado da pagina (no jogo o chat ja abre o teclado)
+void codexBotaoTeclado(bool mostrar) {
+    MAIN_THREAD_ASYNC_EM_ASM({
+        var b = document.getElementById("codexTecladoBtn");
+        if (b && window.CODEX_CELULAR) b.style.display = $0 ? "block" : "none";
+    }, mostrar ? 1 : 0);
+}
+
 stdext::map<char, Fw::Key> m_keyMapStr;
 EmscriptenWebGLContextAttributes attr;
 
