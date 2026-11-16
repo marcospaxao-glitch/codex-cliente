@@ -309,7 +309,7 @@ void MapView::drawForeground(const Rect& rect)
         p += rect.topLeft();
         // CODEX: fala acima do titulo + nome. Altura fixa de tela (o nome e o titulo
         // tem tamanho fixo), aplicada depois do zoom do mapa.
-        p.y -= 33;
+        p.y -= 36;
         staticText->drawText(p.scale(g_app.getStaticTextScale()), rect);
     }
 
