@@ -333,8 +333,10 @@ void MapView::drawForeground(const Rect& rect)
         // passo de quem falou (antes ficava parada no piso e embaralhava no nome).
         p.y -= 36;
         if (quem) {
-            // so o passo/pulo (a altura do nome nao muda com a roupa: os prints mostraram)
-            const float dy = (quem->getDrawOffset().y - std::round(quem->getJumpOffset().y)) * m_posInfo.scaleFactor;
+            // o nome sobe com o deslocamento da roupa (igual ao Creature::drawInformation):
+            // a fala sobe junto. Referencia = roupa sem deslocamento (a do dragao, aprovada).
+            const int dispY = g_game.getFeature(Otc::GameNegativeOffset) ? 0 : quem->getDisplacementY();
+            const float dy = (-dispY + quem->getDrawOffset().y - std::round(quem->getJumpOffset().y)) * m_posInfo.scaleFactor;
             const float dx = (quem->getDrawOffset().x - std::round(quem->getJumpOffset().x)) * m_posInfo.scaleFactor;
             p.y += static_cast<int>(dy * m_posInfo.verticalStretchFactor);
             p.x += static_cast<int>(dx * m_posInfo.horizontalStretchFactor);
