@@ -471,6 +471,8 @@ function init()
     local cb = g_ui.createWidget('CodexCatButton', pinnedPanel)
     cb:setId('cat_' .. c.id)
     cb:setText(c.name)
+    -- CODEX: largura pelo texto (a fonte do cliente novo e um pouco mais larga)
+    pcall(function() cb:setWidth(math.max(96, 30 + cb:getTextSize().width + 10)) end)
     for _, ic in ipairs({c.icon, c.icon2}) do
       if ic and g_resources.fileExists(ICON_DIR .. ic .. '.png') then cb:setIcon(ICON_DIR .. ic) break end
     end

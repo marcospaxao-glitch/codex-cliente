@@ -143,7 +143,9 @@ end
 -- GPS: clique numa marca do minimapa e aparece um caminho verde
 -- ate ela. O caminho vai sumindo conforme o jogador anda.
 -- ============================================================
-local ROUTE_COLOR = '#39d353'
+local ROUTE_COLOR = '#39d353'      -- mesmo andar, caminho achado
+local ROUTE_COLOR_UP = '#4fa3ff'   -- destino em andar acima
+local ROUTE_COLOR_DOWN = '#ff8c3a' -- destino em andar abaixo
 local ROUTE_DOT = 3              -- tamanho do ponto (px)
 local ROUTE_MAX_DOTS = 450       -- pontos desenhados (caminhos longos usam amostragem)
 local ROUTE_COMPLEXITY = 80000   -- limite da busca de caminho
@@ -197,7 +199,7 @@ local function drawRoute()
   for i = step, #points, step do
     local dot = g_ui.createWidget('UIWidget')
     dot:setSize({ width = ROUTE_DOT, height = ROUTE_DOT })
-    dot:setBackgroundColor(route.straight and '#f2c400' or ROUTE_COLOR)
+    dot:setBackgroundColor(route.color or (route.straight and '#f2c400' or ROUTE_COLOR))
     dot:setPhantom(true)
     dot:setFocusable(false)
     minimapWidget:insertChild(1, dot)
@@ -224,12 +226,18 @@ local function calcRoute()
   local from, to = player:getPosition(), route.target
   route.lastCalc = nowMs()
   if from.z ~= to.z then
-    clearDots()
-    route.points = {}
-    local diff = to.z < from.z and ('suba ' .. (from.z - to.z)) or ('desca ' .. (to.z - from.z))
-    routeLabel('GPS: ' .. diff .. ' andar(es)', '#f2c400')
+    -- outro andar: linha reta ate o destino, na cor do andar
+    -- (azul = destino acima, laranja = destino abaixo)
+    local acima = to.z < from.z
+    route.color = acima and ROUTE_COLOR_UP or ROUTE_COLOR_DOWN
+    route.straight = true
+    route.points = straightLine(from, { x = to.x, y = to.y, z = from.z })
+    drawRoute()
+    local diff = acima and ('suba ' .. (from.z - to.z)) or ('desca ' .. (to.z - from.z))
+    routeLabel('GPS: ' .. diff .. ' andar(es)', route.color)
     return
   end
+  route.color = nil
   local points = {}
   local ok, dirs, result = pcall(function() return g_map.findPath(from, to, ROUTE_COMPLEXITY, PathFindFlags and PathFindFlags.AllowCreatures or 2) end)
   if ok and type(dirs) == 'table' and #dirs > 0 and (result == nil or result == 0) then
@@ -258,9 +266,14 @@ local function updateRoute(pos)
   end
   local points = route.points or {}
   if pos.z ~= target.z then
-    -- outro andar: atualiza o aviso (sobe/desce) e apaga o caminho antigo
-    if #points > 0 or route.lastZ ~= pos.z then calcRoute() end
+    -- outro andar: linha reta refeita a cada passo (e barato)
+    calcRoute()
     route.lastZ = pos.z
+    return
+  end
+  if route.lastZ and route.lastZ ~= pos.z then
+    route.lastZ = pos.z
+    calcRoute() -- chegou no andar do destino: agora o caminho de verdade
     return
   end
   if #points == 0 then
@@ -304,6 +317,8 @@ function startRoute(target, name)
   if not target or not minimapWidget then return end
   stopRoute(false)
   route = { target = { x = target.x, y = target.y, z = target.z }, name = name or 'Destino', points = {}, dots = {} }
+  local eu = g_game.getLocalPlayer()
+  route.lastZ = eu and eu:getPosition() and eu:getPosition().z or nil
   local button = stopButton()
   if not button then
     button = g_ui.createWidget('MinimapCtrlButton', minimapWidget)
@@ -400,6 +415,15 @@ function setGuidesDisplay(v)
 end
 
 
+-- marca de GPS que chega do servidor (Loc do celular): ja traca a rota
+function onMarcaDoServidor(pos, icon, description)
+  if not g_game.isOnline() or not pos then return end
+  local desc = tostring(description or ''):lower()
+  if tonumber(icon) == MAPMARK_GPS or desc:find('loc') or desc:find('localiza') then
+    scheduleEvent(function() startRoute(pos, description) end, 100)
+  end
+end
+
 function init()
   minimapButton = modules.client_topmenu.addRightGameToggleButton('minimapButton', 
     tr('Minimap') .. ' (Ctrl+M)', '/images/topbuttons/minimap', toggle)
@@ -410,6 +434,22 @@ function init()
 
   minimapWidget = minimapWindow:recursiveGetChildById('minimap')
   hookCustomFlags(minimapWidget)
+  -- Ctrl + roda: troca o andar mostrado (o cliente novo marca Ctrl junto com "Primary")
+  minimapWidget.onMouseWheel = function(self, mousePos, direction)
+    local mods = g_keyboard.getModifiers()
+    if bit.band(mods, KeyboardCtrlModifier) ~= 0 or bit.band(mods, KeyboardPrimaryModifier) ~= 0 then
+      if direction == MouseWheelDown then self:floorUp(1) else self:floorDown(1) end
+      local floorLabel = minimapWindow:recursiveGetChildById('floorLabel')
+      local cam = self:getCameraPosition()
+      if floorLabel and cam then floorLabel:setText(floorText(cam.z)) end
+      return true
+    end
+    if mods == KeyboardNoModifier then
+      if direction == MouseWheelUp then self:zoomIn() else self:zoomOut() end
+      return true
+    end
+    return false
+  end
 
   local gameRootPanel = modules.game_interface.getRootPanel()
   g_keyboard.bindKeyPress('Alt+Left', function() minimapWidget:move(1,0) end, gameRootPanel)
@@ -424,6 +464,7 @@ function init()
   connect(g_game, {
     onGameStart = online,
     onGameEnd = offline,
+    onAddAutomapFlag = onMarcaDoServidor,
   })
 
   connect(LocalPlayer, {
@@ -444,6 +485,7 @@ function terminate()
   disconnect(g_game, {
     onGameStart = online,
     onGameEnd = offline,
+    onAddAutomapFlag = onMarcaDoServidor,
   })
 
   disconnect(LocalPlayer, {
@@ -564,7 +606,7 @@ function updateCameraPosition()
   local gps = routeInfo()
   if cityLabel and gps then
     cityLabel:setText(gps)
-    cityLabel:setColor(route.straight and '#f2c400' or '#39d353')
+    cityLabel:setColor(route.color or (route.straight and '#f2c400' or '#39d353'))
   elseif cityLabel and not route then
     local city = cityAt(pos)
     cityLabel:setText(city or 'Rota')
