@@ -237,6 +237,12 @@
       }
       // chamado pelo cliente: entrou no jogo = trava deitado; saiu = livre
       window.codexModoJogo = function (noJogo) {
+        // trocou de tela (login <-> jogo): fecha o teclado e solta a tela congelada,
+        // senao o jogo fica preso no tamanho de antes de girar
+        if (document.body.classList.contains("codexNoJogo") !== !!noJogo) {
+          codexFecharTeclado();
+          codexSoltarTela();
+        }
         document.body.classList.toggle("codexNoJogo", !!noJogo);
         try {
           if (noJogo && screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(function () {});
@@ -293,6 +299,13 @@
         if (c) { c.style.width = ""; c.style.height = ""; c.style.transform = ""; }
         window.scrollTo(0, 0);
       }
+      // girou o celular: o tamanho guardado nao vale mais
+      function codexGirou() {
+        codexFecharTeclado();
+        codexSoltarTela();
+      }
+      window.addEventListener("orientationchange", codexGirou);
+      if (screen.orientation && screen.orientation.addEventListener) screen.orientation.addEventListener("change", codexGirou);
       if (window.visualViewport) {
         window.visualViewport.addEventListener("resize", codexReposicionar);
         window.visualViewport.addEventListener("scroll", codexReposicionar);
