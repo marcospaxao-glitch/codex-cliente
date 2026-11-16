@@ -304,10 +304,12 @@ void MapView::drawForeground(const Rect& rect)
             continue;
 
         Point p = transformPositionTo2D(pos) - m_posInfo.drawOffset;
-        p.y -= 40; // CODEX: fala acima do titulo + nome (nao embola com eles)
         p.x *= m_posInfo.horizontalStretchFactor;
         p.y *= m_posInfo.verticalStretchFactor;
         p += rect.topLeft();
+        // CODEX: fala acima do titulo + nome. Altura fixa de tela (o nome e o titulo
+        // tem tamanho fixo), aplicada depois do zoom do mapa.
+        p.y -= 30;
         staticText->drawText(p.scale(g_app.getStaticTextScale()), rect);
     }
 
