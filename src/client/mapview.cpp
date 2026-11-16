@@ -292,6 +292,25 @@ void MapView::drawCreatureInformation() {
     }
 }
 
+// CODEX: quem falou (no piso da fala ou do lado, se ja deu um passo)
+static CreaturePtr codexAcharFalante(const Position& pos, const std::string& nome)
+{
+    if (nome.empty())
+        return nullptr;
+    for (int ox = -1; ox <= 1; ++ox) {
+        for (int oy = -1; oy <= 1; ++oy) {
+            const auto& tile = g_map.getTile(Position(pos.x + ox, pos.y + oy, pos.z));
+            if (!tile)
+                continue;
+            for (const auto& c : tile->getCreatures()) {
+                if (c && c->getName() == nome)
+                    return c;
+            }
+        }
+    }
+    return nullptr;
+}
+
 void MapView::drawForeground(const Rect& rect)
 {
     g_drawPool.scale(g_app.getStaticTextScale());
@@ -303,13 +322,23 @@ void MapView::drawForeground(const Rect& rect)
         if (pos.z != m_posInfo.camera.z && staticText->getMessageMode() == Otc::MessageNone)
             continue;
 
-        Point p = transformPositionTo2D(pos) - m_posInfo.drawOffset;
+        // CODEX: a fala segue quem falou (se ele deu um passo, vai junto)
+        const auto& quem = codexAcharFalante(pos, staticText->getName());
+        Point p = transformPositionTo2D(quem ? quem->getPosition() : pos) - m_posInfo.drawOffset;
         p.x *= m_posInfo.horizontalStretchFactor;
         p.y *= m_posInfo.verticalStretchFactor;
         p += rect.topLeft();
         // CODEX: fala acima do titulo + nome. Altura fixa de tela (o nome e o titulo
-        // tem tamanho fixo), aplicada depois do zoom do mapa.
+        // tem tamanho fixo), aplicada depois do zoom do mapa. O nome acompanha a
+        // roupa (deslocamento do desenho) e o passo: a fala vai junto.
         p.y -= 36;
+        if (quem) {
+            const int dispY = g_game.getFeature(Otc::GameNegativeOffset) ? 0 : quem->getDisplacementY();
+            const float dy = (8 - dispY + quem->getDrawOffset().y - std::round(quem->getJumpOffset().y)) * m_posInfo.scaleFactor;
+            const float dx = (quem->getDrawOffset().x - std::round(quem->getJumpOffset().x)) * m_posInfo.scaleFactor;
+            p.y += static_cast<int>(dy * m_posInfo.verticalStretchFactor);
+            p.x += static_cast<int>(dx * m_posInfo.horizontalStretchFactor);
+        }
         staticText->drawText(p.scale(g_app.getStaticTextScale()), rect);
     }
 
