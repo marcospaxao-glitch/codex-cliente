@@ -29,6 +29,7 @@
 #include <framework/core/resourcemanager.h>
 #include <framework/util/crypt.h>
 #include "framework/core/graphicalapplication.h"
+#include <framework/luaengine/luainterface.h>
 
 #include <algorithm>
 #include <cmath>
@@ -455,19 +456,37 @@ void BrowserWindow::handleTouchCallback(int eventType, const EmscriptenTouchEven
     if (!event || event->numTouches <= 0)
         return;
 
-    const EmscriptenTouchPoint* t = nullptr;
+    // cada dedo que mudou vira um evento (joystick + botao ao mesmo tempo)
     for (int i = 0; i < event->numTouches; ++i) {
-        if (event->touches[i].isChanged) {
-            t = &event->touches[i];
-            break;
-        }
+        const EmscriptenTouchPoint* t = &event->touches[i];
+        if (!t->isChanged)
+            continue;
+        const Point pos(static_cast<int>(t->targetX / m_cssScale), static_cast<int>(t->targetY / m_cssScale));
+        const int id = t->identifier;
+        g_dispatcher.addEvent([this, eventType, pos, id] { onTouch(eventType, pos, id); });
     }
-    if (!t)
-        t = &event->touches[0];
+}
 
-    const Point pos(static_cast<int>(t->targetX / m_cssScale), static_cast<int>(t->targetY / m_cssScale));
-    const int id = t->identifier;
-    g_dispatcher.addEvent([this, eventType, pos, id] { onTouch(eventType, pos, id); });
+// CODEX: o joystick do celular recebe o dedo direto (sem esperar arrastar e sem
+// virar clique direito), por um dedo proprio. Lua: codexJoystickToque(tipo, x, y)
+// tipo 0 = encostou (retorna true se o dedo e do joystick), 1 = moveu, 2 = soltou.
+static bool codexJoystickToque(int tipo, const Point& pos) {
+    bool usado = false;
+    try {
+        g_lua.getGlobal("codexJoystickToque");
+        if (!g_lua.isFunction()) {
+            g_lua.pop();
+            return false;
+        }
+        g_lua.pushInteger(tipo);
+        g_lua.pushInteger(pos.x);
+        g_lua.pushInteger(pos.y);
+        g_lua.safeCall(3, 1);
+        usado = g_lua.popBoolean();
+    } catch (...) {
+        usado = false;
+    }
+    return usado;
 }
 
 void BrowserWindow::sendMouse(Fw::InputEventType type, Fw::MouseButton button, const Point& pos) {
@@ -496,6 +515,20 @@ void BrowserWindow::sendMouse(Fw::InputEventType type, Fw::MouseButton button, c
 void BrowserWindow::onTouch(int eventType, const Point& pos, int id) {
     static constexpr int DISTANCIA_ARRASTE = 10;
     static constexpr int TEMPO_SEGURAR = 450;
+
+    if (eventType == EMSCRIPTEN_EVENT_TOUCHSTART && m_joyId < 0 && codexJoystickToque(0, pos)) {
+        m_joyId = id;
+        return;
+    }
+    if (id == m_joyId) {
+        if (eventType == EMSCRIPTEN_EVENT_TOUCHMOVE) {
+            codexJoystickToque(1, pos);
+        } else if (eventType != EMSCRIPTEN_EVENT_TOUCHSTART) {
+            m_joyId = -1;
+            codexJoystickToque(2, pos);
+        }
+        return;
+    }
 
     if (eventType == EMSCRIPTEN_EVENT_TOUCHSTART) {
         if (m_touchDown)

@@ -3,7 +3,6 @@
 local overlay
 local keypad
 local evento
-local posRel = { x = 0.5, y = 0.5 }
 local segurando = false
 
 local function ehCelular()
@@ -17,27 +16,48 @@ local function centralizar()
   end
 end
 
+-- joystick calibrado: direcao pelo angulo a partir do centro da base.
+-- zona morta no meio; 8 fatias, com as diagonais um pouco mais estreitas
+-- (fica mais facil andar reto).
+local ZONA_MORTA = 12      -- px a partir do centro: nao anda
+local RAIO = 46            -- quanto a bolinha anda
+local MEIA_DIAGONAL = 18   -- graus para cada lado de 45 que contam como diagonal
+local dx, dy = 0, 0
+
+local function centroBase()
+  return keypad:getX() + keypad:getWidth() / 2, keypad:getY() + keypad:getHeight() / 2
+end
+
 local function atualizarPos(widget, pos)
-  posRel = {
-    x = (pos.x - widget:getX()) / widget:getWidth(),
-    y = (pos.y - widget:getY()) / widget:getHeight()
-  }
+  local cx, cy = centroBase()
+  dx, dy = pos.x - cx, pos.y - cy
 end
 
 local function direcao()
-  local x = math.min(1, math.max(0, posRel.x))
-  local y = math.min(1, math.max(0, posRel.y))
-  if y < 0.3 and x < 0.3 then return Directions.NorthWest end
-  if y < 0.3 and x > 0.7 then return Directions.NorthEast end
-  if y > 0.7 and x < 0.3 then return Directions.SouthWest end
-  if y > 0.7 and x > 0.7 then return Directions.SouthEast end
-  if math.abs(y - 0.5) <= 0.1 and math.abs(x - 0.5) <= 0.1 then return nil end
-  if math.abs(y - 0.5) > math.abs(x - 0.5) then
-    return y < 0.5 and Directions.North or Directions.South
-  end
-  return x < 0.5 and Directions.West or Directions.East
+  local dist = math.sqrt(dx * dx + dy * dy)
+  if dist < ZONA_MORTA then return nil end
+  -- 0 = leste, 90 = sul (y cresce para baixo)
+  local ang = math.deg(math.atan2(dy, dx))
+  if ang < 0 then ang = ang + 360 end
+  local function perto(alvo) return math.abs(((ang - alvo + 180) % 360) - 180) <= MEIA_DIAGONAL end
+  if perto(45) then return Directions.SouthEast end
+  if perto(135) then return Directions.SouthWest end
+  if perto(225) then return Directions.NorthWest end
+  if perto(315) then return Directions.NorthEast end
+  if ang >= 315 or ang < 45 then return Directions.East end
+  if ang < 135 then return Directions.South end
+  if ang < 225 then return Directions.West end
+  return Directions.North
 end
 
+local function moverBolinha()
+  local dist = math.sqrt(dx * dx + dy * dy)
+  local f = dist > RAIO and RAIO / dist or 1
+  keypad.pointer:setMarginLeft(math.floor(dx * f))
+  keypad.pointer:setMarginTop(math.floor(dy * f))
+end
+
+local ultimaDir
 local function passo()
   removeEvent(evento)
   evento = nil
@@ -45,20 +65,53 @@ local function passo()
     centralizar()
     return
   end
-  evento = scheduleEvent(passo, 40)
-
-  local x = math.min(1, math.max(0, posRel.x))
-  local y = math.min(1, math.max(0, posRel.y))
-  local ang = math.atan2(x - 0.5, y - 0.5)
-  local maxTop = math.abs(math.cos(ang)) * 50
-  local maxLeft = math.abs(math.sin(ang)) * 50
-  keypad.pointer:setMarginTop(math.max(-maxTop, math.min(maxTop, (y - 0.5) * 100)))
-  keypad.pointer:setMarginLeft(math.max(-maxLeft, math.min(maxLeft, (x - 0.5) * 100)))
-
+  evento = scheduleEvent(passo, 50)
+  moverBolinha()
   local dir = direcao()
-  if dir then g_game.walk(dir) end
+  if not dir then ultimaDir = nil return end
+  local player = g_game.getLocalPlayer()
+  -- trocou de direcao: vira na hora; mesma direcao: so pede o proximo passo
+  if dir ~= ultimaDir or not (player and player:isWalking()) then
+    g_game.walk(dir)
+  end
+  ultimaDir = dir
 end
 
+local function soltar()
+  segurando = false
+  ultimaDir = nil
+  dx, dy = 0, 0
+  removeEvent(evento)
+  evento = nil
+  centralizar()
+end
+
+-- chamado pelo cliente (C++) com o dedo do joystick, separado dos outros dedos.
+-- tipo 0 = encostou, 1 = moveu, 2 = soltou
+local function joystickToque(tipo, x, y)
+  if not keypad or not keypad:isVisible() or not g_game.isOnline() then
+    if tipo ~= 0 then soltar() end
+    return false
+  end
+  local pos = { x = x, y = y }
+  if tipo == 0 then
+    -- area de toque um pouco maior que o desenho da base
+    local cx, cy = centroBase()
+    local alcance = math.max(keypad:getWidth(), keypad:getHeight()) / 2 + 20
+    if math.abs(x - cx) > alcance or math.abs(y - cy) > alcance then return false end
+    atualizarPos(keypad, pos)
+    segurando = true
+    passo()
+    return true
+  elseif tipo == 1 then
+    atualizarPos(keypad, pos)
+    return true
+  end
+  soltar()
+  return true
+end
+
+-- mouse (cliente antigo do navegador sem o toque direto)
 local function onPress(widget, pos, button)
   if button ~= MouseLeftButton then return false end
   atualizarPos(widget, pos)
@@ -74,10 +127,7 @@ end
 
 local function onRelease(widget, pos, button)
   if button ~= MouseLeftButton then return false end
-  segurando = false
-  removeEvent(evento)
-  evento = nil
-  centralizar()
+  soltar()
   return true
 end
 
@@ -172,16 +222,6 @@ local function usarFrente()
     g_game.use(coisa)
   else
     modules.game_textmessage.displayFailureMessage('Nada para usar na frente.')
-  end
-end
-
-local function golpe(n)
-  -- mesma acao da barra de golpes (respeita nivel e recarga)
-  local pm = modules.game_pokemonmoves
-  if pm and pm.useSpell then
-    pm.useSpell(n)
-  elseif g_game.isOnline() then
-    g_game.talk('m' .. n)
   end
 end
 
@@ -416,10 +456,8 @@ function init()
   overlay = g_ui.displayUI('codexmobile')
   keypad = overlay:getChildById('keypad')
   connect(keypad, { onMousePress = onPress, onMouseMove = onMove, onMouseRelease = onRelease })
+  _G.codexJoystickToque = joystickToque -- o cliente manda o dedo do joystick direto aqui
   acoes = overlay:getChildById('acoes')
-  for n = 1, 4 do
-    acoes:getChildById('m' .. n).onClick = function() golpe(n) end
-  end
   acoes:getChildById('atacar').onClick = atacarProximo
   acoes:getChildById('usar').onClick = usarFrente
   acoes:getChildById('poke').onClick = pokemon
@@ -489,6 +527,7 @@ function init()
 end
 
 function terminate()
+  _G.codexJoystickToque = nil
   if not overlay then return end
   removeEvent(evento)
   removeEvent(eventoPosicao)

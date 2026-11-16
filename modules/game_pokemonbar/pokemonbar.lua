@@ -60,7 +60,8 @@ local savedPos = nil
 local dragOffset = nil
 local userHidden = false   -- escondida pelo botao do topmenu (fica salvo)
 local topButton = nil
-local HANDLE = (type(codexCelular) == 'function' and codexCelular()) and 20 or 8 -- CODEX: alca maior no celular (dedo)
+local CELULAR = (type(codexCelular) == 'function' and codexCelular()) and true or false
+local HANDLE = CELULAR and 20 or 8 -- CODEX: alca maior no celular (dedo)
 
 -- ============================================================
 -- util
@@ -324,6 +325,30 @@ function codexModoCelular(x, y)
   refreshBar()
 end
 
+-- arrastar a barra (pela alca; no celular tambem pelos cartoes)
+function arrastarInicio(self, mousePos)
+  if locked then return false end
+  pkb:breakAnchors()
+  dragOffset = {x = mousePos.x - pkb:getX(), y = mousePos.y - pkb:getY()}
+  return true
+end
+
+function arrastarMove(self, mousePos, mouseMoved)
+  if not dragOffset then return false end
+  pkb:setPosition({x = mousePos.x - dragOffset.x, y = mousePos.y - dragOffset.y})
+  pcall(function() pkb:bindRectToParent() end)
+  return true
+end
+
+-- retorna true: quem arrastou um cartao nao "clica" nele ao soltar
+function arrastarFim(self, droppedWidget, mousePos)
+  if not dragOffset then return false end
+  dragOffset = nil
+  savedPos = {x = pkb:getX(), y = pkb:getY()}
+  saveOptions()
+  return true
+end
+
 function refreshBar()
   if not pkb or not listPanel then return end
   listPanel:destroyChildren()
@@ -340,6 +365,13 @@ function refreshBar()
     card:setId('poke' .. entry.order)
     applyCardMode(card)
     fillCard(card, entry)
+    if CELULAR and not locked then
+      -- CODEX celular: arrasta a barra segurando qualquer cartao (alca fina e dificil no dedo)
+      card:setDraggable(true)
+      card.onDragEnter = arrastarInicio
+      card.onDragMove = arrastarMove
+      card.onDragLeave = arrastarFim
+    end
   end
 
   local count = #entries
@@ -583,24 +615,9 @@ function init()
 
   -- arrastar pela alca
   local handle = pkb:getChildById('dragHandle')
-  handle.onDragEnter = function(self, mousePos)
-    if locked then return false end
-    pkb:breakAnchors()
-    dragOffset = {x = mousePos.x - pkb:getX(), y = mousePos.y - pkb:getY()}
-    return true
-  end
-  handle.onDragMove = function(self, mousePos, mouseMoved)
-    if not dragOffset then return false end
-    pkb:setPosition({x = mousePos.x - dragOffset.x, y = mousePos.y - dragOffset.y})
-    pcall(function() pkb:bindRectToParent() end)
-    return true
-  end
-  handle.onDragLeave = function(self, droppedWidget, mousePos)
-    dragOffset = nil
-    savedPos = {x = pkb:getX(), y = pkb:getY()}
-    saveOptions()
-    return true
-  end
+  handle.onDragEnter = arrastarInicio
+  handle.onDragMove = arrastarMove
+  handle.onDragLeave = arrastarFim
   pkb:hide()
 
   connect(g_game, { onGameEnd = onGameEnd })

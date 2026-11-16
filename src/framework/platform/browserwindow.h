@@ -95,6 +95,7 @@ private:
     float m_cssScale = 1.f;
     float m_pixelRatio = 1.f;
     int m_touchId = -1;
+    int m_joyId = -1;
     int m_touchSeq = 0;
     bool m_touchDown = false;
     bool m_touchDragging = false;

@@ -20,12 +20,12 @@ UIWidget
     size: 170 150
     anchors.bottom: parent.bottom
     anchors.left: parent.left
-    margin-left: 6
-    margin-bottom: 40
+    margin-left: 14
+    margin-bottom: 24
     phantom: false
     focusable: false
     visible: false
-    opacity: 0.75
+    opacity: 0.9
     image-source: /images/game/mobile/keypad
     image-fixed-ratio: true
     image-rect: 12 0 150 150
@@ -42,7 +42,7 @@ UIWidget
 
   UIWidget
     id: acoes
-    size: 300 160
+    size: 190 168
     anchors.top: parent.top
     anchors.left: parent.left
     phantom: true
@@ -55,51 +55,11 @@ UIWidget
       image-source: /game_codexmobile/images/mover
       anchors.top: parent.top
       anchors.left: parent.left
-      margin-top: 40
-      margin-left: 155
+      margin-top: 30
+      margin-left: 30
       draggable: true
       focusable: false
       opacity: 0.8
-
-    CodexBotaoMobile
-      id: m1
-      text: M1
-      anchors.top: parent.top
-      anchors.left: parent.left
-      margin-top: 24
-      margin-left: 0
-
-    CodexBotaoMobile
-      id: m2
-      text: M2
-      anchors.top: parent.top
-      anchors.left: parent.left
-      margin-top: 24
-      margin-left: 70
-
-    CodexBotaoMobile
-      id: m3
-      text: M3
-      anchors.top: parent.top
-      anchors.left: parent.left
-      margin-top: 96
-      margin-left: 0
-
-    CodexBotaoMobile
-      id: m4
-      text: M4
-      anchors.top: parent.top
-      anchors.left: parent.left
-      margin-top: 96
-      margin-left: 70
-
-    CodexBotaoMobile
-      id: usar
-      text: USAR
-      anchors.top: parent.top
-      anchors.left: parent.left
-      margin-top: 96
-      margin-left: 140
 
     CodexBotaoMobile
       id: poke
@@ -109,9 +69,17 @@ UIWidget
       anchors.top: parent.top
       anchors.left: parent.left
       margin-top: 0
-      margin-left: 226
+      margin-left: 114
       $pressed:
         image-source: /game_codexmobile/images/poke_on
+
+    CodexBotaoMobile
+      id: usar
+      text: USAR
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 100
+      margin-left: 6
 
     CodexBotaoMobile
       id: atacar
@@ -120,8 +88,8 @@ UIWidget
       image-source: /game_codexmobile/images/grande
       anchors.top: parent.top
       anchors.left: parent.left
-      margin-top: 72
-      margin-left: 212
+      margin-top: 78
+      margin-left: 100
       $pressed:
         image-source: /game_codexmobile/images/grande_on
 
