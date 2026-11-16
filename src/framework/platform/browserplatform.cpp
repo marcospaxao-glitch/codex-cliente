@@ -24,6 +24,7 @@
 
 #include "platform.h"
 #include <cstring>
+#include <emscripten/emscripten.h>
 #include <fstream>
 #include <unistd.h>
 #include <framework/stdext/stdext.h>
@@ -93,8 +94,18 @@ ticks_t Platform::getFileModificationTime(std::string file)
     return 0;
 }
 
+// CODEX: abre o site numa aba nova (se o navegador bloquear, abre nesta aba)
 bool Platform::openUrl(std::string url, bool now)
 {
+    if (url.find("http://") == std::string::npos && url.find("https://") == std::string::npos)
+        url.insert(0, "https://");
+    MAIN_THREAD_ASYNC_EM_ASM({
+        var u = UTF8ToString($0);
+        if (location.protocol === "https:" && u.indexOf("http://") === 0) u = "https://" + u.substring(7);
+        var w = null;
+        try { w = window.open(u, "_blank"); } catch (e) {}
+        if (!w) location.href = u;
+    }, strdup(url.c_str()));
     return true;
 }
 
