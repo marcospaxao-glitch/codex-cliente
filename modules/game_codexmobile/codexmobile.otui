@@ -103,7 +103,7 @@ UIWidget
 
     CodexBotaoMobile
       id: poke
-      text: POKÉ
+      text: POKE
       color: #1a1a1a
       image-source: /game_codexmobile/images/poke
       anchors.top: parent.top
@@ -256,7 +256,7 @@ UIWidget
     CodexBotaoMobile
       id: btnPokemon
       size: 54 54
-      text: POKÉ
+      text: POKE
       color: #1a1a1a
       image-source: /game_codexmobile/images/poke
       $pressed:

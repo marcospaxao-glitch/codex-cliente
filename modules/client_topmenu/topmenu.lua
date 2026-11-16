@@ -260,7 +260,7 @@ local function entriesOf(cat, search)
     if a and not e.hidden and not e.button:isDestroyed() and e.button:isExplicitlyVisible() then
       local ok
       if search ~= '' then ok = (labelOf(id) .. ' ' .. textOf(id)):lower():find(search, 1, true) ~= nil
-      else ok = a.where == cat end
+      else ok = (cat == '*') or a.where == cat end -- CODEX: '*' = todos (celular)
       if ok then list[#list + 1] = {id = id, n = (search ~= '' and e.order or a.n)} end
     end
   end
@@ -651,6 +651,26 @@ end
 
 function getTopMenu()
   return topMenu
+end
+
+-- CODEX celular: sem a barra do topo, o botao MENU abre a gaveta com TODOS os
+-- sistemas, no centro da tela (a busca continua funcionando)
+function codexMenuCelular()
+  if not drawer then return end
+  if drawer:isVisible() and currentCat == '*' then closeDrawer() return end
+  closeDrawer()
+  currentCat = '*'
+  searchText = ''
+  drawer:getChildById('search'):setText('')
+  renderDrawer()
+  drawer:getChildById('title'):setText('Sistemas')
+  drawer:setPosition({x = math.floor((rootWidget:getWidth() - drawer:getWidth()) / 2), y = 70})
+  drawer:show()
+  drawer:raise()
+end
+
+function codexFecharMenu()
+  closeDrawer()
 end
 
 -- abre uma categoria (para atalho de outro modulo): 'combate','atalhos','social','recompensas'

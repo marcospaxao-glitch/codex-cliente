@@ -311,34 +311,61 @@ local function abrirGaveta(abrir)
   if overlay then overlay:raise() end
 end
 
+local function passo(nome, fn)
+  local ok, err = pcall(fn)
+  if not ok then g_logger.warning('[codex celular] ' .. nome .. ': ' .. tostring(err)) end
+end
+
+-- sem a barra do topo no celular: a interface do jogo sobe para o topo da tela
+local function esconderTopo()
+  local tm = modules.client_topmenu and modules.client_topmenu.getTopMenu and modules.client_topmenu.getTopMenu()
+  if not tm then return end
+  if tm:isVisible() then tm:hide() end
+  local gi = modules.game_interface
+  local raiz = gi and gi.getRootPanel and gi.getRootPanel()
+  if raiz then
+    raiz:breakAnchors()
+    raiz:fill('parent')
+  end
+  local btn = gi and gi.getShowTopMenuButton and gi.getShowTopMenuButton()
+  if btn then btn:hide() end
+end
+
 local function organizarTela()
   local gi = modules.game_interface
   if not gi then return end
   local root = g_ui.getRootWidget()
   -- mapa na tela toda (modo da propria interface do Codex)
-  pcall(function() gi.setupViewMode(2) end)
-  -- barra de icones do topo escondida (abre no botao MENU)
-  local tm = modules.client_topmenu and modules.client_topmenu.getTopMenu()
-  if tm then tm:hide() end
-  local esquerda, direita = gi.getLeftPanel(), gi.getRightPanel()
-  if esquerda then esquerda:setOn(false) end
-  if direita then direita:setMarginTop(0) end
-  abrirGaveta(false)
+  passo('mapa em tela cheia', function() gi.setupViewMode(2) end)
+  passo('barra do topo', esconderTopo)
+  passo('paineis', function()
+    local esquerda, direita = gi.getLeftPanel(), gi.getRightPanel()
+    if esquerda then esquerda:setOn(false) end
+    if direita then direita:setMarginTop(0) end
+  end)
+  passo('gaveta', function() abrirGaveta(gavetaAberta) end)
   -- chat compacto embaixo, no centro
-  local fundo = gi.getBottomPanel()
-  if fundo then
-    fundo:breakAnchors()
-    fundo:addAnchor(AnchorBottom, 'parent', AnchorBottom)
-    fundo:addAnchor(AnchorHorizontalCenter, 'parent', AnchorHorizontalCenter)
-    fundo:setWidth(math.max(360, math.floor(root:getWidth() * 0.46)))
-    fundo:setHeight(150)
-  end
-  if gi.bottomSplitter then gi.bottomSplitter:hide() end
+  passo('chat', function()
+    local fundo = gi.getBottomPanel()
+    if fundo then
+      fundo:breakAnchors()
+      fundo:addAnchor(AnchorBottom, 'parent', AnchorBottom)
+      fundo:addAnchor(AnchorHorizontalCenter, 'parent', AnchorHorizontalCenter)
+      fundo:setWidth(math.max(360, math.floor(root:getWidth() * 0.46)))
+      fundo:setHeight(150)
+    end
+    if gi.bottomSplitter then gi.bottomSplitter:hide() end
+  end)
   -- barras do Codex nos lugares do celular (so na primeira vez)
-  local pb = modules.game_pokemonbar
-  if pb and pb.codexModoCelular then pcall(pb.codexModoCelular, 8, 88) end
-  local pm = modules.game_pokemonmoves
-  if pm and pm.codexModoCelular then pcall(pm.codexModoCelular, 6) end
+  passo('barra de pokemons', function()
+    local pb = modules.game_pokemonbar
+    if pb and pb.codexModoCelular then pb.codexModoCelular(8, 88) end
+  end)
+  passo('barra de golpes', function()
+    local pm = modules.game_pokemonmoves
+    if pm and pm.codexModoCelular then pm.codexModoCelular(6) end
+  end)
+  if overlay then overlay:raise() end
 end
 
 local function mostrarHud(mostrar)
@@ -357,13 +384,16 @@ local function onGameStart()
   if hb and hb.setHidden then hb.setHidden(true) end
   mostrarHud(true)
   -- espera a interface do jogo terminar de montar
-  scheduleEvent(function()
-    if not g_game.isOnline() then return end
-    organizarTela()
-    atualizarCartao()
-    atualizarMapa()
-    posicionar()
-  end, 300)
+  -- a interface do Codex termina de montar em etapas: arruma algumas vezes
+  for _, atraso in ipairs({ 300, 1500, 4000 }) do
+    scheduleEvent(function()
+      if not g_game.isOnline() then return end
+      organizarTela()
+      atualizarCartao()
+      atualizarMapa()
+      posicionar()
+    end, atraso)
+  end
   posicionarDepois()
   scheduleEvent(posicionar, 1500) -- depois que as janelas laterais terminam de abrir
 end
@@ -428,7 +458,8 @@ function init()
   miniMapa = overlay:getChildById('miniMapa')
   pcall(function() miniMapa:getChildById('mapa'):hideFloor() end)
   menuTopo:getChildById('btnMenu').onClick = function()
-    if modules.client_topmenu and modules.client_topmenu.toggle then modules.client_topmenu.toggle() end
+    local tm = modules.client_topmenu
+    if tm and tm.codexMenuCelular then tm.codexMenuCelular() end
   end
   menuTopo:getChildById('btnMochila').onClick = function()
     abrirGaveta(true)
@@ -446,6 +477,12 @@ function init()
     abrirGaveta(not gavetaAberta)
   end
   connect(LocalPlayer, { onHealthChange = onVida, onLevelChange = onVida, onPositionChange = onPosicao })
+  local tm = modules.client_topmenu and modules.client_topmenu.getTopMenu and modules.client_topmenu.getTopMenu()
+  if tm then
+    connect(tm, { onVisibilityChange = function(w, visivel)
+      if visivel and g_game.isOnline() then scheduleEvent(function() passo('barra do topo', esconderTopo) end, 50) end
+    end })
+  end
   connect(g_game, { onGameStart = onGameStart, onGameEnd = onGameEnd })
   if g_game.isOnline() then onGameStart() end
   g_logger.info('[codex] modo celular ligado (joystick + botoes de acao)')
