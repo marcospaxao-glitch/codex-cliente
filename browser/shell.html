@@ -109,8 +109,9 @@
         padding: 24px;
       }
       #codexGire span { font-size: 54px; }
+      /* so pede para girar depois de entrar no jogo (login funciona em pe) */
       @media (orientation: portrait) and (pointer: coarse) {
-        #codexGire { display: flex; }
+        body.codexNoJogo #codexGire { display: flex; }
       }
       #aviso {
         position: absolute;
@@ -231,13 +232,17 @@
           var el = document.documentElement;
           var p = el.requestFullscreen ? el.requestFullscreen({ navigationUI: "hide" }) :
             (el.webkitRequestFullscreen ? el.webkitRequestFullscreen() : null);
-          if (p && p.then) {
-            p.then(function () {
-              if (screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(function () {});
-            }).catch(function () {});
-          }
+          if (p && p.catch) p.catch(function () {});
         } catch (e) {}
       }
+      // chamado pelo cliente: entrou no jogo = trava deitado; saiu = livre
+      window.codexModoJogo = function (noJogo) {
+        document.body.classList.toggle("codexNoJogo", !!noJogo);
+        try {
+          if (noJogo && screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(function () {});
+          else if (!noJogo && screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+        } catch (e) {}
+      };
       // envia teclas para o jogo (o cliente escuta o window)
       function codexTecla(tipo, key, code, keyCode) {
         window.dispatchEvent(new KeyboardEvent(tipo, { key: key, code: code, keyCode: keyCode, which: keyCode, charCode: tipo === "keypress" ? keyCode : 0, bubbles: true }));

@@ -62,6 +62,7 @@ void codexBotaoTeclado(bool mostrar) {
     MAIN_THREAD_ASYNC_EM_ASM({
         var b = document.getElementById("codexTecladoBtn");
         if (b && window.CODEX_CELULAR) b.style.display = $0 ? "block" : "none";
+        if (window.CODEX_CELULAR && window.codexModoJogo) window.codexModoJogo(!$0);
     }, mostrar ? 1 : 0);
 }
 

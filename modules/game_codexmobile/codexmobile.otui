@@ -19,9 +19,7 @@ CodexPilula < CodexImgBotao
 CodexAba < CodexImgBotao
   size: 196 48
   image-source: /game_codexmobile/images/aba
-  icon-size: 26 26
-  icon-offset: 14 0
-  icon-align: left
+  icon-rect: 14 11 26 26
   text-align: left
   text-offset: 50 0
   font: verdana-11px-rounded
@@ -34,8 +32,7 @@ CodexAba < CodexImgBotao
 CodexTile < CodexImgBotao
   size: 108 96
   image-source: /game_codexmobile/images/tile
-  icon-size: 36 36
-  icon-offset: 0 -12
+  icon-rect: 36 14 36 36
   text-offset: 0 26
   font: verdana-11px-rounded
   color: #ffffff
