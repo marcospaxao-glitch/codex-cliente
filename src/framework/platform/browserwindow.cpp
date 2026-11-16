@@ -210,8 +210,13 @@ void BrowserWindow::applyCanvasSize() {
 
     if (m_celular) {
         m_pixelRatio = std::clamp<float>(static_cast<float>(codexPixelRatio()), 1.f, 2.f);
-        // area minima da interface do Codex: ~1180 x 600
-        m_cssScale = std::clamp<float>(static_cast<float>(std::min(w / 1180.0, h / 600.0)), 0.45f, 1.f);
+        if (h > w) {
+            // em pe (so na tela de login): interface ~540 x 960, letras maiores
+            m_cssScale = std::clamp<float>(static_cast<float>(std::min(w / 540.0, h / 960.0)), 0.45f, 1.f);
+        } else {
+            // deitado (jogo): area minima da interface do Codex ~1180 x 600
+            m_cssScale = std::clamp<float>(static_cast<float>(std::min(w / 1180.0, h / 600.0)), 0.45f, 1.f);
+        }
     } else {
         m_pixelRatio = 1.f;
         m_cssScale = 1.f;

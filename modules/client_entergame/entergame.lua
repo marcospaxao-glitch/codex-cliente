@@ -154,6 +154,10 @@ function EnterGame.init()
   enterGame:getChildById('footerLabel'):setText(g_app.getName() .. ' v' .. g_app.getVersion())
   if type(codexCelular) == 'function' and codexCelular() then
     pcall(EnterGame.layoutCelular)
+    -- girou o celular: refaz o cartao (em pe = empilhado, deitado = 2 colunas)
+    connect(rootWidget, { onGeometryChange = function()
+      if not g_game.isOnline() then scheduleEvent(function() pcall(EnterGame.layoutCelular) end, 50) end
+    end })
   end
 end
 
@@ -161,6 +165,7 @@ end
 -- direita. Fica tudo na metade de cima, onde o teclado do celular nao cobre.
 function EnterGame.layoutCelular()
   local W = rootWidget:getWidth()
+  if rootWidget:getHeight() > W then return EnterGame.layoutCelularEmPe() end
   local largura = math.min(W - 20, 780)
   enterGame:breakAnchors()
   enterGame:addAnchor(AnchorTop, 'topMenu', AnchorBottom)
@@ -218,6 +223,66 @@ function EnterGame.layoutCelular()
   local esqueci = ancorar('recoverButton', { { AnchorTop, 'loginButton', AnchorBottom }, { AnchorRight, 'parent', AnchorRight } })
   esqueci:setMarginTop(16)
   ancorar('serverInfoLabel', { { AnchorTop, 'createAccountButton', AnchorBottom }, { AnchorHorizontalCenter, 'loginButton', AnchorHorizontalCenter } })
+end
+
+-- CODEX celular em pe: tudo empilhado, no alto (o teclado ocupa a parte de baixo)
+function EnterGame.layoutCelularEmPe()
+  local W = rootWidget:getWidth()
+  enterGame:breakAnchors()
+  enterGame:addAnchor(AnchorTop, 'topMenu', AnchorBottom)
+  enterGame:addAnchor(AnchorHorizontalCenter, 'parent', AnchorHorizontalCenter)
+  enterGame:setMarginTop(10)
+  enterGame:setSize({ width = math.min(W - 24, 500), height = 540 })
+  enterGame:setImageSource('')
+  enterGame:setBackgroundColor('#0a1320ee')
+  enterGame:setBorderWidth(2)
+  enterGame:setBorderColor('#f2c400')
+  enterGame:setPaddingLeft(22)
+  enterGame:setPaddingRight(22)
+  local function W_(id) return enterGame:getChildById(id) end
+  W_('edge'):hide()
+  W_('footerLabel'):hide()
+  local function ancorar(id, regras)
+    local w = W_(id)
+    if not w then return end
+    w:breakAnchors()
+    for _, r in ipairs(regras) do w:addAnchor(r[1], r[2], r[3]) end
+    return w
+  end
+  local larga = { { AnchorLeft, 'parent', AnchorLeft }, { AnchorRight, 'parent', AnchorRight } }
+  local function com(extra)
+    local t = { extra }
+    for _, r in ipairs(larga) do t[#t + 1] = r end
+    return t
+  end
+  local logo = ancorar('logo', { { AnchorTop, 'parent', AnchorTop }, { AnchorHorizontalCenter, 'parent', AnchorHorizontalCenter } })
+  logo:setSize({ width = 230, height = 121 })
+  logo:setMarginTop(16)
+  local conta = ancorar('accountLabel', { { AnchorTop, 'logo', AnchorBottom }, { AnchorLeft, 'parent', AnchorLeft } })
+  conta:setMarginTop(18)
+  conta:setMarginLeft(0)
+  local campo1 = ancorar('accountNameTextEdit', com({ AnchorTop, 'accountLabel', AnchorBottom }))
+  campo1:setHeight(44)
+  campo1:setMarginTop(5)
+  campo1:setTextOffset({ x = 4, y = 14 })
+  local senha = ancorar('passwordLabel', { { AnchorTop, 'accountNameTextEdit', AnchorBottom }, { AnchorLeft, 'parent', AnchorLeft } })
+  senha:setMarginTop(12)
+  local campo2 = ancorar('accountPasswordTextEdit', com({ AnchorTop, 'passwordLabel', AnchorBottom }))
+  campo2:setHeight(44)
+  campo2:setMarginTop(5)
+  campo2:setTextOffset({ x = 4, y = 14 })
+  local lembrar = ancorar('rememberPasswordBox', com({ AnchorTop, 'accountPasswordTextEdit', AnchorBottom }))
+  lembrar:setMarginTop(14)
+  local auto = ancorar('autoLoginBox', com({ AnchorTop, 'rememberPasswordBox', AnchorBottom }))
+  auto:setMarginTop(10)
+  local entrar = ancorar('loginButton', com({ AnchorTop, 'autoLoginBox', AnchorBottom }))
+  entrar:setHeight(48)
+  entrar:setMarginTop(16)
+  local criar = ancorar('createAccountButton', { { AnchorTop, 'loginButton', AnchorBottom }, { AnchorLeft, 'parent', AnchorLeft } })
+  criar:setMarginTop(18)
+  local esqueci = ancorar('recoverButton', { { AnchorTop, 'loginButton', AnchorBottom }, { AnchorRight, 'parent', AnchorRight } })
+  esqueci:setMarginTop(18)
+  ancorar('serverInfoLabel', { { AnchorTop, 'createAccountButton', AnchorBottom }, { AnchorHorizontalCenter, 'parent', AnchorHorizontalCenter } })
 end
 
 function EnterGame.firstShow()
