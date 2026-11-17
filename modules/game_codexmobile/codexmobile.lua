@@ -664,7 +664,7 @@ local function organizarTela()
 end
 
 local function mostrarHud(mostrar)
-  for _, w in ipairs({ topo, cartao, miniMapa, botaoLoot, botaoMontaria, overlay:getChildById('npcHi'), overlay:getChildById('npcTrade') }) do
+  for _, w in ipairs({ topo, cartao, miniMapa, botaoLoot, botaoMontaria, overlay:getChildById('npcHi'), overlay:getChildById('npcTrade'), overlay:getChildById('vooSubir'), overlay:getChildById('vooDescer') }) do
     if w then w:setVisible(mostrar) end
   end
 end
@@ -796,7 +796,7 @@ local function esconderHud(esconder)
   local mudou = hudEscondido ~= esconder
   hudEscondido = esconder
   if not esconder and not mudou then return end
-  for _, w in ipairs({ topo, cartao, keypad, botaoMontaria, overlay:getChildById('npcHi'), overlay:getChildById('npcTrade') }) do
+  for _, w in ipairs({ topo, cartao, keypad, botaoMontaria, overlay:getChildById('npcHi'), overlay:getChildById('npcTrade'), overlay:getChildById('vooSubir'), overlay:getChildById('vooDescer') }) do
     if w then w:setVisible(not esconder) end
   end
   for _, w in ipairs({ miniMapa, botaoLoot, acoes }) do
@@ -980,6 +980,9 @@ local function ligarBotoes()
     local con = modules.game_console
     if con and con.sendMessage then con.sendMessage(texto) else g_game.talk(texto) end
   end
+  -- voando: subir / descer de andar (o mesmo que PageUp / PageDown do PC)
+  overlay:getChildById('vooSubir').onClick = function() if g_game.isOnline() then g_game.talk('!up') end end
+  overlay:getChildById('vooDescer').onClick = function() if g_game.isOnline() then g_game.talk('!down') end end
   overlay:getChildById('npcHi').onClick = function() falarNaAba('hi') end
   overlay:getChildById('npcTrade').onClick = function() falarNaAba('trade') end
   acoes:getChildById('atacar').onClick = atacar

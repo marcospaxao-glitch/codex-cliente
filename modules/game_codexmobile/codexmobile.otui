@@ -527,3 +527,27 @@ UIWidget
     visible: false
     $pressed:
       image-source: /game_codexmobile/images/fechar_on
+
+  // ===== voo: subir / descer (embaixo do cartao, na esquerda) =====
+  CodexImgBotao
+    id: vooSubir
+    size: 62 62
+    anchors.top: cartao.bottom
+    anchors.left: parent.left
+    margin-top: 6
+    margin-left: 18
+    image-source: /game_codexmobile/images/voo_subir
+    visible: false
+    $pressed:
+      image-source: /game_codexmobile/images/voo_subir_on
+
+  CodexImgBotao
+    id: vooDescer
+    size: 62 62
+    anchors.top: vooSubir.bottom
+    anchors.left: vooSubir.left
+    margin-top: 4
+    image-source: /game_codexmobile/images/voo_descer
+    visible: false
+    $pressed:
+      image-source: /game_codexmobile/images/voo_descer_on
