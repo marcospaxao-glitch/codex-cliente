@@ -78,10 +78,10 @@ UIWidget
     anchors.left: keypad.right
     margin-left: 34
     margin-bottom: 4
-    image-source: /game_codexmobile/images/montaria
+    image-source: /game_codexmobile/images/order
     visible: false
     $pressed:
-      image-source: /game_codexmobile/images/montaria_on
+      image-source: /game_codexmobile/images/order_on
 
   // ===== atalhos de NPC (acima da montaria) =====
   CodexImgBotao

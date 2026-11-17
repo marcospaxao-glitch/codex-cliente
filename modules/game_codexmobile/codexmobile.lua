@@ -967,7 +967,13 @@ local function ligarBotoes()
       if not gavetaAberta then abrirGaveta(true) end
     end
   end
-  botaoMontaria.onClick = montaria
+  -- ORDER (mover o pokemon): igual ao botao do meio do mouse; depois toque no lugar/alvo
+  botaoMontaria.onClick = function()
+    if not g_game.isOnline() then return end
+    local hi, gi = modules.game_healthinfo, modules.game_interface
+    if hi and hi.toggleOrder then hi.toggleOrder()
+    elseif gi and gi.toggleOrder then gi.toggleOrder() end
+  end
   -- HI / TRADE vao para a aba escolhida no chat (ex.: a aba do NPC), igual a digitar
   local function falarNaAba(texto)
     if not g_game.isOnline() then return end
