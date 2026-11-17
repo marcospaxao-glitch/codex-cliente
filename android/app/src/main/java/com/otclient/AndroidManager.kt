@@ -67,6 +67,15 @@ class AndroidManager(
         }
     }
 
+    // CODEX: login com o celular em pe (ou como o jogador quiser); no jogo, deitado
+    fun setGameOrientation(inGame: Boolean) {
+        handler.post {
+            (context as? android.app.Activity)?.requestedOrientation =
+                if (inGame) android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+                else android.content.pm.ActivityInfo.SCREEN_ORIENTATION_FULL_USER
+        }
+    }
+
     fun hideSoftKeyboard() {
         handler.post {
             editText.visibility = View.INVISIBLE

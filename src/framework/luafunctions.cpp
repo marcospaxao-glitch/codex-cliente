@@ -116,7 +116,10 @@ void Application::registerLuaFunctions()
 #elif defined(ANDROID)
     // CODEX: app de celular: HUD do celular sempre; teclado do sistema
     g_lua.bindGlobalFunction("codexCelular", [] { return true; });
-    g_lua.bindGlobalFunction("codexBotaoTeclado", [](bool mostrar) { g_codexTecladoSoBotao = !mostrar; });
+    g_lua.bindGlobalFunction("codexBotaoTeclado", [](bool mostrar) {
+        g_codexTecladoSoBotao = !mostrar;
+        g_androidManager.setGameOrientation(!mostrar); // no jogo: deitado; fora: livre
+    });
     g_lua.bindGlobalFunction("codexTeclado", [](bool abrir, int) {
         if (abrir) g_androidManager.showKeyboardSoft();
         else g_androidManager.hideKeyboard();

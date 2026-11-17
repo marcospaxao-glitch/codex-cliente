@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <string>
+#include <memory>
 #include <sys/stat.h>
 #include <unistd.h>
 
@@ -84,18 +85,27 @@ int pknet_download(const char* url, const char* destPath, PkNetProgress cb, void
     size_t slash = u.find('/', sep + 3);
     std::string host = u.substr(0, slash == std::string::npos ? u.size() : slash);
     std::string path = slash == std::string::npos ? "/" : u.substr(slash);
-    httplib::Client cli(host);
+    // CODEX: uma conexao por thread, reaproveitada (keep-alive): abrir https e ler os
+    // certificados a cada bloco de sprite pesava muito no celular
+    thread_local std::string cliHost;
+    thread_local std::unique_ptr<httplib::Client> cliPtr;
+    if(!cliPtr || cliHost != host) {
+        cliPtr = std::make_unique<httplib::Client>(host);
+        cliHost = host;
 #ifdef ANDROID
-    // CODEX: o OpenSSL nao entende a loja de certificados do Android; usa o
-    // cacert.pem que vem no app (copiado para a pasta do app). Sem ele, nao verifica.
-    if(!g_pkCaFile.empty() && pkfs_exists(g_pkCaFile.c_str()))
-        cli.set_ca_cert_path(g_pkCaFile);
-    else
-        cli.enable_server_certificate_verification(false);
+        // o OpenSSL nao entende a loja de certificados do Android; usa o cacert.pem
+        // que vem no app (copiado para a pasta do app). Sem ele, nao verifica.
+        if(!g_pkCaFile.empty() && pkfs_exists(g_pkCaFile.c_str()))
+            cliPtr->set_ca_cert_path(g_pkCaFile);
+        else
+            cliPtr->enable_server_certificate_verification(false);
 #endif
-    cli.set_follow_location(true);
-    cli.set_connection_timeout(15);
-    cli.set_read_timeout(30);
+        cliPtr->set_follow_location(true);
+        cliPtr->set_keep_alive(true);
+        cliPtr->set_connection_timeout(15);
+        cliPtr->set_read_timeout(30);
+    }
+    httplib::Client& cli = *cliPtr;
     FILE* out = fopen(destPath, "wb");
     if(!out) return pkFail(err, errLen, "nao criou o arquivo");
     bool writeOk = true;
@@ -106,6 +116,7 @@ int pknet_download(const char* url, const char* destPath, PkNetProgress cb, void
         });
     fclose(out);
     if(!res || res->status != 200 || !writeOk) {
+        if(!res) cliPtr.reset(); // conexao caiu: abre outra na proxima
         remove(destPath);
         char m[64];
         snprintf(m, sizeof(m), "o site respondeu erro HTTP (%d)", res ? res->status : 0);

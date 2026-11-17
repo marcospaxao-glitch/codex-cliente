@@ -474,7 +474,11 @@ namespace {
 
     uint32_t lerU32(const uint8_t* p) { return p[0] | (p[1] << 8) | (p[2] << 16) | (static_cast<uint32_t>(p[3]) << 24); }
 
+#ifdef ANDROID
+    constexpr size_t CODEX_CACHE_MAX = 64u * 1024u * 1024u; // celular: pouca memoria (o disco ja guarda tudo)
+#else
     constexpr size_t CODEX_CACHE_MAX = 256u * 1024u * 1024u;
+#endif
     constexpr uint32_t CODEX_SPRITE_MAX = 5 + 8200; // cabecalho + pior caso RLE 32x32 RGBA
     constexpr int CODEX_THREADS = 6;
 }

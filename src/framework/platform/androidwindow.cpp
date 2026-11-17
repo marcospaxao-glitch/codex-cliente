@@ -558,9 +558,12 @@ void AndroidWindow::handleCmd(int32_t cmd) {
 void AndroidWindow::codexAjustarDensidade() {
     if (m_size.width() <= 0 || m_size.height() <= 0)
         return;
-    const float w = static_cast<float>(std::max(m_size.width(), m_size.height()));
-    const float h = static_cast<float>(std::min(m_size.width(), m_size.height()));
-    m_displayDensity = std::clamp(std::min(w / 1180.f, h / 600.f), 0.75f, 4.f);
+    const float w = static_cast<float>(m_size.width());
+    const float h = static_cast<float>(m_size.height());
+    if (h > w) // em pe (login): interface ~540 x 960, letras maiores (igual ao navegador)
+        m_displayDensity = std::clamp(std::min(w / 540.f, h / 960.f), 0.75f, 4.f);
+    else // deitado (jogo): ~1180 x 600
+        m_displayDensity = std::clamp(std::min(w / 1180.f, h / 600.f), 0.75f, 4.f);
 }
 
 void AndroidWindow::updateDisplayDensityFromSystem(float screenDensity) {
