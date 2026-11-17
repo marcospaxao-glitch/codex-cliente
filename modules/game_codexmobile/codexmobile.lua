@@ -560,6 +560,12 @@ local function arrumarChat()
     end
     local abas = painel:getChildById('consoleTabBar')
     if abas then
+      -- no dedo, arrastar a aba (trocar de lugar) engolia o toque: a aba nao era
+      -- escolhida e a mensagem ia para o Padrao. No celular as abas nao arrastam.
+      abas.tabsMoveable = false
+      for _, t in ipairs(abas.tabs or {}) do t:setDraggable(false) end
+      for _, t in ipairs(abas.preTabs or {}) do t:setDraggable(false) end
+      for _, t in ipairs(abas.postTabs or {}) do t:setDraggable(false) end
       abas:breakAnchors()
       abas:addAnchor(AnchorTop, 'parent', AnchorTop)
       abas:addAnchor(AnchorLeft, 'parent', AnchorLeft)
