@@ -390,6 +390,12 @@ void LuaInterface::evaluateExpression(const std::string_view expression, const s
 
 std::string LuaInterface::traceback(const std::string_view errorMessage, const int level)
 {
+#ifdef ANDROID
+    // CODEX: luaL_traceback (debug.traceback) derruba o app no Android arm64 com o
+    // LuaJIT; devolve so a mensagem do erro
+    (void)level;
+    return std::string(errorMessage);
+#endif
     // gets debug.traceback
     getGlobal("debug");
     getField("traceback");
@@ -797,7 +803,8 @@ void LuaInterface::createLuaState()
 #if defined(ANDROID) && defined(LUAJIT_VERSION)
     // CODEX: no Android (arm64) o compilador JIT do LuaJIT derrubava o app ao montar o
     // rastreio de um erro de Lua; o interpretador do LuaJIT ja e rapido o bastante
-    luaL_dostring(L, "if jit and jit.off then jit.off() end");
+    luaL_dostring(L, "if jit and jit.off then jit.off() end "
+                     "debug.traceback = function(msg) if msg == nil then return '' end return tostring(msg) end");
 #endif
 
 #ifdef __EMSCRIPTEN__
