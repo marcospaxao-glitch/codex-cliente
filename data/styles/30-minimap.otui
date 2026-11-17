@@ -56,6 +56,8 @@ MinimapMarksButton < MinimapCtrlButton
     border-color: #6f86a8
     background-color: #0a1320aa
 
+// CODEX: os ids dos botoes nao podem ter o nome dos metodos do minimapa
+// (zoomIn, floorUp...): no cliente novo self:getParent().zoomIn virava o botao.
 Minimap < UIMinimap
   draggable: true
   focusable: false
@@ -63,7 +65,7 @@ Minimap < UIMinimap
   color: black
 
   MinimapZoomInButton
-    id: zoomIn
+    id: btnZoomIn
     anchors.top: parent.top
     anchors.right: parent.right
     margin-top: 4
@@ -71,28 +73,28 @@ Minimap < UIMinimap
     @onClick: self:getParent():zoomIn()
 
   MinimapZoomOutButton
-    id: zoomOut
-    anchors.top: zoomIn.bottom
-    anchors.right: zoomIn.right
+    id: btnZoomOut
+    anchors.top: btnZoomIn.bottom
+    anchors.right: btnZoomIn.right
     margin-top: 2
     @onClick: self:getParent():zoomOut()
 
   MinimapFloorUpButton
-    id: floorUp
-    anchors.top: zoomOut.bottom
-    anchors.right: zoomIn.right
+    id: btnFloorUp
+    anchors.top: btnZoomOut.bottom
+    anchors.right: btnZoomIn.right
     margin-top: 8
     @onClick: self:getParent():floorUp(1)
 
   MinimapFloorDownButton
-    id: floorDown
-    anchors.top: floorUp.bottom
-    anchors.right: zoomIn.right
+    id: btnFloorDown
+    anchors.top: btnFloorUp.bottom
+    anchors.right: btnZoomIn.right
     margin-top: 2
     @onClick: self:getParent():floorDown(1)
 
   MinimapResetButton
-    id: reset
+    id: btnReset
     anchors.top: parent.top
     anchors.left: parent.left
     margin-top: 4
@@ -101,8 +103,8 @@ Minimap < UIMinimap
 
   MinimapMarksButton
     id: marks
-    anchors.top: reset.bottom
-    anchors.left: reset.left
+    anchors.top: btnReset.bottom
+    anchors.left: btnReset.left
     margin-top: 2
     @onClick: modules.game_minimap.toggleMarks()
 
