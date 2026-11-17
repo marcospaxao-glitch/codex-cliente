@@ -26,7 +26,9 @@
 #include "androidmanager.h"
 #include <game-activity/native_app_glue/android_native_app_glue.h>
 #include "framework/core/clock.h"
+#include <algorithm>
 #include <framework/core/eventdispatcher.h>
+#include <framework/luaengine/luainterface.h>
 #include <android/log.h>
 #define ALOGD(...) __android_log_print(ANDROID_LOG_DEBUG, "OTClientMobile", __VA_ARGS__)
 
@@ -328,6 +330,7 @@ void AndroidWindow::swapBuffers() {
                 internalCreateGLSurface();
                 internalConnectSurface();
                 queryGlSize();
+                codexAjustarDensidade();
             }
         }
     }
@@ -402,15 +405,72 @@ void AndroidWindow::onDisplayDensityChanged(float newDensity) {
     m_hasBaseDisplayDensity = true;
 }
 
+// CODEX: o joystick do HUD recebe o proprio dedo (Lua: codexJoystickToque(tipo, x, y);
+// tipo 0 = encostou -> true se o dedo e do joystick, 1 = moveu, 2 = soltou)
+static bool codexJoystickToque(int tipo, int x, int y) {
+    bool usado = false;
+    try {
+        g_lua.getGlobal("codexJoystickToque");
+        if (!g_lua.isFunction()) {
+            g_lua.pop();
+            return false;
+        }
+        g_lua.pushInteger(tipo);
+        g_lua.pushInteger(x);
+        g_lua.pushInteger(y);
+        g_lua.safeCall(3, 1);
+        usado = g_lua.popBoolean();
+    } catch (...) {
+        usado = false;
+    }
+    return usado;
+}
+
 void AndroidWindow::onNativeTouch(int actionType,
                                   uint32_t pointerIndex,
                                   GameActivityMotionEvent* motionEvent) {
     float x = GameActivityPointerAxes_getX(&motionEvent->pointers[pointerIndex]);
     float y = GameActivityPointerAxes_getY(&motionEvent->pointers[pointerIndex]);
+    const int id = motionEvent->pointers[pointerIndex].id;
 
-    EventType type = NativeEvent::getEventTypeFromInt(actionType);
+    // CODEX: 0/5 = encostou, 1/6 = soltou, 2 = moveu, 3 = cancelado
+    const bool encostou = actionType == AMOTION_EVENT_ACTION_DOWN || actionType == AMOTION_EVENT_ACTION_POINTER_DOWN;
+    const bool soltou = actionType == AMOTION_EVENT_ACTION_UP || actionType == AMOTION_EVENT_ACTION_POINTER_UP
+        || actionType == AMOTION_EVENT_ACTION_CANCEL;
+    const int ux = static_cast<int>(x / m_displayDensity);
+    const int uy = static_cast<int>(y / m_displayDensity);
 
-    m_events.push(NativeEvent(type, x, y));
+    if (encostou && m_joyId < 0 && codexJoystickToque(0, ux, uy)) {
+        m_joyId = id;
+        return;
+    }
+    if (id == m_joyId) {
+        if (soltou) {
+            m_joyId = -1;
+            codexJoystickToque(2, ux, uy);
+        } else if (actionType == AMOTION_EVENT_ACTION_MOVE) {
+            codexJoystickToque(1, ux, uy);
+        }
+        return;
+    }
+
+    // so um dedo vira mouse; os outros (segundo dedo na tela) sao ignorados
+    if (encostou) {
+        if (m_mouseId >= 0)
+            return;
+        m_mouseId = id;
+        m_events.push(NativeEvent(TOUCH_DOWN, x, y));
+        return;
+    }
+    if (id != m_mouseId)
+        return;
+    if (soltou) {
+        m_mouseId = -1;
+        m_events.push(NativeEvent(TOUCH_UP, x, y));
+        return;
+    }
+    if (actionType == AMOTION_EVENT_ACTION_MOVE)
+        m_events.push(NativeEvent(TOUCH_MOTION, x, y));
 }
 
 void AndroidWindow::onNativeKeyDown( int keyCode ) {
@@ -463,6 +523,7 @@ void AndroidWindow::handleCmd(int32_t cmd) {
                 }
                 updateDisplayDensityFromSystem(g_androidManager.getScreenDensity());
                 queryGlSize();
+                codexAjustarDensidade();
                 ALOGD("INIT_WINDOW: size=%dx%d, density=%.2f, visible=true", m_size.width(), m_size.height(), m_displayDensity);
                 m_visible = true;
             } else {
@@ -484,11 +545,22 @@ void AndroidWindow::handleCmd(int32_t cmd) {
         case APP_CMD_CONFIG_CHANGED:
             updateDisplayDensityFromSystem(g_androidManager.getScreenDensity());
             queryGlSize();
+            codexAjustarDensidade();
             ALOGD("RESIZED/CONFIG_CHANGED: size=%dx%d, density=%.2f", m_size.width(), m_size.height(), m_displayDensity);
             break;
         default:
             break;
     }
+}
+
+// CODEX: a interface do Codex foi desenhada para ~1180 x 600 (igual ao navegador no
+// celular): a escala vem do tamanho da tela, nao da densidade do sistema
+void AndroidWindow::codexAjustarDensidade() {
+    if (m_size.width() <= 0 || m_size.height() <= 0)
+        return;
+    const float w = static_cast<float>(std::max(m_size.width(), m_size.height()));
+    const float h = static_cast<float>(std::min(m_size.width(), m_size.height()));
+    m_displayDensity = std::clamp(std::min(w / 1180.f, h / 600.f), 0.75f, 4.f);
 }
 
 void AndroidWindow::updateDisplayDensityFromSystem(float screenDensity) {
@@ -533,6 +605,10 @@ void AndroidWindow::processNativeInputEvents() {
                 case AMOTION_EVENT_ACTION_UP:
                 case AMOTION_EVENT_ACTION_DOWN:
                     pointerIndex = 0;
+                    break;
+                case AMOTION_EVENT_ACTION_CANCEL: // CODEX: solta todos os dedos
+                    for (uint32_t innerPointerIndex = 0; innerPointerIndex < motionEvent->pointerCount; innerPointerIndex++)
+                        onNativeTouch(actionMasked, innerPointerIndex, motionEvent);
                     break;
                 case AMOTION_EVENT_ACTION_POINTER_UP:
                 case AMOTION_EVENT_ACTION_POINTER_DOWN:

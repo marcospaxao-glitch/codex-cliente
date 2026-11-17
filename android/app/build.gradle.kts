@@ -9,18 +9,19 @@ val ciAbiFilters = providers.gradleProperty("otclient.android.abis")
     ?.split(",")
     ?.map { it.trim() }
     ?.filter { it.isNotEmpty() }
-    ?: listOf("arm64-v8a", "armeabi-v7a", "x86_64", "x86")
+    ?: listOf("arm64-v8a") // CODEX: so 64 bits
 
 android {
     namespace = "com.github.otclient"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.github.otclient"
+        // CODEX: id do app e versao (o GitHub passa o numero da compilacao)
+        applicationId = "com.codexpoketibia.app"
         minSdk = 21
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = (System.getenv("CODEX_VERSION_CODE") ?: "1").toInt()
+        versionName = System.getenv("CODEX_VERSION_NAME") ?: "2.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {

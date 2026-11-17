@@ -82,6 +82,10 @@ int pknet_download(const char* url, const char* destPath, PkNetProgress cb, void
     std::string host = u.substr(0, slash == std::string::npos ? u.size() : slash);
     std::string path = slash == std::string::npos ? "/" : u.substr(slash);
     httplib::Client cli(host);
+#ifdef ANDROID
+    // CODEX: certificados do proprio Android (o OpenSSL nao conhece a loja do sistema)
+    cli.set_ca_cert_path("", "/system/etc/security/cacerts");
+#endif
     cli.set_follow_location(true);
     cli.set_connection_timeout(15);
     cli.set_read_timeout(30);

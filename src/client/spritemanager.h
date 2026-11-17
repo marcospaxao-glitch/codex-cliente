@@ -25,7 +25,7 @@
 #include <framework/core/declarations.h>
 #include <framework/graphics/declarations.h>
 
-#ifdef __EMSCRIPTEN__
+#if defined(__EMSCRIPTEN__) || defined(ANDROID) // CODEX: sprites baixados do site
 #include <condition_variable>
 #include <deque>
 #include <mutex>
@@ -106,7 +106,7 @@ private:
     ImagePtr getSpriteImage(int id, const FileStreamPtr& file);
     ImagePtr decodeSprite(int id, const uint8_t* data, uint16_t pixelDataSize);
 
-#ifdef __EMSCRIPTEN__
+#if defined(__EMSCRIPTEN__) || defined(ANDROID) // CODEX: sprites baixados do site
     bool loadRemoteSpr();
     ImagePtr getRemoteSpriteImage(int id, bool& isLoading);
     bool spriteBlocksReady(uint32_t id, bool queue);

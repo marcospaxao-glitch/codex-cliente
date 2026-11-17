@@ -149,11 +149,14 @@ private:
 
     ticks_t m_lastPress = 0;
     bool m_isDragging = false;
+    int m_joyId = -1;   // CODEX: dedo do joystick (vai direto para o Lua)
+    int m_mouseId = -1; // CODEX: dedo que vira mouse (os outros sao ignorados)
 
     float m_baseDisplayDensity{ DEFAULT_DISPLAY_DENSITY };
     bool m_hasBaseDisplayDensity{ false };
 
     void updateDisplayDensityFromSystem(float screenDensity);
+    void codexAjustarDensidade();
 };
 
 extern "C" {

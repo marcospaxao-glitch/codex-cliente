@@ -31,8 +31,12 @@
 #include "framework/core/resourcemanager.h"
 #include "framework/graphics/image.h"
 
-#ifdef __EMSCRIPTEN__
+#if defined(__EMSCRIPTEN__) || defined(ANDROID)
+#if defined(__EMSCRIPTEN__) || defined(ANDROID)
 #include <emscripten/fetch.h>
+#else
+#include "framework/core/pknet.h"
+#endif
 #include <atomic>
 #include <framework/core/eventdispatcher.h>
 #include <framework/graphics/drawpoolmanager.h>
@@ -92,7 +96,7 @@ bool SpriteManager::loadSpr(std::string file)
         return loadRegularSpr(sprFile);
     }
 
-#ifdef __EMSCRIPTEN__
+#if defined(__EMSCRIPTEN__) || defined(ANDROID)
     // [codex] sem Tibia.spr local: baixa sob demanda do site
     return loadRemoteSpr();
 #else
@@ -237,7 +241,7 @@ ImagePtr SpriteManager::getSpriteImage(const int id, bool& isLoading)
         return g_spriteAppearances.getSpriteImage(id, isLoading);
     }
 
-#ifdef __EMSCRIPTEN__
+#if defined(__EMSCRIPTEN__) || defined(ANDROID)
     if (m_remote)
         return getRemoteSpriteImage(id, isLoading);
 #endif
@@ -396,7 +400,7 @@ ImagePtr SpriteManager::decodeSprite(const int /*id*/, const uint8_t* spriteData
 // ---------------------------------------------------------------------------
 bool SpriteManager::prefetchSprites(const std::vector<uint32_t>& ids)
 {
-#ifdef __EMSCRIPTEN__
+#if defined(__EMSCRIPTEN__) || defined(ANDROID)
     if (!m_remote)
         return true;
     bool pronto = true;
@@ -411,8 +415,45 @@ bool SpriteManager::prefetchSprites(const std::vector<uint32_t>& ids)
 #endif
 }
 
-#ifdef __EMSCRIPTEN__
+#if defined(__EMSCRIPTEN__) || defined(ANDROID)
 namespace {
+#ifdef ANDROID
+    // CODEX (Android): baixa do site e guarda no aparelho; da proxima vez le do disco
+    const std::string CODEX_SITE = "https://codexpoketibia.com.br/jogar/";
+
+    bool lerArquivo(const std::string& caminho, std::vector<uint8_t>& out)
+    {
+        char* buf = nullptr;
+        long long len = 0;
+        if (!pkfs_readAll(caminho.c_str(), &buf, &len))
+            return false;
+        out.assign(reinterpret_cast<uint8_t*>(buf), reinterpret_cast<uint8_t*>(buf) + len);
+        pkfs_free(buf);
+        return len > 0;
+    }
+
+    bool codexBaixar(const std::string& url, std::vector<uint8_t>& out)
+    {
+        std::string dir = g_resources.getWriteDir();
+        if (!dir.empty() && dir.back() != '/')
+            dir += '/';
+        const std::string local = dir + "sprcache/" + url;
+        // o indice muda quando o spr muda: sempre baixa de novo (os blocos tem a assinatura no caminho)
+        const bool ehIndice = url.find("indice.bin") != std::string::npos;
+        if (!ehIndice && lerArquivo(local, out))
+            return true;
+        pkfs_mkdirs(local.substr(0, local.rfind('/')).c_str());
+        const std::string tmp = local + ".tmp" + std::to_string(stdext::getThreadId());
+        char err[128] = { 0 };
+        if (!pknet_download((CODEX_SITE + url).c_str(), tmp.c_str(), nullptr, nullptr, err, sizeof(err))) {
+            if (ehIndice && lerArquivo(local, out))
+                return true; // sem internet: usa o indice guardado
+            return false;
+        }
+        pkfs_move(tmp.c_str(), local.c_str());
+        return lerArquivo(local, out);
+    }
+#else
     bool codexBaixar(const std::string& url, std::vector<uint8_t>& out)
     {
         emscripten_fetch_attr_t attr;
@@ -428,6 +469,7 @@ namespace {
         emscripten_fetch_close(f);
         return ok;
     }
+#endif
 
     uint32_t lerU32(const uint8_t* p) { return p[0] | (p[1] << 8) | (p[2] << 16) | (static_cast<uint32_t>(p[3]) << 24); }
 

@@ -11,7 +11,7 @@ on:
       alvo:
         description: "O que compilar"
         type: choice
-        options: [windows, navegador, os-dois]
+        options: [windows, navegador, android, os-dois, todos]
         default: windows
       console:
         description: "Windows: abrir janela de console junto (versao de teste)"
@@ -28,7 +28,7 @@ concurrency:
 jobs:
   windows:
     name: Windows (.exe)
-    if: inputs.alvo == 'windows' || inputs.alvo == 'os-dois'
+    if: inputs.alvo == 'windows' || inputs.alvo == 'os-dois' || inputs.alvo == 'todos'
     runs-on: windows-2025-vs2026
     env:
       VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}\\vcpkg-cache,readwrite"
@@ -92,7 +92,7 @@ jobs:
 
   navegador:
     name: Navegador (WebAssembly)
-    if: inputs.alvo == 'navegador' || inputs.alvo == 'os-dois'
+    if: inputs.alvo == 'navegador' || inputs.alvo == 'os-dois' || inputs.alvo == 'todos'
     runs-on: ubuntu-latest
     env:
       BUILD_LOG: docker-browser-build.log
@@ -133,4 +133,50 @@ jobs:
           path: |
             ${{ env.BUILD_LOG }}
             ${{ env.OUTPUT_DIR }}
+          retention-days: 14
+
+  android:
+    name: Android (.apk)
+    if: inputs.alvo == 'android' || inputs.alvo == 'todos'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o codigo
+        uses: actions/checkout@v6
+
+      - name: Liberar espaco no disco (SDK + NDK + bibliotecas sao grandes)
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL || true
+          df -h /
+
+      - name: Preparar Docker com cache
+        uses: docker/setup-buildx-action@v3
+
+      - name: Compilar o APK (Docker + Gradle)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.android
+          target: apk-artifacts
+          outputs: type=local,dest=apk-out
+          build-args: |
+            CODEX_VERSION_CODE=${{ github.run_number }}
+            CODEX_VERSION_NAME=2.0.${{ github.run_number }}
+          secrets: |
+            keystore_b64=${{ secrets.ANDROID_KEYSTORE_B64 }}
+            keystore_pass=${{ secrets.ANDROID_KEYSTORE_PASS }}
+          cache-from: type=gha,scope=codex-android
+          cache-to: type=gha,mode=max,scope=codex-android
+
+      - name: Nomear o APK
+        run: |
+          ls -la apk-out
+          mkdir -p Codex-Android
+          cp apk-out/*.apk Codex-Android/Codex.apk
+          ls -la Codex-Android
+
+      - name: Enviar resultado
+        uses: actions/upload-artifact@v7
+        with:
+          name: Codex-Android
+          path: Codex-Android/
           retention-days: 14

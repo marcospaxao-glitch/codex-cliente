@@ -82,6 +82,10 @@ bool codexCelular(); // platform/browserwindow.cpp
 void codexBotaoTeclado(bool mostrar);
 void codexTeclado(bool abrir, int fundo);
 #endif
+#ifdef ANDROID
+#include <framework/platform/androidmanager.h>
+extern bool g_codexTecladoSoBotao; // ui/uitextedit.cpp
+#endif
 #include "core/updater.h"
 
 void Application::registerLuaFunctions()
@@ -109,6 +113,14 @@ void Application::registerLuaFunctions()
     g_lua.bindGlobalFunction("codexCelular", [] { return codexCelular(); }); // CODEX: navegador em celular/tablet
     g_lua.bindGlobalFunction("codexBotaoTeclado", [](bool mostrar) { codexBotaoTeclado(mostrar); });
     g_lua.bindGlobalFunction("codexTeclado", [](bool abrir, int fundo) { codexTeclado(abrir, fundo); });
+#elif defined(ANDROID)
+    // CODEX: app de celular: HUD do celular sempre; teclado do sistema
+    g_lua.bindGlobalFunction("codexCelular", [] { return true; });
+    g_lua.bindGlobalFunction("codexBotaoTeclado", [](bool mostrar) { g_codexTecladoSoBotao = !mostrar; });
+    g_lua.bindGlobalFunction("codexTeclado", [](bool abrir, int) {
+        if (abrir) g_androidManager.showKeyboardSoft();
+        else g_androidManager.hideKeyboard();
+    });
 #else
     g_lua.bindGlobalFunction("codexCelular", [] { return false; });
     g_lua.bindGlobalFunction("codexBotaoTeclado", [](bool) {});

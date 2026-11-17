@@ -1,4 +1,7 @@
-# Use a standard Android SDK image
+# CODEX: app Android (so 64 bits: arm64-v8a). Gera o APK assinado.
+# As camadas pesadas (SDK, NDK, vcpkg, bibliotecas, LuaJIT, Gradle) ficam no
+# cache do GitHub; as proximas compilacoes so refazem o codigo do cliente.
+#   docker build -f Dockerfile.android --target apk-artifacts -o out .
 FROM thyrlian/android-sdk:10.0 AS builder
 
 USER root
@@ -8,43 +11,74 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     pkg-config libtool bison flex \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install vcpkg with FULL history
-WORKDIR /opt
-RUN git clone https://github.com/microsoft/vcpkg.git \
-    && cd vcpkg && ./bootstrap-vcpkg.sh
-
-ENV VCPKG_ROOT=/opt/vcpkg
 ENV ANDROID_HOME=/opt/android-sdk
 ENV ANDROID_NDK_HOME=/opt/android-sdk/ndk/29.0.13599879
+ENV VCPKG_ROOT=/opt/vcpkg
 ENV VCPKG_FORCE_SYSTEM_BINARIES=1
+ENV OTCLIENT_ANDROID_ABIS=arm64-v8a
 
-# Install NDK and stable CMake via sdkmanager
-RUN yes | sdkmanager --sdk_root=$ANDROID_HOME "ndk;29.0.13599879" "cmake;3.22.1"
+# NDK e CMake do Android
+RUN yes | sdkmanager --sdk_root=$ANDROID_HOME "ndk;29.0.13599879" "cmake;3.22.1" "platforms;android-36" "build-tools;36.0.0"
 
-# Set workdir for the project
+# vcpkg na versao do vcpkg.json (builtin-baseline)
+WORKDIR /opt
+COPY vcpkg.json /tmp/vcpkg.json
+RUN git clone https://github.com/microsoft/vcpkg.git \
+    && cd vcpkg \
+    && git checkout "$(grep 'builtin-baseline' /tmp/vcpkg.json | cut -d'"' -f4)" \
+    && ./bootstrap-vcpkg.sh
+
+# Bibliotecas para arm64-android: compiladas aqui e guardadas no cache binario do
+# vcpkg (~/.cache/vcpkg/archives); o Gradle depois so restaura (rapido)
+WORKDIR /deps
+COPY vcpkg.json vcpkg-configuration.json /deps/
+RUN ${VCPKG_ROOT}/vcpkg install --triplet arm64-android --allow-unsupported \
+      --x-install-root=/deps/vcpkg_installed \
+ && rm -rf ${VCPKG_ROOT}/buildtrees ${VCPKG_ROOT}/packages ${VCPKG_ROOT}/downloads /deps/vcpkg_installed
+
+# LuaJIT para arm64 (o port do vcpkg nao cruza para Android)
 WORKDIR /otclient
-COPY . /otclient
-
-# Install gcc-multilib for 32-bit LuaJIT cross-compilation
-RUN apt-get update && apt-get install -y --no-install-recommends gcc-multilib \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Clone LuaJIT source and cross-compile for all Android ABIs
+COPY build_luajit_android.sh /otclient/
 RUN git clone --depth 1 https://github.com/LuaJIT/LuaJIT.git /otclient/luajit-src \
     && cd /otclient/luajit-src && git fetch --depth 1 origin d0e88930ddde28ff662503f9f20facf34f7265aa \
-    && git checkout d0e88930ddde28ff662503f9f20facf34f7265aa
-RUN cd /otclient && chmod +x build_luajit_android.sh && ./build_luajit_android.sh
+    && git checkout d0e88930ddde28ff662503f9f20facf34f7265aa \
+    && cd /otclient && chmod +x build_luajit_android.sh && ./build_luajit_android.sh
 
-# Generate data.zip asset bundle
+# Gradle (baixa a distribuicao uma vez)
+COPY android/gradlew android/gradle.properties android/settings.gradle android/build.gradle /otclient/android/
+COPY android/gradle /otclient/android/gradle
+RUN cd /otclient/android && tr -d '\r' < gradlew > gradlew_unix && chmod +x gradlew_unix && ./gradlew_unix --version
+
+# Codigo do cliente
+COPY . /otclient
+
+# Arquivos do jogo dentro do APK (o Tibia.spr NAO vai: o app baixa os sprites do site)
 RUN mkdir -p /otclient/android/app/src/main/assets \
-    && cd /otclient && zip -r android/app/src/main/assets/data.zip data mods modules init.lua otclientrc.lua
+    && rm -f /otclient/android/app/src/main/assets/data.zip \
+    && cd /otclient && zip -qr android/app/src/main/assets/data.zip data mods modules init.lua otclientrc.lua config.ini cacert.pem \
+       -x 'data/things/*/*.spr'
 
-# Build APK inside the image
-RUN cd /otclient/android \
-    && tr -d '\r' < gradlew > gradlew_unix \
-    && chmod +x gradlew_unix \
-    && ./gradlew_unix assembleRelease
+ARG CODEX_VERSION_CODE=1
+ARG CODEX_VERSION_NAME=2.0
+ENV CODEX_VERSION_CODE=${CODEX_VERSION_CODE}
+ENV CODEX_VERSION_NAME=${CODEX_VERSION_NAME}
 
-# Minimal stage to extract APK
+# APK. Com a chave do Codex (segredos do GitHub) sai assinado com ela; sem a
+# chave sai com a assinatura de teste.
+RUN --mount=type=secret,id=keystore_b64 --mount=type=secret,id=keystore_pass \
+    cd /otclient/android \
+    && tr -d '\r' < gradlew > gradlew_unix && chmod +x gradlew_unix \
+    && if [ -s /run/secrets/keystore_b64 ] && [ -s /run/secrets/keystore_pass ]; then \
+         base64 -d /run/secrets/keystore_b64 > /tmp/codex.jks \
+         && export RELEASE_KEYSTORE=/tmp/codex.jks \
+         && export RELEASE_KEYSTORE_PASSWORD="$(cat /run/secrets/keystore_pass)" \
+         && export RELEASE_KEY_ALIAS=codex \
+         && export RELEASE_KEY_PASSWORD="$(cat /run/secrets/keystore_pass)" \
+         && echo "== assinando com a chave do Codex =="; \
+       else echo "== SEM a chave do Codex: APK com assinatura de teste =="; fi \
+    && ./gradlew_unix assembleRelease \
+    && rm -f /tmp/codex.jks \
+    && ls -la app/build/outputs/apk/release/
+
 FROM scratch AS apk-artifacts
 COPY --from=builder /otclient/android/app/build/outputs/apk/release/ /
