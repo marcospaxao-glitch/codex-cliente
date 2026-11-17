@@ -97,7 +97,7 @@ local function joystickToque(tipo, x, y)
   if tipo == 0 then
     -- area de toque um pouco maior que o desenho da base
     local cx, cy = centroBase()
-    local alcance = math.max(keypad:getWidth(), keypad:getHeight()) / 2 + 20
+    local alcance = math.max(keypad:getWidth(), keypad:getHeight()) / 2 + 4 -- quase so o circulo (nao pega os botoes do lado)
     if math.abs(x - cx) > alcance or math.abs(y - cy) > alcance then return false end
     atualizarPos(keypad, pos)
     segurando = true

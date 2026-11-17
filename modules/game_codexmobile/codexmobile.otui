@@ -76,7 +76,7 @@ UIWidget
     size: 68 68
     anchors.bottom: parent.bottom
     anchors.left: keypad.right
-    margin-left: -6
+    margin-left: 34
     margin-bottom: 4
     image-source: /game_codexmobile/images/montaria
     visible: false
