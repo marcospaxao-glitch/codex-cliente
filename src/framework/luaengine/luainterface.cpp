@@ -642,8 +642,10 @@ int LuaInterface::luaErrorHandler(lua_State* L)
     auto error = g_lua.popString();
 
     // prevents repeated tracebacks
+#ifndef ANDROID // CODEX: o rastreio (luaL_traceback) travava o app no Android; so a mensagem
     if (error.find("stack traceback:") == std::string::npos)
         error = g_lua.traceback(error, 1);
+#endif
 
     // pushes the new error message with traceback information
     g_lua.pushString(error);
@@ -791,6 +793,12 @@ void LuaInterface::createLuaState()
 
     // load lua standard libraries
     luaL_openlibs(L);
+
+#if defined(ANDROID) && defined(LUAJIT_VERSION)
+    // CODEX: no Android (arm64) o compilador JIT do LuaJIT derrubava o app ao montar o
+    // rastreio de um erro de Lua; o interpretador do LuaJIT ja e rapido o bastante
+    luaL_dostring(L, "if jit and jit.off then jit.off() end");
+#endif
 
 #ifdef __EMSCRIPTEN__
     luaopen_bit(L);

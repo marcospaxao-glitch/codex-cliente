@@ -118,7 +118,7 @@ void Application::registerLuaFunctions()
     g_lua.bindGlobalFunction("codexCelular", [] { return true; });
     g_lua.bindGlobalFunction("codexBotaoTeclado", [](bool mostrar) {
         g_codexTecladoSoBotao = !mostrar;
-        g_androidManager.setGameOrientation(!mostrar); // no jogo: deitado; fora: livre
+        // (girar o celular entre login e jogo fazia a tela piscar: fica sempre deitado)
     });
     g_lua.bindGlobalFunction("codexTeclado", [](bool abrir, int) {
         if (abrir) g_androidManager.showKeyboardSoft();
