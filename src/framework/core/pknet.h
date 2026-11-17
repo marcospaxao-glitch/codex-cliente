@@ -8,6 +8,9 @@
 // chamado a cada pedaco baixado; retorne 0 para cancelar
 typedef int (*PkNetProgress)(void* user, unsigned int bytes);
 
+// certificados (PEM) para https fora do Windows; vazio = sem verificar
+void pknet_setCaFile(const char* path);
+
 int pknet_download(const char* url, const char* destPath, PkNetProgress cb, void* user, char* err, int errLen);
 
 int pkfs_move(const char* from, const char* to);   // substitui o destino

@@ -25,6 +25,8 @@ static void setErr(char* err, int errLen, const char* msg, unsigned long code)
         _snprintf(err, errLen - 1, "%s (%lu)", msg, code), err[errLen - 1] = 0;
 }
 
+void pknet_setCaFile(const char*) {} // Windows usa os certificados do sistema (WinINet)
+
 int pknet_download(const char* url, const char* destPath, PkNetProgress cb, void* user, char* err, int errLen)
 {
     int ok = 0;

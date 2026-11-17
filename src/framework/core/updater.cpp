@@ -134,8 +134,29 @@ void Updater::setup(const std::string& baseDir, const std::string& url, const st
     m_exePath = exePath;
 }
 
+void codexPrepararCertificados()
+{
+#if defined(ANDROID) && !defined(UPDATER_STANDALONE)
+    static bool feito = false;
+    if(feito)
+        return;
+    try {
+        const std::string pem = g_resources.readFileContents("/cacert.pem");
+        std::string dir = g_resources.getWriteDir();
+        if(!dir.empty() && dir.back() != '/')
+            dir += '/';
+        const std::string dst = dir + "cacert.pem";
+        if(!pem.empty() && pkfs_writeAll(dst.c_str(), pem.data(), (long long)pem.size()))
+            pknet_setCaFile(dst.c_str());
+        feito = true;
+    } catch(...) {
+    }
+#endif
+}
+
 void Updater::start()
 {
+    codexPrepararCertificados();
 #ifndef UPDATER_STANDALONE
     if(m_state == Checking || m_state == Downloading)
         return;

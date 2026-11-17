@@ -21,6 +21,9 @@
 #include <string>
 #include <thread>
 
+// CODEX (Android): copia o cacert.pem do app para uma pasta real e liga no https
+void codexPrepararCertificados();
+
 class Updater
 {
 public:

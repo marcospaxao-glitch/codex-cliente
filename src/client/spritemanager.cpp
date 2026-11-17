@@ -36,6 +36,7 @@
 #include <emscripten/fetch.h>
 #else
 #include "framework/core/pknet.h"
+#include "framework/core/updater.h"
 #endif
 #include <atomic>
 #include <framework/core/eventdispatcher.h>
@@ -480,6 +481,9 @@ namespace {
 
 bool SpriteManager::loadRemoteSpr()
 {
+#ifdef ANDROID
+    codexPrepararCertificados();
+#endif
     std::vector<uint8_t> idx;
     if (!codexBaixar("spr/indice.bin", idx) || idx.size() < 20 || memcmp(idx.data(), "CDXS", 4) != 0) {
         g_logger.error("[codex] nao consegui baixar spr/indice.bin");
