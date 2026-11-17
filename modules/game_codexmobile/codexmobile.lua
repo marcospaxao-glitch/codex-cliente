@@ -234,6 +234,96 @@ local function pokemon()
   end
 end
 
+-- ============================================================
+-- USAR: liga o "modo usar"; o proximo toque no mapa (ou num item da mochila)
+-- usa a coisa tocada (escada, alavanca, bau de quest, porta, item...), como o
+-- clique de usar do PC. Se ja tiver algo usavel do lado, usa direto.
+-- ============================================================
+local modoUsar = false
+local processarOriginal
+
+local function marcarUsar(ligado)
+  modoUsar = ligado
+  local b = acoes and acoes:getChildById('usar')
+  if b then b:setImageSource('/game_codexmobile/images/' .. (ligado and 'usar_ativo' or 'usar')) end
+end
+
+local function usarCoisa(coisa)
+  local gi = modules.game_interface
+  if coisa:isContainer() then
+    if coisa:getParentContainer() then g_game.open(coisa, coisa:getParentContainer()) else g_game.open(coisa) end
+  elseif coisa:isMultiUse() and gi and gi.startUseWith then
+    gi.startUseWith(coisa) -- corda, pa, item de usar em algo: toque no alvo depois
+  else
+    g_game.use(coisa)
+  end
+end
+
+-- algo claramente usavel colado no jogador (escada de mao, alavanca, bau)?
+local function usavelDoLado()
+  local player = g_game.getLocalPlayer()
+  if not player then return nil end
+  local pos = player:getPosition()
+  local off = FRENTE[player:getDirection()] or { 0, 1 }
+  local ordem = { { off[1], off[2] }, { 0, 0 } }
+  for dx = -1, 1 do
+    for dy = -1, 1 do
+      if not (dx == off[1] and dy == off[2]) and not (dx == 0 and dy == 0) then ordem[#ordem + 1] = { dx, dy } end
+    end
+  end
+  for _, d in ipairs(ordem) do
+    local tile = g_map.getTile({ x = pos.x + d[1], y = pos.y + d[2], z = pos.z })
+    local coisa = tile and tile:getTopUseThing()
+    if coisa and coisa:isItem() and not coisa:isGround() and (coisa:isUsable() or coisa:isContainer()) then
+      return coisa
+    end
+  end
+  return nil
+end
+
+local function botaoUsar()
+  if not g_game.isOnline() then return end
+  if modoUsar then marcarUsar(false) return end
+  local coisa = usavelDoLado()
+  if coisa then
+    usarCoisa(coisa)
+    return
+  end
+  marcarUsar(true)
+  modules.game_textmessage.displayStatusMessage('Toque no que voce quer usar (escada, alavanca, bau, item...).')
+end
+
+local function processarComUsar(menuPosition, mouseButton, autoWalkPos, lookThing, useThing, creatureThing, attackCreature)
+  if modoUsar and mouseButton == MouseLeftButton then
+    marcarUsar(false)
+    if useThing then
+      usarCoisa(useThing)
+      return true
+    end
+    if creatureThing and creatureThing:isNpc() then
+      g_game.talk('hi')
+      return true
+    end
+  end
+  return processarOriginal(menuPosition, mouseButton, autoWalkPos, lookThing, useThing, creatureThing, attackCreature)
+end
+
+local function ligarUsar()
+  local gi = modules.game_interface
+  if gi and gi.processMouseAction and gi.processMouseAction ~= processarComUsar then
+    processarOriginal = gi.processMouseAction
+    gi.processMouseAction = processarComUsar
+  end
+end
+
+local function desligarUsar()
+  local gi = modules.game_interface
+  if gi and processarOriginal and gi.processMouseAction == processarComUsar then
+    gi.processMouseAction = processarOriginal
+  end
+  processarOriginal = nil
+end
+
 -- ATACAR: ataca o mais perto (se ja tem alvo vivo, continua nele)
 local function atacar()
   if not g_game.isOnline() then return end
@@ -708,6 +798,8 @@ end
 local function onGameStart()
   if not keypad then return end
   botaoTeclado(false) -- no jogo, tocar no campo do chat ja abre o teclado
+  ligarUsar()
+  marcarUsar(false)
   overlay:raise()
   keypad:show()
   acoes:show()
@@ -732,6 +824,7 @@ end
 
 local function onGameEnd()
   botaoTeclado(true)
+  marcarUsar(false)
   segurando = false
   removeEvent(evento)
   evento = nil
@@ -829,6 +922,7 @@ local function ligarBotoes()
   botaoMontaria.onClick = montaria
   acoes:getChildById('atacar').onClick = atacar
   acoes:getChildById('trocar').onClick = atacarProximo
+  acoes:getChildById('usar').onClick = botaoUsar
 end
 
 function init()
@@ -891,6 +985,7 @@ end
 
 function terminate()
   _G.codexJoystickToque = nil
+  desligarUsar()
   if not overlay then return end
   removeEvent(evento)
   removeEvent(eventoPosicao)

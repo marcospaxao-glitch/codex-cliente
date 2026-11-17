@@ -101,8 +101,30 @@ jobs:
       - name: Baixar o codigo
         uses: actions/checkout@v6
 
+      # CODEX: Docker com cache do GitHub. A parte pesada (Emscripten + bibliotecas)
+      # fica guardada; as proximas compilacoes so refazem o codigo do cliente.
+      - name: Preparar Docker com cache
+        uses: docker/setup-buildx-action@v3
+
       - name: Compilar com Docker (Emscripten)
-        run: bash Dockerfile.browser.sh
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.browser
+          tags: otclient-web:latest
+          load: true
+          cache-from: type=gha,scope=codex-web
+          cache-to: type=gha,mode=max,scope=codex-web
+
+      - name: Tirar o resultado do Docker
+        run: |
+          rm -rf "$OUTPUT_DIR"
+          echo "compilado com cache do GitHub (veja o log do passo anterior)" > "$BUILD_LOG"
+          docker rm -f otclient-web-tmp >/dev/null 2>&1 || true
+          docker create --name otclient-web-tmp otclient-web:latest
+          docker cp otclient-web-tmp:/otclient-web "$OUTPUT_DIR"
+          docker rm otclient-web-tmp
+          ls -la "$OUTPUT_DIR"
 
       - name: Enviar resultado
         uses: actions/upload-artifact@v7

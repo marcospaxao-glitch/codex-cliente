@@ -47,6 +47,18 @@ RUN git clone --filter=blob:none https://github.com/microsoft/vcpkg.git ${VCPKG_
  && git checkout "$(grep 'builtin-baseline' /tmp/vcpkg.json | cut -d'"' -f4)" \
  && ./bootstrap-vcpkg.sh
 
+# CODEX: as bibliotecas (vcpkg) so dependem destes arquivos. Compiladas numa camada
+# propria, que fica guardada no cache do GitHub: so recompila quando eles mudam.
+WORKDIR /deps
+COPY vcpkg.json vcpkg-configuration.json /deps/
+COPY browser/triplets /deps/triplets
+COPY browser/overlay-ports /deps/overlay-ports
+RUN source /opt/emsdk/emsdk_env.sh \
+ && ${VCPKG_ROOT}/vcpkg install --triplet wasm32-emscripten-pthread \
+      --overlay-triplets=/deps/triplets --overlay-ports=/deps/overlay-ports \
+      --x-install-root=/deps/vcpkg_installed \
+ && rm -rf ${VCPKG_ROOT}/buildtrees ${VCPKG_ROOT}/packages ${VCPKG_ROOT}/downloads
+
 WORKDIR /workspace
 # NOSONAR: .dockerignore constrains the build context to tracked source assets required for this build stage
 COPY . /workspace
@@ -54,12 +66,12 @@ COPY . /workspace
 ARG BUILD_TYPE=Release
 ENV BUILD_DIR=/workspace/build-emscripten
 RUN mkdir -p ${BUILD_DIR}
-# Force complete rebuild by clearing all vcpkg and emscripten caches
+# CODEX: usa as bibliotecas ja compiladas na camada /deps (nao apaga mais os caches)
 RUN source /opt/emsdk/emsdk_env.sh \
- && rm -rf ${VCPKG_ROOT}/buildtrees ${VCPKG_ROOT}/packages ${BUILD_DIR}/vcpkg_installed \
- && rm -rf /opt/emsdk/upstream/emscripten/cache \
  && cmake -G Ninja -S /workspace -B ${BUILD_DIR} \
     -DWASM=ON \
+    -DVCPKG_INSTALLED_DIR=/deps/vcpkg_installed \
+    -DVCPKG_MANIFEST_INSTALL=OFF \
     -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=/opt/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake \
     -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake \
     -DVCPKG_TARGET_TRIPLET=wasm32-emscripten-pthread \

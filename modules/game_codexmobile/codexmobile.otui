@@ -86,7 +86,7 @@ UIWidget
   // ===== trocar alvo + ATACAR (arrastaveis pela alca) =====
   UIWidget
     id: acoes
-    size: 150 232
+    size: 220 232
     anchors.top: parent.top
     anchors.left: parent.left
     phantom: true
@@ -99,8 +99,8 @@ UIWidget
       image-source: /game_codexmobile/images/mover
       anchors.top: parent.top
       anchors.left: parent.left
-      margin-top: 22
-      margin-left: 4
+      margin-top: 40
+      margin-left: 40
       draggable: true
       focusable: false
       opacity: 0.7
@@ -110,11 +110,20 @@ UIWidget
       size: 68 68
       anchors.top: parent.top
       anchors.left: parent.left
-      margin-top: 0
-      margin-left: 56
+      margin-top: 4
+      margin-left: 124
       image-source: /game_codexmobile/images/trocar
       $pressed:
         image-source: /game_codexmobile/images/trocar_on
+
+    CodexImgBotao
+      id: usar
+      size: 68 68
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 128
+      margin-left: 4
+      image-source: /game_codexmobile/images/usar
 
     CodexImgBotao
       id: atacar
@@ -122,7 +131,7 @@ UIWidget
       anchors.top: parent.top
       anchors.left: parent.left
       margin-top: 92
-      margin-left: 10
+      margin-left: 80
       image-source: /game_codexmobile/images/atacar
       $pressed:
         image-source: /game_codexmobile/images/atacar_on
