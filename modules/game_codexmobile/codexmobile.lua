@@ -968,8 +968,14 @@ local function ligarBotoes()
     end
   end
   botaoMontaria.onClick = montaria
-  overlay:getChildById('npcHi').onClick = function() if g_game.isOnline() then g_game.talk('hi') end end
-  overlay:getChildById('npcTrade').onClick = function() if g_game.isOnline() then g_game.talk('trade') end end
+  -- HI / TRADE vao para a aba escolhida no chat (ex.: a aba do NPC), igual a digitar
+  local function falarNaAba(texto)
+    if not g_game.isOnline() then return end
+    local con = modules.game_console
+    if con and con.sendMessage then con.sendMessage(texto) else g_game.talk(texto) end
+  end
+  overlay:getChildById('npcHi').onClick = function() falarNaAba('hi') end
+  overlay:getChildById('npcTrade').onClick = function() falarNaAba('trade') end
   acoes:getChildById('atacar').onClick = atacar
   acoes:getChildById('trocar').onClick = atacarProximo
   acoes:getChildById('usar').onClick = botaoUsar
