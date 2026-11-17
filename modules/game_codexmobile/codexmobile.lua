@@ -99,6 +99,19 @@ local function joystickToque(tipo, x, y)
     local cx, cy = centroBase()
     local alcance = math.max(keypad:getWidth(), keypad:getHeight()) / 2 + 4 -- quase so o circulo (nao pega os botoes do lado)
     if math.abs(x - cx) > alcance or math.abs(y - cy) > alcance then return false end
+    -- so se o joystick for o que esta por cima nesse ponto (menu ou janela aberta
+    -- por cima do joystick: o toque e deles)
+    local ok, topo = pcall(function() return g_ui.getRootWidget():recursiveGetChildByPos(pos, false) end)
+    if ok and topo and topo ~= keypad and topo ~= keypad.pointer then
+      local dentro = math.sqrt((x - cx) ^ 2 + (y - cy) ^ 2) <= keypad:getWidth() / 2
+      local w, deJoystick = topo, false
+      while w do
+        if w == keypad then deJoystick = true break end
+        w = w:getParent()
+      end
+      -- fora do circulo, ou outro widget por cima: nao e do joystick
+      if not deJoystick and (not dentro or not topo:isPhantom()) then return false end
+    end
     atualizarPos(keypad, pos)
     segurando = true
     passo()
