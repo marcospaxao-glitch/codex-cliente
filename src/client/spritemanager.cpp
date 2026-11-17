@@ -32,7 +32,7 @@
 #include "framework/graphics/image.h"
 
 #if defined(__EMSCRIPTEN__) || defined(ANDROID)
-#if defined(__EMSCRIPTEN__) || defined(ANDROID)
+#ifdef __EMSCRIPTEN__
 #include <emscripten/fetch.h>
 #else
 #include "framework/core/pknet.h"
