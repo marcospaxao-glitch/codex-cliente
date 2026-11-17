@@ -66,6 +66,17 @@ void codexBotaoTeclado(bool mostrar) {
     }, mostrar ? 1 : 0);
 }
 
+// CODEX: botao de teclado do chat (no jogo o teclado so abre por ele)
+// fundo = parte de baixo do campo, em pixels da interface
+void codexTeclado(bool abrir, int fundo) {
+    const double campoCss = fundo * g_browserWindow.getCssScale();
+    MAIN_THREAD_ASYNC_EM_ASM({
+        if (!window.CODEX_CELULAR) return;
+        if ($0) { if (window.codexAbrirTeclado) window.codexAbrirTeclado($1, true); }
+        else if (window.codexFecharTeclado) window.codexFecharTeclado();
+    }, abrir ? 1 : 0, campoCss);
+}
+
 stdext::map<char, Fw::Key> m_keyMapStr;
 EmscriptenWebGLContextAttributes attr;
 

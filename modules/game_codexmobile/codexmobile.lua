@@ -469,6 +469,37 @@ local function esconderTopo()
   if btn then btn:hide() end
 end
 
+-- ----- teclado do chat: so abre pelo botao -----
+local tecladoAberto = false
+
+local function campoDoChat()
+  local con = modules.game_console
+  local painel = con and con.consolePanel
+  return painel and painel:getChildById('consoleTextEdit'), painel
+end
+
+local function marcarTeclado(aberto)
+  tecladoAberto = aberto
+  local _, painel = campoDoChat()
+  local b = painel and painel:getChildById('codexChatTeclado')
+  if b then b:setImageSource('/game_codexmobile/images/' .. (aberto and 'chat_teclado_on' or 'chat_teclado')) end
+end
+
+function alternarTeclado()
+  if type(codexTeclado) ~= 'function' then return end
+  local campo = campoDoChat()
+  if tecladoAberto then
+    pcall(codexTeclado, false, 0)
+    marcarTeclado(false)
+    return
+  end
+  if campo then
+    pcall(function() campo:focus() end)
+    pcall(codexTeclado, true, campo:getY() + campo:getHeight())
+  end
+  marcarTeclado(true)
+end
+
 -- ----- chat no estilo do celular -----
 local function enviarMensagem()
   local con = modules.game_console
@@ -559,13 +590,23 @@ local function arrumarChat()
     enviar:setMarginRight(10)
     enviar:setImageSource('/game_codexmobile/images/chat_enviar')
     enviar.onClick = enviarMensagem
+    -- liga/desliga o teclado (no jogo, tocar no campo nao abre mais o teclado sozinho)
+    local teclado = g_ui.createWidget('CodexImgBotao', painel)
+    teclado:setId('codexChatTeclado')
+    teclado:setSize({ width = 44, height = 38 })
+    teclado:addAnchor(AnchorBottom, 'parent', AnchorBottom)
+    teclado:addAnchor(AnchorRight, 'codexChatEnviar', AnchorLeft)
+    teclado:setMarginBottom(8)
+    teclado:setMarginRight(6)
+    teclado:setImageSource('/game_codexmobile/images/chat_teclado')
+    teclado.onClick = function() alternarTeclado() end
     -- campo de digitar entre os dois
     local campo = painel:getChildById('consoleTextEdit')
     if campo then
       campo:breakAnchors()
       campo:addAnchor(AnchorBottom, 'parent', AnchorBottom)
       campo:addAnchor(AnchorLeft, 'codexChatCanal', AnchorRight)
-      campo:addAnchor(AnchorRight, 'codexChatEnviar', AnchorLeft)
+      campo:addAnchor(AnchorRight, 'codexChatTeclado', AnchorLeft)
       campo:setMarginBottom(10)
       campo:setMarginLeft(6)
       campo:setMarginRight(6)
@@ -617,7 +658,7 @@ local function organizarTela()
 end
 
 local function mostrarHud(mostrar)
-  for _, w in ipairs({ topo, cartao, miniMapa, botaoLoot, botaoMontaria }) do
+  for _, w in ipairs({ topo, cartao, miniMapa, botaoLoot, botaoMontaria, overlay:getChildById('npcHi'), overlay:getChildById('npcTrade') }) do
     if w then w:setVisible(mostrar) end
   end
 end
@@ -749,7 +790,7 @@ local function esconderHud(esconder)
   local mudou = hudEscondido ~= esconder
   hudEscondido = esconder
   if not esconder and not mudou then return end
-  for _, w in ipairs({ topo, cartao, keypad, botaoMontaria }) do
+  for _, w in ipairs({ topo, cartao, keypad, botaoMontaria, overlay:getChildById('npcHi'), overlay:getChildById('npcTrade') }) do
     if w then w:setVisible(not esconder) end
   end
   for _, w in ipairs({ miniMapa, botaoLoot, acoes }) do
@@ -824,6 +865,7 @@ end
 
 local function onGameEnd()
   botaoTeclado(true)
+  tecladoAberto = false
   marcarUsar(false)
   segurando = false
   removeEvent(evento)
@@ -920,6 +962,8 @@ local function ligarBotoes()
     end
   end
   botaoMontaria.onClick = montaria
+  overlay:getChildById('npcHi').onClick = function() if g_game.isOnline() then g_game.talk('hi') end end
+  overlay:getChildById('npcTrade').onClick = function() if g_game.isOnline() then g_game.talk('trade') end end
   acoes:getChildById('atacar').onClick = atacar
   acoes:getChildById('trocar').onClick = atacarProximo
   acoes:getChildById('usar').onClick = botaoUsar

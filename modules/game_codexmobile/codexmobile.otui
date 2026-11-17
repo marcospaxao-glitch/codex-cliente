@@ -83,6 +83,29 @@ UIWidget
     $pressed:
       image-source: /game_codexmobile/images/montaria_on
 
+  // ===== atalhos de NPC (acima da montaria) =====
+  CodexImgBotao
+    id: npcTrade
+    size: 60 60
+    anchors.bottom: montaria.top
+    anchors.horizontalCenter: montaria.horizontalCenter
+    margin-bottom: 2
+    image-source: /game_codexmobile/images/npc_trade
+    visible: false
+    $pressed:
+      image-source: /game_codexmobile/images/npc_trade_on
+
+  CodexImgBotao
+    id: npcHi
+    size: 60 60
+    anchors.bottom: npcTrade.top
+    anchors.horizontalCenter: montaria.horizontalCenter
+    margin-bottom: 2
+    image-source: /game_codexmobile/images/npc_hi
+    visible: false
+    $pressed:
+      image-source: /game_codexmobile/images/npc_hi_on
+
   // ===== trocar alvo + ATACAR (arrastaveis pela alca) =====
   UIWidget
     id: acoes

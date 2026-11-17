@@ -244,6 +244,7 @@
           codexSoltarTela();
         }
         document.body.classList.toggle("codexNoJogo", !!noJogo);
+        window.codexTecladoTravado = !!noJogo;
         try {
           if (noJogo && screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(function () {});
           else if (!noJogo && screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
@@ -310,9 +311,12 @@
         window.visualViewport.addEventListener("resize", codexReposicionar);
         window.visualViewport.addEventListener("scroll", codexReposicionar);
       }
-      window.codexAbrirTeclado = function (campo) {
+      // no jogo o teclado so abre pelo botao do chat (forcar = true); tocar no campo nao abre
+      window.codexTecladoTravado = false;
+      window.codexAbrirTeclado = function (campo, forcar) {
         var inp = document.getElementById("codexTeclado");
         if (!inp) return;
+        if (window.codexTecladoTravado && !forcar) return;
         codexCongelarTela(campo);
         inp.value = " ";
         inp.focus({ preventScroll: true });
@@ -324,6 +328,7 @@
         if (inp) inp.blur();
         document.getElementById("codexTecladoBtn").classList.remove("ativo");
       }
+      window.codexFecharTeclado = codexFecharTeclado;
       window.addEventListener("DOMContentLoaded", function () {
         var btn = document.getElementById("codexTecladoBtn");
         var inp = document.getElementById("codexTeclado");
