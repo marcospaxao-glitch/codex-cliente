@@ -261,6 +261,8 @@ void AndroidWindow::processTextInput() {
     }
 }
 
+static Point s_lastMousePos(-1, -1); // CODEX: zerado a cada toque (antes vinha do toque anterior e matava o segurar)
+
 void AndroidWindow::processFingerDownAndUp() {
     bool isTouchdown = m_currentEvent.type == TOUCH_DOWN;
 
@@ -271,6 +273,8 @@ void AndroidWindow::processFingerDownAndUp() {
     m_inputEvent.mouseButton = mouseButton;
 
     if (isTouchdown) {
+        s_lastMousePos = Point(m_currentEvent.x / m_displayDensity, m_currentEvent.y / m_displayDensity);
+        m_isDragging = false;
         m_lastPress = g_clock.millis();
         m_mouseButtonStates |= 1 << mouseButton;
     } else if (m_currentEvent.type == TOUCH_UP) {
@@ -288,7 +292,7 @@ void AndroidWindow::processFingerDownAndUp() {
 }
 
 void AndroidWindow::processFingerMotion() {
-    static Point lastMousePos(-1, -1);
+    Point& lastMousePos = s_lastMousePos;
     static const int dragThreshold = 15; // Increased for touch (was 5, too sensitive)
 
     m_inputEvent.reset();

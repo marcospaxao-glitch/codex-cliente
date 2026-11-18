@@ -41,6 +41,9 @@
 
 // CODEX: no jogo (celular) o teclado so abre pelo botao do chat (Lua: codexBotaoTeclado)
 bool g_codexTecladoSoBotao = false;
+// o "so pelo botao" vale para o campo do chat; campos de janelas (painel ADM, busca...)
+// abrem o teclado ao tocar
+static bool codexCampoDoChat(UITextEdit* w) { return w->getId() == "consoleTextEdit"; }
 
 UITextEdit::UITextEdit()
 {
@@ -1374,7 +1377,7 @@ void UITextEdit::onFocusChange(const bool focused, const Fw::FocusReason reason)
         }
 #ifdef ANDROID
         // Only show keyboard on user interaction (mouse/touch), not programmatic focus
-        if (getProp(PropEditable) && reason == Fw::MouseFocusReason && !g_codexTecladoSoBotao) {
+        if (getProp(PropEditable) && reason == Fw::MouseFocusReason && !(g_codexTecladoSoBotao && codexCampoDoChat(this))) {
             g_androidManager.showKeyboardSoft();
             // TODO: widget rect is passed for future smart toolbar positioning
             // (toolbar tries above/below/left/right of the input before falling back to above-keyboard)
@@ -1642,7 +1645,7 @@ bool UITextEdit::onMousePress(const Point& mousePos, const Fw::MouseButton butto
 
     if (button == Fw::MouseLeftButton) {
 #ifdef ANDROID
-        if (getProp(PropEditable) && !g_codexTecladoSoBotao) {
+        if (getProp(PropEditable) && !(g_codexTecladoSoBotao && codexCampoDoChat(this))) {
             g_androidManager.showKeyboardSoft();
             const auto& rect = getRect();
             g_androidManager.showInputPreview(getText(), rect.x(), rect.y(), rect.width(), rect.height());
@@ -1674,15 +1677,16 @@ bool UITextEdit::onMousePress(const Point& mousePos, const Fw::MouseButton butto
         if (g_window.isVisible() && getProp(PropEditable) && isEnabled() && isVisible()) {
             // CODEX: parte de baixo do campo, em px da pagina (a tela sobe ate ele aparecer)
             const double campoCss = getRect().bottom() * g_browserWindow.getCssScale();
+            const int forcar = getId() == "consoleTextEdit" ? 0 : 1; // so o chat depende do botao
             MAIN_THREAD_ASYNC_EM_ASM({
                 // CODEX: campo de texto do proprio shell (funciona no Android e no iPhone)
                 if (window.CODEX_CELULAR && window.codexAbrirTeclado) {
-                    window.codexAbrirTeclado($0);
+                    window.codexAbrirTeclado($0, $1 === 1);
                 } else if (navigator && "virtualKeyboard" in navigator) {
                     document.getElementById("title-text").focus();
                     navigator.virtualKeyboard.show();
                 }
-            }, campoCss);
+            }, campoCss, forcar);
         }
 #endif
         return true;

@@ -701,6 +701,16 @@ function codexGruposMenu()
   add('Pokemon', ICON_DIR .. 'pokeball', 'left')
   for _, c in ipairs(LAYOUT.cats) do add(c.name, ICON_DIR .. c.icon, c.id) end
   add('Servidor', ICON_DIR .. 'info', 'right')
+  -- celular: o terminal (Ctrl+T do PC) mostra os erros do jogo
+  local term = modules.client_terminal
+  if term and term.toggle then
+    local g = grupos[#grupos]
+    if not g or g.nome ~= 'Servidor' then
+      g = { nome = 'Servidor', icon = ICON_DIR .. 'info', itens = {} }
+      grupos[#grupos + 1] = g
+    end
+    g.itens[#g.itens + 1] = { label = 'Terminal', icon = ICON_DIR .. 'options', run = function() term.toggle() end }
+  end
   return grupos
 end
 

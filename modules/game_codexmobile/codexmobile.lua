@@ -452,6 +452,26 @@ end
 
 -- gaveta = coluna da direita do PC (batalha, mochila, janelas), por cima do
 -- mapa, abaixo da barra do topo. Abre/fecha pela BOLSA.
+-- gaveta aberta: as janelas (mochila, batalha...) dividem a altura toda, porque a
+-- borda de puxar para aumentar e pequena demais para o dedo
+local ultimaQtdGaveta = -1
+local function encherGaveta(forcar)
+  local gi = modules.game_interface
+  local direita = gi and gi.getRightPanel and gi.getRightPanel()
+  if not direita or not direita:isVisible() then ultimaQtdGaveta = -1 return end
+  local janelas = {}
+  for _, w in ipairs(direita:getChildren()) do
+    local ok, classe = pcall(function() return w:getClassName() end)
+    local minimizada = false
+    pcall(function() minimizada = w:isOn() end) -- miniwindow minimizada fica "on"
+    if w:isVisible() and ok and classe == 'UIMiniWindow' and not minimizada then janelas[#janelas + 1] = w end
+  end
+  if #janelas == 0 or (#janelas == ultimaQtdGaveta and not forcar) then return end
+  ultimaQtdGaveta = #janelas
+  local cada = math.floor((direita:getHeight() - 8) / #janelas) - 2
+  for _, w in ipairs(janelas) do pcall(function() w:setHeight(math.max(90, cada)) end) end
+end
+
 local function abrirGaveta(abrir)
   local gi = modules.game_interface
   local direita = gi and gi.getRightPanel and gi.getRightPanel()
@@ -459,7 +479,10 @@ local function abrirGaveta(abrir)
   gavetaAberta = abrir
   direita:setMarginTop(TOPO_ALTURA + 4)
   direita:setVisible(abrir)
-  if abrir then direita:raise() end
+  if abrir then
+    direita:raise()
+    scheduleEvent(function() encherGaveta(true) end, 200)
+  end
   -- o que fica embaixo da gaveta sai da frente
   for _, w in ipairs({ miniMapa, botaoLoot, acoes }) do
     if w then w:setVisible(not abrir and not hudEscondido) end
@@ -850,6 +873,7 @@ end
 
 local function verJanelas()
   publicarJoystick()
+  if gavetaAberta then encherGaveta(false) end -- abriu/fechou uma janela na gaveta
   if not g_game.isOnline() or not topo then return end
   local w = acharJanelaGrande()
   if w and w ~= janelaAberta then
