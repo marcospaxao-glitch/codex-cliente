@@ -105,3 +105,22 @@ if g_map and g_map.addThing and not g_map.__codexAddThing then
     return g_map.__codexAddThing(thing, pos, stackPos)
   end
 end
+
+
+-- CODEX: salvar as configuracoes (senha lembrada, posicao das janelas, opcoes) de
+-- tempos em tempos. No navegador e no app de celular o jogo quase nunca "fecha"
+-- direito (a aba/o app e simplesmente encerrado), entao o salvamento do fim nunca
+-- acontecia e tudo se perdia.
+do
+  local function salvar()
+    pcall(function() g_settings.save() end)
+  end
+  local evento = cycleEvent(salvar, 20000)
+  connect(g_game, { onGameStart = function() scheduleEvent(salvar, 3000) end, onGameEnd = salvar })
+  local _terminate = terminate
+  function terminate()
+    removeEvent(evento)
+    salvar()
+    if _terminate then _terminate() end
+  end
+end

@@ -847,6 +847,8 @@ local function esconderHud(esconder)
     x:setVisible(esconder)
     if esconder then x:raise() end
   end
+  -- a janela pode estar acima do HUD (ex.: Terminal): o X tem que ficar por cima dela
+  if esconder and overlay then overlay:raise() end
 end
 
 local function fecharJanela()
