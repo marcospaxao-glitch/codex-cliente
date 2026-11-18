@@ -19,6 +19,7 @@ local SETTINGS_KEY = 'codexTopbar'
 
 -- icone novo por id do botao (primeiro) ou pelo nome do arquivo do icone
 local ICON_BY_ID = {
+  codexJornadaButton = 'shieldstar',
   logoutButton = 'logout', optionsButton = 'options', audioButton = 'audio', hotkeysButton = 'hotkeys',
   battleButton = 'battle', vipListButton = 'viplist', minimapButton = 'minimap',
   questLogButton = 'questlog', skillsButton = 'skills', inventoryButton = 'inventory', lootButton = 'loot',
@@ -122,6 +123,7 @@ local LAYOUT = {
     }},
   },
   right = {
+    {label = 'Jornada', ids = {'codexJornadaButton'}, words = {'jornada do treinador'}},
     {label = 'Recompensas', ids = {'codexHorasButton'}, words = {'recompensas por tempo'}},
     {label = 'Streamer', ids = {'codexStreamerButton'}, words = {'painel do streamer'}},
     {label = 'Guia', ids = {'codexGuideButton'}, words = {'guia do servidor'}},
@@ -675,7 +677,7 @@ end
 function codexGruposMenu()
   local grupos = {}
   -- no celular: Autoloot junto dos sistemas de Pokemon; Hotbar e Hotkeys (teclado do PC) saem
-  local MOVER = { ['Autoloot'] = 'left' }
+  local MOVER = { ['Autoloot'] = 'left', ['Jornada'] = 'left' }
   local FORA = { ['Hotbar'] = true, ['Hotkeys'] = true }
   local function add(nome, icone, where)
     local itens = {}

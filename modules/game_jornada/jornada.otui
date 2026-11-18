@@ -1,0 +1,267 @@
+JornadaCap < Label
+  height: 22
+  font: verdana-11px-rounded
+  color: #f2c400
+  text-offset: 6 4
+  background-color: #12223a
+  focusable: false
+
+JornadaRow < Label
+  height: 22
+  font: verdana-11px-antialised
+  color: #6f86a8
+  text-offset: 22 4
+  focusable: true
+  background-color: alpha
+  $hover:
+    background-color: #1a3050
+  $focus:
+    background-color: #24456f
+
+  UIWidget
+    id: marca
+    size: 10 10
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 7
+    background-color: #2a3c56
+    phantom: true
+
+JornadaBox < UIWidget
+  background-color: #0b1626
+  border-width: 1
+  border-color: #23395a
+
+JornadaTitulo < Label
+  font: verdana-11px-rounded
+  color: #f2c400
+  text-auto-resize: true
+
+// quadro na tela com a missao atual
+JornadaQuadro < UIWidget
+  size: 230 50
+  background-color: #0c1828e6
+  border-width: 1
+  border-color: #b08a14
+  focusable: false
+
+  Label
+    id: cabeca
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 5 8 0 8
+    height: 13
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-auto-resize: false
+    phantom: true
+
+  Label
+    id: missao
+    anchors.top: cabeca.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 3 8 0 8
+    height: 13
+    font: verdana-11px-antialised
+    color: #ffffff
+    text-auto-resize: false
+    phantom: true
+
+  UIWidget
+    id: barraFundo
+    anchors.top: missao.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 5 8 0 8
+    height: 6
+    background-color: #1a2a40
+    phantom: true
+
+    UIWidget
+      id: barra
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      width: 0
+      background-color: #4fa3ff
+      phantom: true
+
+MainWindow
+  id: jornadaWindow
+  text: Jornada do Treinador
+  size: 680 450
+  @onEscape: modules.game_jornada.hide()
+
+  TextList
+    id: lista
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    width: 220
+    margin-bottom: 4
+    focusable: false
+    vertical-scrollbar: listaScroll
+    background-color: #0b1626
+    border-width: 1
+    border-color: #23395a
+
+  VerticalScrollBar
+    id: listaScroll
+    anchors.top: lista.top
+    anchors.bottom: lista.bottom
+    anchors.left: lista.right
+    step: 22
+    pixels-scroll: true
+
+  // ---- o Professor ----
+  JornadaBox
+    id: retratoBox
+    anchors.top: parent.top
+    anchors.left: listaScroll.right
+    size: 84 84
+    margin-left: 8
+
+    UICreature
+      id: retrato
+      anchors.centerIn: parent
+      size: 80 80
+      phantom: true
+
+  Label
+    id: professor
+    anchors.top: retratoBox.bottom
+    anchors.horizontalCenter: retratoBox.horizontalCenter
+    margin-top: 2
+    width: 100
+    font: verdana-11px-rounded
+    color: #f2c400
+    text-align: center
+    text-auto-resize: false
+
+  JornadaBox
+    id: falaBox
+    anchors.top: parent.top
+    anchors.left: retratoBox.right
+    anchors.right: parent.right
+    height: 170
+    margin-left: 8
+
+    UILabel
+      id: fala
+      anchors.fill: parent
+      margin: 8 10 8 10
+      font: verdana-11px-antialised
+      color: #e8eef7
+      text-wrap: true
+      text-align: topLeft
+      text-auto-resize: false
+
+  // ---- missao ----
+  JornadaTitulo
+    id: tituloMissao
+    anchors.top: falaBox.bottom
+    anchors.left: retratoBox.left
+    margin-top: 10
+
+  Label
+    id: progressoTexto
+    anchors.verticalCenter: tituloMissao.verticalCenter
+    anchors.right: parent.right
+    font: verdana-11px-rounded
+    color: #c9d6e6
+    text-auto-resize: true
+
+  UIWidget
+    id: barraFundo
+    anchors.top: tituloMissao.bottom
+    anchors.left: retratoBox.left
+    anchors.right: parent.right
+    margin-top: 6
+    height: 10
+    background-color: #1a2a40
+    border-width: 1
+    border-color: #23395a
+
+    UIWidget
+      id: barra
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      margin: 1
+      width: 0
+      background-color: #4fa3ff
+
+  Label
+    id: dicaTitulo
+    text: COMO FAZER
+    anchors.top: barraFundo.bottom
+    anchors.left: retratoBox.left
+    margin-top: 10
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: true
+
+  UILabel
+    id: dica
+    anchors.top: dicaTitulo.bottom
+    anchors.left: retratoBox.left
+    anchors.right: parent.right
+    margin-top: 3
+    height: 32
+    font: verdana-11px-antialised
+    color: #ffffff
+    text-wrap: true
+    text-align: topLeft
+    text-auto-resize: false
+
+  Label
+    id: premioTitulo
+    text: PREMIO
+    anchors.top: dica.bottom
+    anchors.left: retratoBox.left
+    margin-top: 6
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: true
+
+  UILabel
+    id: premio
+    anchors.top: premioTitulo.bottom
+    anchors.left: retratoBox.left
+    anchors.right: parent.right
+    margin-top: 3
+    height: 28
+    font: verdana-11px-antialised
+    color: #72e6a0
+    text-wrap: true
+    text-align: topLeft
+    text-auto-resize: false
+
+  CheckBox
+    id: mostrarQuadro
+    text: Mostrar a missao na tela
+    anchors.bottom: parent.bottom
+    anchors.left: retratoBox.left
+    margin-bottom: 8
+    width: 190
+    @onCheckChange: modules.game_jornada.onMostrarQuadro(self:isChecked())
+
+  Button
+    id: botaoGuia
+    text: Guia
+    anchors.bottom: parent.bottom
+    anchors.right: botaoAcao.left
+    margin-right: 6
+    width: 70
+    height: 28
+    @onClick: modules.game_jornada.abrirGuia()
+
+  Button
+    id: botaoAcao
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    width: 150
+    height: 28
+    @onClick: modules.game_jornada.acao()

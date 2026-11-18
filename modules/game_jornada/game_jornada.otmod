@@ -1,0 +1,11 @@
+Module
+  name: game_jornada
+  description: Jornada do Treinador - tutorial em missoes com o Professor
+  author: Codex
+  website: codexpoketibia.com.br
+  autoload: true
+  autoload-priority: 1010
+  scripts: [ jornada_textos, jornada ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

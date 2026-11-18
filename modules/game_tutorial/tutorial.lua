@@ -6,7 +6,7 @@
 --   (ex.: imgs/paginas/tera.png) e ela aparece na pagina sozinha.
 -- ============================================================
 local HOTKEY = 'Ctrl+Shift+H'
-local OPEN_ON_FIRST_LOGIN = true     -- abre sozinho no 1o login de cada personagem
+local OPEN_ON_FIRST_LOGIN = false    -- (a Jornada do Treinador abre no 1o login no lugar do Guia)
 local SETTINGS_KEY = 'codexGuia'
 local IMG_DIR = '/modules/game_tutorial/imgs/paginas/'
 local IMG_HEIGHT = 150
