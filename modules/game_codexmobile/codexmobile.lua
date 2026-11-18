@@ -697,6 +697,8 @@ local function atualizarSom()
   if b then b:setImageSource('/game_codexmobile/images/' .. (ligado and 'ic_som' or 'ic_mudo')) end
 end
 
+local publicarJoystick -- (definida mais abaixo; app Android)
+
 -- ============================================================
 -- menu do celular: grupos a esquerda, sistemas grandes a direita
 -- ============================================================
@@ -705,6 +707,7 @@ local grupoAtual = 1
 
 local function fecharMenu()
   if menuCelular then menuCelular:hide() end
+  if publicarJoystick then publicarJoystick() end
 end
 
 local function mostrarGrupo(i)
@@ -741,6 +744,7 @@ local function abrirMenu()
   if gavetaAberta then abrirGaveta(false) end
   mostrarGrupo(grupoAtual)
   menuCelular:show()
+  if publicarJoystick then publicarJoystick() end
   menuCelular:raise()
   if topo then topo:raise() end
 end
@@ -835,7 +839,17 @@ local function fecharJanela()
   if w:isVisible() then w:hide() end
 end
 
+-- app Android: o cliente testa a area do joystick sozinho (fora do Lua); avisa onde
+-- ele esta e se pode receber o dedo agora (sem menu ou janela grande por cima)
+publicarJoystick = function()
+  if type(codexJoystickArea) ~= 'function' or not keypad then return end
+  local ativo = g_game.isOnline() and keypad:isVisible() and not hudEscondido
+    and not (menuCelular and menuCelular:isVisible())
+  pcall(codexJoystickArea, keypad:getX(), keypad:getY(), keypad:getWidth(), keypad:getHeight(), ativo and true or false)
+end
+
 local function verJanelas()
+  publicarJoystick()
   if not g_game.isOnline() or not topo then return end
   local w = acharJanelaGrande()
   if w and w ~= janelaAberta then
@@ -896,6 +910,7 @@ local function onGameEnd()
   hudEscondido = false
   janelaAberta = nil
   if overlay then overlay:getChildById('fecharJanela'):hide() end
+  if type(codexJoystickArea) == 'function' then pcall(codexJoystickArea, 0, 0, 0, 0, false) end
   fecharMenu()
   mostrarHud(false)
   gavetaAberta = false

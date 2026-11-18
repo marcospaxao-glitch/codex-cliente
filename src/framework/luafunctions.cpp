@@ -85,6 +85,7 @@ void codexTeclado(bool abrir, int fundo);
 #ifdef ANDROID
 #include <framework/platform/androidmanager.h>
 extern bool g_codexTecladoSoBotao; // ui/uitextedit.cpp
+void codexJoystickArea(int x, int y, int w, int h, bool ativo); // platform/androidwindow.cpp
 #endif
 #include "core/updater.h"
 
@@ -120,6 +121,7 @@ void Application::registerLuaFunctions()
         g_codexTecladoSoBotao = !mostrar;
         // (girar o celular entre login e jogo fazia a tela piscar: fica sempre deitado)
     });
+    g_lua.bindGlobalFunction("codexJoystickArea", [](int x, int y, int w, int h, bool ativo) { codexJoystickArea(x, y, w, h, ativo); });
     g_lua.bindGlobalFunction("codexTeclado", [](bool abrir, int) {
         if (abrir) g_androidManager.showKeyboardSoft();
         else g_androidManager.hideKeyboard();

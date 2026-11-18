@@ -27,6 +27,7 @@
 #include <game-activity/native_app_glue/android_native_app_glue.h>
 #include "framework/core/clock.h"
 #include <algorithm>
+#include <atomic>
 #include <framework/core/eventdispatcher.h>
 #include <framework/luaengine/luainterface.h>
 #include <android/log.h>
@@ -405,25 +406,46 @@ void AndroidWindow::onDisplayDensityChanged(float newDensity) {
     m_hasBaseDisplayDensity = true;
 }
 
-// CODEX: o joystick do HUD recebe o proprio dedo (Lua: codexJoystickToque(tipo, x, y);
-// tipo 0 = encostou -> true se o dedo e do joystick, 1 = moveu, 2 = soltou)
-static bool codexJoystickToque(int tipo, int x, int y) {
-    bool usado = false;
-    try {
-        g_lua.getGlobal("codexJoystickToque");
-        if (!g_lua.isFunction()) {
+// CODEX: o joystick do HUD recebe o proprio dedo. O toque chega na thread da janela,
+// e o Lua roda em outra (a do jogo): aqui so se testa a area do joystick (que o Lua
+// publica com codexJoystickArea) e o Lua e chamado na thread dele (g_dispatcher).
+// Chamar o Lua direto daqui corrompia o estado do Lua e fechava o app.
+static std::atomic<int> s_joyX{ 0 }, s_joyY{ 0 }, s_joyW{ 0 }, s_joyH{ 0 };
+static std::atomic<bool> s_joyAtivo{ false };
+
+void codexJoystickArea(int x, int y, int w, int h, bool ativo)
+{
+    s_joyX = x; s_joyY = y; s_joyW = w; s_joyH = h;
+    s_joyAtivo = ativo && w > 0 && h > 0;
+}
+
+static bool codexNoJoystick(int x, int y)
+{
+    if (!s_joyAtivo)
+        return false;
+    const float r = std::max(s_joyW.load(), s_joyH.load()) / 2.f + 4.f;
+    const float dx = x - (s_joyX + s_joyW / 2.f);
+    const float dy = y - (s_joyY + s_joyH / 2.f);
+    return dx * dx + dy * dy <= r * r;
+}
+
+static void codexJoystickToque(int tipo, int x, int y)
+{
+    g_dispatcher.addEvent([tipo, x, y] {
+        try {
+            g_lua.getGlobal("codexJoystickToque");
+            if (!g_lua.isFunction()) {
+                g_lua.pop();
+                return;
+            }
+            g_lua.pushInteger(tipo);
+            g_lua.pushInteger(x);
+            g_lua.pushInteger(y);
+            g_lua.safeCall(3, 1);
             g_lua.pop();
-            return false;
+        } catch (...) {
         }
-        g_lua.pushInteger(tipo);
-        g_lua.pushInteger(x);
-        g_lua.pushInteger(y);
-        g_lua.safeCall(3, 1);
-        usado = g_lua.popBoolean();
-    } catch (...) {
-        usado = false;
-    }
-    return usado;
+    });
 }
 
 void AndroidWindow::onNativeTouch(int actionType,
@@ -440,8 +462,9 @@ void AndroidWindow::onNativeTouch(int actionType,
     const int ux = static_cast<int>(x / m_displayDensity);
     const int uy = static_cast<int>(y / m_displayDensity);
 
-    if (encostou && m_joyId < 0 && codexJoystickToque(0, ux, uy)) {
+    if (encostou && m_joyId < 0 && codexNoJoystick(ux, uy)) {
         m_joyId = id;
+        codexJoystickToque(0, ux, uy);
         return;
     }
     if (id == m_joyId) {
