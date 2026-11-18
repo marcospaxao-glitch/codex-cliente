@@ -951,6 +951,41 @@ publicarJoystick = function()
   pcall(codexJoystickArea, keypad:getX(), keypad:getY(), keypad:getWidth(), keypad:getHeight(), ativo and true or false)
 end
 
+-- botoes - e + no topo da janela: diminui/aumenta uma linha (36 px) por toque
+local LINHA_JANELA = 36
+local function botoesTamanho(w, rb)
+  if rb.minimum and rb.maximum and rb.minimum >= rb.maximum then return end
+  local ancora = w:getChildById('minimizeButton')
+  if not ancora or not ancora:isVisible() then ancora = w:getChildById('closeButton') end
+  if not ancora then return end
+  local function mudar(sinal)
+    local root = g_ui.getRootWidget()
+    local minimo = math.max(rb.minimum or 48, 48)
+    local maximo = math.min(rb.maximum or 2000, root:getHeight() - w:getY() - 4)
+    local h = math.max(minimo, math.min(maximo, w:getHeight() + sinal * LINHA_JANELA))
+    if w:isOn() then pcall(function() w:maximize() end) end -- minimizada: abre antes
+    w:setHeight(h)
+  end
+  local mais = g_ui.createWidget('CodexImgBotao', w)
+  mais:setId('codexJanMais')
+  mais:setSize({ width = 26, height = 20 })
+  mais:addAnchor(AnchorTop, 'parent', AnchorTop)
+  mais:addAnchor(AnchorRight, ancora:getId(), AnchorLeft)
+  mais:setMarginTop(2)
+  mais:setMarginRight(6)
+  mais:setImageSource('/game_codexmobile/images/jan_mais')
+  mais.onClick = function() mudar(1) end
+  local menos = g_ui.createWidget('CodexImgBotao', w)
+  menos:setId('codexJanMenos')
+  menos:setSize({ width = 26, height = 20 })
+  menos:addAnchor(AnchorTop, 'parent', AnchorTop)
+  menos:addAnchor(AnchorRight, 'codexJanMais', AnchorLeft)
+  menos:setMarginTop(2)
+  menos:setMarginRight(3)
+  menos:setImageSource('/game_codexmobile/images/jan_menos')
+  menos.onClick = function() mudar(-1) end
+end
+
 -- janelas pequenas (mochila, bolsa de loot...): a borda de baixo, que puxa para
 -- aumentar/diminuir, fica grossa e sempre visivel (3 px era impossivel de pegar no dedo)
 local function ajustarJanelas()
@@ -970,6 +1005,7 @@ local function ajustarJanelas()
           rb:setBackgroundColor('#f5c51855')
           rb:setOpacity(1)
           rb.onHoverChange = function() end
+          pcall(botoesTamanho, w, rb)
         end
       end
     end
