@@ -14,7 +14,7 @@ JORNADA_INICIO = [[Ola, treinador! Eu sou o Professor Carvalho.
 
 Vou te ensinar tudo o que voce precisa para comecar a sua jornada: soltar e cuidar do seu Pokemon, batalhar, capturar, comprar e crescer.
 
-Sao 15 missoes curtas. Cada uma da experiencia, gold e itens. Vamos nessa?]]
+Sao 18 missoes curtas. Cada uma da experiencia, gold e itens. Vamos nessa?]]
 
 JORNADA_FIM = [[Parabens! Voce completou a Jornada do Treinador.
 
@@ -22,7 +22,7 @@ Agora voce conhece o basico do Codex. Ainda tem muito mais: ginasios, clas, dung
 
 Quando tiver duvida, abra o Guia (botao Guia). Boa sorte, treinador!]]
 
-JORNADA_CAPITULOS = {'Primeiros passos', 'Cuidando do time', 'Capturar', 'Economia', 'Crescendo'}
+JORNADA_CAPITULOS = {'Primeiros passos', 'Cuidando do time', 'Capturar', 'Pokemon Manager', 'Economia', 'Crescendo'}
 
 JORNADA_MISSOES = {
   -- ===== Capitulo 1: Primeiros passos =====
@@ -109,8 +109,34 @@ Derrote 20 Pokemon selvagens. Dica: ligue o Autoloot para pegar o loot sozinho.]
    cel = 'Autoloot: MENU, grupo Pokemon, Autoloot. O loot vai para a Bolsa de Loot (botao LOOT).',
    feito = 'Que treino! Venda o loot nos NPCs para ganhar gold.'},
 
-  -- ===== Capitulo 4: Economia =====
-  {cap = 4, titulo = 'Compre algo no Mark',
+  -- ===== Capitulo 4: Pokemon Manager =====
+  {cap = 4, titulo = 'Aprenda um golpe no Manager',
+   fala = [[O Pokemon Manager e o centro de tudo do seu Pokemon: golpes, atributos, itens, evolucao, amizade e ovos.
+
+Cada level do Pokemon da 1 ponto de skill. Gaste os pontos na aba Moves para liberar golpes novos.]],
+   dica = 'Guarde o Pokemon na pokebola. Abra o Manager (Ctrl+D), aba Moves, escolha um golpe e aprenda.',
+   cel = 'Guarde o Pokemon na pokebola. MENU, grupo Pokemon, Manager. Aba Moves, escolha um golpe e aprenda.',
+   feito = 'Golpe novo liberado! Ele ja aparece na barra de golpes.'},
+
+  {cap = 4, titulo = 'Distribua os atributos (EV)',
+   fala = [[Derrotando Pokemon, o seu ganha pontos de EV. Voce escolhe onde colocar: HP, Ataque, Defesa, Atq. Especial, Def. Especial ou Velocidade.
+
+Cada atributo vai ate 252 e o total ate 512.]],
+   dica = 'No Manager, aba Atributos: use +1 / +10 num atributo e clique em APLICAR EV.',
+   cel = 'No Manager, aba Atributos: toque em +1 / +10 num atributo e depois em APLICAR EV.',
+   feito = 'Agora o seu Pokemon e do seu jeito! Pegue o premio: tem um Pokemon Egg para a proxima missao.'},
+
+  {cap = 4, titulo = 'Choque um ovo',
+   fala = [[Ovos chocam Pokemon novos! Tem dois jeitos:
+
+- Incubadora: coloque o ovo numa incubadora e espere o tempo dela.
+- Por passos: ande carregando o ovo (10.000 passos), sem precisar de incubadora.]],
+   dica = 'No Manager, aba Incubadoras: COLOCAR OVO numa incubadora, ou comece a incubacao por passos.',
+   cel = 'No Manager, aba Incubadoras: COLOCAR OVO numa incubadora, ou comece a incubacao por passos.',
+   feito = 'O ovo esta chocando! Quando ficar pronto, pegue o Pokemon na mesma aba.'},
+
+  -- ===== Capitulo 5: Economia =====
+  {cap = 5, titulo = 'Compre algo no Mark',
    fala = [[O Mark vende os itens basicos: bolas, pocoes, revives e mais. Tudo e pago pelo PokeBank.
 
 Va ate o Mark e compre qualquer coisa.]],
@@ -118,7 +144,7 @@ Va ate o Mark e compre qualquer coisa.]],
    cel = 'Fique perto do Mark, toque em HI e depois em TRADE. Escolha o item e compre.',
    feito = 'Compra feita! Os NPCs tambem compram o seu loot direto da Bolsa de Loot.'},
 
-  {cap = 4, titulo = 'Pegue a Recompensa diaria',
+  {cap = 5, titulo = 'Pegue a Recompensa diaria',
    fala = [[Todo dia tem um presente para voce! Sao 28 dias seguidos de recompensas.
 
 Pegue a recompensa de hoje.]],
@@ -126,7 +152,7 @@ Pegue a recompensa de hoje.]],
    cel = 'MENU, grupo Recompensas, Recompensa.',
    feito = 'Volte todo dia para nao perder a sequencia!'},
 
-  {cap = 4, titulo = 'Abra o seu PC',
+  {cap = 5, titulo = 'Abra o seu PC',
    fala = [[No PC fica tudo o que nao esta com voce: Pokemon (30 caixas) e itens, separados por abas.
 
 Va ate um computador (PC) no Centro Pokemon e abra.]],
@@ -134,8 +160,8 @@ Va ate um computador (PC) no Centro Pokemon e abra.]],
    cel = 'Segure o dedo no computador do Centro Pokemon (ou use o botao USAR).',
    feito = 'Voce pode travar Pokemon no PC com o cadeado: ai eles nao sao vendidos por engano.'},
 
-  -- ===== Capitulo 5: Crescendo =====
-  {cap = 5, titulo = 'Complete uma Missao diaria',
+  -- ===== Capitulo 6: Crescendo =====
+  {cap = 6, titulo = 'Complete uma Missao diaria',
    fala = [[Todo dia voce recebe 3 missoes (facil, media e dificil) com gold, experiencia e pontos para a loja de missoes.
 
 Complete uma e pegue o premio dela.]],
@@ -143,7 +169,7 @@ Complete uma e pegue o premio dela.]],
    cel = 'MENU, grupo Recompensas, Missoes Diarias.',
    feito = 'Essa e uma otima rotina diaria!'},
 
-  {cap = 5, titulo = 'Chegue ao level 15',
+  {cap = 6, titulo = 'Chegue ao level 15',
    fala = [[Ultima missao! Continue treinando, capturando e fazendo missoes ate o level 15.
 
 Quando chegar, volte aqui para o grande premio.]],

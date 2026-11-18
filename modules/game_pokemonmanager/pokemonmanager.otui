@@ -12191,7 +12191,7 @@ UIWindow
             anchors.right: parent.right
             height: 14
             margin: 4 16 0 16
-            text: "Evolua ao chegar no level, ou a qualquer level com 50 pedras do elemento + 5 tokens."
+            text: "Evolua ao chegar no level, ou a qualquer level com 50 pedras do elemento (vale para as evolucoes por troca)."
             font: verdana-11px-rounded
             color: #829abe
 

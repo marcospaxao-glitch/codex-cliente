@@ -5259,7 +5259,7 @@ function PokemonManager.updateEvolutionUI()
       if o.stoneClientId > 0 then stoneItem:setItemId(o.stoneClientId) end
       local okStone = o.stoneHave >= o.stoneNeed
       local okTokens = e.tokens >= o.tokens
-      stoneText:setText(o.stoneNeed .. 'x ' .. o.stoneName .. ' (' .. o.stoneHave .. ')  +  ' .. o.tokens .. ' tokens (' .. e.tokens .. ')')
+      stoneText:setText(o.stoneNeed .. 'x ' .. o.stoneName .. ' (' .. o.stoneHave .. ')' .. ((o.tokens or 0) > 0 and ('  +  ' .. o.tokens .. ' tokens (' .. e.tokens .. ')') or ''))
       stoneText:setColor((okStone and okTokens) and '#dce8f5' or '#ff9a7a')
       stoneButton:setEnabled(okStone and okTokens and not e.busy)
       local armed = false
