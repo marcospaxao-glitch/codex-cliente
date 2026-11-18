@@ -51,6 +51,8 @@ void AndroidManager::setAndroidManager(JNIEnv* env, jobject androidManager) {
     m_midHideSoftKeyboard = jniEnv->GetMethodID(androidManagerJClass, "hideSoftKeyboard", "()V");
     m_midSetGameOrientation = jniEnv->GetMethodID(androidManagerJClass, "setGameOrientation", "(Z)V");
     if (jniEnv->ExceptionCheck()) { jniEnv->ExceptionClear(); m_midSetGameOrientation = nullptr; }
+    m_midRestartApp = jniEnv->GetMethodID(androidManagerJClass, "restartApp", "()V");
+    if (jniEnv->ExceptionCheck()) { jniEnv->ExceptionClear(); m_midRestartApp = nullptr; }
     m_midGetDisplayDensity = jniEnv->GetMethodID(androidManagerJClass, "getDisplayDensity", "()F");
     m_midShowInputPreview = jniEnv->GetMethodID(androidManagerJClass, "showInputPreview", "(Ljava/lang/String;IIII)V");
     m_midUpdateInputPreview = jniEnv->GetMethodID(androidManagerJClass, "updateInputPreview", "(Ljava/lang/String;)V");
@@ -70,6 +72,14 @@ void AndroidManager::setGameOrientation(bool inGame) {
         return;
     JNIEnv* env = getJNIEnv();
     env->CallVoidMethod(m_androidManagerJObject, m_midSetGameOrientation, inGame ? JNI_TRUE : JNI_FALSE);
+}
+
+bool AndroidManager::restartApp() {
+    if (!m_midRestartApp)
+        return false;
+    JNIEnv* env = getJNIEnv();
+    env->CallVoidMethod(m_androidManagerJObject, m_midRestartApp);
+    return true;
 }
 
 void AndroidManager::hideKeyboard() {

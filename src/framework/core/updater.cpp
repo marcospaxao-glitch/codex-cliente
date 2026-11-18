@@ -19,6 +19,10 @@
 #ifdef __EMSCRIPTEN__
 #include <emscripten/emscripten.h>
 #endif
+#if defined(ANDROID) && !defined(UPDATER_STANDALONE)
+#include <framework/core/eventdispatcher.h>
+#include <framework/platform/androidmanager.h>
+#endif
 
 #ifndef CLIENT_UPDATE_URL
 #define CLIENT_UPDATE_URL "https://codexpoketibia.com.br/updates/"
@@ -224,7 +228,11 @@ void Updater::restart()
     });
     return;
 #elif defined(ANDROID)
-    g_app.exit();
+    // CODEX: abre o app de novo sozinho (antes so fechava). Se nao der, fecha em 5 s.
+    if (!g_androidManager.restartApp())
+        g_app.exit();
+    else
+        g_dispatcher.scheduleEvent([] { g_app.exit(); }, 5000);
     return;
 #endif
     std::string exe = m_exePath;

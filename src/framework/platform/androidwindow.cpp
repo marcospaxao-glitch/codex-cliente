@@ -202,8 +202,25 @@ void AndroidWindow::terminate() {
     internalDestroyGLContext();
 }
 
+// CODEX: a tela girou (ou mudou de tamanho): o jogo nao era avisado e continuava
+// desenhando no tamanho antigo (a tela ficava cheia de pedacos repetidos).
+void AndroidWindow::codexConferirTamanho() {
+    if (!m_visible || !m_onResize)
+        return;
+    queryGlSize();
+    if (m_size.width() <= 0 || m_size.height() <= 0)
+        return;
+    codexAjustarDensidade();
+    if (m_size == m_codexTamanhoAvisado && m_displayDensity == m_codexDensidadeAvisada)
+        return;
+    m_codexTamanhoAvisado = m_size;
+    m_codexDensidadeAvisada = m_displayDensity;
+    m_onResize(m_size);
+}
+
 void AndroidWindow::poll() {
     handleNativeEvents();
+    codexConferirTamanho();
 
     while( !m_events.empty() ) {
         m_currentEvent = m_events.front();

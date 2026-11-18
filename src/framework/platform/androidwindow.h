@@ -159,6 +159,9 @@ private:
     void codexAjustarDensidade();
     void codexMouse(Fw::InputEventType tipo, Fw::MouseButton botao, const Point& pos);
     void codexChecarSegurar();
+    void codexConferirTamanho();
+    Size m_codexTamanhoAvisado;
+    float m_codexDensidadeAvisada = 0.f;
 };
 
 extern "C" {

@@ -42,6 +42,13 @@
                 android:name="android.app.lib_name"
                 android:value="otclient" />
         </activity>
+        <!-- CODEX: reabre o jogo depois de uma atualizacao -->
+        <activity
+            android:name="com.otclient.CodexReiniciar"
+            android:process=":reiniciar"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:excludeFromRecents="true"
+            android:exported="false" />
     </application>
 
 </manifest>

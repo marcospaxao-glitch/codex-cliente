@@ -37,6 +37,7 @@ public:
     void showKeyboardSoft();
     void hideKeyboard();
     void setGameOrientation(bool inGame); // CODEX
+    bool restartApp(); // CODEX: reabre o app (depois de atualizar)
 
     // Input preview toolbar: positioned near the focused widget
     void showInputPreview(const std::string& text, int widgetX = -1, int widgetY = -1, int widgetW = -1, int widgetH = -1);
@@ -62,6 +63,7 @@ private:
     jmethodID m_midShowSoftKeyboard;
     jmethodID m_midHideSoftKeyboard;
     jmethodID m_midSetGameOrientation = nullptr;
+    jmethodID m_midRestartApp = nullptr;
     jmethodID m_midGetDisplayDensity;
     jmethodID m_midShowInputPreview;
     jmethodID m_midUpdateInputPreview;

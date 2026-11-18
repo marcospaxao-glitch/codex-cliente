@@ -67,6 +67,21 @@ class AndroidManager(
         }
     }
 
+    // CODEX: o atualizador baixou arquivos novos: abre o app de novo sozinho.
+    // Uma tela invisivel (em outro processo) fecha este processo e abre o jogo de novo.
+    fun restartApp() {
+        handler.post {
+            try {
+                val i = android.content.Intent(context, CodexReiniciar::class.java)
+                i.putExtra("pid", android.os.Process.myPid())
+                i.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(i)
+            } catch (e: Exception) {
+                android.os.Process.killProcess(android.os.Process.myPid())
+            }
+        }
+    }
+
     // CODEX: login com o celular em pe (ou como o jogador quiser); no jogo, deitado
     fun setGameOrientation(inGame: Boolean) {
         handler.post {
