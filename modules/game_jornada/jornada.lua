@@ -8,7 +8,7 @@
 local OPCODE = 132
 local HOTKEY = 'Ctrl+Shift+J'
 -- aparencia do Professor (outfit de NPC). Troque o type se quiser outro.
-local PROFESSOR_LOOK = {type = 2007, head = 0, body = 0, legs = 0, feet = 0}
+local PROFESSOR_LOOK = {type = 1987, head = 0, body = 0, legs = 0, feet = 0}
 local CHAVE_QUADRO = 'codexJornadaQuadro'      -- mostrar o quadro na tela
 local CHAVE_POS = 'codexJornadaQuadroPos'
 
@@ -272,7 +272,7 @@ function show()
   if cb then cb:setChecked(quadroLigado()) end
   local r = window:recursiveGetChildById('retrato')
   pcall(function() r:setOutfit(PROFESSOR_LOOK) end)
-  window:recursiveGetChildById('professor'):setText(JORNADA_PROFESSOR or 'Professor')
+  window:recursiveGetChildById('professor'):setText(JORNADA_PROFESSOR_CURTO or JORNADA_PROFESSOR or 'Professor')
   enviar('INFO')
   atualizar(true)
 end

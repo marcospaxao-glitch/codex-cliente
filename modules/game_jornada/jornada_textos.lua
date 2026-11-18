@@ -9,6 +9,7 @@
 --   feito  : o Professor quando a missao termina
 -- ============================================================
 JORNADA_PROFESSOR = 'Professor Carvalho'
+JORNADA_PROFESSOR_CURTO = 'Prof. Carvalho' -- nome embaixo da foto
 
 JORNADA_INICIO = [[Ola, treinador! Eu sou o Professor Carvalho.
 
@@ -35,19 +36,29 @@ Quando terminar uma missao, volte aqui e pegue o premio. Leu? Entao clique em En
    dica = 'Clique em Entendi! aqui embaixo.',
    feito = 'Otimo! Pegue o seu primeiro premio. O gold vai direto para o seu PokeBank.'},
 
-  {cap = 1, titulo = 'Solte o seu Pokemon',
-   fala = [[Primeiro, o seu parceiro tem que sair da pokebola.
+  {cap = 1, titulo = 'Aprenda um golpe no Manager',
+   fala = [[Os golpes do seu Pokemon sao liberados no Pokemon Manager, o centro de tudo do seu Pokemon: golpes, atributos, itens, evolucao, amizade e ovos.
 
-Se voce ainda nao tem um Pokemon, escolha o seu inicial na sala onde voce comecou. Depois, solte ele!]],
+Cada level do Pokemon da 1 ponto de skill. Gaste os pontos na aba Moves para aprender um golpe.
+
+Ainda nao tem Pokemon? Escolha o seu inicial na sala onde voce comecou.]],
+   dica = 'Com o Pokemon guardado na pokebola, abra o Manager (botao no topo ou Ctrl+D), aba Moves, escolha um golpe e aprenda.',
+   cel = 'Com o Pokemon guardado na pokebola: MENU, grupo Pokemon, Manager. Aba Moves, escolha um golpe e aprenda.',
+   feito = 'Golpe aprendido! Ele ja aparece na barra de golpes. Agora vamos soltar o seu Pokemon.'},
+
+  {cap = 1, titulo = 'Solte o seu Pokemon',
+   fala = [[Agora o seu parceiro tem que sair da pokebola para batalhar.
+
+Solte ele!]],
    dica = 'Clique na foto do Pokemon na barra de Pokemon (ou clique duplo na pokebola na janela Equipe, Ctrl+Shift+P).',
    cel = 'Toque na foto do Pokemon na barra de Pokemon, no alto da tela.',
    feito = 'Ai esta ele! Clicar de novo na foto guarda o Pokemon na pokebola.'},
 
   {cap = 1, titulo = 'Use 3 golpes',
-   fala = [[Cada Pokemon tem ate 12 golpes (m1 ate m12). Os golpes tem tempo de recarga e alguns pedem level.
+   fala = [[Hora de usar os golpes que o seu Pokemon aprendeu! Cada golpe tem tempo de recarga e alguns pedem level.
 
-Ataque um Pokemon selvagem e use os golpes do seu Pokemon!]],
-   dica = 'Clique num golpe na barra de golpes. Dica: em Hotkeys (Ctrl+K) coloque #s m1 numa tecla (ex.: F1).',
+Ataque um Pokemon selvagem e use os golpes do seu Pokemon.]],
+   dica = 'Com o Pokemon solto, clique num golpe na barra de golpes. Golpe novo? Aprenda no Manager, aba Moves.',
    cel = 'Toque num golpe na barra de golpes, logo acima do chat.',
    feito = 'Muito bem! Combinar golpes e a chave das batalhas.'},
 
@@ -110,14 +121,6 @@ Derrote 20 Pokemon selvagens. Dica: ligue o Autoloot para pegar o loot sozinho.]
    feito = 'Que treino! Venda o loot nos NPCs para ganhar gold.'},
 
   -- ===== Capitulo 4: Pokemon Manager =====
-  {cap = 4, titulo = 'Aprenda um golpe no Manager',
-   fala = [[O Pokemon Manager e o centro de tudo do seu Pokemon: golpes, atributos, itens, evolucao, amizade e ovos.
-
-Cada level do Pokemon da 1 ponto de skill. Gaste os pontos na aba Moves para liberar golpes novos.]],
-   dica = 'Guarde o Pokemon na pokebola. Abra o Manager (Ctrl+D), aba Moves, escolha um golpe e aprenda.',
-   cel = 'Guarde o Pokemon na pokebola. MENU, grupo Pokemon, Manager. Aba Moves, escolha um golpe e aprenda.',
-   feito = 'Golpe novo liberado! Ele ja aparece na barra de golpes.'},
-
   {cap = 4, titulo = 'Distribua os atributos (EV)',
    fala = [[Derrotando Pokemon, o seu ganha pontos de EV. Voce escolhe onde colocar: HP, Ataque, Defesa, Atq. Especial, Def. Especial ou Velocidade.
 

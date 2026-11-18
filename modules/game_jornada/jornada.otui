@@ -94,6 +94,16 @@ MainWindow
   size: 680 450
   @onEscape: modules.game_jornada.hide()
 
+  Button
+    id: closeButton
+    text: X
+    size: 22 18
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: -31
+    margin-right: -8
+    @onClick: modules.game_jornada.hide()
+
   TextList
     id: lista
     anchors.top: parent.top
