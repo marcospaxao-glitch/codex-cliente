@@ -134,7 +134,21 @@ local function corDaLinha(i)
   return '#56698a', '#2a3c56'                                              -- trancada
 end
 
+-- lista: criada uma vez; a cada atualizacao so troca as cores
+local linhas = {}
+
+local function pintarLista()
+  local olhando = vendo or estado.passo
+  for i, row in pairs(linhas) do
+    local cor, marca = corDaLinha(i)
+    row:setColor(cor)
+    row:getChildById('marca'):setBackgroundColor(marca)
+    row:setBackgroundColor((i == olhando and (estado.passo > 0 or estado.fim)) and '#24456f' or '#00000000')
+  end
+end
+
 local function montarLista()
+  if next(linhas) then pintarLista() return end
   local lista = window:getChildById('lista')
   lista:destroyChildren()
   local cap = 0
@@ -147,16 +161,22 @@ local function montarLista()
     local row = g_ui.createWidget('JornadaRow', lista)
     row:setId('missao' .. i)
     row:setText(m.titulo)
-    local cor, marca = corDaLinha(i)
-    row:setColor(cor)
-    row:getChildById('marca'):setBackgroundColor(marca)
-    row.onClick = function()
+    row:setFocusable(false)
+    linhas[i] = row
+    -- tocar numa missao feita mostra ela de novo; tocar na atual volta para ela
+    row.onMouseRelease = function(self, pos, botaoMouse)
+      if botaoMouse ~= MouseLeftButton or not self:containsPoint(pos) then return false end
       if estado.fim or i <= estado.passo then
-        vendo = (i == estado.passo and not estado.fim) and nil or i
-        modules.game_jornada.atualizar(true)
+        local alvo = (i == estado.passo and not estado.fim) and nil or i
+        addEvent(function()
+          vendo = alvo
+          modules.game_jornada.atualizar(true)
+        end)
       end
+      return true
     end
   end
+  pintarLista()
 end
 
 local function botao(texto, ativo)
@@ -215,9 +235,8 @@ function atualizar(refalar)
     if refalar then falar(m.feito or m.fala) end
     progTxt:setText('Feita')
     barraEm(1, '#4fe07a')
-    premio:setText('Premio ja entregue.')
-    botao('Voltar para a atual', not estado.fim)
-    if estado.fim then botao('Fechar', true) end
+    premio:setText('Premio ja entregue. Toque na missao amarela da lista para voltar.')
+    botao('Ja feito', false)
     return
   end
   progTxt:setText(math.min(estado.prog, estado.meta) .. ' / ' .. estado.meta)
