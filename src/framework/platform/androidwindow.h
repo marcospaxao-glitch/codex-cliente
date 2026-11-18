@@ -157,6 +157,8 @@ private:
 
     void updateDisplayDensityFromSystem(float screenDensity);
     void codexAjustarDensidade();
+    void codexMouse(Fw::InputEventType tipo, Fw::MouseButton botao, const Point& pos);
+    void codexChecarSegurar();
 };
 
 extern "C" {

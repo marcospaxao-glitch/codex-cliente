@@ -219,6 +219,7 @@ void AndroidWindow::poll() {
                 break;
             case TOUCH_MOTION:
                 processFingerMotion();
+                break;
             case KEY_DOWN:
             case KEY_UP:
             case EVENT_UNDEFINED:
@@ -229,6 +230,7 @@ void AndroidWindow::poll() {
         m_events.pop();
     }
 
+    codexChecarSegurar();
     fireKeysPress();
 }
 
@@ -261,56 +263,81 @@ void AndroidWindow::processTextInput() {
     }
 }
 
-static Point s_lastMousePos(-1, -1); // CODEX: zerado a cada toque (antes vinha do toque anterior e matava o segurar)
+// CODEX: o toque funciona igual ao navegador no celular:
+//  - tocar e soltar           -> clique esquerdo (aperta e solta no fim do toque)
+//  - arrastar                 -> aperta o esquerdo so depois de mover ~10 px, no ponto
+//                                onde o dedo encostou (arrastar janela/item fica preciso)
+//  - segurar parado ~0,45 s   -> clique direito (menus da barra, golpes, etc.)
+static constexpr int CODEX_DISTANCIA_ARRASTE = 10;
+static constexpr ticks_t CODEX_TEMPO_SEGURAR = 450;
+static bool s_toque = false, s_arrastando = false, s_segurou = false;
+static Point s_inicio, s_ultimo;
+static ticks_t s_inicioMs = 0;
+
+void AndroidWindow::codexMouse(Fw::InputEventType tipo, Fw::MouseButton botao, const Point& pos) {
+    if (!m_onInputEvent)
+        return;
+    m_inputEvent.reset();
+    m_inputEvent.type = tipo;
+    m_inputEvent.mouseButton = botao;
+    m_inputEvent.mouseMoved = pos - m_inputEvent.mousePos;
+    m_inputEvent.mousePos = pos;
+    if (tipo == Fw::MousePressInputEvent)
+        m_mouseButtonStates |= 1 << botao;
+    else if (tipo == Fw::MouseReleaseInputEvent)
+        m_mouseButtonStates &= ~(1 << botao);
+    m_onInputEvent(m_inputEvent);
+}
+
+void AndroidWindow::codexChecarSegurar() {
+    if (!s_toque || s_arrastando || s_segurou)
+        return;
+    if (stdext::millis() - s_inicioMs < CODEX_TEMPO_SEGURAR)
+        return;
+    s_segurou = true;
+    codexMouse(Fw::MousePressInputEvent, Fw::MouseRightButton, s_ultimo);
+    codexMouse(Fw::MouseReleaseInputEvent, Fw::MouseRightButton, s_ultimo);
+}
 
 void AndroidWindow::processFingerDownAndUp() {
-    bool isTouchdown = m_currentEvent.type == TOUCH_DOWN;
-
-    Fw::MouseButton mouseButton = Fw::MouseLeftButton;
-
-    m_inputEvent.reset();
-    m_inputEvent.type = (isTouchdown) ? Fw::MousePressInputEvent : Fw::MouseReleaseInputEvent;
-    m_inputEvent.mouseButton = mouseButton;
-
-    if (isTouchdown) {
-        s_lastMousePos = Point(m_currentEvent.x / m_displayDensity, m_currentEvent.y / m_displayDensity);
-        m_isDragging = false;
-        m_lastPress = g_clock.millis();
-        m_mouseButtonStates |= 1 << mouseButton;
-    } else if (m_currentEvent.type == TOUCH_UP) {
-        if (!m_isDragging && stdext::millis() > m_lastPress + 500) {
-            // Long-press: remap to right-click and clear left button state
-            m_mouseButtonStates &= ~(1 << Fw::MouseLeftButton);
-            mouseButton = Fw::MouseRightButton;
-            m_inputEvent.mouseButton = mouseButton;
-        }
-        m_isDragging = false;
-        g_dispatcher.addEvent([this, mouseButton] { m_mouseButtonStates &= ~(1 << mouseButton); });
+    const Point pos(m_currentEvent.x / m_displayDensity, m_currentEvent.y / m_displayDensity);
+    if (m_currentEvent.type == TOUCH_DOWN) {
+        s_toque = true;
+        s_arrastando = false;
+        s_segurou = false;
+        s_inicio = s_ultimo = pos;
+        s_inicioMs = stdext::millis();
+        codexMouse(Fw::MouseMoveInputEvent, Fw::MouseLeftButton, pos);
+        return;
     }
-
-    handleInputEvent();
+    if (m_currentEvent.type != TOUCH_UP || !s_toque)
+        return;
+    s_toque = false;
+    if (s_arrastando) {
+        codexMouse(Fw::MouseReleaseInputEvent, Fw::MouseLeftButton, pos);
+    } else if (!s_segurou) {
+        codexMouse(Fw::MousePressInputEvent, Fw::MouseLeftButton, pos);
+        codexMouse(Fw::MouseReleaseInputEvent, Fw::MouseLeftButton, pos);
+    }
+    s_arrastando = false;
+    s_segurou = false;
 }
 
 void AndroidWindow::processFingerMotion() {
-    Point& lastMousePos = s_lastMousePos;
-    static const int dragThreshold = 15; // Increased for touch (was 5, too sensitive)
-
-    m_inputEvent.reset();
-    m_inputEvent.type = Fw::MouseMoveInputEvent;
-
-    Point newMousePos(m_currentEvent.x / m_displayDensity, m_currentEvent.y / m_displayDensity);
-
-    if (lastMousePos.x != -1 && lastMousePos.y != -1) {
-        int dx = std::abs(newMousePos.x - lastMousePos.x);
-        int dy = std::abs(newMousePos.y - lastMousePos.y);
-
-        if (dx > dragThreshold || dy > dragThreshold) {
-            m_isDragging = true;
-        }
+    if (!s_toque)
+        return;
+    const Point pos(m_currentEvent.x / m_displayDensity, m_currentEvent.y / m_displayDensity);
+    s_ultimo = pos;
+    if (s_segurou)
+        return;
+    if (!s_arrastando) {
+        const Point d = pos - s_inicio;
+        if (std::abs(d.x) + std::abs(d.y) < CODEX_DISTANCIA_ARRASTE)
+            return;
+        s_arrastando = true;
+        codexMouse(Fw::MousePressInputEvent, Fw::MouseLeftButton, s_inicio);
     }
-    lastMousePos = newMousePos;
-
-    handleInputEvent();
+    codexMouse(Fw::MouseMoveInputEvent, Fw::MouseLeftButton, pos);
 }
 
 void AndroidWindow::handleInputEvent() {

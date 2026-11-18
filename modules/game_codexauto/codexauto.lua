@@ -97,6 +97,8 @@ end
 
 local function refreshPanel()
   local bp, tp = panels.ball, panels.target
+  if bp and bp.codexIcone then bp.codexIcone(ballOn) end
+  if tp and tp.codexIcone then tp.codexIcone(targetOn) end
   if bp then
     local b = chosenBall()
     local ballText
@@ -513,6 +515,17 @@ local function createPanel(key)
     row.onClick = function() toggleTarget() end
   end
   if not g_settings.getBoolean(def.hideKey .. 'Shown') then panel:setVisible(false) end -- codex itens: escondido ate usar o item
+  -- celular: o quadro vira um icone (tocar liga/desliga; segurar o da bola abre a janela)
+  if type(codexCelular) == 'function' and codexCelular() and type(codexIconeCelular) == 'function' then
+    if key == 'ball' then
+      codexIconeCelular(panel, { icone = 'auto_bola', chave = 'codexCelIconeBola', ordem = 3,
+        tocar = function() toggleBall() end, segurar = function() openWindow() end })
+    else
+      codexIconeCelular(panel, { icone = 'auto_alvo', chave = 'codexCelIconeAlvo', ordem = 1,
+        tocar = function() toggleTarget() end })
+    end
+    return
+  end
   scheduleEvent(function() placePanel(key) end, 200)
 end
 

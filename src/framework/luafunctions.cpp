@@ -119,7 +119,14 @@ void Application::registerLuaFunctions()
     g_lua.bindGlobalFunction("codexCelular", [] { return true; });
     g_lua.bindGlobalFunction("codexBotaoTeclado", [](bool mostrar) {
         g_codexTecladoSoBotao = !mostrar;
-        // (girar o celular entre login e jogo fazia a tela piscar: fica sempre deitado)
+        // CODEX: login como o jogador segurar (em pe ou deitado); no jogo, sempre deitado.
+        // So pede ao Android quando muda (pedir de novo a cada chamada fazia piscar).
+        static int s_noJogo = -1;
+        const int noJogo = mostrar ? 0 : 1;
+        if (noJogo != s_noJogo) {
+            s_noJogo = noJogo;
+            g_androidManager.setGameOrientation(noJogo == 1);
+        }
     });
     g_lua.bindGlobalFunction("codexJoystickArea", [](int x, int y, int w, int h, bool ativo) { codexJoystickArea(x, y, w, h, ativo); });
     g_lua.bindGlobalFunction("codexTeclado", [](bool abrir, int) {

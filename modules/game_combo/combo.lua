@@ -41,6 +41,7 @@ end
 
 local function setLook(on)
   if not button then return end
+  if button.codexIcone then button.codexIcone(on) return end
   local dot = button:getChildById('dot')
   local state = button:getChildById('state')
   if dot then dot:setBackgroundColor(on and '#4fe07a' or '#3a5170') end
@@ -181,6 +182,13 @@ local function createButton()
     activate()
   end
   if isHidden() then button:setVisible(false) end
+  -- celular: vira um icone redondo (tocar liga/desliga)
+  if type(codexCelular) == 'function' and codexCelular() and type(codexIconeCelular) == 'function' then
+    codexIconeCelular(button, { icone = 'auto_combo', chave = 'codexCelIconeCombo', ordem = 2,
+      tocar = function() activate() end })
+    refreshTopButton()
+    return
+  end
   scheduleEvent(placeButton, 200)
   refreshTopButton()
 end

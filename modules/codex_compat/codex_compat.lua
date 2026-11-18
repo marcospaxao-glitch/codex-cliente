@@ -124,3 +124,72 @@ do
     if _terminate then _terminate() end
   end
 end
+
+-- CODEX celular: transforma um quadro (Auto Target / Combo / Auto Ball) num icone redondo.
+-- Tocar = cfg.tocar(); segurar = cfg.segurar() (se tiver); arrastar = muda de lugar.
+-- Volta uma funcao estado(ligado) que troca o icone (verde = ligado).
+function codexIconeCelular(w, cfg)
+  if not w or w.codexIcone then return w and w.codexIcone end
+  for _, c in ipairs(w:getChildren()) do c:hide() end
+  local TAM = 64
+  w:setSize({ width = TAM, height = TAM })
+  w:setBackgroundColor('#00000000')
+  pcall(function() w:setBorderWidth(0) end)
+  w:setTooltip('')
+  w:setDraggable(true)
+  local base = '/game_codexmobile/images/' .. cfg.icone
+  local ligado = false
+  local function estado(on)
+    ligado = on and true or false
+    w:setImageSource(base .. (ligado and '_verde' or ''))
+  end
+  estado(false)
+  -- setBorderColor/setBackgroundColor do modulo nao estragam o icone
+  w.setBorderColor = function() end
+  local soltouEm = 0
+  w.onDragEnter = function(self, pos)
+    self.codexOff = { x = pos.x - self:getX(), y = pos.y - self:getY() }
+    return true
+  end
+  w.onDragMove = function(self, pos)
+    local off = self.codexOff or { x = 0, y = 0 }
+    local p = self:getParent()
+    self:setPosition({ x = math.max(8, math.min(pos.x - off.x, p:getWidth() - TAM - 8)),
+                       y = math.max(8, math.min(pos.y - off.y, p:getHeight() - TAM - 8)) })
+    return true
+  end
+  w.onDragLeave = function(self)
+    soltouEm = g_clock.millis()
+    local pos = self:getPosition()
+    g_settings.set(cfg.chave, pos.x .. ',' .. pos.y)
+    return true
+  end
+  w.onClick = function()
+    if g_clock.millis() - soltouEm < 300 then return true end -- acabou de arrastar
+    cfg.tocar()
+    return true
+  end
+  w.onMouseRelease = function(self, pos, botao)
+    if botao == MouseRightButton then
+      if cfg.segurar then cfg.segurar() else cfg.tocar() end
+      return true
+    end
+    return false
+  end
+  -- lugar: o salvo (no celular) ou uma coluna ao lado de SUBIR/DESCER
+  local function posicionar()
+    local p = w:getParent()
+    if not p then return end
+    local x, y = string.match(g_settings.getString(cfg.chave) or '', '^(%-?%d+),(%-?%d+)$')
+    x, y = tonumber(x), tonumber(y)
+    if not x or x < 0 or y < 0 or x > p:getWidth() - 20 or y > p:getHeight() - 20 then
+      x = 90
+      y = 150 + ((cfg.ordem or 1) - 1) * 66
+    end
+    w:setPosition({ x = x, y = y })
+  end
+  w.codexPosicionar = posicionar
+  scheduleEvent(posicionar, 300)
+  w.codexIcone = estado
+  return estado
+end

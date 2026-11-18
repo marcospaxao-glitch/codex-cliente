@@ -363,7 +363,7 @@ end
 -- ============================================================
 -- posicao dos botoes de ataque (arrastando a alca); nil = lugar padrao
 -- ============================================================
-local CHAVE_POS = 'codexMobileAcoesV2'
+local CHAVE_POS = 'codexMobileAcoesV3' -- V3: longe do canto (tela arredondada)
 local CHAVE_TRAVA = 'codexMobileTravado'
 local travado = false
 
@@ -377,8 +377,8 @@ end
 
 local function aplicarPos(x, y)
   local root = g_ui.getRootWidget()
-  x = math.max(0, math.min(x, root:getWidth() - acoes:getWidth()))
-  y = math.max(0, math.min(y, root:getHeight() - acoes:getHeight()))
+  x = math.max(10, math.min(x, root:getWidth() - acoes:getWidth() - 10))
+  y = math.max(10, math.min(y, root:getHeight() - acoes:getHeight() - 8))
   acoes:setMarginLeft(x)
   acoes:setMarginTop(y)
 end
@@ -394,8 +394,8 @@ local function posicionar()
     return
   end
   local root = g_ui.getRootWidget()
-  acoes:setMarginLeft(math.max(0, root:getWidth() - acoes:getWidth() - 4))
-  acoes:setMarginTop(math.max(0, root:getHeight() - acoes:getHeight() - 2))
+  acoes:setMarginLeft(math.max(0, root:getWidth() - acoes:getWidth() - 24))
+  acoes:setMarginTop(math.max(0, root:getHeight() - acoes:getHeight() - 14))
 end
 
 local function posicionarDepois()
@@ -558,6 +558,69 @@ local function tamanhoChat()
   end
 end
 
+-- ----- chat escondido: some a janela, ficam so as ultimas mensagens por cima do jogo -----
+local CHAVE_CHAT_OCULTO = 'codexChatOculto'
+local chatOculto = false
+local addTabTextOriginal = nil
+
+local function linhaFlutuante(texto, cor)
+  local box = overlay and overlay:getChildById('chatFlutuante')
+  if not box or not chatOculto then return end
+  if #texto > 78 then texto = texto:sub(1, 76) .. '...' end
+  local l = g_ui.createWidget('UILabel', box)
+  l:setFont('verdana-11px-rounded')
+  l:setText(texto)
+  l:setColor(cor or '#ffffff')
+  l:setHeight(18)
+  l:setTextAlign(AlignLeft)
+  l:setTextOffset({ x = 6, y = 0 })
+  l:setBackgroundColor('#00000088')
+  l:setPhantom(true)
+  while box:getChildCount() > 4 do box:getFirstChild():destroy() end
+  box:setHeight(box:getChildCount() * 18)
+  scheduleEvent(function()
+    if not l:isDestroyed() then l:destroy() end
+    if not box:isDestroyed() then box:setHeight(math.max(1, box:getChildCount() * 18)) end
+  end, 12000)
+end
+
+local function ligarChatFlutuante()
+  local con = modules.game_console
+  if addTabTextOriginal or not con or type(con.addTabText) ~= 'function' then return end
+  addTabTextOriginal = con.addTabText
+  con.addTabText = function(text, speaktype, tab, creatureName)
+    local r = addTabTextOriginal(text, speaktype, tab, creatureName)
+    if chatOculto and text and tab then
+      local atual = con.consoleTabBar and con.consoleTabBar:getCurrentTab()
+      if tab == atual then pcall(linhaFlutuante, text, speaktype and speaktype.color) end
+    end
+    return r
+  end
+end
+
+local function desligarChatFlutuante()
+  local con = modules.game_console
+  if addTabTextOriginal and con then con.addTabText = addTabTextOriginal end
+  addTabTextOriginal = nil
+end
+
+local function ocultarChat(oculto)
+  chatOculto = oculto and true or false
+  g_settings.set(CHAVE_CHAT_OCULTO, chatOculto)
+  local gi = modules.game_interface
+  local fundo = gi and gi.getBottomPanel and gi.getBottomPanel()
+  if fundo then fundo:setVisible(not chatOculto) end
+  if not overlay then return end
+  local box = overlay:getChildById('chatFlutuante')
+  if box then
+    box:setVisible(chatOculto)
+    if not chatOculto then box:destroyChildren() end
+  end
+  local b = overlay:getChildById('chatMostrar')
+  if b then b:setVisible(chatOculto and not hudEscondido and g_game.isOnline()) end
+  if chatOculto and tecladoAberto then alternarTeclado() end
+end
+
 local function arrumarChat()
   local gi = modules.game_interface
   local fundo = gi.getBottomPanel()
@@ -594,6 +657,16 @@ local function arrumarChat()
       chatGrande = not chatGrande
       tamanhoChat()
     end
+    -- esconder o chat (olho), ao lado da seta
+    local ocultar = g_ui.createWidget('CodexImgBotao', painel)
+    ocultar:setId('codexChatOcultar')
+    ocultar:setSize({ width = 40, height = 28 })
+    ocultar:addAnchor(AnchorTop, 'parent', AnchorTop)
+    ocultar:addAnchor(AnchorRight, 'codexChatAbrir', AnchorLeft)
+    ocultar:setMarginTop(4)
+    ocultar:setMarginRight(4)
+    ocultar:setImageSource('/game_codexmobile/images/chat_ocultar')
+    ocultar.onClick = function() ocultarChat(true) end
     local abas = painel:getChildById('consoleTabBar')
     if abas then
       -- no dedo, arrastar a aba (trocar de lugar) engolia o toque: a aba nao era
@@ -605,7 +678,7 @@ local function arrumarChat()
       abas:breakAnchors()
       abas:addAnchor(AnchorTop, 'parent', AnchorTop)
       abas:addAnchor(AnchorLeft, 'parent', AnchorLeft)
-      abas:addAnchor(AnchorRight, 'codexChatAbrir', AnchorLeft)
+      abas:addAnchor(AnchorRight, 'codexChatOcultar', AnchorLeft)
       abas:setMarginTop(4)
       abas:setMarginLeft(10)
       abas:setMarginRight(6)
@@ -696,6 +769,7 @@ local function organizarTela()
     local pm = modules.game_pokemonmoves
     if pm and pm.codexModoCelularV2 then pm.codexModoCelularV2(root:getHeight() - ALTURA_CHAT - 12) end
   end)
+  passo('chat oculto', function() ocultarChat(chatOculto) end)
   if overlay then overlay:raise() end
 end
 
@@ -842,6 +916,10 @@ local function esconderHud(esconder)
   for _, w in ipairs({ miniMapa, botaoLoot, acoes }) do
     if w then w:setVisible(not esconder and not gavetaAberta) end
   end
+  local cm = overlay and overlay:getChildById('chatMostrar')
+  if cm then cm:setVisible(chatOculto and not esconder) end
+  local cf = overlay and overlay:getChildById('chatFlutuante')
+  if cf then cf:setVisible(chatOculto and not esconder) end
   local x = overlay and overlay:getChildById('fecharJanela')
   if x then
     x:setVisible(esconder)
@@ -873,8 +951,50 @@ publicarJoystick = function()
   pcall(codexJoystickArea, keypad:getX(), keypad:getY(), keypad:getWidth(), keypad:getHeight(), ativo and true or false)
 end
 
+-- janelas pequenas (mochila, bolsa de loot...): a borda de baixo, que puxa para
+-- aumentar/diminuir, fica grossa e sempre visivel (3 px era impossivel de pegar no dedo)
+local function ajustarJanelas()
+  local gi = modules.game_interface
+  local listas = {}
+  for _, f in ipairs({ 'getRootPanel', 'getRightPanel' }) do
+    local ok, p = pcall(function() return gi and gi[f] and gi[f]() end)
+    if ok and p then listas[#listas + 1] = p:getChildren() end
+  end
+  for _, lista in ipairs(listas) do
+    for _, w in ipairs(lista) do
+      if not w.codexAjustada and w:getClassName() == 'UIMiniWindow' then
+        w.codexAjustada = true
+        local rb = w:getChildById('bottomResizeBorder')
+        if rb then
+          rb:setHeight(16)
+          rb:setBackgroundColor('#f5c51855')
+          rb:setOpacity(1)
+          rb.onHoverChange = function() end
+        end
+      end
+    end
+  end
+end
+
+-- arrastar janela solta: no PC, passar por cima das outras janelas abria espaco
+-- entre elas (e a janela grudava). No celular, com a gaveta fechada, ela so anda.
+local arrastarJanelaOriginal = nil
+local function ligarArrasteLivre()
+  if arrastarJanelaOriginal or not UIMiniWindow then return end
+  arrastarJanelaOriginal = UIMiniWindow.onDragMove
+  UIMiniWindow.onDragMove = function(self, mousePos, mouseMoved)
+    if not gavetaAberta then return UIWindow.onDragMove(self, mousePos, mouseMoved) end
+    return arrastarJanelaOriginal(self, mousePos, mouseMoved)
+  end
+end
+local function desligarArrasteLivre()
+  if arrastarJanelaOriginal then UIMiniWindow.onDragMove = arrastarJanelaOriginal end
+  arrastarJanelaOriginal = nil
+end
+
 local function verJanelas()
   publicarJoystick()
+  pcall(ajustarJanelas)
   if gavetaAberta then encherGaveta(false) end -- abriu/fechou uma janela na gaveta
   if not g_game.isOnline() or not topo then return end
   local w = acharJanelaGrande()
@@ -906,6 +1026,8 @@ local function onGameStart()
   local hb = modules.game_codexhotbar
   if hb and hb.setHidden then hb.setHidden(true) end
   mostrarHud(true)
+  chatOculto = g_settings.getBoolean(CHAVE_CHAT_OCULTO)
+  ligarChatFlutuante()
   aplicarTrava()
   atualizarSom()
   for _, atraso in ipairs({ 300, 1500, 4000, 8000 }) do
@@ -935,7 +1057,12 @@ local function onGameEnd()
   eventoJanelas = nil
   hudEscondido = false
   janelaAberta = nil
-  if overlay then overlay:getChildById('fecharJanela'):hide() end
+  if overlay then
+    overlay:getChildById('fecharJanela'):hide()
+    overlay:getChildById('chatMostrar'):hide()
+    overlay:getChildById('chatFlutuante'):hide()
+    overlay:getChildById('chatFlutuante'):destroyChildren()
+  end
   if type(codexJoystickArea) == 'function' then pcall(codexJoystickArea, 0, 0, 0, 0, false) end
   fecharMenu()
   mostrarHud(false)
@@ -1050,6 +1177,8 @@ function init()
   keypad = overlay:getChildById('keypad')
   connect(keypad, { onMousePress = onPress, onMouseMove = onMove, onMouseRelease = onRelease })
   _G.codexJoystickToque = joystickToque -- o cliente manda o dedo do joystick direto aqui
+  ligarArrasteLivre()
+  overlay:getChildById('chatMostrar').onClick = function() ocultarChat(false) end
   acoes = overlay:getChildById('acoes')
   topo = overlay:getChildById('topo')
   cartao = overlay:getChildById('cartao')
@@ -1104,6 +1233,8 @@ end
 
 function terminate()
   _G.codexJoystickToque = nil
+  desligarArrasteLivre()
+  desligarChatFlutuante()
   desligarUsar()
   if not overlay then return end
   removeEvent(evento)
