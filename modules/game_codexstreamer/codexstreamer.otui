@@ -239,7 +239,7 @@ CSJanela
         anchors.right: premioProx.left
         anchors.top: parent.top
         margin: 6 4 0 6
-        font: verdana-11px-rounded
+        font: verdana-11px-antialised
         color: #ffffff
         text-auto-resize: false
         height: 14
