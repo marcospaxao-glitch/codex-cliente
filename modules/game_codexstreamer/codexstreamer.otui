@@ -80,6 +80,16 @@ CSJanela
       text: Ir ao vivo
       @onClick: modules.game_codexstreamer.toggleLive()
 
+    CSBotaoVermelho
+      id: botaoEncerrar
+      anchors.top: pilula.top
+      anchors.left: pilula.right
+      margin-left: 10
+      size: 168 40
+      text: Encerrar live
+      visible: false
+      @onClick: modules.game_codexstreamer.toggleLive()
+
     CSBotaoAzul
       id: botaoRanking
       anchors.top: parent.top
@@ -154,7 +164,7 @@ CSJanela
       anchors.left: parent.left
       anchors.right: parent.right
       margin-top: 6
-      font: verdana-11px-rounded
+      font: verdana-11px-antialised
       color: #c8a8ff
       text-align: center
       text-auto-resize: false
@@ -313,7 +323,7 @@ CSJanela
       Label
         id: texto
         anchors.fill: parent
-        font: verdana-11px-rounded
+        font: verdana-11px-antialised
         color: #ffffff
         text-align: center
         phantom: true
@@ -394,7 +404,7 @@ CSJanela
       text-wrap: true
       text-align: center
       text-auto-resize: false
-      text: Efeito em cima de voce e do seu Pokemon (so ao vivo).
+      text: Aparece em voce e no seu Pokemon. So ao vivo.
 
   // ===================== VIAGEM =====================
   CSCard

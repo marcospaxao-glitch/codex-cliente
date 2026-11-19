@@ -20,7 +20,7 @@ CSFechar < UIButton
   size: 26 26
   image-source: images/st_btn_red
   image-border: 9
-  font: verdana-11px-rounded
+  font: verdana-11px-antialised
   color: #ffffff
   text: X
   $pressed:
@@ -32,7 +32,7 @@ CSCard < UIWidget
   padding: 10
 
 CSCardTitulo < Label
-  font: verdana-12px-bold
+  font: verdana-11px-rounded
   color: #ffe27a
   text-auto-resize: true
   text-offset: 24 0
@@ -51,7 +51,7 @@ CSBotao < UIButton
   height: 34
   image-source: images/st_btn_gold
   image-border: 9
-  font: verdana-11px-rounded
+  font: verdana-11px-antialised
   color: #1a1400
   text-offset: 0 0
   $pressed:
@@ -107,8 +107,8 @@ CSStat < UIWidget
     anchors.bottom: parent.bottom
     anchors.left: icone.right
     anchors.right: parent.right
-    margin: 0 4 4 6
-    font: verdana-12px-bold
+    margin: 0 4 5 6
+    font: verdana-11px-rounded
     color: #ffd84a
     text-auto-resize: false
     phantom: true
@@ -121,7 +121,7 @@ CSCidade < UIButton
   size: 70 34
   image-source: images/st_cidade
   image-border: 8
-  font: verdana-11px-rounded
+  font: verdana-11px-antialised
   color: #e8f0ff
   text-wrap: true
   $pressed:
@@ -169,7 +169,7 @@ CSAviso < UIWidget
     anchors.left: ponto.right
     anchors.right: fechar.left
     margin-left: 8
-    font: verdana-12px-bold
+    font: verdana-11px-rounded
     color: #ffffff
     text-auto-resize: false
     height: 18
