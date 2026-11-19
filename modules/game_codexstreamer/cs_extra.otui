@@ -1,0 +1,67 @@
+// ============================================================
+// janelas pequenas: ranking, historico, regras, resumo
+// ============================================================
+CSJanela
+  id: codexStreamerExtra
+  size: 470 470
+  visible: false
+  @onEscape: self:hide()
+
+  CSFechar
+    id: closeButton
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: -34
+    @onClick: self:getParent():hide()
+
+  Label
+    id: subtitulo
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-align: center
+    text-auto-resize: false
+    height: 16
+
+  ScrollablePanel
+    id: lista
+    anchors.top: subtitulo.bottom
+    anchors.left: parent.left
+    anchors.right: listaScroll.left
+    anchors.bottom: rodape.top
+    margin: 6 4 6 0
+    vertical-scrollbar: listaScroll
+    layout:
+      type: verticalBox
+      spacing: 4
+
+  VerticalScrollBar
+    id: listaScroll
+    anchors.top: lista.top
+    anchors.bottom: lista.bottom
+    anchors.right: parent.right
+    step: 30
+    pixels-scroll: true
+
+  Label
+    id: rodape
+    anchors.bottom: botaoExtra.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-bottom: 6
+    height: 56
+    font: verdana-11px-antialised
+    color: #c9d6ea
+    text-wrap: true
+    text-auto-resize: false
+
+  CSBotao
+    id: botaoExtra
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    width: 180
+    text: Fechar
+    @onClick: self:getParent():hide()
+

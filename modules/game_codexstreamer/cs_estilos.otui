@@ -1,0 +1,204 @@
+// ============================================================
+// PAINEL DO STREAMER 2.0 (azul-marinho + dourado, igual ao HUD)
+// ============================================================
+CSJanela < UIWindow
+  image-source: images/st_card
+  image-border: 12
+  font: sans-bold-16px
+  color: #ffd84a
+  text-align: top
+  text-offset: 0 10
+  padding-top: 42
+  padding-left: 14
+  padding-right: 14
+  padding-bottom: 14
+  anchors.centerIn: parent
+  draggable: true
+  focusable: true
+
+CSFechar < UIButton
+  size: 26 26
+  image-source: images/st_btn_red
+  image-border: 9
+  font: verdana-11px-rounded
+  color: #ffffff
+  text: X
+  $pressed:
+    image-source: images/st_btn_red_on
+
+CSCard < UIWidget
+  image-source: images/st_card
+  image-border: 12
+  padding: 10
+
+CSCardTitulo < Label
+  font: verdana-12px-bold
+  color: #ffe27a
+  text-auto-resize: true
+  text-offset: 24 0
+  height: 20
+
+CSIcone < UIWidget
+  size: 20 20
+  phantom: true
+
+CSTexto < Label
+  font: verdana-11px-antialised
+  color: #c9d6ea
+  text-auto-resize: true
+
+CSBotao < UIButton
+  height: 34
+  image-source: images/st_btn_gold
+  image-border: 9
+  font: verdana-11px-rounded
+  color: #1a1400
+  text-offset: 0 0
+  $pressed:
+    image-source: images/st_btn_gold_on
+  $disabled:
+    image-source: images/st_btn_off
+    color: #9aa6b8
+
+CSBotaoVermelho < CSBotao
+  image-source: images/st_btn_red
+  color: #ffffff
+  $pressed:
+    image-source: images/st_btn_red_on
+
+CSBotaoRoxo < CSBotao
+  image-source: images/st_btn_purple
+  color: #ffffff
+  $pressed:
+    image-source: images/st_btn_purple_on
+
+CSBotaoAzul < CSBotao
+  image-source: images/st_btn_blue
+  color: #e8f0ff
+  $pressed:
+    image-source: images/st_btn_blue_on
+
+CSStat < UIWidget
+  image-source: images/st_stat
+  image-border: 8
+  size: 122 42
+
+  UIWidget
+    id: icone
+    size: 20 20
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    phantom: true
+
+  Label
+    id: titulo
+    anchors.top: parent.top
+    anchors.left: icone.right
+    anchors.right: parent.right
+    margin: 5 4 0 6
+    font: verdana-9px-rounded
+    color: #8fa7c4
+    text-auto-resize: false
+    phantom: true
+
+  Label
+    id: valor
+    anchors.bottom: parent.bottom
+    anchors.left: icone.right
+    anchors.right: parent.right
+    margin: 0 4 4 6
+    font: verdana-12px-bold
+    color: #ffd84a
+    text-auto-resize: false
+    phantom: true
+
+CSEmote < UIButton
+  size: 64 50
+  phantom: false
+
+CSCidade < UIButton
+  size: 70 34
+  image-source: images/st_cidade
+  image-border: 8
+  font: verdana-11px-rounded
+  color: #e8f0ff
+  text-wrap: true
+  $pressed:
+    image-source: images/st_cidade_on
+  $checked:
+    image-source: images/st_cidade_sel
+    color: #ffe27a
+
+CSPremio < UIWidget
+  image-source: images/st_campo
+  image-border: 6
+  height: 46
+
+CSLinha < Label
+  height: 26
+  image-source: images/st_linha
+  image-border: 6
+  font: verdana-11px-antialised
+  color: #dce8f5
+  text-offset: 10 0
+  text-align: left
+
+// ============================================================
+// aviso para todos: alguem entrou ao vivo / abriu sorteio
+// ============================================================
+CSAviso < UIWidget
+  size: 430 86
+  image-source: images/st_card_on
+  image-border: 12
+  padding: 10
+  focusable: false
+
+  UIWidget
+    id: ponto
+    size: 16 16
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 2
+    image-source: images/st_dot_live
+    phantom: true
+
+  Label
+    id: titulo
+    anchors.top: parent.top
+    anchors.left: ponto.right
+    anchors.right: fechar.left
+    margin-left: 8
+    font: verdana-12px-bold
+    color: #ffffff
+    text-auto-resize: false
+    height: 18
+    phantom: true
+
+  Label
+    id: texto
+    anchors.top: titulo.bottom
+    anchors.left: titulo.left
+    anchors.right: parent.right
+    margin-top: 2
+    font: verdana-9px-rounded
+    color: #c9d6ea
+    text-auto-resize: false
+    height: 14
+    phantom: true
+
+  CSFechar
+    id: fechar
+    anchors.top: parent.top
+    anchors.right: parent.right
+    size: 22 22
+
+  UIWidget
+    id: botoes
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 30
+    layout:
+      type: horizontalBox
+      spacing: 6

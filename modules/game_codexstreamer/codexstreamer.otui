@@ -1,198 +1,562 @@
-CSTitle < Label
-  font: verdana-11px-rounded
-  color: #a970ff
-  text-auto-resize: true
-  margin-top: 12
-
-CSLine < Label
-  font: verdana-11px-antialised
-  color: #c9d6ea
-  text-auto-resize: true
-
-CSEmote < Button
-  width: 54
-  height: 24
-  margin-right: 4
-
-MainWindow
+// ------------------------------------------------------------
+CSJanela
   id: codexStreamerWindow
   text: Painel do Streamer
-  size: 440 590
+  size: 800 590
   @onEscape: modules.game_codexstreamer.hide()
 
-  Label
-    id: liveState
+  CSFechar
+    id: closeButton
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: -34
+    @onClick: modules.game_codexstreamer.hide()
+
+  // ===================== TOPO: estado da live =====================
+  UIWidget
+    id: topo
     anchors.top: parent.top
     anchors.left: parent.left
     anchors.right: parent.right
-    height: 24
-    font: sans-bold-16px
-    text-align: center
+    height: 108
+    image-source: images/st_topo
+    image-border: 10
 
-  Label
-    id: stats
-    anchors.top: liveState.bottom
+    UICreature
+      id: retrato
+      anchors.left: parent.left
+      anchors.top: parent.top
+      margin: 6 0 0 8
+      size: 76 76
+      phantom: true
+
+    Label
+      id: nome
+      anchors.top: retrato.bottom
+      anchors.horizontalCenter: retrato.horizontalCenter
+      margin-top: 0
+      width: 92
+      font: verdana-11px-rounded
+      color: #b48cff
+      text-align: center
+      text-auto-resize: false
+
+    UIWidget
+      id: pilula
+      anchors.top: parent.top
+      anchors.left: retrato.right
+      margin: 10 0 0 12
+      size: 300 40
+      image-source: images/st_pill_off
+      image-border: 18
+
+      UIWidget
+        id: ponto
+        size: 16 16
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        margin-left: 14
+        image-source: images/st_dot_off
+        phantom: true
+
+      Label
+        id: texto
+        anchors.left: ponto.right
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        margin-left: 10
+        font: sans-bold-16px
+        color: #ffffff
+        text-auto-resize: false
+        text: FORA DO AR
+        phantom: true
+
+    CSBotao
+      id: botaoLive
+      anchors.top: pilula.top
+      anchors.left: pilula.right
+      margin-left: 10
+      size: 168 40
+      text: Ir ao vivo
+      @onClick: modules.game_codexstreamer.toggleLive()
+
+    CSBotaoAzul
+      id: botaoRanking
+      anchors.top: parent.top
+      anchors.right: parent.right
+      margin: 8 8 0 0
+      size: 128 28
+      text: Ranking
+      @onClick: modules.game_codexstreamer.abrirRanking()
+
+    CSBotaoAzul
+      id: botaoHistorico
+      anchors.top: botaoRanking.bottom
+      anchors.right: parent.right
+      margin: 4 8 0 0
+      size: 128 28
+      text: Historico
+      @onClick: modules.game_codexstreamer.abrirHistorico()
+
+    CSBotaoAzul
+      id: botaoRegras
+      anchors.top: botaoHistorico.bottom
+      anchors.right: parent.right
+      margin: 4 8 0 0
+      size: 128 28
+      text: Regras
+      @onClick: modules.game_codexstreamer.abrirRegras()
+
+    CSStat
+      id: statHoras
+      anchors.left: pilula.left
+      anchors.bottom: parent.bottom
+      margin-bottom: 8
+
+    CSStat
+      id: statAura
+      anchors.left: statHoras.right
+      anchors.bottom: parent.bottom
+      margin: 0 0 8 6
+
+    CSStat
+      id: statIndic
+      anchors.left: statAura.right
+      anchors.bottom: parent.bottom
+      margin: 0 0 8 6
+
+    CSStat
+      id: statRank
+      anchors.left: statIndic.right
+      anchors.bottom: parent.bottom
+      margin: 0 0 8 6
+
+  // ===================== SORTEIO =====================
+  CSCard
+    id: cardSorteio
+    anchors.top: topo.bottom
     anchors.left: parent.left
-    anchors.right: parent.right
-    margin-top: 4
-    font: verdana-11px-antialised
-    color: #8ea4c2
-    text-align: center
-    text-wrap: true
-    height: 30
-
-  CSTitle
-    id: tLink
-    anchors.top: stats.bottom
-    anchors.left: parent.left
-    text: LINK DA LIVE (Twitch, YouTube, Kick, TikTok...)
-
-  TextEdit
-    id: link
-    anchors.top: tLink.bottom
-    anchors.left: parent.left
-    anchors.right: saveLink.left
-    margin-top: 4
-    margin-right: 6
-    height: 22
-    max-length: 200
-
-  Button
-    id: saveLink
-    anchors.top: tLink.bottom
-    margin-top: 4
-    anchors.right: parent.right
-    width: 70
-    height: 22
-    text: Salvar
-    @onClick: modules.game_codexstreamer.sendLink()
-
-  Button
-    id: liveButton
-    anchors.top: link.bottom
-    anchors.left: parent.left
-    anchors.right: parent.right
     margin-top: 8
-    height: 30
-    @onClick: modules.game_codexstreamer.toggleLive()
+    size: 252 210
 
-  CSTitle
-    id: tDraw
-    anchors.top: liveButton.bottom
-    anchors.left: parent.left
+    CSIcone
+      anchors.top: parent.top
+      anchors.left: parent.left
+      image-source: images/st_ic_gift
+    CSCardTitulo
+      anchors.top: parent.top
+      anchors.left: parent.left
+      text: Sorteio para o Chat
 
-  TextEdit
-    id: drawName
-    anchors.top: tDraw.bottom
-    anchors.left: parent.left
-    anchors.right: drawButton.left
-    margin-top: 4
-    margin-right: 6
-    height: 22
-    max-length: 30
-    placeholder: Nome do jogador
+    Label
+      id: disponiveis
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 6
+      font: verdana-11px-rounded
+      color: #c8a8ff
+      text-align: center
+      text-auto-resize: false
+      height: 14
 
-  Button
-    id: drawButton
-    anchors.top: tDraw.bottom
+    UIWidget
+      id: barraFundo
+      anchors.top: disponiveis.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 4
+      height: 16
+      background-color: #0a1426
+      border-width: 1
+      border-color: #2a4a78
+
+      UIWidget
+        id: barra
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        margin: 1
+        width: 0
+        background-color: #f2c400
+        phantom: true
+
+      Label
+        id: barraTexto
+        anchors.fill: parent
+        font: verdana-9px-rounded
+        color: #ffffff
+        text-align: center
+        phantom: true
+
+    CSPremio
+      id: premioBox
+      anchors.top: barraFundo.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 8
+
+      CSBotaoAzul
+        id: premioAnt
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        margin-left: 4
+        size: 24 36
+        text: <
+        @onClick: modules.game_codexstreamer.trocarPremio(-1)
+
+      CSBotaoAzul
+        id: premioProx
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        margin-right: 4
+        size: 24 36
+        text: >
+        @onClick: modules.game_codexstreamer.trocarPremio(1)
+
+      UIItem
+        id: premioItem
+        anchors.left: premioAnt.right
+        anchors.verticalCenter: parent.verticalCenter
+        margin-left: 6
+        size: 36 36
+        virtual: true
+        phantom: true
+
+      Label
+        id: premioNome
+        anchors.left: premioItem.right
+        anchors.right: premioProx.left
+        anchors.top: parent.top
+        margin: 6 4 0 6
+        font: verdana-11px-rounded
+        color: #ffffff
+        text-auto-resize: false
+        height: 14
+
+      Label
+        id: premioDesc
+        anchors.left: premioNome.left
+        anchors.right: premioNome.right
+        anchors.top: premioNome.bottom
+        margin-top: 2
+        font: verdana-9px-rounded
+        color: #8fa7c4
+        text-auto-resize: false
+        height: 14
+
+    Label
+      id: estadoSorteio
+      anchors.top: premioBox.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 6
+      font: verdana-11px-antialised
+      color: #8fa7c4
+      text-align: center
+      text-auto-resize: false
+      height: 14
+
+    CSBotao
+      id: botaoSorteio
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      text: Abrir sorteio
+      @onClick: modules.game_codexstreamer.botaoSorteio()
+
+    CSBotaoVermelho
+      id: botaoCancelar
+      anchors.bottom: parent.bottom
+      anchors.right: parent.right
+      width: 76
+      text: Cancelar
+      visible: false
+      @onClick: modules.game_codexstreamer.cancelarSorteio()
+
+  // ===================== CHAMARIZ =====================
+  CSCard
+    id: cardChamariz
+    anchors.top: cardSorteio.top
+    anchors.left: cardSorteio.right
+    margin-left: 6
+    size: 252 210
+
+    CSIcone
+      anchors.top: parent.top
+      anchors.left: parent.left
+      image-source: images/st_ic_ball
+    CSCardTitulo
+      anchors.top: parent.top
+      anchors.left: parent.left
+      text: Chamar Pokemon Raro
+
+    UIWidget
+      id: misterio
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      margin-top: 8
+      size: 96 84
+      image-source: images/st_misterio
+      phantom: true
+
+    UIWidget
+      id: estadoChamariz
+      anchors.top: misterio.top
+      anchors.left: misterio.right
+      anchors.right: parent.right
+      margin: 6 0 0 6
+      height: 32
+      image-source: images/st_pill_wait
+      image-border: 14
+
+      Label
+        id: texto
+        anchors.fill: parent
+        font: verdana-11px-rounded
+        color: #ffffff
+        text-align: center
+        phantom: true
+
+    Label
+      id: explica
+      anchors.top: estadoChamariz.bottom
+      anchors.left: estadoChamariz.left
+      anchors.right: parent.right
+      margin-top: 6
+      height: 42
+      font: verdana-9px-rounded
+      color: #c9d6ea
+      text-wrap: true
+      text-auto-resize: false
+      text: Chama um Pokemon raro perto de voce, fora da cidade.
+
+    Label
+      id: ultimo
+      anchors.top: misterio.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 4
+      height: 28
+      font: verdana-9px-rounded
+      color: #8fa7c4
+      text-wrap: true
+      text-align: center
+      text-auto-resize: false
+
+    CSBotaoRoxo
+      id: botaoChamariz
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      text: Chamar
+      @onClick: modules.game_codexstreamer.chamariz()
+
+  // ===================== EMOTES =====================
+  CSCard
+    id: cardEmotes
+    anchors.top: cardSorteio.top
+    anchors.left: cardChamariz.right
     anchors.right: parent.right
-    margin-top: 4
-    width: 70
-    height: 22
-    text: Sortear
-    @onClick: modules.game_codexstreamer.doDraw()
+    margin-left: 6
+    height: 210
 
-  ComboBox
-    id: prize
-    anchors.top: drawName.bottom
+    CSIcone
+      anchors.top: parent.top
+      anchors.left: parent.left
+      image-source: images/st_ic_emote
+    CSCardTitulo
+      anchors.top: parent.top
+      anchors.left: parent.left
+      text: Emotes da Live
+
+    UIWidget
+      id: emotes
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 10
+      height: 112
+      layout:
+        type: grid
+        cell-size: 72 54
+        cell-spacing: 4
+        flow: true
+
+    Label
+      id: emoteDica
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 28
+      font: verdana-9px-rounded
+      color: #8fa7c4
+      text-wrap: true
+      text-align: center
+      text-auto-resize: false
+      text: Efeito em cima de voce e do seu Pokemon (so ao vivo).
+
+  // ===================== VIAGEM =====================
+  CSCard
+    id: cardViagem
+    anchors.top: cardSorteio.bottom
     anchors.left: parent.left
+    margin-top: 8
+    size: 372 178
+
+    CSIcone
+      anchors.top: parent.top
+      anchors.left: parent.left
+      image-source: images/st_ic_cidade
+    CSCardTitulo
+      anchors.top: parent.top
+      anchors.left: parent.left
+      text: Viagem Gratis (ao vivo)
+
+    CSBotaoAzul
+      id: cidadeAnt
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      margin-top: 22
+      size: 20 46
+      text: <
+      @onClick: modules.game_codexstreamer.paginaCidades(-1)
+
+    UIWidget
+      id: cidades
+      anchors.top: cidadeAnt.top
+      anchors.left: cidadeAnt.right
+      anchors.right: cidadeProx.left
+      margin: -14 4 0 4
+      height: 76
+      layout:
+        type: grid
+        cell-size: 70 34
+        cell-spacing: 6
+        flow: true
+
+    CSBotaoAzul
+      id: cidadeProx
+      anchors.top: cidadeAnt.top
+      anchors.right: parent.right
+      size: 20 46
+      text: >
+      @onClick: modules.game_codexstreamer.paginaCidades(1)
+
+    Label
+      id: paginaCidade
+      anchors.top: cidades.bottom
+      anchors.horizontalCenter: parent.horizontalCenter
+      margin-top: 0
+      font: verdana-9px-rounded
+      color: #8fa7c4
+      text-auto-resize: true
+
+    CSBotao
+      id: botaoViajar
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      text: Escolha uma cidade
+      @onClick: modules.game_codexstreamer.viajar()
+
+  // ===================== TV =====================
+  CSCard
+    id: cardTv
+    anchors.top: cardViagem.top
+    anchors.left: cardViagem.right
+    margin-left: 6
+    size: 184 178
+
+    CSIcone
+      anchors.top: parent.top
+      anchors.left: parent.left
+      image-source: images/st_ic_tv
+    CSCardTitulo
+      anchors.top: parent.top
+      anchors.left: parent.left
+      text: Assistir TV
+
+    Label
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 8
+      height: 70
+      font: verdana-11px-antialised
+      color: #c9d6ea
+      text-wrap: true
+      text-auto-resize: false
+      text: A TV do jogo mostra quem esta jogando agora (quem esta AO VIVO aparece primeiro). Use em area protegida.
+
+    CSBotao
+      id: botaoTv
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      text: Assistir TV
+      @onClick: modules.game_codexstreamer.abrirTv()
+
+  // ===================== LINK =====================
+  CSCard
+    id: cardLink
+    anchors.top: cardViagem.top
+    anchors.left: cardTv.right
     anchors.right: parent.right
-    margin-top: 4
-    height: 22
+    margin-left: 6
+    height: 178
 
-  CSTitle
-    id: tLure
-    anchors.top: prize.bottom
-    anchors.left: parent.left
-    text: CHAMARIZ DE LIVE
+    CSIcone
+      anchors.top: parent.top
+      anchors.left: parent.left
+      image-source: images/st_ic_link
+    CSCardTitulo
+      anchors.top: parent.top
+      anchors.left: parent.left
+      text: Link da Live
 
-  Button
-    id: lureButton
-    anchors.top: tLure.bottom
-    anchors.left: parent.left
-    anchors.right: parent.right
-    margin-top: 4
-    height: 24
-    @onClick: modules.game_codexstreamer.send('LURE')
+    UIWidget
+      id: linkEstado
+      anchors.top: parent.top
+      anchors.right: parent.right
+      size: 66 20
+      image-source: images/st_pill_wait
+      image-border: 9
 
-  CSTitle
-    id: tTravel
-    anchors.top: lureButton.bottom
-    anchors.left: parent.left
-    text: VIAGEM GRATIS E TV (ao vivo)
+      Label
+        id: texto
+        anchors.fill: parent
+        font: verdana-9px-rounded
+        color: #ffffff
+        text-align: center
+        phantom: true
 
-  ComboBox
-    id: town
-    anchors.top: tTravel.bottom
-    anchors.left: parent.left
-    anchors.right: travelButton.left
-    margin-top: 4
-    margin-right: 6
-    height: 22
+    TextEdit
+      id: link
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 12
+      height: 24
+      max-length: 200
 
-  Button
-    id: travelButton
-    anchors.top: tTravel.bottom
-    margin-top: 4
-    anchors.right: tvButton.left
-    margin-right: 6
-    width: 70
-    height: 22
-    text: Viajar
-    @onClick: modules.game_codexstreamer.doTravel()
+    Label
+      id: plataforma
+      anchors.top: link.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 6
+      height: 30
+      font: verdana-9px-rounded
+      color: #8fa7c4
+      text-wrap: true
+      text-auto-resize: false
 
-  Button
-    id: tvButton
-    anchors.top: tTravel.bottom
-    margin-top: 4
-    anchors.right: parent.right
-    width: 90
-    height: 22
-    text: Assistir TV
-    @onClick: modules.game_codexstreamer.send('TV')
+    CSBotaoAzul
+      id: botaoSalvar
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      text: Salvar link
+      @onClick: modules.game_codexstreamer.salvarLink()
 
-  CSTitle
-    id: tEmote
-    anchors.top: town.bottom
-    anchors.left: parent.left
-    text: EMOTES (efeito em cima de voce e do seu pokemon)
-
-  Panel
-    id: emotes
-    anchors.top: tEmote.bottom
-    anchors.left: parent.left
-    anchors.right: parent.right
-    margin-top: 4
-    height: 26
-    layout:
-      type: horizontalBox
-      spacing: 4
-
-  CSLine
-    id: tips
-    anchors.top: emotes.bottom
-    anchors.left: parent.left
-    anchors.right: parent.right
-    margin-top: 12
-    text-wrap: true
-    text-auto-resize: false
-    height: 60
-    color: #8ea4c2
-
-  Button
-    id: closeButton
-    anchors.right: parent.right
-    anchors.bottom: parent.bottom
-    width: 80
-    text: Fechar
-    @onClick: modules.game_codexstreamer.hide()
