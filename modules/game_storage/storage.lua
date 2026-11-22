@@ -607,6 +607,156 @@ local function fillAttrs(data, show)
   end
 end
 
+-- ============================================================
+-- forja 2: 1 slot de ORIGEM + slots de MATERIAL
+-- ============================================================
+local IV_NOMES = { 'HP', 'Ataque', 'Defesa', 'Atq. Esp.', 'Def. Esp.', 'Velocidade' }
+local NAT_STAT = { Lonely = 2, Adamant = 2, Naughty = 2, Brave = 2, Bold = 3, Impish = 3, Lax = 3, Relaxed = 3,
+  Modest = 4, Mild = 4, Rash = 4, Quiet = 4, Calm = 5, Gentle = 5, Careful = 5, Sassy = 5,
+  Timid = 1, Hasty = 1, Jolly = 1, Naive = 1 }
+
+local function setForgeV2(on)
+  for _, id in ipairs({ 'forgeTitle', 'forgeAuto', 'forgePokeList', 'forgePokeScroll', 'forgePreview' }) do
+    W(id):setVisible(not on)
+  end
+  W('forge2'):setVisible(on)
+end
+
+local function buildForge2(data)
+  local current = data.current or ''
+  local origem, mats, cands = data.origem, {}, {}
+  for _, poke in ipairs(data.pokes) do
+    if poke.selected then mats[#mats + 1] = poke end
+    cands[#cands + 1] = poke
+  end
+  local maxMats = data.required or 3
+  if current == '' then
+    W('f2Title'):setText('Escolha um pokemon na lista ao lado')
+  else
+    W('f2Title'):setText(current:upper() .. '   -   1 origem + ate ' .. maxMats .. ' materiais')
+  end
+  W('f2Auto'):setEnabled(current ~= '')
+  W('f2Clear'):setEnabled(current ~= '')
+
+  -- slot de ORIGEM
+  local box = W('f2Origem')
+  local temOrigem = origem ~= nil
+  for _, id in ipairs({ 'portrait', 'nameLabel', 'infoLabel', 'natLabel' }) do box:getChildById(id):setVisible(temOrigem) end
+  box:getChildById('emptyLabel'):setVisible(not temOrigem)
+  if temOrigem then
+    box:getChildById('portrait'):setImageSource(iconFor(current))
+    box:getChildById('nameLabel'):setText(current)
+    box:getChildById('infoLabel'):setText('Nv ' .. origem.level .. '   IV ' .. origem.iv .. '%')
+    local nat = origem.nature ~= '' and origem.nature or '?'
+    local stat = NAT_STAT[origem.nature]
+    box:getChildById('natLabel'):setText(nat .. (stat and ('  (+' .. IV_NOMES[stat] .. ')') or '  (neutra)'))
+    box:setBorderColor('#5fd35f')
+    box:setTooltip('ORIGEM: este fica com tudo (nivel, natureza, IVs, golpes...) e recebe os pontos.\nClique para tirar do slot.')
+    box.onClick = function() send('FTOG|' .. origem.key) end
+  else
+    box:getChildById('emptyLabel'):setText(current == '' and 'Escolha um pokemon' or 'Clique num ' .. current .. ' abaixo para colocar aqui')
+    box:setBorderColor('#2b4a75')
+    box:setTooltip('')
+    box.onClick = nil
+  end
+
+  -- slots de MATERIAL
+  local slots = W('f2Mats')
+  slots:destroyChildren()
+  for i = 1, maxMats do
+    local slot = g_ui.createWidget('PCForgeSlot', slots)
+    local m = mats[i]
+    slot:getChildById('title'):setText('MATERIAL ' .. i)
+    if m then
+      slot:getChildById('portrait'):setImageSource(iconFor(current))
+      slot:getChildById('levelLabel'):setText('Nv ' .. m.level)
+      slot:getChildById('ivLabel'):setText('IV ' .. m.iv .. '%')
+      slot:getChildById('hint'):setText('clique p/ tirar')
+      slot:setBorderColor('#f2c400')
+      slot:setBackgroundColor('#1f1a06')
+      slot:setTooltip('Sera consumido na forja (dando certo ou nao).')
+      slot.onClick = function() send('FTOG|' .. m.key) end
+    else
+      slot:getChildById('levelLabel'):setText('vazio')
+      slot:getChildById('levelLabel'):setColor('#3a4c64')
+      slot:getChildById('hint'):setText(temOrigem and 'clique num abaixo' or '')
+    end
+  end
+
+  -- resultado se der certo
+  local ivPanel = W('f2Ivs')
+  ivPanel:destroyChildren()
+  local n = #mats
+  local alvo = origem and origem.alvo or 0
+  W('f2ResTitle'):setText(origem and ('SE DER CERTO: +' .. (n * (data.pmin or 1)) .. ' a +' .. (n * (data.pmax or 3)) ..
+    ' pontos em ' .. (IV_NOMES[alvo] or '-') .. (n == 0 and '   (coloque materiais)' or
+    ((origem.ivs[alvo] or 0) + n * (data.pmax or 3) > 31 and '   (sobra vai p/ o menor IV)' or ''))) or 'IVs DA ORIGEM')
+  for i = 1, 6 do
+    local row = g_ui.createWidget('PCForge2IV', ivPanel)
+    local cur = origem and origem.ivs[i] or 0
+    row:getChildById('name'):setText(IV_NOMES[i])
+    local value = row:getChildById('value')
+    local ganho = 0
+    if origem and i == alvo and n > 0 then
+      local lo, hi = math.min(31, cur + n * (data.pmin or 1)), math.min(31, cur + n * (data.pmax or 3))
+      ganho = hi
+      value:setText(cur .. '  ->  ' .. lo .. (hi > lo and (' a ' .. hi) or '') .. ' / 31')
+      value:setColor('#f2c400')
+      row:getChildById('name'):setColor('#f2c400')
+    else
+      value:setText(origem and (cur .. ' / 31') or '-')
+      if cur >= 31 then value:setColor('#5fd35f') end
+    end
+    -- barras: a largura so existe depois do layout
+    local function barras()
+      if row:isDestroyed() then return end
+      local full = math.max(1, row:getChildById('barBg'):getWidth())
+      row:getChildById('bar'):setWidth(math.floor(full * cur / 31))
+      row:getChildById('barGain'):setWidth(math.floor(full * ganho / 31))
+    end
+    barras()
+    addEvent(barras)
+  end
+  if origem then
+    W('f2Info'):setText('Chance: ' .. origem.chance .. '%   |   Forjas neste: ' .. origem.forjas ..
+      '   |   Se falhar: origem igual, materiais perdidos')
+  else
+    W('f2Info'):setText('Cada material: +' .. (data.pmin or 1) .. ' a +' .. (data.pmax or 3) .. ' no IV da natureza da origem')
+  end
+
+  -- lista do PC
+  local list = W('f2List')
+  list:destroyChildren()
+  W('f2ListTitle'):setText(current == '' and '' or ('SEUS ' .. current:upper() .. ' NO PC   -   clique: ' ..
+    (temOrigem and 'material' or 'origem') .. '   |   clique direito: origem'))
+  for _, poke in ipairs(cands) do
+    local card = g_ui.createWidget('PCForgePoke', list)
+    card:getChildById('portrait'):setImageSource(iconFor(current))
+    card:getChildById('levelLabel'):setText('Nv ' .. poke.level)
+    card:getChildById('ivLabel'):setText(poke.iv >= 0 and ('IV ' .. poke.iv .. '%') or 'IV -')
+    local stateLabel = card:getChildById('stateLabel')
+    if poke.selected then
+      card:setBorderColor('#f2c400')
+      card:setBackgroundColor('#1f1a06')
+      stateLabel:setText('MATERIAL')
+      stateLabel:setColor('#f2c400')
+    else
+      stateLabel:setText(temOrigem and 'clique: material' or 'clique: origem')
+    end
+    card:setTooltip('IVs: HP ' .. poke.ivs[1] .. '  Atq ' .. poke.ivs[2] .. '  Def ' .. poke.ivs[3] ..
+      '  Atq.Esp ' .. poke.ivs[4] .. '  Def.Esp ' .. poke.ivs[5] .. '  Vel ' .. poke.ivs[6] ..
+      '\n\nClique: ' .. (temOrigem and 'usar como material / tirar' or 'colocar na ORIGEM') .. '   |   Clique direito: ORIGEM')
+    card.onClick = function() send('FTOG|' .. poke.key) end
+    card.onMouseRelease = function(self, mousePos, mouseButton)
+      if mouseButton == MouseRightButton then
+        send('FORIG|' .. poke.key)
+        return true
+      end
+      return false
+    end
+  end
+end
+
 local function buildForge(data)
   local list = W('forgeSpeciesList')
   list:destroyChildren()
@@ -614,10 +764,12 @@ local function buildForge(data)
     local row = g_ui.createWidget('PCForgeSpecies', list)
     row:getChildById('portrait'):setImageSource(iconFor(species.name))
     row:getChildById('nameLabel'):setText(species.name)
-    row:getChildById('infoLabel'):setText(species.ready and 'Pronto para forjar' or ('Faltam ' .. math.max(0, (data.required or 10) - species.count)))
+    local v2 = data.version == 2
+    row:getChildById('infoLabel'):setText(species.ready and 'Pronto para forjar' or
+      (v2 and 'Precisa de 2 no PC' or ('Faltam ' .. math.max(0, (data.required or 10) - species.count))))
     row:getChildById('infoLabel'):setColor(species.ready and '#5fd35f' or '#6f86a8')
     local count = row:getChildById('countLabel')
-    count:setText(species.count .. '/' .. (data.required or 10))
+    count:setText(v2 and ('x' .. species.count) or (species.count .. '/' .. (data.required or 10)))
     count:setColor(species.ready and '#5fd35f' or '#8fa7c4')
     row:setOn(species.name == data.current)
     row.onClick = function()
@@ -631,6 +783,10 @@ local function buildForge(data)
   end
 
   local current = data.current or ''
+  setForgeV2(data.version == 2)
+  if data.version == 2 then
+    buildForge2(data)
+  end
   local pokeList = W('forgePokeList')
   pokeList:destroyChildren()
   if current == '' then
@@ -710,6 +866,25 @@ local function buildForge(data)
   end
 
   local forgeButton = W('forgeButton')
+  if data.version == 2 then
+    local ready2 = current ~= '' and data.origem ~= nil and (data.selected or 0) >= 1 and forgeCurrency ~= nil and (data.origem.alvo or 0) > 0
+    forgeButton:setEnabled(ready2)
+    forgeArmedAt = 0
+    if current == '' then
+      forgeButton:setText('ESCOLHA UM POKEMON')
+    elseif not data.origem then
+      forgeButton:setText('COLOQUE UM POKEMON NA ORIGEM')
+    elseif (data.origem.alvo or 0) == 0 then
+      forgeButton:setText('TODOS OS IVs JA ESTAO NO MAXIMO')
+    elseif (data.selected or 0) < 1 then
+      forgeButton:setText('COLOQUE PELO MENOS 1 MATERIAL')
+    elseif not forgeCurrency then
+      forgeButton:setText('SALDO INSUFICIENTE')
+    else
+      forgeButton:setText('FORJAR (' .. data.selected .. (data.selected > 1 and ' MATERIAIS' or ' MATERIAL') .. ', ' .. data.origem.chance .. '% DE CHANCE)')
+    end
+    return
+  end
   local ready = current ~= '' and (data.selected or 0) == (data.required or 10) and forgeCurrency ~= nil
   forgeButton:setEnabled(ready)
   forgeArmedAt = 0
@@ -1032,6 +1207,16 @@ local function onStorageOpcode(protocol, opcode, buffer)
       forgeData.pokes[#forgeData.pokes + 1] = { key = tonumber(f[2]) or 0, level = tonumber(f[3]) or 0,
         iv = tonumber(f[4]) or -1, ivs = ivs, selected = f[11] == '1',
         boost = tonumber(f[12]) or 0, love = tonumber(f[13]) or 0, evs = tonumber(f[14]) or 0, base = f[15] == '1' }
+    elseif f[1] == 'FO' then
+      local ivs = {}
+      for i = 5, 10 do ivs[#ivs + 1] = tonumber(f[i]) or 0 end
+      forgeData.origem = { key = tonumber(f[2]) or 0, level = tonumber(f[3]) or 0, iv = tonumber(f[4]) or -1, ivs = ivs,
+        nature = f[11] or '', alvo = tonumber(f[12]) or 0, forjas = tonumber(f[13]) or 0, chance = tonumber(f[14]) or 0 }
+    elseif f[1] == 'FM' then
+      local ivs = {}
+      for i = 5, 10 do ivs[#ivs + 1] = tonumber(f[i]) or 0 end
+      forgeData.pokes[#forgeData.pokes + 1] = { key = tonumber(f[2]) or 0, level = tonumber(f[3]) or 0,
+        iv = tonumber(f[4]) or -1, ivs = ivs, selected = f[11] == '1', boost = 0, love = 0, evs = 0 }
     elseif f[1] == 'FA' then
       forgeData.attrs[#forgeData.attrs + 1] = { name = f[2] or '', best = tonumber(f[3]) or 0, common = tonumber(f[4]) or 0,
         perfect = tonumber(f[5]) or 0, max = tonumber(f[6]) or 0 }
@@ -1046,6 +1231,9 @@ local function onStorageOpcode(protocol, opcode, buffer)
       forgeData.shiny = tonumber(f[6]) or 0
       forgeData.hasShiny = f[7] == '1'
       forgeData.bonus = tonumber(f[8]) or 20
+      forgeData.version = tonumber(f[9]) or 1
+      forgeData.pmin = tonumber(f[10]) or 1
+      forgeData.pmax = tonumber(f[11]) or 3
     elseif f[1] == 'B' then
       balances = { GOLD = tonumber(f[2]) or 0, POKECOINS = tonumber(f[3]) or 0, TOKENS = tonumber(f[4]) or 0, DONATE = tonumber(f[5]) or 0 }
     elseif f[1] == 'I' then
@@ -1180,6 +1368,8 @@ function init()
   W('depositTabButton').onClick = function() send('DEPTAB') end
   W('cartAddButton').onClick = addToCart
   W('forgeAuto').onClick = function() send('FAUTO') end
+  W('f2Auto').onClick = function() send('FAUTO') end
+  W('f2Clear').onClick = function() send('FCLR') end
   W('forgeButton').onClick = function(self)
     if not forgeCurrency then return end
     if os.time() - forgeArmedAt <= 4 then

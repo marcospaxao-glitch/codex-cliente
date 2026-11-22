@@ -576,6 +576,125 @@ PCForgeCost < UIButton
     color: #6f86a8
     phantom: true
 
+PCForgeSlot < UIWidget
+  size: 92 150
+  background-color: #07101c
+  border-width: 1
+  border-color: #2b4a75
+
+  $hover:
+    border-color: #f2c400
+
+  Label
+    id: title
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 5
+    height: 13
+    text-align: center
+    font: verdana-11px-rounded
+    color: #f2c400
+    phantom: true
+
+  UIWidget
+    id: portrait
+    size: 48 48
+    anchors.top: title.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 8
+    image-size: 48 48
+    phantom: true
+
+  Label
+    id: levelLabel
+    anchors.top: portrait.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 6
+    height: 13
+    text-align: center
+    font: verdana-11px-rounded
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: ivLabel
+    anchors.top: levelLabel.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 2
+    height: 13
+    text-align: center
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
+  Label
+    id: hint
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-bottom: 5
+    height: 13
+    text-align: center
+    font: verdana-11px-rounded
+    color: #3a4c64
+    phantom: true
+
+PCForge2IV < UIWidget
+  height: 16
+
+  Label
+    id: name
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 10
+    width: 80
+    font: verdana-11px-rounded
+    color: #dce8f5
+    phantom: true
+
+  UIWidget
+    id: barBg
+    anchors.left: name.right
+    anchors.right: value.left
+    anchors.verticalCenter: parent.verticalCenter
+    height: 8
+    margin-right: 10
+    background-color: #142238
+    phantom: true
+
+  UIWidget
+    id: barGain
+    anchors.left: barBg.left
+    anchors.verticalCenter: parent.verticalCenter
+    height: 8
+    width: 0
+    background-color: #f2c400
+    opacity: 0.55
+    phantom: true
+
+  UIWidget
+    id: bar
+    anchors.left: barBg.left
+    anchors.verticalCenter: parent.verticalCenter
+    height: 8
+    width: 0
+    background-color: #3f7fd0
+    phantom: true
+
+  Label
+    id: value
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 10
+    width: 150
+    text-align: right
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    phantom: true
+
 PCForgeAttr < UIWidget
   height: 15
 
@@ -1236,23 +1355,239 @@ UIWindow
           font: verdana-11px-rounded
           color: #f2c400
 
+      Panel
+        id: forge2
+        anchors.top: parent.top
+        anchors.left: forgeSpeciesScroll.right
+        anchors.right: parent.right
+        anchors.bottom: costTitle.top
+        margin-left: 12
+        margin-right: 10
+        margin-bottom: 8
+        visible: false
+
+        Label
+          id: f2Title
+          anchors.top: parent.top
+          anchors.left: parent.left
+          anchors.right: f2Clear.left
+          margin-top: 10
+          margin-right: 8
+          height: 14
+          font: verdana-11px-rounded
+          color: #ffffff
+
+        PCButton
+          id: f2Auto
+          text: Auto
+          width: 56
+          anchors.top: parent.top
+          anchors.right: parent.right
+          margin-top: 6
+          @onSetup: self:setTooltip('Escolhe sozinho: origem = melhor IV, materiais = os piores')
+
+        PCButton
+          id: f2Clear
+          text: Limpar
+          width: 60
+          anchors.top: parent.top
+          anchors.right: f2Auto.left
+          margin-top: 6
+          margin-right: 4
+
+        UIWidget
+          id: f2Origem
+          size: 170 150
+          anchors.top: f2Title.bottom
+          anchors.left: parent.left
+          margin-top: 10
+          background-color: #0d2410
+          border-width: 2
+          border-color: #5fd35f
+
+          Label
+            id: title
+            text: ORIGEM
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            margin-top: 5
+            height: 13
+            text-align: center
+            font: verdana-11px-rounded
+            color: #5fd35f
+            phantom: true
+
+          UIWidget
+            id: portrait
+            size: 64 64
+            anchors.top: title.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            margin-top: 4
+            image-size: 64 64
+            phantom: true
+
+          Label
+            id: nameLabel
+            anchors.top: portrait.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            margin-top: 4
+            height: 13
+            text-align: center
+            font: verdana-11px-rounded
+            color: #ffffff
+            phantom: true
+
+          Label
+            id: infoLabel
+            anchors.top: nameLabel.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            margin-top: 2
+            height: 13
+            text-align: center
+            font: verdana-11px-rounded
+            color: #8fa7c4
+            phantom: true
+
+          Label
+            id: natLabel
+            anchors.top: infoLabel.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            margin-top: 2
+            height: 13
+            text-align: center
+            font: verdana-11px-rounded
+            color: #f2c400
+            phantom: true
+
+          Label
+            id: emptyLabel
+            anchors.centerIn: parent
+            width: 150
+            text-wrap: true
+            text-auto-resize: true
+            text-align: center
+            font: verdana-11px-rounded
+            color: #6f86a8
+            phantom: true
+
+        Label
+          id: f2Plus
+          text: +
+          anchors.verticalCenter: f2Origem.verticalCenter
+          anchors.left: f2Origem.right
+          width: 24
+          text-align: center
+          font: verdana-11px-rounded
+          color: #f2c400
+
+        Panel
+          id: f2Mats
+          anchors.top: f2Origem.top
+          anchors.left: f2Plus.right
+          anchors.right: parent.right
+          height: 150
+          layout:
+            type: horizontalBox
+            spacing: 6
+
+        Panel
+          id: f2Result
+          anchors.top: f2Origem.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          height: 136
+          margin-top: 8
+          background-color: #07101c
+          border-width: 1
+          border-color: #1d3557
+
+          Label
+            id: f2ResTitle
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            margin: 5 10 0 10
+            height: 13
+            font: verdana-11px-rounded
+            color: #f2c400
+
+          Panel
+            id: f2Ivs
+            anchors.top: f2ResTitle.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            margin-top: 3
+            height: 96
+            layout:
+              type: verticalBox
+
+          Label
+            id: f2Info
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            margin: 0 10 4 10
+            height: 13
+            font: verdana-11px-rounded
+            color: #8fa7c4
+
+        Label
+          id: f2ListTitle
+          anchors.top: f2Result.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          margin-top: 8
+          height: 13
+          font: verdana-11px-rounded
+          color: #8fa7c4
+
+        ScrollablePanel
+          id: f2List
+          anchors.top: f2ListTitle.bottom
+          anchors.left: parent.left
+          anchors.right: f2ListScroll.left
+          anchors.bottom: parent.bottom
+          margin-top: 6
+          margin-right: 4
+          vertical-scrollbar: f2ListScroll
+          layout:
+            type: grid
+            cell-size: 84 60
+            cell-spacing: 6
+            num-columns: 5
+            flow: true
+
+        VerticalScrollBar
+          id: f2ListScroll
+          width: 12
+          anchors.top: f2List.top
+          anchors.bottom: f2List.bottom
+          anchors.right: parent.right
+          step: 66
+          pixels-scroll: true
+
       Label
         id: costTitle
         text: PAGAMENTO
-        anchors.top: forgePreview.bottom
-        anchors.left: forgeTitle.left
-        margin-top: 10
+        anchors.bottom: forgeCosts.top
+        anchors.left: forgeSpeciesScroll.right
+        margin-left: 12
+        margin-bottom: 6
         font: verdana-11px-rounded
         color: #f2c400
         text-auto-resize: true
 
       Panel
         id: forgeCosts
-        anchors.top: costTitle.bottom
-        anchors.left: forgeTitle.left
+        anchors.bottom: forgeButton.top
+        anchors.left: costTitle.left
         anchors.right: parent.right
         height: 40
-        margin-top: 6
+        margin-bottom: 10
         margin-right: 10
         layout:
           type: horizontalBox
@@ -1260,7 +1595,7 @@ UIWindow
 
       UIButton
         id: forgeButton
-        anchors.left: forgeTitle.left
+        anchors.left: costTitle.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         height: 36

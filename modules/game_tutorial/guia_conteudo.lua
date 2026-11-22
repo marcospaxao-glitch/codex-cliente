@@ -519,15 +519,17 @@ Trave um Pokemon: ele nao pode ser vendido, liberado ou usado na Forja.]==]},
     {id = "forja", title = "Forja Pokemon",
      items = {}, itemNames = {},
      pokes = {},
-     text = [==[Na aba Forja do PC voce junta Pokemon iguais em um so, mais forte.
+     text = [==[Na aba Forja do PC voce melhora os IVs de um Pokemon aos poucos.
 
-- Coloque os Pokemon iguais.
-- Clique direito marca o ORIGINAL: ele fica (mesma ball, nivel, nature, Tera, golpes, held) e recebe os atributos forjados.
-- Os outros sao o material e somem.
-- IVs, EVs, boost e amizade partem do melhor valor e somam parte dos outros.
-- Chance de forja perfeita e pequena chance de virar Shiny.
+- ORIGEM: o Pokemon que fica. Ele mantem tudo (ball, nivel, nature, IVs, EVs, Tera, golpes, held).
+- MATERIAIS: 1 a 3 Pokemon da mesma especie. Eles somem na forja.
+- Cada material da +1 a +3 pontos no IV que a NATURE da origem favorece (ex.: Adamant = Ataque).
+- Nature neutra, ou esse IV ja em 31: os pontos vao para o menor IV.
+- A forja pode falhar: a origem nao muda e os materiais sao perdidos.
+- A chance cai um pouco a cada forja do mesmo Pokemon.
+- Pequena chance de virar Shiny.
 
-O custo aparece na janela antes de confirmar.]==]},
+O custo e a chance aparecem na janela antes de confirmar.]==]},
     {id = "market", title = "Market",
      items = {}, itemNames = {},
      pokes = {},
