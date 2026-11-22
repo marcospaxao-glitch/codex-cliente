@@ -6064,3 +6064,201 @@ do
     b3:setTooltip('Tipo Tera: o pokemon ganhou esse tipo (fraquezas, resistencias e golpes)')
   end
 end
+
+-- ============================================================
+-- CODEX MANAGER V2: abas no topo (PC) / coluna de abas (celular)
+--   O menu lateral antigo fica escondido; cada aba abre as paginas de
+--   sempre (mesma logica). Abas com 2 paginas ganham sub-abas no topo.
+-- ============================================================
+PokemonManager.ABAS = {
+  {id = 'perfil',  nome = 'PERFIL',   icone = 'perfil',     paginas = {{'profile', 'navProfile', 'Perfil'}}},
+  {id = 'resumo',  nome = 'RESUMO',   icone = 'resumo',     paginas = {{'summary', 'navSummary', 'Resumo'}}},
+  {id = 'status',  nome = 'STATUS',   icone = 'ev',         paginas = {{'base', 'navBase', 'Atributos'}, {'vitamins', 'navVitamins', 'Vitaminas'}}, extras = {ev = true}},
+  {id = 'combate', nome = 'COMBATE',  icone = 'moves',      paginas = {{'moves', 'navMoves', 'Moves'}, {'abilities', 'navAbilities', 'Habilidades'}}},
+  {id = 'itens',   nome = 'ITENS',    icone = 'held',       paginas = {{'held', 'navHeld', 'Itens Equip'}}},
+  {id = 'vinculo', nome = 'VINCULO',  icone = 'amizade',    paginas = {{'friend', 'navFriend', 'Amizade'}}},
+  {id = 'evolucao', nome = 'EVOLUCAO', icone = 'evolucao',  paginas = {{'evolution', 'navEvolution', 'Evolucao'}}},
+  {id = 'outros',  nome = 'OUTROS',   icone = 'incubadora', paginas = {{'incubators', 'navIncubators', 'Incubadoras'}}},
+}
+
+local function pmAbaDaPagina(page)
+  for _, aba in ipairs(PokemonManager.ABAS) do
+    if aba.extras and aba.extras[page] then return aba end
+    for _, pg in ipairs(aba.paginas) do
+      if pg[1] == page then return aba end
+    end
+  end
+end
+
+local function pmAbrirPagina(pg)
+  PokemonManager.selectMenuButton(pg[2])
+  PokemonManager.showPage(pg[1])
+  if PokemonManager.softRefresh then PokemonManager.softRefresh() end
+end
+
+function PokemonManager.marcarAba(page)
+  local win = PokemonManager.window
+  if not win or win:isDestroyed() or not win.codexAbas then return end
+  local atual = pmAbaDaPagina(page)
+  for _, aba in ipairs(PokemonManager.ABAS) do
+    local b = win.codexAbas[aba.id]
+    if b then
+      local on = aba == atual
+      b:setOn(on)
+      local icon = b:getChildById('icon')
+      if icon then icon:setImageSource(PokemonManager.navIconPath .. aba.icone .. (on and '_hover.png' or '.png')) end
+    end
+  end
+  local sub = win:recursiveGetChildById('codexSubAbas')
+  if not sub then return end
+  sub:destroyChildren()
+  if atual then
+    atual.ultima = page
+    if #atual.paginas > 1 then
+      for _, pg in ipairs(atual.paginas) do
+        local s = g_ui.createWidget('PMSubTab', sub)
+        s:setText(pg[3])
+        s:setOn((pg[1] == page or (atual.extras and atual.extras[page] and pg[1] == 'base')) and true or false)
+        s.onClick = function() pmAbrirPagina(pg) end
+      end
+    end
+  end
+end
+
+function PokemonManager.montarAbas()
+  local win = PokemonManager.window
+  if not win or win:isDestroyed() or win.codexAbas then return end
+  local celular = type(codexCelular) == 'function' and codexCelular()
+  local main = win:recursiveGetChildById('mainWindow')
+  local header = win:recursiveGetChildById('header')
+  local body = win:recursiveGetChildById('body')
+  local sidebar = win:recursiveGetChildById('sidebar')
+  local content = win:recursiveGetChildById('content')
+  if not main or not header or not body or not sidebar or not content then return end
+  win.codexAbas = {}
+
+  -- menu lateral antigo some (os widgets continuam existindo para a logica antiga)
+  sidebar:setWidth(0)
+  sidebar:hide()
+  content:setMarginLeft(0)
+  -- a janela perde a largura do menu (o conteudo fica com a mesma largura de antes)
+  win:setWidth(win:getWidth() - 222 + (celular and 78 or 0))
+
+  -- cabecalho: logo, titulo no centro, sub-abas a direita
+  local brand = win:recursiveGetChildById('headerBrandText')
+  if not celular then
+    header:setHeight(52)
+    local logo = g_ui.createWidget('UIWidget', header)
+    logo:setId('codexHeaderLogo')
+    logo:setImageSource('/modules/game_pokemonmanager/menu/logo.png')
+    logo:setSize({width = 76, height = 43})
+    logo:addAnchor(AnchorLeft, 'parent', AnchorLeft)
+    logo:addAnchor(AnchorVerticalCenter, 'parent', AnchorVerticalCenter)
+    logo:setMarginLeft(12)
+    logo:setPhantom(true)
+    if brand then
+      brand:breakAnchors()
+      brand:addAnchor(AnchorLeft, 'codexHeaderLogo', AnchorRight)
+      brand:addAnchor(AnchorVerticalCenter, 'parent', AnchorVerticalCenter)
+      brand:setMarginLeft(14)
+      brand:setText('POKEMON MANAGER')
+    end
+    local versao = g_ui.createWidget('Label', header)
+    versao:setText('v2.0')
+    versao:setFont('verdana-11px-antialised')
+    versao:setColor('#1b1400')
+    versao:setBackgroundColor('#f2c400')
+    versao:setTextAutoResize(true)
+    pcall(function() versao:setPadding({top = 2, bottom = 2, left = 6, right = 6}) end)
+    versao:addAnchor(AnchorLeft, 'headerBrandText', AnchorRight)
+    versao:addAnchor(AnchorVerticalCenter, 'parent', AnchorVerticalCenter)
+    versao:setMarginLeft(8)
+    local close = win:recursiveGetChildById('btnClose')
+    if close then close:setMarginTop(11) end
+  end
+  local sub = g_ui.createWidget('Panel', header)
+  sub:setId('codexSubAbas')
+  sub:addAnchor(AnchorRight, 'btnClose', AnchorLeft)
+  sub:addAnchor(AnchorVerticalCenter, 'parent', AnchorVerticalCenter)
+  sub:setMarginRight(12)
+  sub:setSize({width = 260, height = 26})
+  local lay = UIHorizontalLayout.create(sub)
+  lay:setSpacing(6)
+  pcall(function() lay:setAlignRight(true) end)
+  sub:setLayout(lay)
+
+  -- barra de abas
+  local barra = g_ui.createWidget('Panel', main)
+  barra:setId('codexAbasBarra')
+  barra:setBackgroundColor('#0d1a2e')
+  barra:addAnchor(AnchorTop, 'header', AnchorBottom)
+  barra:addAnchor(AnchorLeft, 'parent', AnchorLeft)
+  if celular then
+    -- celular: coluna de icones a esquerda
+    barra:addAnchor(AnchorBottom, 'parent', AnchorBottom)
+    barra:setWidth(78)
+    local v = UIVerticalLayout.create(barra)
+    v:setSpacing(2)
+    barra:setLayout(v)
+    pcall(function() barra:setPadding({top = 4, bottom = 4, left = 0, right = 0}) end)
+    body:addAnchor(AnchorLeft, 'codexAbasBarra', AnchorRight)
+  else
+    barra:addAnchor(AnchorRight, 'parent', AnchorRight)
+    barra:setHeight(48)
+    local h = UIHorizontalLayout.create(barra)
+    h:setSpacing(5)
+    pcall(function() h:setFitChildren(false) end)
+    barra:setLayout(h)
+    pcall(function() barra:setPadding({top = 8, bottom = 2, left = 12, right = 12}) end)
+    body:addAnchor(AnchorTop, 'codexAbasBarra', AnchorBottom)
+  end
+
+  local largura = celular and 78 or math.floor((win:getWidth() - 24 - 5 * (#PokemonManager.ABAS - 1)) / #PokemonManager.ABAS)
+  for _, aba in ipairs(PokemonManager.ABAS) do
+    local b = g_ui.createWidget('PMTab', barra)
+    b:setText(aba.nome)
+    b:setWidth(largura)
+    b:getChildById('icon'):setImageSource(PokemonManager.navIconPath .. aba.icone .. '.png')
+    if celular then
+      -- icone em cima, nome embaixo
+      b:setHeight(math.max(38, math.floor((barra:getHeight() > 0 and barra:getHeight() - 8 or 330) / #PokemonManager.ABAS) - 2))
+      local icon = b:getChildById('icon')
+      icon:breakAnchors()
+      icon:addAnchor(AnchorTop, 'parent', AnchorTop)
+      icon:addAnchor(AnchorHorizontalCenter, 'parent', AnchorHorizontalCenter)
+      icon:setMarginTop(4)
+      b:setTextOffset({x = 0, y = 10})
+    end
+    b.onClick = function()
+      local alvo = aba.paginas[1]
+      for _, pg in ipairs(aba.paginas) do
+        if pg[1] == aba.ultima then alvo = pg end
+      end
+      pmAbrirPagina(alvo)
+    end
+    win.codexAbas[aba.id] = b
+  end
+
+  -- mais altura para compensar a barra (o conteudo continua com a mesma largura)
+  if not celular then
+    win:setHeight(win:getHeight() + 30)
+  end
+  PokemonManager.marcarAba(PokemonManager.currentPage or 'summary')
+end
+
+if not PokemonManager.codexAbasHook then
+  PokemonManager.codexAbasHook = true
+  local showOriginal = PokemonManager.show
+  PokemonManager.show = function(...)
+    local r = showOriginal(...)
+    pcall(PokemonManager.montarAbas)
+    pcall(PokemonManager.marcarAba, PokemonManager.currentPage or 'summary')
+    return r
+  end
+  local pageOriginal = PokemonManager.showPage
+  PokemonManager.showPage = function(page, ...)
+    local r = pageOriginal(page, ...)
+    pcall(PokemonManager.marcarAba, page)
+    return r
+  end
+end

@@ -1,3 +1,56 @@
+PMTab < UIButton
+  height: 38
+  focusable: false
+  font: verdana-11px-rounded
+  color: #cfdbec
+  background-color: #132340
+  border-width: 1
+  border-color: #1f3557
+  text-align: center
+  text-offset: 10 0
+
+  $hover:
+    background-color: #1b3157
+    border-color: #2b4a75
+    color: #ffffff
+
+  $on:
+    background-color: #f2c400
+    border-color: #ffe27a
+    color: #1b1400
+    font: verdana-11px-antialised
+
+  UIWidget
+    id: icon
+    size: 18 18
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    margin-left: 6
+    image-size: 18 18
+    phantom: true
+
+PMSubTab < UIButton
+  height: 26
+  focusable: false
+  font: verdana-11px-rounded
+  color: #9fb3cf
+  background-color: #0f1b2e
+  border-width: 1
+  border-color: #2b4a75
+  text-align: center
+  text-auto-resize: true
+  padding: 0 14 0 14
+
+  $hover:
+    color: #ffffff
+    border-color: #4f9cf0
+
+  $on:
+    color: #ffffff
+    background-color: #1d3a66
+    border-color: #4f9cf0
+    font: verdana-11px-antialised
+
 PMButton < UIButton
   height: 30
   focusable: false
