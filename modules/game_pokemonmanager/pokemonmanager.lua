@@ -2075,8 +2075,8 @@ function PokemonManager.refreshBaseSelection()
       if PokemonManager.pokemon[i] then
         card:setVisible(true)
         local isSelected = i == PokemonManager.selected
-        card:setBackgroundColor(isSelected and '#263b59' or '#102138')
-        card:setBorderColor(isSelected and '#ffd24a' or '#294765')
+        card:setBackgroundColor('#00000000')
+        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'pm2_slot_on' or 'pm2_slot'))
         local level = card:recursiveGetChildById('level')
         if level then level:setColor(isSelected and '#ffd24a' or '#9bb6dc') end
       else
@@ -2604,8 +2604,8 @@ function PokemonManager.updateDashboard()
           level:setColor(isSelected and '#ffd24a' or '#9bb6dc')
         end
         if slot then slot:setText('#' .. tostring(i)) end
-        card:setBackgroundColor(isSelected and '#263b59' or '#102138')
-        card:setBorderColor(isSelected and '#ffd24a' or '#294765')
+        card:setBackgroundColor('#00000000')
+        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'pm2_slot_on' or 'pm2_slot'))
       else
         card:setVisible(false)
       end
@@ -5364,8 +5364,8 @@ function PokemonManager.updateFriendCards()
           miniFill:setWidth(math.floor(tw * friendship / 1000))
           miniFill:setBackgroundColor(PokemonManager.getFriendshipColor(friendship))
         end
-        card:setBackgroundColor(isSelected and '#263b59' or '#102138')
-        card:setBorderColor(isSelected and '#ffd24a' or '#294765')
+        card:setBackgroundColor('#00000000')
+        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'pm2_slot_on' or 'pm2_slot'))
       else
         card:setVisible(false)
       end
@@ -6070,6 +6070,16 @@ end
 --   O menu lateral antigo fica escondido; cada aba abre as paginas de
 --   sempre (mesma logica). Abas com 2 paginas ganham sub-abas no topo.
 -- ============================================================
+-- fonte do visual v2 (TTF): nomes ChakraPetch-Bold_<tamanho> / ChakraPetch-SemiBold_<tamanho>
+for _, f in ipairs({{'ChakraPetch-Bold', {12, 13, 14, 20, 22}}, {'ChakraPetch-SemiBold', {12}}}) do
+  for _, tam in ipairs(f[2]) do
+    local ok, res = pcall(function()
+      return g_fonts.importFontWithSize('/modules/game_pokemonmanager/fonts/' .. f[1] .. '.ttf', tam)
+    end)
+    if not ok or res == false then g_logger.warning('[Manager v2] fonte ' .. f[1] .. ' ' .. tam .. ' nao carregou: ' .. tostring(res)) end
+  end
+end
+
 PokemonManager.ABAS = {
   {id = 'perfil',  nome = 'PERFIL',   icone = 'perfil',     paginas = {{'profile', 'navProfile', 'Perfil'}}},
   {id = 'resumo',  nome = 'RESUMO',   icone = 'resumo',     paginas = {{'summary', 'navSummary', 'Resumo'}}},
