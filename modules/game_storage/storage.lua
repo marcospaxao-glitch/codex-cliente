@@ -850,6 +850,12 @@ local function buildForge(data)
   end
   for _, cost in ipairs(data.costs) do
     local button = g_ui.createWidget('PCForgeCost', costs)
+    -- codex: as moedas dividem a largura (4 ou mais cabem na linha)
+    local n = #data.costs
+    if n > 3 then
+      local largura = costs:getWidth() > 0 and costs:getWidth() or 470
+      button:setWidth(math.max(100, math.floor((largura - 6 * (n - 1)) / n)))
+    end
     local enough = cost.balance >= cost.amount
     if cost.icon > 0 then button:getChildById('icon'):setItemId(cost.icon) end
     button:getChildById('amount'):setText(fmt(cost.amount) .. ' ' .. (CURRENCY_LABEL[cost.currency] or cost.currency))
