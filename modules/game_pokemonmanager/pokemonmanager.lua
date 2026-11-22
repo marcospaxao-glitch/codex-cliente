@@ -6251,10 +6251,11 @@ function PokemonManager.montarAbas()
   PokemonManager.marcarAba(PokemonManager.currentPage or 'summary')
 end
 
-if not PokemonManager.codexAbasHook then
-  PokemonManager.codexAbasHook = true
+-- o arquivo roda 2 vezes (scripts: do .otmod + dofile do onLoad) e a 2a vez
+-- recria show/showPage: por isso liga de novo sempre que a funcao nao for a nossa.
+if PokemonManager.show ~= PokemonManager.codexShowAbas then
   local showOriginal = PokemonManager.show
-  PokemonManager.show = function(...)
+  PokemonManager.codexShowAbas = function(...)
     local r = showOriginal(...)
     local ok, err = pcall(PokemonManager.montarAbas)
     if not ok then g_logger.error('[Manager v2] erro ao montar as abas: ' .. tostring(err)) end
@@ -6262,11 +6263,15 @@ if not PokemonManager.codexAbasHook then
     if not ok then g_logger.error('[Manager v2] erro ao marcar a aba: ' .. tostring(err)) end
     return r
   end
+  PokemonManager.show = PokemonManager.codexShowAbas
   g_logger.info('[Manager v2] abas ligadas')
+end
+if PokemonManager.showPage ~= PokemonManager.codexPageAbas then
   local pageOriginal = PokemonManager.showPage
-  PokemonManager.showPage = function(page, ...)
+  PokemonManager.codexPageAbas = function(page, ...)
     local r = pageOriginal(page, ...)
     pcall(PokemonManager.marcarAba, page)
     return r
   end
+  PokemonManager.showPage = PokemonManager.codexPageAbas
 end
