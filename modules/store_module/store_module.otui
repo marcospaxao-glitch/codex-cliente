@@ -601,9 +601,11 @@ UIWindow
     VerticalScrollBar
       id: historyScroll
       width: 12
-      anchors.top: historyList.top
-      anchors.bottom: historyList.bottom
+      anchors.top: historyTitle.bottom
+      anchors.bottom: historyClose.top
       anchors.right: parent.right
+      margin-top: 10
+      margin-bottom: 10
       margin-right: 14
       step: 20
       pixels-scroll: true

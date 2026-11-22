@@ -39,8 +39,10 @@ CSJanela
 
   VerticalScrollBar
     id: listaScroll
-    anchors.top: lista.top
-    anchors.bottom: lista.bottom
+    anchors.top: subtitulo.bottom
+    anchors.bottom: rodape.top
+    margin-top: 6
+    margin-bottom: 6
     anchors.right: parent.right
     step: 30
     pixels-scroll: true

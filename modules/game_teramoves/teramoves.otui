@@ -203,9 +203,11 @@ TMWindow < UIWindow
 
   VerticalScrollBar
     id: movesScroll
-    anchors.top: movesPanel.top
-    anchors.bottom: movesPanel.bottom
+    anchors.top: prev.bottom
+    anchors.bottom: parent.bottom
     anchors.right: parent.right
+    margin-top: 4
+    margin-bottom: 12
     margin-right: 12
     step: 28
     pixels-scroll: true

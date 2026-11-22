@@ -1564,9 +1564,10 @@ UIWindow
         VerticalScrollBar
           id: f2ListScroll
           width: 12
-          anchors.top: f2List.top
-          anchors.bottom: f2List.bottom
+          anchors.top: f2ListTitle.bottom
+          anchors.bottom: parent.bottom
           anchors.right: parent.right
+          margin-top: 6
           step: 66
           pixels-scroll: true
 
@@ -1584,9 +1585,10 @@ UIWindow
       Panel
         id: forgeCosts
         anchors.bottom: forgeButton.top
-        anchors.left: costTitle.left
+        anchors.left: forgeSpeciesScroll.right
         anchors.right: parent.right
         height: 40
+        margin-left: 12
         margin-bottom: 10
         margin-right: 10
         layout:
@@ -1595,7 +1597,8 @@ UIWindow
 
       UIButton
         id: forgeButton
-        anchors.left: costTitle.left
+        anchors.left: forgeSpeciesScroll.right
+        margin-left: 12
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         height: 36
