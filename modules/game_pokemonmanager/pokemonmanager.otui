@@ -5,17 +5,16 @@ PMTab < UIButton
   color: #d6e4f7
   background-color: #00000000
   border-width: 0
-  image-source: /modules/game_pokemonmanager/v2/pm2_tab
-  image-border: 12
+  image-source: /modules/game_pokemonmanager/v2/pmx_tab
+  image-border: 14
   text-align: center
-  text-offset: 10 0
+  text-offset: 12 0
 
   $hover:
-    image-source: /modules/game_pokemonmanager/v2/pm2_tab_hover
     color: #ffffff
 
   $on:
-    image-source: /modules/game_pokemonmanager/v2/pm2_tab_on
+    image-source: /modules/game_pokemonmanager/v2/pmx_tab_on
     color: #1b1400
 
   UIWidget
@@ -129,8 +128,8 @@ PMBaseTeamCard < Panel
   phantom: false
   background-color: #00000000
   border-width: 0
-  image-source: /modules/game_pokemonmanager/v2/pm2_slot
-  image-border: 10
+  image-source: /modules/game_pokemonmanager/v2/pmx_slot
+  image-border: 16
 
 PMActionButton < Button
   width: 30
@@ -538,17 +537,95 @@ PMSummaryStatRow < Panel
     font: verdana-11px-antialised
     color: #7f94b1
 
+PMSummaryStatRow2 < Panel
+  height: 20
+  focusable: false
+
+  Label
+    id: name
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    width: 62
+    height: 14
+    margin-left: 16
+    text-align: left
+    font: ChakraPetch-Bold_12
+    color: #9bb6dc
+
+  Label
+    id: value
+    anchors.left: name.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 36
+    height: 14
+    text-align: right
+    font: ChakraPetch-Bold_12
+    color: #ffffff
+
+  Panel
+    id: bar
+    anchors.left: value.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 168
+    height: 8
+    margin-left: 10
+    background-color: #06101f
+    border-width: 1
+    border-color: #17345c
+    focusable: false
+
+    UIWidget
+      id: fill
+      anchors.left: parent.left
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      width: 0
+      background-color: #55aaff
+      phantom: true
+      focusable: false
+
+  Label
+    id: iv
+    anchors.left: bar.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 52
+    height: 14
+    margin-left: 12
+    text-align: left
+    font: verdana-11px-antialised
+    color: #9bb6dc
+
+  Label
+    id: ev
+    anchors.left: iv.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 62
+    height: 14
+    text-align: left
+    font: verdana-11px-antialised
+    color: #9bb6dc
+
+  Label
+    id: vit
+    anchors.left: ev.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 40
+    height: 14
+    text-align: left
+    font: verdana-11px-antialised
+    color: #7f94b1
+
 PMSummaryTile < Panel
-  height: 58
+  height: 62
   phantom: false
   focusable: false
   background-color: #00000000
   border-width: 0
-  image-source: /modules/game_pokemonmanager/v2/pm2_panel
-  image-border: 12
+  image-source: /modules/game_pokemonmanager/v2/pmx_card
+  image-border: 20
 
   $hover:
-    image-source: /modules/game_pokemonmanager/v2/pm2_panel_gold
+    image-source: /modules/game_pokemonmanager/v2/pmx_card_green
 
   Panel
     id: tileAccent
@@ -1199,7 +1276,7 @@ UIWindow
       height: 52
       focusable: false
       background-color: #0a1428
-      image-source: /modules/game_pokemonmanager/v2/pm2_header
+      image-source: /modules/game_pokemonmanager/v2/pmx_header
 
       UIWidget
         id: codexHeaderLogo
@@ -1232,6 +1309,7 @@ UIWindow
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         text: "POKEMON MANAGER"
+        visible: false
         text-auto-resize: true
         font: ChakraPetch-Bold_22
         color: #eef4ff
@@ -1239,6 +1317,7 @@ UIWindow
       Label
         id: codexVersao
         text: v2.0
+        visible: false
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: headerBrandText.right
         margin-left: 8
@@ -4215,7 +4294,9 @@ UIWindow
             anchors.top: dashboardTitleBar.bottom
             anchors.left: parent.left
             margin: 4 16 0 16
-            text: "Clique num Pokemon para ver os detalhes. Os cards de baixo levam direto a pagina."
+            text: ""
+            height: 0
+            visible: false
             font: verdana-11px-rounded
             color: #829abe
 
@@ -4224,7 +4305,7 @@ UIWindow
             anchors.top: dashboardSubtitle.bottom
             anchors.left: parent.left
             anchors.right: parent.right
-            margin: 10 16 0 16
+            margin: 8 16 0 16
             height: 82
             focusable: false
             background-color: #00000000
@@ -4235,7 +4316,7 @@ UIWindow
               anchors.top: parent.top
               anchors.left: parent.left
               margin-left: 0
-              width: 108
+              width: 118
               height: 82
 
               Label
@@ -4277,8 +4358,8 @@ UIWindow
               id: dashboardTeam2
               anchors.top: parent.top
               anchors.left: dashboardTeam1.right
-              margin-left: 6
-              width: 108
+              margin-left: 10
+              width: 118
               height: 82
 
               Label
@@ -4320,8 +4401,8 @@ UIWindow
               id: dashboardTeam3
               anchors.top: parent.top
               anchors.left: dashboardTeam2.right
-              margin-left: 6
-              width: 108
+              margin-left: 10
+              width: 118
               height: 82
 
               Label
@@ -4363,8 +4444,8 @@ UIWindow
               id: dashboardTeam4
               anchors.top: parent.top
               anchors.left: dashboardTeam3.right
-              margin-left: 6
-              width: 108
+              margin-left: 10
+              width: 118
               height: 82
 
               Label
@@ -4406,8 +4487,8 @@ UIWindow
               id: dashboardTeam5
               anchors.top: parent.top
               anchors.left: dashboardTeam4.right
-              margin-left: 6
-              width: 108
+              margin-left: 10
+              width: 118
               height: 82
 
               Label
@@ -4449,8 +4530,8 @@ UIWindow
               id: dashboardTeam6
               anchors.top: parent.top
               anchors.left: dashboardTeam5.right
-              margin-left: 6
-              width: 108
+              margin-left: 10
+              width: 118
               height: 82
 
               Label
@@ -4489,21 +4570,60 @@ UIWindow
                 phantom: true
 
           Panel
-            id: dashboardHero
-            anchors.top: dashboardTeam.bottom
+            id: dashboardPortrait
             anchors.left: parent.left
-            anchors.right: parent.right
-            margin: 8 16 0 16
-            height: 150
+            anchors.top: dashboardTeam.bottom
+            width: 250
+            height: 322
+            margin-left: 16
+            margin-top: 10
             background-color: #00000000
             border-width: 0
-            image-source: /modules/game_pokemonmanager/v2/pm2_panel
-            image-border: 12
+            image-source: /modules/game_pokemonmanager/v2/pmx_retrato
+            focusable: false
+
+            UIWidget
+              id: dashboardIcon
+              anchors.horizontalCenter: parent.horizontalCenter
+              anchors.verticalCenter: parent.verticalCenter
+              width: 140
+              height: 140
+              margin-bottom: 40
+              focusable: false
+              phantom: true
+
+          Label
+            id: dashboardSlotTag
+            anchors.left: dashboardPortrait.left
+            anchors.top: dashboardPortrait.top
+            width: 70
+            height: 20
+            margin-left: 14
+            margin-top: 12
+            text: "SLOT #-"
+            text-align: center
+            font: ChakraPetch-Bold_12
+            color: #ffffff
+            image-source: /modules/game_pokemonmanager/v2/pm2_chip
+            image-border: 5
+
+          Panel
+            id: dashboardHero
+            anchors.top: dashboardPortrait.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            margin: 0 16 0 10
+            height: 140
+            background-color: #00000000
+            border-width: 0
+            image-source: /modules/game_pokemonmanager/v2/pmx_info
+            image-border: 26
             border-color: #1c3350
             focusable: false
 
             Panel
               id: dashboardHeroAccent
+              visible: false
               anchors.left: parent.left
               anchors.top: parent.top
               anchors.bottom: parent.bottom
@@ -4511,64 +4631,13 @@ UIWindow
               background-color: #f2c400
               focusable: false
 
-            Panel
-              id: dashboardPortrait
-              anchors.left: parent.left
-              anchors.top: parent.top
-              width: 112
-              height: 112
-              margin-left: 14
-              margin-top: 12
-              background-color: #00000000
-              border-width: 0
-              image-source: /modules/game_pokemonmanager/v2/pm2_panel
-              image-border: 12
-              focusable: false
-
-              UIWidget
-                anchors.centerIn: parent
-                size: 96 96
-                image-source: /modules/game_pokemonmanager/v2/pm2_pokebola
-                phantom: true
-                focusable: false
-
-              UIWidget
-                anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                size: 104 32
-                margin-bottom: 2
-                image-source: /modules/game_pokemonmanager/v2/pm2_platform
-                phantom: true
-                focusable: false
-
-              UIWidget
-                id: dashboardIcon
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                width: 100
-                height: 100
-                focusable: false
-                phantom: true
-
-            Label
-              id: dashboardSlotTag
-              anchors.left: dashboardPortrait.left
-              anchors.top: dashboardPortrait.bottom
-              width: 112
-              height: 12
-              margin-top: 4
-              text: "SLOT #-"
-              text-align: center
-              font: verdana-11px-antialised
-              color: #5f7596
-
             Label
               id: dashboardName
-              anchors.left: dashboardPortrait.right
+              anchors.left: parent.left
               anchors.top: parent.top
-              width: 300
-              height: 20
-              margin-left: 14
+              width: 220
+              height: 22
+              margin-left: 18
               margin-top: 12
               text: "NENHUM POKEMON"
               font: ChakraPetch-Bold_20
@@ -4598,11 +4667,11 @@ UIWindow
 
             Panel
               id: dashboardLevelChip
-              anchors.left: dashboardPortrait.right
+              anchors.left: parent.left
               anchors.top: dashboardName.bottom
               width: 70
               height: 20
-              margin-left: 14
+              margin-left: 18
               margin-top: 6
               background-color: #00000000
               border-width: 0
@@ -4663,11 +4732,11 @@ UIWindow
 
             Label
               id: dashboardNature
-              anchors.left: dashboardPortrait.right
+              anchors.left: parent.left
               anchors.top: dashboardLevelChip.bottom
               text-auto-resize: true
               height: 14
-              margin-left: 14
+              margin-left: 18
               margin-top: 8
               text: "NATUREZA: -"
               font: verdana-11px-antialised
@@ -4686,12 +4755,12 @@ UIWindow
 
             Label
               id: dashboardHPLabel
-              anchors.left: dashboardPortrait.right
+              anchors.left: parent.left
               anchors.top: parent.top
-              width: 64
+              width: 60
               height: 14
-              margin-left: 14
-              margin-top: 94
+              margin-left: 18
+              margin-top: 84
               text: "HP"
               font: verdana-11px-antialised
               color: #7f94b1
@@ -4700,7 +4769,7 @@ UIWindow
               id: dashboardHPBack
               anchors.left: dashboardHPLabel.right
               anchors.verticalCenter: dashboardHPLabel.verticalCenter
-              width: 286
+              width: 150
               height: 8
               background-color: #091522
               focusable: false
@@ -4719,21 +4788,21 @@ UIWindow
               id: dashboardHPValue
               anchors.left: dashboardHPBack.right
               anchors.verticalCenter: dashboardHPLabel.verticalCenter
-              width: 80
+              width: 70
               height: 14
-              margin-left: 10
+              margin-left: 8
               text-align: left
               font: verdana-11px-antialised
               color: #ffffff
 
             Label
               id: dashboardFriendLabel
-              anchors.left: dashboardPortrait.right
+              anchors.left: parent.left
               anchors.top: parent.top
-              width: 64
+              width: 60
               height: 14
-              margin-left: 14
-              margin-top: 112
+              margin-left: 18
+              margin-top: 100
               text: "AMIZADE"
               font: verdana-11px-antialised
               color: #7f94b1
@@ -4742,7 +4811,7 @@ UIWindow
               id: dashboardFriendBack
               anchors.left: dashboardFriendLabel.right
               anchors.verticalCenter: dashboardFriendLabel.verticalCenter
-              width: 286
+              width: 150
               height: 8
               background-color: #091522
               focusable: false
@@ -4761,21 +4830,21 @@ UIWindow
               id: dashboardFriendValue
               anchors.left: dashboardFriendBack.right
               anchors.verticalCenter: dashboardFriendLabel.verticalCenter
-              width: 80
+              width: 70
               height: 14
-              margin-left: 10
+              margin-left: 8
               text-align: left
               font: verdana-11px-antialised
               color: #ffffff
 
             Label
               id: dashboardEVLabel
-              anchors.left: dashboardPortrait.right
+              anchors.left: parent.left
               anchors.top: parent.top
-              width: 64
+              width: 60
               height: 14
-              margin-left: 14
-              margin-top: 130
+              margin-left: 18
+              margin-top: 116
               text: "EV"
               font: verdana-11px-antialised
               color: #7f94b1
@@ -4784,7 +4853,7 @@ UIWindow
               id: dashboardEVBack
               anchors.left: dashboardEVLabel.right
               anchors.verticalCenter: dashboardEVLabel.verticalCenter
-              width: 286
+              width: 150
               height: 8
               background-color: #091522
               focusable: false
@@ -4803,9 +4872,9 @@ UIWindow
               id: dashboardEVValue
               anchors.left: dashboardEVBack.right
               anchors.verticalCenter: dashboardEVLabel.verticalCenter
-              width: 80
+              width: 70
               height: 14
-              margin-left: 10
+              margin-left: 8
               text-align: left
               font: verdana-11px-antialised
               color: #ffffff
@@ -4814,14 +4883,14 @@ UIWindow
               id: dashboardGradeBox
               anchors.right: parent.right
               anchors.top: parent.top
-              width: 150
-              height: 126
+              width: 140
+              height: 116
               margin-right: 12
               margin-top: 12
               background-color: #00000000
               border-width: 0
-              image-source: /modules/game_pokemonmanager/v2/pm2_panel_gold
-              image-border: 12
+              image-source: /modules/game_pokemonmanager/v2/pmx_iv
+              image-border: 30
               focusable: false
 
               Label
@@ -4835,8 +4904,6 @@ UIWindow
                 text-align: center
                 font: ChakraPetch-Bold_12
                 color: #1b1400
-                image-source: /modules/game_pokemonmanager/v2/pm2_tag
-                image-border: 6
 
               Label
                 id: dashboardGradePercent
@@ -5075,14 +5142,17 @@ UIWindow
           Panel
             id: dashboardStats
             anchors.top: dashboardHero.bottom
-            anchors.left: parent.left
+            anchors.left: dashboardPortrait.right
             anchors.right: parent.right
-            margin: 8 16 0 16
-            height: 166
+            margin: 10 16 0 10
+            height: 172
             background-color: #00000000
             border-width: 0
-            image-source: /modules/game_pokemonmanager/v2/pm2_panel
-            image-border: 12
+            image-source: /modules/game_pokemonmanager/v2/pmx_atrib
+            image-border-left: 214
+            image-border-top: 38
+            image-border-right: 16
+            image-border-bottom: 14
             border-color: #1c3350
             focusable: false
 
@@ -5092,6 +5162,7 @@ UIWindow
               width: 3
               height: 14
               margin-top: 9
+              visible: false
               background-color: #f2c400
               focusable: false
 
@@ -5103,7 +5174,8 @@ UIWindow
               height: 18
               margin-left: 10
               margin-top: 7
-              text: "ATRIBUTOS"
+              text: ""
+              visible: false
               text-align: center
               font: ChakraPetch-Bold_12
               color: #1b1400
@@ -5112,12 +5184,13 @@ UIWindow
 
             Label
               id: dashboardBST
-              anchors.left: dashboardStatsTitle.right
-              anchors.top: dashboardStatsTitle.top
+              anchors.left: parent.left
+              anchors.top: parent.top
+              margin-top: 10
               width: 150
               height: 14
               text: "TOTAL 0"
-              margin-left: 12
+              margin-left: 226
               font: ChakraPetch-SemiBold_12
               color: #7f94b1
 
@@ -5126,8 +5199,8 @@ UIWindow
               anchors.top: parent.top
               width: 56
               height: 14
-              margin-left: 554
-              margin-top: 10
+              margin-left: 300
+              margin-top: 44
               text: "IV"
               font: verdana-11px-antialised
               color: #5f7596
@@ -5137,8 +5210,8 @@ UIWindow
               anchors.top: parent.top
               width: 70
               height: 14
-              margin-left: 610
-              margin-top: 10
+              margin-left: 352
+              margin-top: 44
               text: "EV"
               font: verdana-11px-antialised
               color: #5f7596
@@ -5148,61 +5221,61 @@ UIWindow
               anchors.top: parent.top
               width: 60
               height: 14
-              margin-left: 680
-              margin-top: 10
+              margin-left: 414
+              margin-top: 44
               text: "VITAMINA"
               font: verdana-11px-antialised
               color: #5f7596
 
-            PMSummaryStatRow
+            PMSummaryStatRow2
               id: dashboardStatRow1
               anchors.top: parent.top
               anchors.left: parent.left
               anchors.right: parent.right
-              margin-top: 30
+              margin-top: 58
 
-            PMSummaryStatRow
+            PMSummaryStatRow2
               id: dashboardStatRow2
               anchors.top: parent.top
               anchors.left: parent.left
               anchors.right: parent.right
-              margin-top: 52
+              margin-top: 76
 
-            PMSummaryStatRow
+            PMSummaryStatRow2
               id: dashboardStatRow3
               anchors.top: parent.top
               anchors.left: parent.left
               anchors.right: parent.right
-              margin-top: 74
+              margin-top: 94
 
-            PMSummaryStatRow
+            PMSummaryStatRow2
               id: dashboardStatRow4
               anchors.top: parent.top
               anchors.left: parent.left
               anchors.right: parent.right
-              margin-top: 96
+              margin-top: 112
 
-            PMSummaryStatRow
+            PMSummaryStatRow2
               id: dashboardStatRow5
               anchors.top: parent.top
               anchors.left: parent.left
               anchors.right: parent.right
-              margin-top: 118
+              margin-top: 130
 
-            PMSummaryStatRow
+            PMSummaryStatRow2
               id: dashboardStatRow6
               anchors.top: parent.top
               anchors.left: parent.left
               anchors.right: parent.right
-              margin-top: 140
+              margin-top: 148
 
           Panel
             id: dashboardTiles
-            anchors.top: dashboardStats.bottom
+            anchors.top: dashboardPortrait.bottom
             anchors.left: parent.left
             anchors.right: parent.right
-            margin: 8 16 0 16
-            height: 58
+            margin: 10 16 0 16
+            height: 62
             focusable: false
 
             PMSummaryTile

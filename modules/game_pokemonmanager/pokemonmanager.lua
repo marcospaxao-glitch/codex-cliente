@@ -2076,7 +2076,7 @@ function PokemonManager.refreshBaseSelection()
         card:setVisible(true)
         local isSelected = i == PokemonManager.selected
         card:setBackgroundColor('#00000000')
-        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'pm2_slot_on' or 'pm2_slot'))
+        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'pmx_slot_on' or 'pmx_slot'))
         local level = card:recursiveGetChildById('level')
         if level then level:setColor(isSelected and '#ffd24a' or '#9bb6dc') end
       else
@@ -2605,7 +2605,7 @@ function PokemonManager.updateDashboard()
         end
         if slot then slot:setText('#' .. tostring(i)) end
         card:setBackgroundColor('#00000000')
-        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'pm2_slot_on' or 'pm2_slot'))
+        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'pmx_slot_on' or 'pmx_slot'))
       else
         card:setVisible(false)
       end
@@ -2619,7 +2619,7 @@ function PokemonManager.updateDashboard()
       local path = '/modules/game_pokemonbar/bar_icon/' .. PokemonManager.sanitizeIconName(p.name) .. '.png'
       pcall(function()
         icon:setImageSource(path)
-        icon:setImageSize({width = 100, height = 100})
+        icon:setImageSize({width = 132, height = 132})
       end)
       icon:setVisible(true)
     else
@@ -5365,7 +5365,7 @@ function PokemonManager.updateFriendCards()
           miniFill:setBackgroundColor(PokemonManager.getFriendshipColor(friendship))
         end
         card:setBackgroundColor('#00000000')
-        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'pm2_slot_on' or 'pm2_slot'))
+        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'pmx_slot_on' or 'pmx_slot'))
       else
         card:setVisible(false)
       end
