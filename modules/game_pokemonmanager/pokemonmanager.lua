@@ -6134,8 +6134,13 @@ function PokemonManager.montarAbas()
   local body = win:recursiveGetChildById('body')
   local sidebar = win:recursiveGetChildById('sidebar')
   local content = win:recursiveGetChildById('content')
-  if not main or not header or not body or not sidebar or not content then return end
+  if not main or not header or not body or not sidebar or not content then
+    g_logger.error('[Manager v2] nao achei: ' .. (main and '' or 'mainWindow ') .. (header and '' or 'header ') ..
+      (body and '' or 'body ') .. (sidebar and '' or 'sidebar ') .. (content and '' or 'content'))
+    return
+  end
   win.codexAbas = {}
+  g_logger.info('[Manager v2] montando as abas')
 
   -- menu lateral antigo some (os widgets continuam existindo para a logica antiga)
   sidebar:setWidth(0)
@@ -6251,10 +6256,13 @@ if not PokemonManager.codexAbasHook then
   local showOriginal = PokemonManager.show
   PokemonManager.show = function(...)
     local r = showOriginal(...)
-    pcall(PokemonManager.montarAbas)
-    pcall(PokemonManager.marcarAba, PokemonManager.currentPage or 'summary')
+    local ok, err = pcall(PokemonManager.montarAbas)
+    if not ok then g_logger.error('[Manager v2] erro ao montar as abas: ' .. tostring(err)) end
+    ok, err = pcall(PokemonManager.marcarAba, PokemonManager.currentPage or 'summary')
+    if not ok then g_logger.error('[Manager v2] erro ao marcar a aba: ' .. tostring(err)) end
     return r
   end
+  g_logger.info('[Manager v2] abas ligadas')
   local pageOriginal = PokemonManager.showPage
   PokemonManager.showPage = function(page, ...)
     local r = pageOriginal(page, ...)
