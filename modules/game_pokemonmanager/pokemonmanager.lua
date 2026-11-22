@@ -6119,7 +6119,7 @@ function PokemonManager.marcarAba(page)
         local s = g_ui.createWidget('PMSubTab', sub)
         s:setText(pg[3])
         s:setOn((pg[1] == page or (atual.extras and atual.extras[page] and pg[1] == 'base')) and true or false)
-        s.onClick = function() pmAbrirPagina(pg) end
+        s.onClick = function() scheduleEvent(function() pmAbrirPagina(pg) end, 1) end
       end
     end
   end
@@ -6128,127 +6128,35 @@ end
 function PokemonManager.montarAbas()
   local win = PokemonManager.window
   if not win or win:isDestroyed() or win.codexAbas then return end
-  local celular = type(codexCelular) == 'function' and codexCelular()
-  local main = win:recursiveGetChildById('mainWindow')
-  local header = win:recursiveGetChildById('header')
-  local body = win:recursiveGetChildById('body')
-  local sidebar = win:recursiveGetChildById('sidebar')
-  local content = win:recursiveGetChildById('content')
-  if not main or not header or not body or not sidebar or not content then
-    g_logger.error('[Manager v2] nao achei: ' .. (main and '' or 'mainWindow ') .. (header and '' or 'header ') ..
-      (body and '' or 'body ') .. (sidebar and '' or 'sidebar ') .. (content and '' or 'content'))
+  local barra = win:recursiveGetChildById('codexAbasBarra')
+  if not barra then
+    g_logger.error('[Manager v2] layout antigo (sem codexAbasBarra)')
     return
   end
-  win.codexAbas = {}
   g_logger.info('[Manager v2] montando as abas')
-
-  -- menu lateral antigo some (os widgets continuam existindo para a logica antiga)
-  sidebar:setWidth(0)
-  sidebar:hide()
-  content:setMarginLeft(0)
-  -- a janela perde a largura do menu (o conteudo fica com a mesma largura de antes)
-  win:setWidth(win:getWidth() - 222 + (celular and 78 or 0))
-
-  -- cabecalho: logo, titulo no centro, sub-abas a direita
-  local brand = win:recursiveGetChildById('headerBrandText')
-  if not celular then
-    header:setHeight(52)
-    local logo = g_ui.createWidget('UIWidget', header)
-    logo:setId('codexHeaderLogo')
-    logo:setImageSource('/modules/game_pokemonmanager/menu/logo.png')
-    logo:setSize({width = 76, height = 43})
-    logo:addAnchor(AnchorLeft, 'parent', AnchorLeft)
-    logo:addAnchor(AnchorVerticalCenter, 'parent', AnchorVerticalCenter)
-    logo:setMarginLeft(12)
-    logo:setPhantom(true)
-    if brand then
-      brand:breakAnchors()
-      brand:addAnchor(AnchorLeft, 'codexHeaderLogo', AnchorRight)
-      brand:addAnchor(AnchorVerticalCenter, 'parent', AnchorVerticalCenter)
-      brand:setMarginLeft(14)
-      brand:setText('POKEMON MANAGER')
-    end
-    local versao = g_ui.createWidget('Label', header)
-    versao:setText('v2.0')
-    versao:setFont('verdana-11px-antialised')
-    versao:setColor('#1b1400')
-    versao:setBackgroundColor('#f2c400')
-    versao:setTextAutoResize(true)
-    pcall(function() versao:setPadding({top = 2, bottom = 2, left = 6, right = 6}) end)
-    versao:addAnchor(AnchorLeft, 'headerBrandText', AnchorRight)
-    versao:addAnchor(AnchorVerticalCenter, 'parent', AnchorVerticalCenter)
-    versao:setMarginLeft(8)
-    local close = win:recursiveGetChildById('btnClose')
-    if close then close:setMarginTop(11) end
-  end
-  local sub = g_ui.createWidget('Panel', header)
-  sub:setId('codexSubAbas')
-  sub:addAnchor(AnchorRight, 'btnClose', AnchorLeft)
-  sub:addAnchor(AnchorVerticalCenter, 'parent', AnchorVerticalCenter)
-  sub:setMarginRight(12)
-  sub:setSize({width = 260, height = 26})
-  local lay = UIHorizontalLayout.create(sub)
-  lay:setSpacing(6)
-  pcall(function() lay:setAlignRight(true) end)
-  sub:setLayout(lay)
-
-  -- barra de abas
-  local barra = g_ui.createWidget('Panel', main)
-  barra:setId('codexAbasBarra')
-  barra:setBackgroundColor('#0d1a2e')
-  barra:addAnchor(AnchorTop, 'header', AnchorBottom)
-  barra:addAnchor(AnchorLeft, 'parent', AnchorLeft)
+  win.codexAbas = {}
+  local celular = type(codexCelular) == 'function' and codexCelular()
   if celular then
-    -- celular: coluna de icones a esquerda
-    barra:addAnchor(AnchorBottom, 'parent', AnchorBottom)
-    barra:setWidth(78)
-    local v = UIVerticalLayout.create(barra)
-    v:setSpacing(2)
-    barra:setLayout(v)
-    pcall(function() barra:setPadding({top = 4, bottom = 4, left = 0, right = 0}) end)
-    body:addAnchor(AnchorLeft, 'codexAbasBarra', AnchorRight)
-  else
-    barra:addAnchor(AnchorRight, 'parent', AnchorRight)
-    barra:setHeight(48)
-    local h = UIHorizontalLayout.create(barra)
-    h:setSpacing(5)
-    pcall(function() h:setFitChildren(false) end)
-    barra:setLayout(h)
-    pcall(function() barra:setPadding({top = 8, bottom = 2, left = 12, right = 12}) end)
-    body:addAnchor(AnchorTop, 'codexAbasBarra', AnchorBottom)
+    local logo = win:recursiveGetChildById('codexHeaderLogo')
+    if logo then logo:hide() end
   end
-
-  local largura = celular and 78 or math.floor((win:getWidth() - 24 - 5 * (#PokemonManager.ABAS - 1)) / #PokemonManager.ABAS)
+  local largura = math.floor((818 - 24 - 5 * (#PokemonManager.ABAS - 1)) / #PokemonManager.ABAS)
   for _, aba in ipairs(PokemonManager.ABAS) do
     local b = g_ui.createWidget('PMTab', barra)
     b:setText(aba.nome)
     b:setWidth(largura)
-    b:getChildById('icon'):setImageSource(PokemonManager.navIconPath .. aba.icone .. '.png')
-    if celular then
-      -- icone em cima, nome embaixo
-      b:setHeight(math.max(38, math.floor((barra:getHeight() > 0 and barra:getHeight() - 8 or 330) / #PokemonManager.ABAS) - 2))
-      local icon = b:getChildById('icon')
-      icon:breakAnchors()
-      icon:addAnchor(AnchorTop, 'parent', AnchorTop)
-      icon:addAnchor(AnchorHorizontalCenter, 'parent', AnchorHorizontalCenter)
-      icon:setMarginTop(4)
-      b:setTextOffset({x = 0, y = 10})
-    end
+    local icon = b:getChildById('icon')
+    if icon then icon:setImageSource(PokemonManager.navIconPath .. aba.icone .. '.png') end
     b.onClick = function()
       local alvo = aba.paginas[1]
       for _, pg in ipairs(aba.paginas) do
         if pg[1] == aba.ultima then alvo = pg end
       end
-      pmAbrirPagina(alvo)
+      -- fora do clique (nao destruir/recriar nada durante o proprio clique)
+      scheduleEvent(function() pmAbrirPagina(alvo) end, 1)
     end
     win.codexAbas[aba.id] = b
   end
-
-  -- mais altura para compensar a barra (o conteudo continua com a mesma largura)
-  if not celular then
-    win:setHeight(win:getHeight() + 30)
-  end
-  PokemonManager.marcarAba(PokemonManager.currentPage or 'summary')
 end
 
 -- o arquivo roda 2 vezes (scripts: do .otmod + dofile do onLoad) e a 2a vez

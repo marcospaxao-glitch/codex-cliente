@@ -1181,7 +1181,7 @@ PMIncubEggChoice < UIWidget
 
 UIWindow
   id: pokemonManager
-  size: 1040 700
+  size: 818 730
   focusable: false
   background-color: #101F3E
   opacity: 0.99
@@ -1197,9 +1197,19 @@ UIWindow
       anchors.top: parent.top
       anchors.left: parent.left
       anchors.right: parent.right
-      height: 66
+      height: 52
       focusable: false
       background-color: #101F3E
+
+      UIWidget
+        id: codexHeaderLogo
+        size: 76 43
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        margin-left: 12
+        image-source: /modules/game_pokemonmanager/menu/logo.png
+        phantom: true
+        focusable: false
 
       Panel
         anchors.bottom: parent.bottom
@@ -1220,11 +1230,34 @@ UIWindow
       Label
         id: headerBrandText
         anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        margin-left: 18
+        anchors.left: codexHeaderLogo.right
+        margin-left: 14
         text: "POKEMON MANAGER"
         font: verdana-11px-antialised
         color: #dce8f5
+
+      Label
+        id: codexVersao
+        text: v2.0
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: headerBrandText.right
+        margin-left: 8
+        padding: 2 6 2 6
+        text-auto-resize: true
+        font: verdana-11px-antialised
+        color: #1b1400
+        background-color: #f2c400
+
+      Panel
+        id: codexSubAbas
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: btnClose.left
+        margin-right: 12
+        size: 280 26
+        layout:
+          type: horizontalBox
+          spacing: 6
+          align-right: true
 
       Label
         id: version
@@ -1265,8 +1298,21 @@ UIWindow
           color: #ffffff
 
     Panel
-      id: body
+      id: codexAbasBarra
       anchors.top: header.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 48
+      padding: 8 12 2 12
+      focusable: false
+      background-color: #0d1a2e
+      layout:
+        type: horizontalBox
+        spacing: 5
+
+    Panel
+      id: body
+      anchors.top: codexAbasBarra.bottom
       anchors.left: parent.left
       anchors.right: parent.right
       anchors.bottom: parent.bottom
@@ -1278,7 +1324,8 @@ UIWindow
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.bottom: parent.bottom
-        width: 212
+        width: 0
+        visible: false
         focusable: false
         background-color: #101F3E
         border-width: 0
@@ -1754,7 +1801,7 @@ UIWindow
         anchors.left: sidebar.right
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        margin-left: 10
+        margin-left: 0
         margin-right: 4
         focusable: false
         background-color: #101F3E
