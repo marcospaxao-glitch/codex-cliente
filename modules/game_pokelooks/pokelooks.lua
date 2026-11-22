@@ -45,6 +45,9 @@ local function attach(widget, outfit)
     creature:setPhantom(true)
   end
   creature:setOutfit(outfit)
+  if widget.codexLookSize then -- codex: janela pediu o sprite grande (ex.: retrato do Manager)
+    pcall(function() creature:setCreatureSize(widget.codexLookSize); creature:setCenter(true) end)
+  end
   creature:setVisible(true)
 end
 

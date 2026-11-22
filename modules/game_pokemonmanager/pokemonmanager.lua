@@ -2076,7 +2076,7 @@ function PokemonManager.refreshBaseSelection()
         card:setVisible(true)
         local isSelected = i == PokemonManager.selected
         card:setBackgroundColor('#00000000')
-        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'pmx_slot_on' or 'pmx_slot'))
+        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'kx_slot_on' or 'kx_slot'))
         local level = card:recursiveGetChildById('level')
         if level then level:setColor(isSelected and '#ffd24a' or '#9bb6dc') end
       else
@@ -2605,7 +2605,7 @@ function PokemonManager.updateDashboard()
         end
         if slot then slot:setText('#' .. tostring(i)) end
         card:setBackgroundColor('#00000000')
-        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'pmx_slot_on' or 'pmx_slot'))
+        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'kx_slot_on' or 'kx_slot'))
       else
         card:setVisible(false)
       end
@@ -5365,7 +5365,7 @@ function PokemonManager.updateFriendCards()
           miniFill:setBackgroundColor(PokemonManager.getFriendshipColor(friendship))
         end
         card:setBackgroundColor('#00000000')
-        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'pmx_slot_on' or 'pmx_slot'))
+        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'kx_slot_on' or 'kx_slot'))
       else
         card:setVisible(false)
       end
@@ -6080,15 +6080,16 @@ for _, f in ipairs({{'ChakraPetch-Bold', {12, 13, 14, 20, 22}}, {'ChakraPetch-Se
   end
 end
 
+PM_V2 = '/modules/game_pokemonmanager/v2/'
 PokemonManager.ABAS = {
-  {id = 'perfil',  nome = 'PERFIL',   icone = 'perfil',     paginas = {{'profile', 'navProfile', 'Perfil'}}},
-  {id = 'resumo',  nome = 'RESUMO',   icone = 'resumo',     paginas = {{'summary', 'navSummary', 'Resumo'}}},
-  {id = 'status',  nome = 'STATUS',   icone = 'ev',         paginas = {{'base', 'navBase', 'Atributos'}, {'vitamins', 'navVitamins', 'Vitaminas'}}, extras = {ev = true}},
-  {id = 'combate', nome = 'COMBATE',  icone = 'moves',      paginas = {{'moves', 'navMoves', 'Moves'}, {'abilities', 'navAbilities', 'Habilidades'}}},
-  {id = 'itens',   nome = 'ITENS',    icone = 'held',       paginas = {{'held', 'navHeld', 'Itens Equip'}}},
-  {id = 'vinculo', nome = 'VINCULO',  icone = 'amizade',    paginas = {{'friend', 'navFriend', 'Amizade'}}},
-  {id = 'evolucao', nome = 'EVOLUCAO', icone = 'evolucao',  paginas = {{'evolution', 'navEvolution', 'Evolucao'}}},
-  {id = 'outros',  nome = 'OUTROS',   icone = 'incubadora', paginas = {{'incubators', 'navIncubators', 'Incubadoras'}}},
+  {id = 'perfil', arte = 216,  nome = 'PERFIL',   icone = 'perfil',     paginas = {{'profile', 'navProfile', 'Perfil'}}},
+  {id = 'resumo', arte = 215,  nome = 'RESUMO',   icone = 'resumo',     paginas = {{'summary', 'navSummary', 'Resumo'}}},
+  {id = 'status', arte = 201,  nome = 'STATUS',   icone = 'ev',         paginas = {{'base', 'navBase', 'Atributos'}, {'vitamins', 'navVitamins', 'Vitaminas'}}, extras = {ev = true}},
+  {id = 'combate', arte = 197, nome = 'COMBATE',  icone = 'moves',      paginas = {{'moves', 'navMoves', 'Moves'}, {'abilities', 'navAbilities', 'Habilidades'}}},
+  {id = 'itens', arte = 163,   nome = 'ITENS',    icone = 'held',       paginas = {{'held', 'navHeld', 'Itens Equip'}}},
+  {id = 'vinculo', arte = 181, nome = 'VINCULO',  icone = 'amizade',    paginas = {{'friend', 'navFriend', 'Amizade'}}},
+  {id = 'evolucao', arte = 173, nome = 'EVOLUCAO', icone = 'evolucao',  paginas = {{'evolution', 'navEvolution', 'Evolucao'}}},
+  {id = 'outros', arte = 162,  nome = 'OUTROS',   icone = 'incubadora', paginas = {{'incubators', 'navIncubators', 'Incubadoras'}}},
 }
 
 local function pmAbaDaPagina(page)
@@ -6115,8 +6116,7 @@ function PokemonManager.marcarAba(page)
     if b then
       local on = aba == atual
       b:setOn(on)
-      local icon = b:getChildById('icon')
-      if icon then icon:setImageSource(PokemonManager.navIconPath .. aba.icone .. (on and '_hover.png' or '.png')) end
+      b:setImageSource(PM_V2 .. 'kx_tab_' .. aba.id .. (on and '_on' or ''))
     end
   end
   local sub = win:recursiveGetChildById('codexSubAbas')
@@ -6150,13 +6150,19 @@ function PokemonManager.montarAbas()
     local logo = win:recursiveGetChildById('codexHeaderLogo')
     if logo then logo:hide() end
   end
-  local largura = math.floor((818 - 24 - 5 * (#PokemonManager.ABAS - 1)) / #PokemonManager.ABAS)
+  local soma = 0
+  for _, aba in ipairs(PokemonManager.ABAS) do soma = soma + aba.arte end
+  local fator = (818 - 24 - 4 * (#PokemonManager.ABAS - 1)) / soma
+  local icone = win:recursiveGetChildById('dashboardIcon')
+  if icone then icone.codexLookSize = 150 end
   for _, aba in ipairs(PokemonManager.ABAS) do
     local b = g_ui.createWidget('PMTab', barra)
-    b:setText(aba.nome)
-    b:setWidth(largura)
+    b:setText('')
+    b:setWidth(math.floor(aba.arte * fator))
+    b:setHeight(math.floor(59 * fator))
+    b:setImageSource(PM_V2 .. 'kx_tab_' .. aba.id)
     local icon = b:getChildById('icon')
-    if icon then icon:setImageSource(PokemonManager.navIconPath .. aba.icone .. '.png') end
+    if icon then icon:hide() end
     b.onClick = function()
       local alvo = aba.paginas[1]
       for _, pg in ipairs(aba.paginas) do
