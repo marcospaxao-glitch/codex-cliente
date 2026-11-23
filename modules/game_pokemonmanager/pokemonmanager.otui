@@ -122,7 +122,7 @@ PMBaseTeamCard < Panel
   phantom: false
   background-color: #00000000
   border-width: 0
-  image-source: /modules/game_pokemonmanager/v2/kx_slot
+  image-source: /modules/game_pokemonmanager/v2/k3_slot
   image-border: 14
 
 PMActionButton < Button
@@ -615,11 +615,11 @@ PMSummaryTile < Panel
   focusable: false
   background-color: #00000000
   border-width: 0
-  image-source: /modules/game_pokemonmanager/v2/kx_card
-  image-border: 18
+  image-source: /modules/game_pokemonmanager/v2/k3_card
+  image-border: 20
 
   $hover:
-    image-source: /modules/game_pokemonmanager/v2/kx_card_on
+    image-source: /modules/game_pokemonmanager/v2/k3_card_on
 
   Panel
     id: tileAccent
@@ -636,11 +636,11 @@ PMSummaryTile < Panel
     id: tileIconBg
     anchors.left: parent.left
     anchors.verticalCenter: parent.verticalCenter
-    width: 34
-    height: 34
+    width: 38
+    height: 38
     margin-left: 14
-    background-color: #0a1422
-    border-width: 1
+    background-color: #00000000
+    border-width: 0
     border-color: #1c3350
     phantom: true
     focusable: false
@@ -1275,11 +1275,11 @@ UIWindow
 
       UIWidget
         id: codexHeaderLogo
-        size: 76 43
+        size: 92 40
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        margin-left: 12
-        image-source: /modules/game_pokemonmanager/menu/logo.png
+        margin-left: 10
+        image-source: /modules/game_pokemonmanager/v2/k3_logo
         phantom: true
         focusable: false
 
@@ -1360,13 +1360,13 @@ UIWindow
         anchors.top: parent.top
         anchors.right: parent.right
         margin: 11 12 0 0
-        width: 30
-        height: 30
-        text: "X"
+        width: 32
+        height: 32
+        text: ""
         color: #e7edf7
-        background-color: #0a1a2a
-        border-width: 1
-        border-color: #1a3850
+        background-color: #00000000
+        border-width: 0
+        image-source: /modules/game_pokemonmanager/v2/k3_fechar
 
         $hover:
           background-color: #2a4d68
@@ -4574,7 +4574,7 @@ UIWindow
             margin-top: 10
             background-color: #00000000
             border-width: 0
-            image-source: /modules/game_pokemonmanager/v2/kx_retrato
+            image-source: /modules/game_pokemonmanager/v2/k3_retrato
             focusable: false
 
             UIWidget
@@ -4611,7 +4611,7 @@ UIWindow
             height: 150
             background-color: #00000000
             border-width: 0
-            image-source: /modules/game_pokemonmanager/v2/kx_largo
+            image-source: /modules/game_pokemonmanager/v2/k3_largo
             image-border: 22
             border-color: #1c3350
             focusable: false
@@ -4884,7 +4884,7 @@ UIWindow
               margin-top: 10
               background-color: #00000000
               border-width: 0
-              image-source: /modules/game_pokemonmanager/v2/kx_iv
+              image-source: /modules/game_pokemonmanager/v2/k3_iv
               image-border: 26
               focusable: false
 
@@ -4892,10 +4892,10 @@ UIWindow
                 id: dashboardGradeTitle
                 anchors.top: parent.top
                 anchors.left: parent.left
-                width: 98
+                width: 88
                 height: 16
                 margin-top: 3
-                margin-left: 33
+                margin-left: 42
                 text: "QUALIDADE IV"
                 text-align: center
                 font: verdana-11px-antialised
@@ -5144,11 +5144,8 @@ UIWindow
             height: 184
             background-color: #00000000
             border-width: 0
-            image-source: /modules/game_pokemonmanager/v2/pmx_atrib
-            image-border-left: 214
-            image-border-top: 38
-            image-border-right: 16
-            image-border-bottom: 14
+            image-source: /modules/game_pokemonmanager/v2/k3_principal
+            image-border: 26
             border-color: #1c3350
             focusable: false
 
@@ -5166,17 +5163,16 @@ UIWindow
               id: dashboardStatsTitle
               anchors.left: parent.left
               anchors.top: parent.top
-              width: 104
-              height: 18
+              width: 128
+              height: 24
               margin-left: 10
-              margin-top: 7
-              text: ""
-              visible: false
+              margin-top: 8
+              text: "ATRIBUTOS"
               text-align: center
-              font: ChakraPetch-Bold_12
+              font: ChakraPetch-Bold_14
               color: #1b1400
-              image-source: /modules/game_pokemonmanager/v2/pm2_tag
-              image-border: 6
+              image-source: /modules/game_pokemonmanager/v2/k3_faixa
+              image-border: 0
 
             Label
               id: dashboardBST
@@ -5186,7 +5182,8 @@ UIWindow
               width: 150
               height: 14
               text: "TOTAL 0"
-              margin-left: 226
+              margin-left: 150
+              margin-top: 14
               font: ChakraPetch-SemiBold_12
               color: #7f94b1
 

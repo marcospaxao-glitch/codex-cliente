@@ -2076,7 +2076,7 @@ function PokemonManager.refreshBaseSelection()
         card:setVisible(true)
         local isSelected = i == PokemonManager.selected
         card:setBackgroundColor('#00000000')
-        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'kx_slot_on' or 'kx_slot'))
+        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'k3_slot_on' or 'k3_slot'))
         local level = card:recursiveGetChildById('level')
         if level then level:setColor(isSelected and '#ffd24a' or '#9bb6dc') end
       else
@@ -2605,7 +2605,7 @@ function PokemonManager.updateDashboard()
         end
         if slot then slot:setText('#' .. tostring(i)) end
         card:setBackgroundColor('#00000000')
-        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'kx_slot_on' or 'kx_slot'))
+        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'k3_slot_on' or 'k3_slot'))
       else
         card:setVisible(false)
       end
@@ -2785,14 +2785,19 @@ function PokemonManager.updateDashboard()
     end
     if hnt then hnt:setText(hint) end
     if acc then acc:setBackgroundColor(active and '#72e6a0' or '#3a5170') end
-    tile:setImageSource('/modules/game_pokemonmanager/v2/' .. (active and 'pmx_card_green' or 'kx_card'))
+    tile:setImageSource('/modules/game_pokemonmanager/v2/' .. (active and 'pmx_card_green' or 'k3_card'))
+    local iconeArte = ({dashboardTileHeld = 'k3_ic_held', dashboardTileEquip = 'k3_ic_mega', dashboardTileMoves = 'k3_ic_moves', dashboardTilePassive = 'k3_ic_passiva'})[id]
+    local fundo = tile:recursiveGetChildById('tileIconBg')
+    if fundo and iconeArte then
+      fundo:setImageSource('/modules/game_pokemonmanager/v2/' .. (((tonumber(clientId) or 0) > 0) and 'k3_ic_vazio' or iconeArte))
+    end
     local cid = tonumber(clientId) or 0
     if item then
       item:setItemId(cid)
       item:setVisible(cid > 0)
     end
     if ico then
-      if cid > 0 or not iconName then
+      if cid > 0 or not iconName or iconeArte then
         ico:setVisible(false)
       else
         ico:setImageSource(PokemonManager.navIconPath .. iconName .. '.png')
@@ -5366,7 +5371,7 @@ function PokemonManager.updateFriendCards()
           miniFill:setBackgroundColor(PokemonManager.getFriendshipColor(friendship))
         end
         card:setBackgroundColor('#00000000')
-        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'kx_slot_on' or 'kx_slot'))
+        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'k3_slot_on' or 'k3_slot'))
       else
         card:setVisible(false)
       end
@@ -6087,9 +6092,9 @@ PokemonManager.ABAS = {
   {id = 'resumo', arte = 94,  nome = 'RESUMO',   icone = 'resumo',     paginas = {{'summary', 'navSummary', 'Resumo'}}},
   {id = 'status', arte = 88,  nome = 'STATUS',   icone = 'ev',         paginas = {{'base', 'navBase', 'Atributos'}, {'vitamins', 'navVitamins', 'Vitaminas'}}, extras = {ev = true}},
   {id = 'combate', arte = 99, nome = 'COMBATE',  icone = 'moves',      paginas = {{'moves', 'navMoves', 'Moves'}, {'abilities', 'navAbilities', 'Habilidades'}}},
-  {id = 'itens', arte = 78,   nome = 'ITENS',    icone = 'held',       paginas = {{'held', 'navHeld', 'Itens Equip'}}},
+  {id = 'itens', arte = 79,   nome = 'ITENS',    icone = 'held',       paginas = {{'held', 'navHeld', 'Itens Equip'}}},
   {id = 'vinculo', arte = 95, nome = 'VINCULO',  icone = 'amizade',    paginas = {{'friend', 'navFriend', 'Amizade'}}},
-  {id = 'evolucao', arte = 107, nome = 'EVOLUCAO', icone = 'evolucao',  paginas = {{'evolution', 'navEvolution', 'Evolucao'}}},
+  {id = 'evolucao', arte = 105, nome = 'EVOLUCAO', icone = 'evolucao',  paginas = {{'evolution', 'navEvolution', 'Evolucao'}}},
   {id = 'outros', arte = 92,  nome = 'OUTROS',   icone = 'incubadora', paginas = {{'incubators', 'navIncubators', 'Incubadoras'}}},
 }
 
