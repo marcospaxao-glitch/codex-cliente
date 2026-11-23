@@ -1601,6 +1601,10 @@ function PokemonManager.startIncubator(slot, incubatorId)
   -- O servidor continua sendo a autoridade: ele valida o item, remove o ovo
   -- e grava a duracao correspondente.
   local egg = PokemonManager.incubEggChoice or 'random'
+  if egg == 'random' and (tonumber(PokemonManager.pokeEggCount) or 0) <= 0 then
+    modules.game_textmessage.displayFailureMessage('Voce nao tem nenhum ovo. Consiga um Pokemon Egg (Loja/Gachas) ou um ovo da Creche e volte aqui.')
+    return
+  end
   proto:sendExtendedOpcode(PokemonManager.opcode, 'INCUBATOR_START|' .. slot .. '|' .. incubatorId ..
     (egg ~= 'random' and ('|' .. egg) or ''))
 end
@@ -1611,16 +1615,24 @@ function PokemonManager.updateIncubEggPicker()
   local box = win and win:recursiveGetChildById('incubEggChoices')
   if not box then return end
   box:destroyChildren()
-  local found = PokemonManager.incubEggChoice == 'random'
+  local temAleatorio = (tonumber(PokemonManager.pokeEggCount) or 0) > 0
+  local found = temAleatorio and PokemonManager.incubEggChoice == 'random'
   for _, e in ipairs(PokemonManager.crecheEggs) do
     if e.id == PokemonManager.incubEggChoice then found = true end
   end
-  if not found then PokemonManager.incubEggChoice = 'random' end
+  if not found then
+    PokemonManager.incubEggChoice = 'random'
+    if not temAleatorio and PokemonManager.crecheEggs[1] then PokemonManager.incubEggChoice = PokemonManager.crecheEggs[1].id end
+  end
   local function nice(name)
     return (tostring(name or ''):gsub("(%a)([%w']*)", function(a, b) return a:upper() .. b end))
   end
-  local options = {{id = 'random', name = 'Pokemon Egg', clientId = PokemonManager.pokeEggClientId,
-    sub = 'Aleatorio  x' .. tostring(PokemonManager.pokeEggCount or 0)}}
+  -- so mostra os ovos que o jogador TEM (antes aparecia "Pokemon Egg x0" e parecia que havia ovo)
+  local options = {}
+  if temAleatorio then
+    options[1] = {id = 'random', name = 'Pokemon Egg', clientId = PokemonManager.pokeEggClientId,
+      sub = 'Voce tem ' .. tostring(PokemonManager.pokeEggCount)}
+  end
   for _, e in ipairs(PokemonManager.crecheEggs) do
     options[#options + 1] = {id = e.id, name = nice(e.species), clientId = e.clientId, poke = e.species,
       sub = (e.gender == 'M' and 'M' or (e.gender == 'F' and 'F' or '-')) .. '  IV ' .. e.pct .. '%'}
@@ -1641,6 +1653,10 @@ function PokemonManager.updateIncubEggPicker()
     nextB:setEnabled(page < pages)
     nextB.onClick = function() PokemonManager.incubEggPage = page + 1 PokemonManager.updateIncubEggPicker() return true end
   end
+  local vazio = win:recursiveGetChildById('incubEggEmpty')
+  if vazio then vazio:setVisible(#options == 0) end
+  if prev then prev:setVisible(pages > 1) end
+  if nextB then nextB:setVisible(pages > 1) end
   local shown = {}
   for i = (page - 1) * perPage + 1, math.min(#options, page * perPage) do shown[#shown + 1] = options[i] end
   for _, o in ipairs(shown) do
