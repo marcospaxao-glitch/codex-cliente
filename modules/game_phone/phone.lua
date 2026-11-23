@@ -672,6 +672,7 @@ local function showMarket(buffer)
       market.page = tonumber(f[3]) or 1
       market.pages = tonumber(f[4]) or 1
       mineTab = market.tab == -2
+      market.bal = { GOLD = tonumber(f[5]) or 0, POKECOINS = tonumber(f[6]) or 0, TOKENS = tonumber(f[7]) or 0, DONATE = tonumber(f[8]) or 0 }
       W('balanceLabel'):setText('GP ' .. formatNumber(f[5]) .. '  |  Coins ' .. formatNumber(f[6]) .. '  |  Tk ' .. formatNumber(f[7]) .. '  |  Dn ' .. formatNumber(f[8]))
       if not W('searchEdit'):isFocused() then
         W('searchEdit'):setText(f[9] or '')
@@ -715,9 +716,14 @@ local function showMarket(buffer)
           qtyEdit:setText('1')
           qtyEdit:setTooltip('Quantidade (1 a ' .. formatNumber(count) .. ')')
           local function showTotal()
-            infoLabel:setText('Total de ' .. formatNumber(qty) .. ': ' .. formatNumber(unitPrice * qty) .. ' ' .. (CURRENCY_NAME[f[9]] or f[9] or ''))
+            local total = unitPrice * qty
+            local falta = total > ((market.bal or {})[f[9]] or 0)
+            infoLabel:setText('TOTAL ' .. formatNumber(qty) .. 'x: ' .. formatNumber(total) .. ' ' .. (CURRENCY_NAME[f[9]] or f[9] or '') .. (falta and '  (sem saldo)' or ''))
+            infoLabel:setColor(falta and '#ff6b6b' or '#ffd84a')
+            button:setEnabled(not falta)
+            button:setText(falta and 'Sem saldo' or 'Comprar')
+            resetConfirm()
           end
-          showTotal()
           qtyEdit.onTextChange = function(self, text)
             local digits = tostring(text or ''):gsub('%D', '')
             if digits ~= text then self:setText(digits) return end
@@ -726,10 +732,10 @@ local function showMarket(buffer)
             qty = math.max(1, n or 1)
             showTotal()
           end
-          button:setText('Comprar')
           button.onClick = function()
             if confirmClick(button, 'B' .. offerId .. 'x' .. qty) then send('MBUY|' .. offerId .. '|' .. qty) end
           end
+          showTotal()
         else
           button:setText('Comprar')
           button.onClick = function()

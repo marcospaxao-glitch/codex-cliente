@@ -456,16 +456,45 @@ local function buildMarket(rows, mine)
       local infoLabel = widget:getChildById('infoLabel')
       infoLabel:setText(info)
       widget:setTooltip(title .. '\n' .. info .. '\nPreco: ' .. money(row.currency, row.price) .. (row.unit and ' por unidade' or ''))
+      local priceLabel = widget:getChildById('priceLabel')
+      -- saldo: avisa na propria linha (sem saldo = botao desligado)
+      local function checaSaldo(total)
+        if row.mine then return end
+        local tem = balances[row.currency] or 0
+        local falta = total > tem
+        button:setEnabled(not falta)
+        if falta then
+          button:setText('Sem saldo')
+          button:setTooltip('Saldo no PokeBank: ' .. money(row.currency, tem) .. '\nPrecisa de: ' .. money(row.currency, total))
+        else
+          button:setTooltip('')
+        end
+        return falta
+      end
+      local refresh = function() checaSaldo(row.price) end
       if showQty then
         local qty = math.max(1, math.min(row.count, buyQty[row.id] or 1))
         buyQty[row.id] = qty
+        priceLabel:setTextAlign(AlignCenter)
+        priceLabel:setBackgroundColor('#2a2206')
+        priceLabel:setBorderWidth(1)
+        priceLabel:setBorderColor('#f2c400')
         local function showTotal()
           local n = buyQty[row.id] or 1
-          infoLabel:setText('Vendedor: ' .. row.seller .. '  -  Total de ' .. fmt(n) .. ': ' .. money(row.currency, row.price * n))
+          local total = row.price * n
+          infoLabel:setText('Vendedor: ' .. row.seller .. '  -  ' .. money(row.currency, row.price) .. ' por unidade')
+          priceLabel:setText('TOTAL  ' .. money(row.currency, total))
+          local falta = checaSaldo(total)
+          priceLabel:setColor(falta and '#ff6b6b' or '#ffd84a')
+          priceLabel:setBorderColor(falta and '#e04848' or '#f2c400')
+          if not falta then
+            local waiting = armedOffer == row.id and os.time() - armedAt <= 4
+            button:setText(waiting and 'Confirmar?' or 'Comprar')
+          end
         end
         qtyEdit:setText(tostring(qty))
         qtyEdit:setTooltip('Quantidade (1 a ' .. fmt(row.count) .. ')')
-        showTotal()
+        refresh = showTotal
         qtyEdit.onTextChange = function(self, text)
           local digits = tostring(text or ''):gsub('%D', '')
           if digits ~= text then self:setText(digits) return end
@@ -482,6 +511,7 @@ local function buildMarket(rows, mine)
       else
         local waiting = armedOffer == row.id and os.time() - armedAt <= 4
         button:setText(waiting and 'Confirmar?' or 'Comprar')
+        refresh()
         button.onClick = function(self)
           if armedOffer == row.id and os.time() - armedAt <= 4 then
             armedOffer = nil

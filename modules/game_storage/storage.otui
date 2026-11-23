@@ -362,11 +362,13 @@ PCMarketRow < UIWidget
 
   Label
     id: priceLabel
-    width: 130
+    width: 170
+    height: 24
     anchors.right: qtyEdit.left
     anchors.verticalCenter: parent.verticalCenter
     margin-right: 8
     text-align: right
+    padding: 0 8 0 8
     font: verdana-11px-rounded
     color: #f2c400
     phantom: true
