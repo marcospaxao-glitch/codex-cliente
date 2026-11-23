@@ -6155,6 +6155,10 @@ function PokemonManager.montarAbas()
   if celular then
     local logo = win:recursiveGetChildById('codexHeaderLogo')
     if logo then logo:hide() end
+    local tit = win:recursiveGetChildById('codexHeaderTitulo')
+    if tit then tit:setWidth(340); tit:setHeight(28) end
+    local fx = win:recursiveGetChildById('btnClose')
+    if fx then fx:setWidth(31); fx:setHeight(29); fx:setMarginTop(4) end
   end
   local icone = win:recursiveGetChildById('dashboardIcon')
   if icone then icone.codexLookSize = 170 end

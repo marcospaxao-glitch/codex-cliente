@@ -541,7 +541,7 @@ PMSummaryStatRow2 < Panel
     anchors.verticalCenter: parent.verticalCenter
     width: 62
     height: 14
-    margin-left: 16
+    margin-left: 22
     text-align: left
     font: ChakraPetch-Bold_12
     color: #9bb6dc
@@ -610,7 +610,7 @@ PMSummaryStatRow2 < Panel
     color: #7f94b1
 
 PMSummaryTile < Panel
-  height: 62
+  height: 74
   phantom: false
   focusable: false
   background-color: #00000000
@@ -636,9 +636,9 @@ PMSummaryTile < Panel
     id: tileIconBg
     anchors.left: parent.left
     anchors.verticalCenter: parent.verticalCenter
-    width: 38
-    height: 38
-    margin-left: 14
+    width: 44
+    height: 44
+    margin-left: 16
     background-color: #00000000
     border-width: 0
     border-color: #1c3350
@@ -669,10 +669,10 @@ PMSummaryTile < Panel
     anchors.left: tileIconBg.right
     anchors.right: parent.right
     anchors.top: parent.top
-    height: 12
-    margin-left: 8
-    margin-right: 10
-    margin-top: 10
+    height: 13
+    margin-left: 10
+    margin-right: 18
+    margin-top: 14
     text-align: left
     font: verdana-11px-antialised
     color: #7f94b1
@@ -684,8 +684,8 @@ PMSummaryTile < Panel
     anchors.right: parent.right
     anchors.top: tileLabel.bottom
     height: 14
-    margin-left: 8
-    margin-right: 10
+    margin-left: 10
+    margin-right: 18
     margin-top: 2
     text-align: left
     font: verdana-11px-antialised
@@ -697,10 +697,10 @@ PMSummaryTile < Panel
     anchors.left: tileIconBg.right
     anchors.right: parent.right
     anchors.top: tileValue.bottom
-    height: 12
-    margin-left: 8
-    margin-right: 8
-    margin-top: 1
+    height: 13
+    margin-left: 10
+    margin-right: 18
+    margin-top: 2
     text-align: left
     font: verdana-11px-antialised
     color: #5f7596
@@ -1366,7 +1366,7 @@ UIWindow
         font: verdana-11px-rounded
         color: #8fd3ff
 
-      Button
+      UIButton
         id: btnClose
         anchors.top: parent.top
         anchors.right: parent.right
@@ -1378,10 +1378,14 @@ UIWindow
         background-color: #00000000
         border-width: 0
         image-source: /modules/game_pokemonmanager/v2/k4_fechar
+        image-clip: 0 0 77 72
+        image-border: 0
 
         $hover:
-          background-color: #00000000
           opacity: 0.8
+
+        $pressed:
+          opacity: 0.6
 
     Panel
       id: codexAbasBarra
@@ -4330,7 +4334,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 7 0 0 12
+                margin: 10 0 0 17
                 text: "#1"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -4373,7 +4377,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 7 0 0 12
+                margin: 10 0 0 17
                 text: "#2"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -4416,7 +4420,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 7 0 0 12
+                margin: 10 0 0 17
                 text: "#3"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -4459,7 +4463,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 7 0 0 12
+                margin: 10 0 0 17
                 text: "#4"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -4502,7 +4506,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 7 0 0 12
+                margin: 10 0 0 17
                 text: "#5"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -4545,7 +4549,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 7 0 0 12
+                margin: 10 0 0 17
                 text: "#6"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -4888,10 +4892,10 @@ UIWindow
               id: dashboardGradeBox
               anchors.right: parent.right
               anchors.top: parent.top
-              width: 200
-              height: 117
-              margin-right: 14
-              margin-top: 16
+              width: 228
+              height: 133
+              margin-right: 12
+              margin-top: 9
               background-color: #00000000
               border-width: 0
               image-source: /modules/game_pokemonmanager/v2/k4_iv
@@ -4901,10 +4905,10 @@ UIWindow
                 id: dashboardGradeTitle
                 anchors.top: parent.top
                 anchors.left: parent.left
-                width: 130
-                height: 14
+                width: 148
+                height: 15
                 margin-top: 3
-                margin-left: 42
+                margin-left: 48
                 text: "QUALIDADE IV"
                 text-align: center
                 font: verdana-11px-antialised
@@ -4916,7 +4920,7 @@ UIWindow
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: 140
                 height: 20
-                margin-top: 5
+                margin-top: 3
                 text: "0.0%"
                 text-align: center
                 font: ChakraPetch-Bold_20
@@ -4940,7 +4944,7 @@ UIWindow
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: 120
                 height: 34
-                margin-top: 5
+                margin-top: 4
                 focusable: false
 
                 Panel
@@ -5069,7 +5073,7 @@ UIWindow
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: 120
                 height: 12
-                margin-top: 3
+                margin-top: 2
                 focusable: false
 
                 Label
@@ -5154,7 +5158,7 @@ UIWindow
             background-color: #00000000
             border-width: 0
             image-source: /modules/game_pokemonmanager/v2/k4_principal
-            image-border: 32
+            image-border: 40
             border-color: #1c3350
             focusable: false
 
@@ -5202,7 +5206,7 @@ UIWindow
               width: 56
               height: 14
               margin-left: 432
-              margin-top: 40
+              margin-top: 36
               text: "IV"
               font: verdana-11px-antialised
               color: #5f7596
@@ -5213,7 +5217,7 @@ UIWindow
               width: 70
               height: 14
               margin-left: 484
-              margin-top: 40
+              margin-top: 36
               text: "EV"
               font: verdana-11px-antialised
               color: #5f7596
@@ -5224,7 +5228,7 @@ UIWindow
               width: 60
               height: 14
               margin-left: 546
-              margin-top: 40
+              margin-top: 36
               text: "VITAMINA"
               font: verdana-11px-antialised
               color: #5f7596
@@ -5234,42 +5238,42 @@ UIWindow
               anchors.top: parent.top
               anchors.left: parent.left
               anchors.right: parent.right
-              margin-top: 56
+              margin-top: 50
 
             PMSummaryStatRow2
               id: dashboardStatRow2
               anchors.top: parent.top
               anchors.left: parent.left
               anchors.right: parent.right
-              margin-top: 75
+              margin-top: 68
 
             PMSummaryStatRow2
               id: dashboardStatRow3
               anchors.top: parent.top
               anchors.left: parent.left
               anchors.right: parent.right
-              margin-top: 94
+              margin-top: 86
 
             PMSummaryStatRow2
               id: dashboardStatRow4
               anchors.top: parent.top
               anchors.left: parent.left
               anchors.right: parent.right
-              margin-top: 113
+              margin-top: 104
 
             PMSummaryStatRow2
               id: dashboardStatRow5
               anchors.top: parent.top
               anchors.left: parent.left
               anchors.right: parent.right
-              margin-top: 132
+              margin-top: 122
 
             PMSummaryStatRow2
               id: dashboardStatRow6
               anchors.top: parent.top
               anchors.left: parent.left
               anchors.right: parent.right
-              margin-top: 151
+              margin-top: 140
 
           Panel
             id: dashboardTiles
@@ -5277,7 +5281,7 @@ UIWindow
             anchors.left: parent.left
             anchors.right: parent.right
             margin: 10 16 0 16
-            height: 62
+            height: 74
             focusable: false
 
             PMSummaryTile
@@ -5938,7 +5942,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#1"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -5981,7 +5985,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#2"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -6024,7 +6028,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#3"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -6067,7 +6071,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#4"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -6110,7 +6114,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#5"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -6153,7 +6157,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#6"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -8815,7 +8819,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#1"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -8858,7 +8862,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#2"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -8901,7 +8905,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#3"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -8944,7 +8948,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#4"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -8987,7 +8991,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#5"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -9030,7 +9034,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#6"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -9544,7 +9548,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#1"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -9587,7 +9591,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#2"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -9630,7 +9634,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#3"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -9673,7 +9677,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#4"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -9716,7 +9720,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#5"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -9759,7 +9763,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#6"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -10401,7 +10405,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#1"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -10444,7 +10448,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#2"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -10487,7 +10491,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#3"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -10530,7 +10534,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#4"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -10573,7 +10577,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#5"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -10616,7 +10620,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#6"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -11009,7 +11013,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#1"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -11073,7 +11077,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#2"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -11137,7 +11141,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#3"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -11201,7 +11205,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#4"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -11265,7 +11269,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#5"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -11329,7 +11333,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#6"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -12543,7 +12547,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#1"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -12586,7 +12590,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#2"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -12629,7 +12633,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#3"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -12672,7 +12676,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#4"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -12715,7 +12719,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#5"
                 font: verdana-11px-antialised
                 color: #7f97b8
@@ -12758,7 +12762,7 @@ UIWindow
                 anchors.left: parent.left
                 width: 20
                 height: 14
-                margin: 4 0 0 5
+                margin: 8 0 0 14
                 text: "#6"
                 font: verdana-11px-antialised
                 color: #7f97b8
