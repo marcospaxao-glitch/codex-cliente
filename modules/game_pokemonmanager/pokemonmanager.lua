@@ -4015,7 +4015,7 @@ end
 -- mais "layout: verticalBox" no otui (cada PMMoveRow e posicionado na
 -- mao aqui, via addAnchor/margin), porque o card precisou ficar
 -- compacto (2 linhas) pra caber em meia largura.
-local PM_MOVE_ROW_HEIGHT = 48
+local PM_MOVE_ROW_HEIGHT = 54
 local PM_MOVE_ROW_SPACING = 6
 local PM_MOVE_COLUMN_GAP = 8
 
