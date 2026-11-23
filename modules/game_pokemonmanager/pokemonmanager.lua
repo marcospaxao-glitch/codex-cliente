@@ -6082,14 +6082,14 @@ end
 
 PM_V2 = '/modules/game_pokemonmanager/v2/'
 PokemonManager.ABAS = {
-  {id = 'perfil', arte = 216,  nome = 'PERFIL',   icone = 'perfil',     paginas = {{'profile', 'navProfile', 'Perfil'}}},
-  {id = 'resumo', arte = 215,  nome = 'RESUMO',   icone = 'resumo',     paginas = {{'summary', 'navSummary', 'Resumo'}}},
-  {id = 'status', arte = 201,  nome = 'STATUS',   icone = 'ev',         paginas = {{'base', 'navBase', 'Atributos'}, {'vitamins', 'navVitamins', 'Vitaminas'}}, extras = {ev = true}},
-  {id = 'combate', arte = 197, nome = 'COMBATE',  icone = 'moves',      paginas = {{'moves', 'navMoves', 'Moves'}, {'abilities', 'navAbilities', 'Habilidades'}}},
-  {id = 'itens', arte = 163,   nome = 'ITENS',    icone = 'held',       paginas = {{'held', 'navHeld', 'Itens Equip'}}},
-  {id = 'vinculo', arte = 181, nome = 'VINCULO',  icone = 'amizade',    paginas = {{'friend', 'navFriend', 'Amizade'}}},
-  {id = 'evolucao', arte = 173, nome = 'EVOLUCAO', icone = 'evolucao',  paginas = {{'evolution', 'navEvolution', 'Evolucao'}}},
-  {id = 'outros', arte = 162,  nome = 'OUTROS',   icone = 'incubadora', paginas = {{'incubators', 'navIncubators', 'Incubadoras'}}},
+  {id = 'perfil', arte = 88,  nome = 'PERFIL',   icone = 'perfil',     paginas = {{'profile', 'navProfile', 'Perfil'}}},
+  {id = 'resumo', arte = 97,  nome = 'RESUMO',   icone = 'resumo',     paginas = {{'summary', 'navSummary', 'Resumo'}}},
+  {id = 'status', arte = 91,  nome = 'STATUS',   icone = 'ev',         paginas = {{'base', 'navBase', 'Atributos'}, {'vitamins', 'navVitamins', 'Vitaminas'}}, extras = {ev = true}},
+  {id = 'combate', arte = 102, nome = 'COMBATE',  icone = 'moves',      paginas = {{'moves', 'navMoves', 'Moves'}, {'abilities', 'navAbilities', 'Habilidades'}}},
+  {id = 'itens', arte = 81,   nome = 'ITENS',    icone = 'held',       paginas = {{'held', 'navHeld', 'Itens Equip'}}},
+  {id = 'vinculo', arte = 98, nome = 'VINCULO',  icone = 'amizade',    paginas = {{'friend', 'navFriend', 'Amizade'}}},
+  {id = 'evolucao', arte = 110, nome = 'EVOLUCAO', icone = 'evolucao',  paginas = {{'evolution', 'navEvolution', 'Evolucao'}}},
+  {id = 'outros', arte = 95,  nome = 'OUTROS',   icone = 'incubadora', paginas = {{'incubators', 'navIncubators', 'Incubadoras'}}},
 }
 
 local function pmAbaDaPagina(page)
@@ -6116,7 +6116,7 @@ function PokemonManager.marcarAba(page)
     if b then
       local on = aba == atual
       b:setOn(on)
-      b:setImageSource(PM_V2 .. 'kx_tab_' .. aba.id .. (on and '_on' or ''))
+      b:setImageSource(PM_V2 .. 'kt_' .. aba.id .. (on and '_on' or ''))
     end
   end
   local sub = win:recursiveGetChildById('codexSubAbas')
@@ -6150,17 +6150,14 @@ function PokemonManager.montarAbas()
     local logo = win:recursiveGetChildById('codexHeaderLogo')
     if logo then logo:hide() end
   end
-  local soma = 0
-  for _, aba in ipairs(PokemonManager.ABAS) do soma = soma + aba.arte end
-  local fator = (818 - 24 - 4 * (#PokemonManager.ABAS - 1)) / soma
   local icone = win:recursiveGetChildById('dashboardIcon')
-  if icone then icone.codexLookSize = 150 end
+  if icone then icone.codexLookSize = 170 end
   for _, aba in ipairs(PokemonManager.ABAS) do
     local b = g_ui.createWidget('PMTab', barra)
     b:setText('')
-    b:setWidth(math.floor(aba.arte * fator))
-    b:setHeight(math.floor(59 * fator))
-    b:setImageSource(PM_V2 .. 'kx_tab_' .. aba.id)
+    b:setWidth(aba.arte)
+    b:setHeight(32)
+    b:setImageSource(PM_V2 .. 'kt_' .. aba.id)
     local icon = b:getChildById('icon')
     if icon then icon:hide() end
     b.onClick = function()
