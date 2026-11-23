@@ -1102,38 +1102,59 @@ end
 -- nomes curtos para caber na linha de categorias (o nome inteiro fica no tooltip)
 local SUB_CURTO = { ['mega stones'] = 'Megas', ['held items'] = 'Helds', ['pokebolas'] = 'Bolas' }
 
--- celular: a janela cabe na altura da tela e o conteudo rola arrastando o dedo
+
+-- ============================================================
+-- celular: arrastar com o dedo rola as listas (qualquer painel com barra)
+-- ============================================================
+local function codexDentro(w, pai)
+  while w do
+    if w == pai then return true end
+    w = w:getParent()
+  end
+  return false
+end
+
+local function codexArrastoArea(area)
+  if area.codexArrasto then return end
+  area.codexArrasto = true
+  local ultimoY, ultimoMs = nil, 0
+  area.onMouseMove = function(self, pos, moved)
+    local barra = self.verticalScrollBar
+    local apertado = g_ui.getPressedWidget()
+    if not barra or not apertado or g_ui.getDraggingWidget() or apertado:isDraggable()
+        or codexDentro(apertado, barra) or not codexDentro(apertado, self)
+        or barra:getMaximum() <= barra:getMinimum() then
+      ultimoY = nil
+      return false
+    end
+    local agora = g_clock.millis()
+    if ultimoY and agora - ultimoMs < 250 then
+      local dy = pos.y - ultimoY
+      if dy ~= 0 then barra:setValue(barra:getValue() - dy) end
+    end
+    ultimoY, ultimoMs = pos.y, agora
+    return true -- a lista de dentro rola; a de fora fica parada
+  end
+end
+
+local function codexArrastoRolagem(raiz)
+  if not raiz or raiz:isDestroyed() then return end
+  local function varrer(w)
+    if w.verticalScrollBar then codexArrastoArea(w) end
+    for _, filho in ipairs(w:getChildren()) do varrer(filho) end
+  end
+  varrer(raiz)
+end
+
+-- celular: a janela cabe na altura da tela e as listas rolam arrastando o dedo
 local function ajustarCelular()
   if not window then return end
   local alturaTela = g_ui.getRootWidget():getHeight()
   if window:getHeight() > alturaTela - 8 then
     window:setHeight(alturaTela - 8)
   end
-  local conteudo, barra = W('contentPanel'), W('pcScroll')
-  if not conteudo or not barra or conteudo.codexArrasto then return end
-  conteudo.codexArrasto = true
-  local ultimoY = nil
-  local function dentro(w, pai)
-    while w do
-      if w == pai then return true end
-      w = w:getParent()
-    end
-    return false
-  end
-  conteudo.onMouseMove = function(self, pos, moved)
-    local apertado = g_ui.getPressedWidget()
-    -- arrastando item (para a mochila etc.) nao rola
-    if not apertado or g_ui.getDraggingWidget() or apertado:isDraggable() or not dentro(apertado, self) then
-      ultimoY = nil
-      return false
-    end
-    if ultimoY then
-      local dy = pos.y - ultimoY
-      if dy ~= 0 then barra:setValue(barra:getValue() - dy) end
-    end
-    ultimoY = pos.y
-    return false
-  end
+  -- as listas sao recriadas, mas os paineis com barra ficam: varre sempre
+  scheduleEvent(function() codexArrastoRolagem(window) end, 50)
 end
 
 local lastItemTab = nil -- ultima aba de itens aberta (a aba "Itens" volta nela)

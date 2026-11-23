@@ -1922,7 +1922,7 @@ UIWindow
         anchors.left: sidebar.right
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        vertical-scrollbar: contentScrollBar
+        vertical-scrollbar: contentScrollMob
         margin-left: 0
         margin-right: 4
         focusable: false
@@ -15080,3 +15080,13 @@ UIWindow
             text: "Vitaminas entram na formula do servidor. PP MAX e PP UP contam no limite de 10; LEVEL nao."
             font: verdana-11px-rounded
             color: #5f7596
+
+      VerticalScrollBar
+        id: contentScrollMob
+        anchors.top: content.top
+        anchors.bottom: content.bottom
+        anchors.left: content.right
+        width: 10
+        step: 24
+        pixels-scroll: true
+        visible: false

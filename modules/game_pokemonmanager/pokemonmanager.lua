@@ -6157,6 +6157,52 @@ function PokemonManager.marcarAba(page)
   end
 end
 
+
+-- ============================================================
+-- celular: arrastar com o dedo rola as listas (qualquer painel com barra)
+-- ============================================================
+local function codexDentro(w, pai)
+  while w do
+    if w == pai then return true end
+    w = w:getParent()
+  end
+  return false
+end
+
+local function codexArrastoArea(area)
+  if area.codexArrasto then return end
+  area.codexArrasto = true
+  local ultimoY, ultimoMs = nil, 0
+  area.onMouseMove = function(self, pos, moved)
+    local barra = self.verticalScrollBar
+    local apertado = g_ui.getPressedWidget()
+    if not barra or not apertado or g_ui.getDraggingWidget() or apertado:isDraggable()
+        or codexDentro(apertado, barra) or not codexDentro(apertado, self)
+        or barra:getMaximum() <= barra:getMinimum() then
+      ultimoY = nil
+      return false
+    end
+    local agora = g_clock.millis()
+    if ultimoY and agora - ultimoMs < 250 then
+      local dy = pos.y - ultimoY
+      if dy ~= 0 then barra:setValue(barra:getValue() - dy) end
+    end
+    ultimoY, ultimoMs = pos.y, agora
+    return true -- a lista de dentro rola; a de fora fica parada
+  end
+end
+
+local function codexArrastoRolagem(raiz)
+  if not raiz or raiz:isDestroyed() then return end
+  local function varrer(w)
+    if w.verticalScrollBar then codexArrastoArea(w) end
+    for _, filho in ipairs(w:getChildren()) do varrer(filho) end
+  end
+  varrer(raiz)
+end
+
+PokemonManager.codexArrastoRolagem = codexArrastoRolagem
+
 function PokemonManager.montarAbas()
   local win = PokemonManager.window
   if not win or win:isDestroyed() or win.codexAbas then return end
@@ -6185,33 +6231,10 @@ function PokemonManager.montarAbas()
     if win:getHeight() > alturaTela - 8 then
       win:setHeight(alturaTela - 8)
     end
-    if barra and conteudo then
-      barra:setVisible(true)
-      barra:setWidth(16)
-      local ultimoY = nil
-      conteudo.onMouseMove = function(self, pos, moved)
-        -- arrastar com o dedo: so enquanto algo dentro do conteudo esta pressionado
-        local apertado = g_ui.getPressedWidget()
-        local function dentro(w, pai)
-          while w do
-            if w == pai then return true end
-            w = w:getParent()
-          end
-          return false
-        end
-        if not apertado or g_ui.getDraggingWidget() or dentro(apertado, barra)
-            or not dentro(apertado, self) then
-          ultimoY = nil
-          return false
-        end
-        if ultimoY then
-          local dy = pos.y - ultimoY
-          if dy ~= 0 then barra:setValue(barra:getValue() - dy) end
-        end
-        ultimoY = pos.y
-        return false
-      end
-    end
+    if barra then barra:setVisible(false) end
+    local mob = win:recursiveGetChildById('contentScrollMob')
+    if mob then mob:setVisible(true) end
+    scheduleEvent(function() codexArrastoRolagem(win) end, 200)
   end
   local icone = win:recursiveGetChildById('dashboardIcon')
   if icone then icone.codexLookSize = 170 end
