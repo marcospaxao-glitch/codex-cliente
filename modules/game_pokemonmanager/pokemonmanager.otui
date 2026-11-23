@@ -1378,11 +1378,7 @@ UIWindow
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: btnClose.left
         margin-right: 12
-        size: 300 26
-        layout:
-          type: horizontalBox
-          spacing: 12
-          align-right: true
+        size: 214 26
 
       Label
         id: version

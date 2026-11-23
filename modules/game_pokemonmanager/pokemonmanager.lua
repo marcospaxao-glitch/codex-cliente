@@ -6136,8 +6136,19 @@ function PokemonManager.marcarAba(page)
   if atual then
     atual.ultima = page
     if #atual.paginas > 1 then
+      local anterior
+      sub:setWidth(#atual.paginas * 100 + (#atual.paginas - 1) * 14)
       for _, pg in ipairs(atual.paginas) do
         local s = g_ui.createWidget('PMSubTab', sub)
+        -- posicao manual (sem layout): da esquerda pra direita, 14px entre os botoes
+        s:addAnchor(AnchorTop, 'parent', AnchorTop)
+        if anterior then
+          s:addAnchor(AnchorLeft, 'prev', AnchorRight)
+          s:setMarginLeft(14)
+        else
+          s:addAnchor(AnchorLeft, 'parent', AnchorLeft)
+        end
+        anterior = s
         s:setText(pg[3])
         s:setOn((pg[1] == page or (atual.extras and atual.extras[page] and pg[1] == 'base')) and true or false)
         s.onClick = function() scheduleEvent(function() pmAbrirPagina(pg) end, 1) end
