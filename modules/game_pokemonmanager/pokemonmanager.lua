@@ -2621,7 +2621,7 @@ function PokemonManager.updateDashboard()
       end
     end
   end
-  setText('dashboardTeamCount', tostring(teamCount) .. ' / 6 NA EQUIPE')
+  setText('dashboardTeamCount', 'Equipe: ' .. tostring(teamCount) .. ' / 6')
 
   local icon = get('dashboardIcon')
   if icon then

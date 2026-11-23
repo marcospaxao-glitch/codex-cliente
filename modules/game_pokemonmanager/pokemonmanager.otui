@@ -30,7 +30,7 @@ PMSubTab < UIButton
   height: 26
   width: 100
   focusable: false
-  font: ChakraPetch-SemiBold_12
+  font: verdana-11px-rounded
   color: #9fb3cf
   background-color: #00000000
   border-width: 0
@@ -4376,12 +4376,15 @@ UIWindow
             id: dashboardTeamCount
             anchors.verticalCenter: dashboardTitleBar.verticalCenter
             anchors.right: parent.right
-            width: 220
+            width: 132
+            height: 24
             margin-right: 16
-            text: "0 / 6 NA EQUIPE"
-            text-align: right
-            font: ChakraPetch-SemiBold_12
-            color: #9bb6dc
+            text: "Equipe: 0 / 6"
+            text-align: center
+            font: verdana-11px-rounded
+            color: #ffe27a
+            image-source: /modules/game_pokemonmanager/v2/st_campo
+            image-border: 6
 
           Label
             id: dashboardSubtitle
@@ -5282,7 +5285,7 @@ UIWindow
               text: "TOTAL 0"
               margin-left: 160
               margin-top: 14
-              font: ChakraPetch-SemiBold_12
+              font: verdana-11px-rounded
               color: #7f94b1
 
             Label
