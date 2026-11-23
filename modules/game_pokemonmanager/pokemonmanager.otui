@@ -122,8 +122,8 @@ PMBaseTeamCard < Panel
   phantom: false
   background-color: #00000000
   border-width: 0
-  image-source: /modules/game_pokemonmanager/v2/k3_slot
-  image-border: 14
+  image-source: /modules/game_pokemonmanager/v2/k4_slot
+  image-border: 16
 
 PMActionButton < Button
   width: 30
@@ -560,7 +560,7 @@ PMSummaryStatRow2 < Panel
     id: bar
     anchors.left: value.right
     anchors.verticalCenter: parent.verticalCenter
-    width: 168
+    width: 300
     height: 8
     margin-left: 10
     background-color: #06101f
@@ -615,11 +615,11 @@ PMSummaryTile < Panel
   focusable: false
   background-color: #00000000
   border-width: 0
-  image-source: /modules/game_pokemonmanager/v2/k3_card
-  image-border: 20
+  image-source: /modules/game_pokemonmanager/v2/k4_card
+  image-border: 22
 
   $hover:
-    image-source: /modules/game_pokemonmanager/v2/k3_card_on
+    image-source: /modules/game_pokemonmanager/v2/k4_card_on
 
   Panel
     id: tileAccent
@@ -1252,7 +1252,7 @@ PMIncubEggChoice < UIWidget
 
 UIWindow
   id: pokemonManager
-  size: 818 730
+  size: 1000 760
   focusable: false
   background-color: #101F3E
   opacity: 0.99
@@ -1268,18 +1268,28 @@ UIWindow
       anchors.top: parent.top
       anchors.left: parent.left
       anchors.right: parent.right
-      height: 52
+      height: 60
       focusable: false
       background-color: #0a1428
-      image-source: /modules/game_pokemonmanager/v2/pmx_header
+      image-source: /modules/game_pokemonmanager/v2/k4_headerbg
 
       UIWidget
         id: codexHeaderLogo
-        size: 92 40
+        size: 110 47
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        margin-left: 10
-        image-source: /modules/game_pokemonmanager/v2/k3_logo
+        margin-left: 12
+        image-source: /modules/game_pokemonmanager/v2/k4_logo
+        phantom: true
+        focusable: false
+
+      UIWidget
+        id: codexHeaderTitulo
+        size: 462 38
+        anchors.left: codexHeaderLogo.right
+        anchors.verticalCenter: parent.verticalCenter
+        margin-left: 14
+        image-source: /modules/game_pokemonmanager/v2/k4_titulo
         phantom: true
         focusable: false
 
@@ -1288,6 +1298,7 @@ UIWindow
         anchors.left: parent.left
         anchors.right: parent.right
         height: 2
+        visible: false
         background-color: #f2c400
         opacity: 0.85
         focusable: false
@@ -1359,27 +1370,26 @@ UIWindow
         id: btnClose
         anchors.top: parent.top
         anchors.right: parent.right
-        margin: 11 12 0 0
-        width: 32
-        height: 32
+        margin: 12 14 0 0
+        width: 38
+        height: 36
         text: ""
         color: #e7edf7
         background-color: #00000000
         border-width: 0
-        image-source: /modules/game_pokemonmanager/v2/k3_fechar
+        image-source: /modules/game_pokemonmanager/v2/k4_fechar
 
         $hover:
-          background-color: #2a4d68
-          border-color: #f2c400
-          color: #ffffff
+          background-color: #00000000
+          opacity: 0.8
 
     Panel
       id: codexAbasBarra
       anchors.top: header.bottom
       anchors.left: parent.left
       anchors.right: parent.right
-      height: 44
-      padding: 7 12 2 12
+      height: 46
+      padding: 7 12 3 12
       focusable: false
       background-color: #0a1428
       image-source: /modules/game_pokemonmanager/v2/pm2_tabbar
@@ -4301,7 +4311,7 @@ UIWindow
             anchors.left: parent.left
             anchors.right: parent.right
             margin: 8 16 0 16
-            height: 82
+            height: 90
             focusable: false
             background-color: #00000000
             clip: false
@@ -4311,8 +4321,8 @@ UIWindow
               anchors.top: parent.top
               anchors.left: parent.left
               margin-left: 0
-              width: 118
-              height: 82
+              width: 148
+              height: 90
 
               Label
                 id: slot
@@ -4354,8 +4364,8 @@ UIWindow
               anchors.top: parent.top
               anchors.left: dashboardTeam1.right
               margin-left: 10
-              width: 118
-              height: 82
+              width: 148
+              height: 90
 
               Label
                 id: slot
@@ -4397,8 +4407,8 @@ UIWindow
               anchors.top: parent.top
               anchors.left: dashboardTeam2.right
               margin-left: 10
-              width: 118
-              height: 82
+              width: 148
+              height: 90
 
               Label
                 id: slot
@@ -4440,8 +4450,8 @@ UIWindow
               anchors.top: parent.top
               anchors.left: dashboardTeam3.right
               margin-left: 10
-              width: 118
-              height: 82
+              width: 148
+              height: 90
 
               Label
                 id: slot
@@ -4483,8 +4493,8 @@ UIWindow
               anchors.top: parent.top
               anchors.left: dashboardTeam4.right
               margin-left: 10
-              width: 118
-              height: 82
+              width: 148
+              height: 90
 
               Label
                 id: slot
@@ -4526,8 +4536,8 @@ UIWindow
               anchors.top: parent.top
               anchors.left: dashboardTeam5.right
               margin-left: 10
-              width: 118
-              height: 82
+              width: 148
+              height: 90
 
               Label
                 id: slot
@@ -4574,7 +4584,7 @@ UIWindow
             margin-top: 10
             background-color: #00000000
             border-width: 0
-            image-source: /modules/game_pokemonmanager/v2/k3_retrato
+            image-source: /modules/game_pokemonmanager/v2/k4_retrato
             focusable: false
 
             UIWidget
@@ -4583,7 +4593,7 @@ UIWindow
               anchors.bottom: parent.bottom
               width: 160
               height: 160
-              margin-bottom: 34
+              margin-bottom: 46
               focusable: false
               phantom: true
 
@@ -4593,8 +4603,8 @@ UIWindow
             anchors.top: dashboardPortrait.top
             width: 70
             height: 20
-            margin-left: 14
-            margin-top: 12
+            margin-left: 30
+            margin-top: 14
             text: "SLOT #-"
             text-align: center
             font: ChakraPetch-Bold_12
@@ -4611,8 +4621,8 @@ UIWindow
             height: 150
             background-color: #00000000
             border-width: 0
-            image-source: /modules/game_pokemonmanager/v2/k3_largo
-            image-border: 22
+            image-source: /modules/game_pokemonmanager/v2/k4_info
+            image-border: 24
             border-color: #1c3350
             focusable: false
 
@@ -4878,22 +4888,21 @@ UIWindow
               id: dashboardGradeBox
               anchors.right: parent.right
               anchors.top: parent.top
-              width: 160
-              height: 130
-              margin-right: 12
-              margin-top: 10
+              width: 200
+              height: 117
+              margin-right: 14
+              margin-top: 16
               background-color: #00000000
               border-width: 0
-              image-source: /modules/game_pokemonmanager/v2/k3_iv
-              image-border: 26
+              image-source: /modules/game_pokemonmanager/v2/k4_iv
               focusable: false
 
               Label
                 id: dashboardGradeTitle
                 anchors.top: parent.top
                 anchors.left: parent.left
-                width: 88
-                height: 16
+                width: 130
+                height: 14
                 margin-top: 3
                 margin-left: 42
                 text: "QUALIDADE IV"
@@ -4907,7 +4916,7 @@ UIWindow
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: 140
                 height: 20
-                margin-top: 8
+                margin-top: 5
                 text: "0.0%"
                 text-align: center
                 font: ChakraPetch-Bold_20
@@ -4931,7 +4940,7 @@ UIWindow
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: 120
                 height: 34
-                margin-top: 8
+                margin-top: 5
                 focusable: false
 
                 Panel
@@ -5144,8 +5153,8 @@ UIWindow
             height: 184
             background-color: #00000000
             border-width: 0
-            image-source: /modules/game_pokemonmanager/v2/k3_principal
-            image-border: 26
+            image-source: /modules/game_pokemonmanager/v2/k4_principal
+            image-border: 32
             border-color: #1c3350
             focusable: false
 
@@ -5163,15 +5172,15 @@ UIWindow
               id: dashboardStatsTitle
               anchors.left: parent.left
               anchors.top: parent.top
-              width: 128
-              height: 24
-              margin-left: 10
-              margin-top: 8
+              width: 132
+              height: 30
+              margin-left: 12
+              margin-top: 6
               text: "ATRIBUTOS"
               text-align: center
               font: ChakraPetch-Bold_14
               color: #1b1400
-              image-source: /modules/game_pokemonmanager/v2/k3_faixa
+              image-source: /modules/game_pokemonmanager/v2/k4_x03
               image-border: 0
 
             Label
@@ -5182,7 +5191,7 @@ UIWindow
               width: 150
               height: 14
               text: "TOTAL 0"
-              margin-left: 150
+              margin-left: 160
               margin-top: 14
               font: ChakraPetch-SemiBold_12
               color: #7f94b1
@@ -5192,7 +5201,7 @@ UIWindow
               anchors.top: parent.top
               width: 56
               height: 14
-              margin-left: 300
+              margin-left: 432
               margin-top: 40
               text: "IV"
               font: verdana-11px-antialised
@@ -5203,7 +5212,7 @@ UIWindow
               anchors.top: parent.top
               width: 70
               height: 14
-              margin-left: 352
+              margin-left: 484
               margin-top: 40
               text: "EV"
               font: verdana-11px-antialised
@@ -5214,7 +5223,7 @@ UIWindow
               anchors.top: parent.top
               width: 60
               height: 14
-              margin-left: 414
+              margin-left: 546
               margin-top: 40
               text: "VITAMINA"
               font: verdana-11px-antialised
@@ -5275,28 +5284,28 @@ UIWindow
               id: dashboardTileHeld
               anchors.top: parent.top
               anchors.left: parent.left
-              width: 184
+              width: 231
               margin-left: 0
 
             PMSummaryTile
               id: dashboardTileEquip
               anchors.top: parent.top
               anchors.left: dashboardTileHeld.right
-              width: 185
+              width: 231
               margin-left: 8
 
             PMSummaryTile
               id: dashboardTileMoves
               anchors.top: parent.top
               anchors.left: dashboardTileEquip.right
-              width: 184
+              width: 231
               margin-left: 8
 
             PMSummaryTile
               id: dashboardTilePassive
               anchors.top: parent.top
               anchors.left: dashboardTileMoves.right
-              width: 185
+              width: 231
               margin-left: 8
 
         PMCard
