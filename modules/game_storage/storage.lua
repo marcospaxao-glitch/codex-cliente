@@ -66,6 +66,15 @@ local function fmt(n)
   return (s:reverse():gsub('(%d%d%d)', '%1.'):reverse():gsub('^%.', ''))
 end
 
+-- numero curto para caber nos botoes de custo (7.030.000 -> 7,03M)
+local function curto(n)
+  n = math.floor(tonumber(n) or 0)
+  if n >= 1000000000 then return (string.format('%.2f', n / 1000000000):gsub('%.?0+$', ''):gsub('%.', ',')) .. 'B' end
+  if n >= 1000000 then return (string.format('%.2f', n / 1000000):gsub('%.?0+$', ''):gsub('%.', ',')) .. 'M' end
+  if n >= 100000 then return (string.format('%.1f', n / 1000):gsub('%.?0+$', ''):gsub('%.', ',')) .. 'k' end
+  return fmt(n)
+end
+
 local function iconFor(name)
   local lower = tostring(name or ''):lower()
   local path = ICON_PATH .. lower .. '.png'
@@ -939,10 +948,11 @@ local function buildForge(data)
     end
     local enough = cost.balance >= cost.amount
     if cost.icon > 0 then button:getChildById('icon'):setItemId(cost.icon) end
-    button:getChildById('amount'):setText(fmt(cost.amount) .. ' ' .. (CURRENCY_LABEL[cost.currency] or cost.currency))
+    button:getChildById('amount'):setText(curto(cost.amount) .. ' ' .. (CURRENCY_LABEL[cost.currency] or cost.currency))
+    button:setTooltip(fmt(cost.amount) .. ' ' .. (CURRENCY_LABEL[cost.currency] or cost.currency) .. '\nSaldo: ' .. fmt(cost.balance))
     button:getChildById('amount'):setColor(enough and '#ffffff' or '#6f86a8')
     local balance = button:getChildById('balance')
-    balance:setText('Saldo: ' .. fmt(cost.balance))
+    balance:setText('Saldo: ' .. curto(cost.balance))
     balance:setColor(enough and '#5fd35f' or '#e04848')
     button:setOn(cost.currency == forgeCurrency)
     button:setEnabled(enough)
@@ -1115,7 +1125,7 @@ local function buildTabs(tabs)
     end
     local active = tab.index == state.tab or (tab.index == -1 and state.tab <= -3)
     button:setOn(active)
-    button:getChildById('marker'):setBackgroundColor(active and '#f2c400' or '#00000000')
+    button:getChildById('marker'):setBackgroundColor('#00000000')
     button.onClick = function()
       if state.tab ~= tab.index then
         selected = nil
