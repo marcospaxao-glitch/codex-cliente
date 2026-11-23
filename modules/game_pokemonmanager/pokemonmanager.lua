@@ -1326,7 +1326,7 @@ function PokemonManager.updateIncubatorSlot(slot)
     setProgress(nil)
     if action then
       action:setText('DESBLOQUEAR')
-      action:setColor('#ffd24a')
+      action:setColor('#1a1400'); action:setImageSource('/modules/game_pokemonmanager/v2/st_btn_gold')
       action:setVisible(true)
       action:setEnabled(true)
     end
@@ -1378,7 +1378,7 @@ function PokemonManager.updateIncubatorSlot(slot)
       setProgress(duration > 0 and (elapsed / duration) or 0, itemColor)
       if action then
         action:setText('EM ANDAMENTO')
-        action:setColor('#8ff09a')
+        action:setColor('#9aa6b8')
         action:setVisible(true)
         action:setEnabled(false)
       end
@@ -1396,7 +1396,7 @@ function PokemonManager.updateIncubatorSlot(slot)
       setProgress(1, color)
       if action then
         action:setText('CHOCAR')
-        action:setColor('#8ff09a')
+        action:setColor('#1a1400'); action:setImageSource('/modules/game_pokemonmanager/v2/st_btn_gold')
         action:setVisible(true)
         action:setEnabled(true)
       end
@@ -1533,10 +1533,10 @@ function PokemonManager.updateStepEggUI()
   local statusText, statusColor
   if not hasEgg then
     statusText, statusColor = 'SEM OVO', '#9bb6dc'
-    if action then action:setText('COLOCAR OVO'); action:setEnabled(true) end
+    if action then action:setText('COLOCAR OVO'); action:setColor('#1a1400'); action:setEnabled(true) end
   elseif ready then
     statusText, statusColor = 'PRONTO PARA CHOCAR', '#72e6a0'
-    if action then action:setText('CHOCAR'); action:setEnabled(true) end
+    if action then action:setText('CHOCAR'); action:setColor('#1a1400'); action:setEnabled(true) end
   else
     statusText, statusColor = 'ANDANDO - ' .. tostring(math.floor(ratio * 100)) .. '%', color
     if action then action:setText('ANDANDO...'); action:setEnabled(false) end
@@ -4313,7 +4313,7 @@ function PokemonManager.updateMovesUI()
       if actionButton then
         actionButton:setVisible(true)
         actionButton:setText('ESQUECER')
-        actionButton:setColor('#ff9a9a')
+        actionButton:setColor('#ffffff'); actionButton:setImageSource('/modules/game_pokemonmanager/v2/st_btn_red')
         actionButton:setEnabled(not locked)
         actionButton.onClick = function()
           if not locked then PokemonManager.sendMoveForget(move.name) end
@@ -4335,7 +4335,7 @@ function PokemonManager.updateMovesUI()
       if actionButton then
         actionButton:setVisible(true)
         actionButton:setText('APRENDER')
-        actionButton:setColor('#8ff09a')
+        actionButton:setColor('#1a1400'); actionButton:setImageSource('/modules/game_pokemonmanager/v2/st_btn_gold')
         actionButton:setEnabled(canAfford and not locked)
         actionButton.onClick = function()
           if canAfford and not locked then PokemonManager.sendMoveLearn(move.name) end
