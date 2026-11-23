@@ -2076,7 +2076,7 @@ function PokemonManager.refreshBaseSelection()
         card:setVisible(true)
         local isSelected = i == PokemonManager.selected
         card:setBackgroundColor('#00000000')
-        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'k4_slot_on' or 'k4_slot'))
+        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'st_cidade_sel' or 'st_cidade'))
         local level = card:recursiveGetChildById('level')
         if level then level:setColor(isSelected and '#ffd24a' or '#9bb6dc') end
       else
@@ -2605,7 +2605,7 @@ function PokemonManager.updateDashboard()
         end
         if slot then slot:setText('#' .. tostring(i)) end
         card:setBackgroundColor('#00000000')
-        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'k4_slot_on' or 'k4_slot'))
+        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'st_cidade_sel' or 'st_cidade'))
       else
         card:setVisible(false)
       end
@@ -2785,7 +2785,7 @@ function PokemonManager.updateDashboard()
     end
     if hnt then hnt:setText(hint) end
     if acc then acc:setBackgroundColor(active and '#72e6a0' or '#3a5170') end
-    tile:setImageSource('/modules/game_pokemonmanager/v2/' .. (active and 'pmx_card_green' or 'k4_card'))
+    tile:setImageSource('/modules/game_pokemonmanager/v2/' .. (active and 'st_card_on' or 'st_stat'))
     local iconeArte = ({dashboardTileHeld = 'k4_ic_held', dashboardTileEquip = 'k4_ic_mega', dashboardTileMoves = 'k4_ic_moves', dashboardTilePassive = 'k4_ic_passiva'})[id]
     local fundo = tile:recursiveGetChildById('tileIconBg')
     if fundo and iconeArte then
@@ -5371,7 +5371,7 @@ function PokemonManager.updateFriendCards()
           miniFill:setBackgroundColor(PokemonManager.getFriendshipColor(friendship))
         end
         card:setBackgroundColor('#00000000')
-        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'k4_slot_on' or 'k4_slot'))
+        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'st_cidade_sel' or 'st_cidade'))
       else
         card:setVisible(false)
       end
@@ -6088,14 +6088,14 @@ end
 
 PM_V2 = '/modules/game_pokemonmanager/v2/'
 PokemonManager.ABAS = {
-  {id = 'perfil', arte = 104,  nome = 'PERFIL',   icone = 'perfil',     paginas = {{'profile', 'navProfile', 'Perfil'}}},
-  {id = 'resumo', arte = 113,  nome = 'RESUMO',   icone = 'resumo',     paginas = {{'summary', 'navSummary', 'Resumo'}}},
-  {id = 'status', arte = 107,  nome = 'STATUS',   icone = 'ev',         paginas = {{'base', 'navBase', 'Atributos'}, {'vitamins', 'navVitamins', 'Vitaminas'}}, extras = {ev = true}},
-  {id = 'combate', arte = 118, nome = 'COMBATE',  icone = 'moves',      paginas = {{'moves', 'navMoves', 'Moves'}, {'abilities', 'navAbilities', 'Habilidades'}}},
-  {id = 'itens', arte = 97,   nome = 'ITENS',    icone = 'held',       paginas = {{'held', 'navHeld', 'Itens Equip'}}},
-  {id = 'vinculo', arte = 114, nome = 'VINCULO',  icone = 'amizade',    paginas = {{'friend', 'navFriend', 'Amizade'}}},
-  {id = 'evolucao', arte = 126, nome = 'EVOLUCAO', icone = 'evolucao',  paginas = {{'evolution', 'navEvolution', 'Evolucao'}}},
-  {id = 'outros', arte = 140,  nome = 'INCUBADORA',   icone = 'incubadora', paginas = {{'incubators', 'navIncubators', 'Incubadoras'}}},
+  {id = 'perfil', arte = 104,  nome = 'Perfil',   icone = 'perfil',     paginas = {{'profile', 'navProfile', 'Perfil'}}},
+  {id = 'resumo', arte = 113,  nome = 'Resumo',   icone = 'resumo',     paginas = {{'summary', 'navSummary', 'Resumo'}}},
+  {id = 'status', arte = 107,  nome = 'Status',   icone = 'ev',         paginas = {{'base', 'navBase', 'Atributos'}, {'vitamins', 'navVitamins', 'Vitaminas'}}, extras = {ev = true}},
+  {id = 'combate', arte = 118, nome = 'Combate',  icone = 'moves',      paginas = {{'moves', 'navMoves', 'Moves'}, {'abilities', 'navAbilities', 'Habilidades'}}},
+  {id = 'itens', arte = 97,   nome = 'Itens',    icone = 'held',       paginas = {{'held', 'navHeld', 'Itens Equip'}}},
+  {id = 'vinculo', arte = 114, nome = 'Vinculo',  icone = 'amizade',    paginas = {{'friend', 'navFriend', 'Amizade'}}},
+  {id = 'evolucao', arte = 126, nome = 'Evolucao', icone = 'evolucao',  paginas = {{'evolution', 'navEvolution', 'Evolucao'}}},
+  {id = 'outros', arte = 140,  nome = 'Incubadora',   icone = 'incubadora', paginas = {{'incubators', 'navIncubators', 'Incubadoras'}}},
 }
 
 local function pmAbaDaPagina(page)
@@ -6122,7 +6122,8 @@ function PokemonManager.marcarAba(page)
     if b then
       local on = aba == atual
       b:setOn(on)
-      b:setImageSource(PM_V2 .. 'kt_' .. aba.id .. (on and '_on' or ''))
+      b:setImageSource(PM_V2 .. (on and 'st_btn_gold' or 'st_btn_blue'))
+      b:setColor(on and '#1a1400' or '#e8f0ff')
     end
   end
   local sub = win:recursiveGetChildById('codexSubAbas')
@@ -6158,16 +6159,16 @@ function PokemonManager.montarAbas()
     local tit = win:recursiveGetChildById('codexHeaderTitulo')
     if tit then tit:setWidth(340); tit:setHeight(28) end
     local fx = win:recursiveGetChildById('btnClose')
-    if fx then fx:setWidth(31); fx:setHeight(29); fx:setMarginTop(4) end
+    if fx then fx:setMarginTop(5) end
   end
   local icone = win:recursiveGetChildById('dashboardIcon')
   if icone then icone.codexLookSize = 170 end
   for _, aba in ipairs(PokemonManager.ABAS) do
     local b = g_ui.createWidget('PMTab', barra)
-    b:setText('')
-    b:setWidth(aba.arte)
-    b:setHeight(34)
-    b:setImageSource(PM_V2 .. 'kt_' .. aba.id)
+    b:setText(aba.nome)
+    b:setWidth(114)
+    b:setHeight(30)
+    b:setImageSource(PM_V2 .. 'st_btn_blue')
     local icon = b:getChildById('icon')
     if icon then icon:hide() end
     b.onClick = function()

@@ -1,12 +1,13 @@
 PMTab < UIButton
-  height: 38
+  height: 30
   focusable: false
-  font: ChakraPetch-Bold_13
-  color: #d6e4f7
+  font: verdana-11px-antialised
+  color: #e8f0ff
   background-color: #00000000
   border-width: 0
   text-align: center
-  image-smooth: true
+  image-source: /modules/game_pokemonmanager/v2/st_btn_blue
+  image-border: 9
 
   $hover:
     opacity: 0.85
@@ -25,22 +26,22 @@ PMSubTab < UIButton
   focusable: false
   font: ChakraPetch-SemiBold_12
   color: #9fb3cf
-  background-color: #0f1b2e
-  border-width: 1
-  border-color: #2b4a75
+  background-color: #00000000
+  border-width: 0
+  image-source: /modules/game_pokemonmanager/v2/st_btn_blue
+  image-border: 9
   text-align: center
   text-auto-resize: true
   padding: 0 14 0 14
+  font: verdana-11px-antialised
+  color: #e8f0ff
 
   $hover:
     color: #ffffff
-    border-color: #4f9cf0
 
   $on:
-    color: #ffffff
-    background-color: #1d3a66
-    border-color: #4f9cf0
-    font: verdana-11px-antialised
+    color: #1a1400
+    image-source: /modules/game_pokemonmanager/v2/st_btn_gold
 
 PMButton < UIButton
   height: 30
@@ -92,9 +93,10 @@ PMMenuItem < UIButton
 
 PMCard < Panel
   focusable: false
-  background-color: #0e1a2b
-  border-width: 1
-  border-color: #24415f
+  background-color: #00000000
+  border-width: 0
+  image-source: /modules/game_pokemonmanager/v2/st_card
+  image-border: 12
 
 PMTeamCard < Panel
   width: 226
@@ -122,8 +124,8 @@ PMBaseTeamCard < Panel
   phantom: false
   background-color: #00000000
   border-width: 0
-  image-source: /modules/game_pokemonmanager/v2/k4_slot
-  image-border: 16
+  image-source: /modules/game_pokemonmanager/v2/st_cidade
+  image-border: 8
 
 PMActionButton < Button
   width: 30
@@ -615,11 +617,11 @@ PMSummaryTile < Panel
   focusable: false
   background-color: #00000000
   border-width: 0
-  image-source: /modules/game_pokemonmanager/v2/k4_card
-  image-border: 22
+  image-source: /modules/game_pokemonmanager/v2/st_stat
+  image-border: 8
 
   $hover:
-    image-source: /modules/game_pokemonmanager/v2/k4_card_on
+    image-source: /modules/game_pokemonmanager/v2/st_card_on
 
   Panel
     id: tileAccent
@@ -1252,30 +1254,32 @@ PMIncubEggChoice < UIWidget
 
 UIWindow
   id: pokemonManager
-  size: 1000 760
+  size: 1000 740
   focusable: false
-  background-color: #101F3E
-  opacity: 0.99
+  background-color: #00000000
+  image-source: /modules/game_pokemonmanager/v2/st_card
+  image-border: 12
+  opacity: 1
 
   Panel
     id: mainWindow
     anchors.fill: parent
     focusable: false
-    background-color: #101F3E
+    background-color: #00000000
 
     Panel
       id: header
       anchors.top: parent.top
       anchors.left: parent.left
       anchors.right: parent.right
-      height: 60
+      height: 44
       focusable: false
-      background-color: #0a1428
-      image-source: /modules/game_pokemonmanager/v2/k4_headerbg
+      background-color: #00000000
 
       UIWidget
         id: codexHeaderLogo
         size: 110 47
+        visible: false
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
         margin-left: 12
@@ -1286,6 +1290,7 @@ UIWindow
       UIWidget
         id: codexHeaderTitulo
         size: 462 38
+        visible: false
         anchors.left: codexHeaderLogo.right
         anchors.verticalCenter: parent.verticalCenter
         margin-left: 14
@@ -1314,11 +1319,10 @@ UIWindow
         id: headerBrandText
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "POKEMON MANAGER"
-        visible: false
+        text: "Pokemon Manager"
         text-auto-resize: true
-        font: ChakraPetch-Bold_22
-        color: #eef4ff
+        font: sans-bold-16px
+        color: #ffd84a
 
       Label
         id: codexVersao
@@ -1370,33 +1374,29 @@ UIWindow
         id: btnClose
         anchors.top: parent.top
         anchors.right: parent.right
-        margin: 12 14 0 0
-        width: 38
-        height: 36
-        text: ""
-        color: #e7edf7
+        margin: 9 12 0 0
+        width: 26
+        height: 26
+        text: X
+        font: verdana-11px-antialised
+        color: #ffffff
         background-color: #00000000
         border-width: 0
-        image-source: /modules/game_pokemonmanager/v2/k4_fechar
-        image-clip: 0 0 77 72
-        image-border: 0
-
-        $hover:
-          opacity: 0.8
+        image-source: /modules/game_pokemonmanager/v2/st_btn_red
+        image-border: 9
 
         $pressed:
-          opacity: 0.6
+          image-source: /modules/game_pokemonmanager/v2/st_btn_red_on
 
     Panel
       id: codexAbasBarra
       anchors.top: header.bottom
       anchors.left: parent.left
       anchors.right: parent.right
-      height: 46
-      padding: 7 12 3 12
+      height: 36
+      padding: 0 12 0 12
       focusable: false
-      background-color: #0a1428
-      image-source: /modules/game_pokemonmanager/v2/pm2_tabbar
+      background-color: #00000000
       layout:
         type: horizontalBox
         spacing: 8
@@ -4257,7 +4257,7 @@ UIWindow
           anchors.right: parent.right
           anchors.bottom: parent.bottom
           focusable: false
-          background-color: #0b1730
+          background-color: #00000000
           clip: true
 
           Panel
@@ -4588,7 +4588,8 @@ UIWindow
             margin-top: 10
             background-color: #00000000
             border-width: 0
-            image-source: /modules/game_pokemonmanager/v2/k4_retrato
+            image-source: /modules/game_pokemonmanager/v2/st_card
+            image-border: 12
             focusable: false
 
             UIWidget
@@ -4625,8 +4626,8 @@ UIWindow
             height: 150
             background-color: #00000000
             border-width: 0
-            image-source: /modules/game_pokemonmanager/v2/k4_info
-            image-border: 24
+            image-source: /modules/game_pokemonmanager/v2/st_topo
+            image-border: 10
             border-color: #1c3350
             focusable: false
 
@@ -4898,21 +4899,22 @@ UIWindow
               margin-top: 9
               background-color: #00000000
               border-width: 0
-              image-source: /modules/game_pokemonmanager/v2/k4_iv
+              image-source: /modules/game_pokemonmanager/v2/st_card_on
+              image-border: 12
               focusable: false
 
               Label
                 id: dashboardGradeTitle
                 anchors.top: parent.top
                 anchors.left: parent.left
-                width: 148
+                width: 208
                 height: 15
-                margin-top: 3
-                margin-left: 48
+                margin-top: 8
+                margin-left: 10
                 text: "QUALIDADE IV"
                 text-align: center
-                font: verdana-11px-antialised
-                color: #1b1400
+                font: verdana-11px-rounded
+                color: #ffe27a
 
               Label
                 id: dashboardGradePercent
@@ -5157,8 +5159,8 @@ UIWindow
             height: 184
             background-color: #00000000
             border-width: 0
-            image-source: /modules/game_pokemonmanager/v2/k4_principal
-            image-border: 40
+            image-source: /modules/game_pokemonmanager/v2/st_card
+            image-border: 12
             border-color: #1c3350
             focusable: false
 
@@ -5177,15 +5179,13 @@ UIWindow
               anchors.left: parent.left
               anchors.top: parent.top
               width: 132
-              height: 30
-              margin-left: 12
-              margin-top: 6
+              height: 20
+              margin-left: 14
+              margin-top: 10
               text: "ATRIBUTOS"
-              text-align: center
-              font: ChakraPetch-Bold_14
-              color: #1b1400
-              image-source: /modules/game_pokemonmanager/v2/k4_x03
-              image-border: 0
+              text-align: left
+              font: verdana-11px-rounded
+              color: #ffe27a
 
             Label
               id: dashboardBST
