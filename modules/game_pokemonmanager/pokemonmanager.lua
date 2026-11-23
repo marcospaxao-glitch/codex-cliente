@@ -2785,6 +2785,7 @@ function PokemonManager.updateDashboard()
     end
     if hnt then hnt:setText(hint) end
     if acc then acc:setBackgroundColor(active and '#72e6a0' or '#3a5170') end
+    tile:setImageSource('/modules/game_pokemonmanager/v2/' .. (active and 'pmx_card_green' or 'kx_card'))
     local cid = tonumber(clientId) or 0
     if item then
       item:setItemId(cid)
