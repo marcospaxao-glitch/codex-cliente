@@ -34,6 +34,7 @@ local tabsPanel, pokeGrid, itemGrid, marketPanel = nil, nil, nil, nil
 local cart = {}           -- { kind = 'I'|'P', id, box, slot, name, max, count, price, currency }
 local balances = {}
 local armedOffer, armedAt = nil, 0  -- compra aguardando o 2o clique
+local buyQty = {}  -- quantidade escolhida por anuncio (anuncio por unidade)
 local releaseArmed, releaseAt = nil, 0  -- liberar pokemon aguardando confirmacao
 local state = { tab = 0, page = 1, pages = 1, box = 1, boxes = 30, slots = 20 }
 local pkSearch, pkHint = '', nil   -- codex: busca de pokemon no PC
@@ -418,11 +419,19 @@ local function buildMarket(rows, mine)
       widget:getChildById('icon'):setItemId(row.clientId)
     end
     local title = isPoke and (row.name .. '  Nv ' .. row.level) or ((row.count > 1 and (fmt(row.count) .. 'x ') or '') .. row.name)
+    if row.unit and not isPoke then title = row.name .. '  (' .. fmt(row.count) .. ' disponiveis)' end
+    local qtyEdit = widget:getChildById('qtyEdit')
+    local showQty = row.unit and not mine and not row.mine
+    qtyEdit:setVisible(showQty)
+    if not showQty then
+      qtyEdit:setWidth(0)
+      qtyEdit:setMarginRight(0)
+    end
     if isPoke then
       widget.onClick = function() send('MINFO|' .. row.id) end
     end
     widget:getChildById('nameLabel'):setText(title)
-    widget:getChildById('priceLabel'):setText(money(row.currency, row.price))
+    widget:getChildById('priceLabel'):setText(money(row.currency, row.price) .. (row.unit and ' /un' or ''))
     local button = widget:getChildById('actionButton')
     if mine then
       local info = row.status
@@ -433,8 +442,10 @@ local function buildMarket(rows, mine)
       elseif row.status == 'EXPIRADO' or row.status == 'CANCELADO' then
         info = (row.status == 'EXPIRADO' and 'Expirou' or 'Cancelado') .. ' - voltou para o PC'
       end
+      if row.status == 'ESGOTADO' then info = 'Esgotado - tudo vendido' end
+      if row.unit and row.status == 'ATIVO' then info = info .. '  -  restam ' .. fmt(row.count) .. ' (preco por unidade)' end
       widget:getChildById('infoLabel'):setText(info)
-      widget:getChildById('infoLabel'):setColor(row.status == 'VENDIDO' and '#5fd35f' or (row.status == 'ATIVO' and '#8fa7c4' or '#6f86a8'))
+      widget:getChildById('infoLabel'):setColor((row.status == 'VENDIDO' or row.status == 'ESGOTADO') and '#5fd35f' or (row.status == 'ATIVO' and '#8fa7c4' or '#6f86a8'))
       button:setText('Cancelar')
       button:setVisible(row.status == 'ATIVO')
       button.onClick = function() send('CANCEL|' .. row.id) end
@@ -442,8 +453,29 @@ local function buildMarket(rows, mine)
       local info = 'Vendedor: ' .. row.seller
       if row.info ~= '' then info = info .. '  -  ' .. row.info end
       if isPoke then info = info .. '  -  clique para ver o resumo' end
-      widget:getChildById('infoLabel'):setText(info)
-      widget:setTooltip(title .. '\n' .. info .. '\nPreco: ' .. money(row.currency, row.price))
+      local infoLabel = widget:getChildById('infoLabel')
+      infoLabel:setText(info)
+      widget:setTooltip(title .. '\n' .. info .. '\nPreco: ' .. money(row.currency, row.price) .. (row.unit and ' por unidade' or ''))
+      if showQty then
+        local qty = math.max(1, math.min(row.count, buyQty[row.id] or 1))
+        buyQty[row.id] = qty
+        local function showTotal()
+          local n = buyQty[row.id] or 1
+          infoLabel:setText('Vendedor: ' .. row.seller .. '  -  Total de ' .. fmt(n) .. ': ' .. money(row.currency, row.price * n))
+        end
+        qtyEdit:setText(tostring(qty))
+        qtyEdit:setTooltip('Quantidade (1 a ' .. fmt(row.count) .. ')')
+        showTotal()
+        qtyEdit.onTextChange = function(self, text)
+          local digits = tostring(text or ''):gsub('%D', '')
+          if digits ~= text then self:setText(digits) return end
+          local n = tonumber(digits)
+          if n and n > row.count then self:setText(tostring(row.count)) return end
+          buyQty[row.id] = math.max(1, n or 1)
+          if armedOffer == row.id then armedOffer = nil end
+          showTotal()
+        end
+      end
       if row.mine then
         button:setText('Seu')
         button:setEnabled(false)
@@ -456,7 +488,7 @@ local function buildMarket(rows, mine)
           else
             armedOffer, armedAt = row.id, os.time()
           end
-          send('BUY|' .. row.id)
+          send('BUY|' .. row.id .. (showQty and ('|' .. (buyQty[row.id] or 1)) or ''))
         end
       end
     end
@@ -500,6 +532,20 @@ local function buildSellList()
   for index, entry in ipairs(cart) do
     local row = g_ui.createWidget('PCSellRow', list)
     row:getChildById('nameLabel'):setText(entry.kind == 'P' and (entry.name .. ' (caixa ' .. entry.box .. ')') or entry.name)
+    local nameLabel = row:getChildById('nameLabel')
+    local baseName = entry.kind == 'P' and (entry.name .. ' (caixa ' .. entry.box .. ')') or entry.name
+    local function showUnit()
+      local price = tonumber(entry.price) or 0
+      if entry.kind == 'I' and entry.count > 1 then
+        local conta = fmt(entry.count) .. ' x ' .. fmt(price) .. ' = ' .. money(entry.currency, entry.count * price)
+        nameLabel:setText(baseName .. '  -  ' .. conta)
+        nameLabel:setColor('#ffe27a')
+        row:setTooltip(baseName .. '\nPreco por unidade: ' .. money(entry.currency, price) .. '\nLote inteiro: ' .. conta .. '\nO comprador escolhe a quantidade.')
+      else
+        nameLabel:setText(baseName)
+        nameLabel:setColor('#ffffff')
+      end
+    end
     local countEdit = row:getChildById('countEdit')
     countEdit:setText(tostring(entry.count))
     countEdit:setVisible(entry.kind == 'I')
@@ -507,6 +553,7 @@ local function buildSellList()
       local digits = tostring(text or ''):gsub('%D', '')
       if digits ~= text then self:setText(digits) return end
       entry.count = math.max(1, math.min(entry.max, tonumber(digits) or 1))
+      showUnit()
     end
     local priceEdit = row:getChildById('priceEdit')
     priceEdit:setText(entry.price)
@@ -514,7 +561,9 @@ local function buildSellList()
       local digits = tostring(text or ''):gsub('%D', '')
       if digits ~= text then self:setText(digits) return end
       entry.price = digits
+      showUnit()
     end
+    priceEdit:setTooltip(entry.kind == 'I' and 'Preco de UMA unidade (com quantidade maior que 1)' or 'Preco total')
     local currencyButton = row:getChildById('currencyButton')
     currencyButton:setText(CURRENCY_LABEL[entry.currency])
     currencyButton.onClick = function(self)
@@ -524,7 +573,9 @@ local function buildSellList()
       end
       entry.currency = CURRENCIES[nextIndex]
       self:setText(CURRENCY_LABEL[entry.currency])
+      showUnit()
     end
+    showUnit()
     row:getChildById('removeButton').onClick = function()
       table.remove(cart, index)
       updateFooter()
@@ -536,7 +587,7 @@ local function buildSellList()
     end
   end
   local note = W('sellNote')
-  note:setText('Preco total do lote. O item sai do PC e volta se nao vender em 7 dias.')
+  note:setText('Com quantidade: preco POR UNIDADE. Volta pro PC em 7 dias.')
   note:setColor('#6f86a8')
 end
 
@@ -561,7 +612,7 @@ local function confirmSell()
     if entry.kind == 'P' then
       send('SELL|P|' .. entry.box .. '|' .. entry.slot .. '|' .. entry.price .. '|' .. entry.currency)
     else
-      send('SELL|I|' .. entry.id .. '|' .. entry.count .. '|' .. entry.price .. '|' .. entry.currency)
+      send('SELL|I|' .. entry.id .. '|' .. entry.count .. '|' .. entry.price .. '|' .. entry.currency .. (entry.count > 1 and '|U' or ''))
     end
   end
   cart = {}
@@ -1200,7 +1251,7 @@ local function onStorageOpcode(protocol, opcode, buffer)
     elseif f[1] == 'M' or f[1] == 'O' then
       markets[#markets + 1] = { id = tonumber(f[2]) or 0, kind = f[3] or 'I', clientId = tonumber(f[4]) or 0, name = f[5] or '',
         count = tonumber(f[6]) or 1, level = tonumber(f[7]) or 0, price = tonumber(f[8]) or 0, currency = f[9] or 'GOLD',
-        seller = f[10] or '', info = f[11] or '', mine = f[12] == '1',
+        seller = f[10] or '', info = f[11] or '', mine = f[12] == '1', unit = f[13] == '1',
         status = f[10] or '', buyer = f[11] or '', when = tonumber(f[12]) or 0 }
     elseif f[1] == 'F' then
       filters[#filters + 1] = { index = tonumber(f[2]) or 0, name = f[3] or '', count = tonumber(f[4]) or 0 }

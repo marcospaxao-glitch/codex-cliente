@@ -346,10 +346,24 @@ PCMarketRow < UIWidget
       background-color: #0c1828
       border-color: #142238
 
+  TextEdit
+    id: qtyEdit
+    size: 56 22
+    anchors.right: actionButton.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 6
+    font: verdana-11px-antialised
+    color: #0a1320
+    background-color: #a2a2a2
+    selection-color: #ffffff
+    selection-background-color: #2b5a8a
+    text-align: center
+    max-length: 7
+
   Label
     id: priceLabel
     width: 130
-    anchors.right: actionButton.left
+    anchors.right: qtyEdit.left
     anchors.verticalCenter: parent.verticalCenter
     margin-right: 8
     text-align: right

@@ -690,10 +690,12 @@ local function showMarket(buffer)
         row:getChildById('item'):setItemId(tonumber(f[4]) or 0)
       end
       local count = tonumber(f[6]) or 1
+      local unit = f[13] == '1' -- preco por unidade (comprador escolhe a quantidade)
       local name = (count > 1 and (count .. 'x ') or '') .. (f[5] or '?')
+      if unit and not isPoke then name = (f[5] or '?') .. ' (' .. formatNumber(count) .. ' disp.)' end
       if isPoke then name = name .. '  Lv ' .. (f[7] or 1) end
       row:getChildById('name'):setText(name)
-      row:getChildById('price'):setText(formatNumber(f[8]) .. ' ' .. (CURRENCY_NAME[f[9]] or f[9] or ''))
+      row:getChildById('price'):setText(formatNumber(f[8]) .. ' ' .. (CURRENCY_NAME[f[9]] or f[9] or '') .. (unit and ' /un' or ''))
       local button = row:getChildById('actionButton')
       if f[1] == 'M' then
         local info = f[11] ~= '' and f[11] or ('Vendedor: ' .. (f[10] or '?'))
@@ -703,6 +705,30 @@ local function showMarket(buffer)
           button:setText('Cancelar')
           button.onClick = function()
             if confirmClick(button, 'C' .. offerId) then send('MCANCEL|' .. offerId) end
+          end
+        elseif unit then
+          local unitPrice = tonumber(f[8]) or 0
+          local qtyEdit = row:getChildById('qtyEdit')
+          local infoLabel = row:getChildById('info')
+          local qty = 1
+          qtyEdit:setVisible(true)
+          qtyEdit:setText('1')
+          qtyEdit:setTooltip('Quantidade (1 a ' .. formatNumber(count) .. ')')
+          local function showTotal()
+            infoLabel:setText('Total de ' .. formatNumber(qty) .. ': ' .. formatNumber(unitPrice * qty) .. ' ' .. (CURRENCY_NAME[f[9]] or f[9] or ''))
+          end
+          showTotal()
+          qtyEdit.onTextChange = function(self, text)
+            local digits = tostring(text or ''):gsub('%D', '')
+            if digits ~= text then self:setText(digits) return end
+            local n = tonumber(digits)
+            if n and n > count then self:setText(tostring(count)) return end
+            qty = math.max(1, n or 1)
+            showTotal()
+          end
+          button:setText('Comprar')
+          button.onClick = function()
+            if confirmClick(button, 'B' .. offerId .. 'x' .. qty) then send('MBUY|' .. offerId .. '|' .. qty) end
           end
         else
           button:setText('Comprar')
@@ -779,6 +805,7 @@ local function updateSellPanel()
   W('sellButton'):setEnabled(true)
   W('sellCount'):setEnabled(entry.kind == 'I')
   W('sellCount'):setText(entry.kind == 'I' and tostring(entry.total) or '1')
+  W('sellPriceHint'):setText((entry.kind == 'I' and entry.total > 1) and 'Preco por unid.' or 'Preco')
 end
 
 -- nomes curtos das abas do PC (cabem no botao)
@@ -884,12 +911,16 @@ local function doSell()
     count = math.max(1, math.min(entry.total, tonumber(W('sellCount'):getText():match('%d+')) or 1))
   end
   local button = W('sellButton')
-  if not confirmClick(button, 'S', 'Confirmar ' .. formatNumber(price) .. ' ' .. CURRENCY_NAME[CURRENCIES[sell.currency]]) then
+  local confirmText = 'Confirmar ' .. formatNumber(price) .. ' ' .. CURRENCY_NAME[CURRENCIES[sell.currency]]
+  if entry.kind == 'I' and count > 1 then confirmText = 'Confirmar ' .. formatNumber(price) .. '/un' end
+  if not confirmClick(button, 'S', confirmText) then
     return
   end
   button:setText('Anunciar')
   local b = entry.kind == 'I' and count or entry.b
-  send('MSELL|' .. entry.kind .. '|' .. entry.a .. '|' .. b .. '|' .. price .. '|' .. CURRENCIES[sell.currency])
+  -- item com quantidade: preco digitado e POR UNIDADE (o comprador escolhe quantas)
+  local porUnidade = entry.kind == 'I' and count > 1
+  send('MSELL|' .. entry.kind .. '|' .. entry.a .. '|' .. b .. '|' .. price .. '|' .. CURRENCIES[sell.currency] .. (porUnidade and '|U' or ''))
 end
 
 -- ============================================================

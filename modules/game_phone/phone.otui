@@ -416,6 +416,17 @@ PhoneOffer < UIWidget
     margin-bottom: 4
     margin-right: 5
 
+  PhoneEdit
+    id: qtyEdit
+    size: 44 18
+    anchors.bottom: parent.bottom
+    anchors.right: actionButton.left
+    margin-bottom: 4
+    margin-right: 4
+    text-align: center
+    max-length: 7
+    visible: false
+
 PhoneSellRow < UIButton
   height: 40
   background-color: #0c1828
