@@ -1096,47 +1096,99 @@ local function sectionOf(index)
   return 'MERCADO'
 end
 
+local lastItemTab = nil -- ultima aba de itens aberta (a aba "Itens" volta nela)
+
+local function setTabIcon(button, name, itemIcon)
+  local image = TAB_ICONS[tostring(name):lower()]
+  if image and g_resources.fileExists(image) then
+    button:getChildById('icon'):setVisible(false)
+    local iconImage = button:getChildById('iconImage')
+    iconImage:setImageSource(image)
+    iconImage:setVisible(true)
+  elseif itemIcon and itemIcon > 0 then
+    button:getChildById('icon'):setItemId(itemIcon)
+  else
+    button:getChildById('icon'):setVisible(false)
+    button:setTextOffset({ x = 10, y = 0 })
+  end
+end
+
+local function openTab(index)
+  if state.tab ~= index then
+    selected = nil
+    searchSent = ''
+    W('searchEdit'):setText('')
+    pkSearch, pkHint = '', nil
+    gSearch, gRes = '', nil
+    send('TAB|' .. index)
+  end
+end
+
+-- abas no topo: Pokemons | Itens | Market | Meus anuncios | Forja
+-- "Itens" abre uma segunda linha com as categorias (Pokebolas, Ovos...)
 local function buildTabs(tabs)
   tabsPanel:destroyChildren()
-  local lastSection = nil
+  local subPanel = W('subTabsPanel')
+  subPanel:destroyChildren()
+  local itemTabs, itemTotal = {}, 0
   for _, tab in ipairs(tabs) do
-    local section = sectionOf(tab.index)
-    if section ~= lastSection then
-      local header = g_ui.createWidget('PCTabHeader', tabsPanel)
-      header:getChildById('title'):setText(section)
-      lastSection = section
+    if tab.index > 0 then
+      itemTabs[#itemTabs + 1] = tab
+      itemTotal = itemTotal + (tab.count or 0)
     end
-    local button = g_ui.createWidget('PCTab', tabsPanel)
-    button:setText(tab.name)
-    local count = button:getChildById('countLabel')
-    count:setText(tab.count > 999 and '999+' or fmt(tab.count))
-    count:setColor(tab.count > 0 and '#dce8f5' or '#3a4c64')
-    local image = TAB_ICONS[tostring(tab.name):lower()]
-    if image and g_resources.fileExists(image) then
-      button:getChildById('icon'):setVisible(false)
-      local iconImage = button:getChildById('iconImage')
-      iconImage:setImageSource(image)
-      iconImage:setVisible(true)
-    elseif tab.icon and tab.icon > 0 then
-      button:getChildById('icon'):setItemId(tab.icon)
-    else
-      button:getChildById('iconBg'):setVisible(false)
-      button:setTextOffset({ x = 10, y = 0 })
-    end
-    local active = tab.index == state.tab or (tab.index == -1 and state.tab <= -3)
+  end
+  if state.tab > 0 then lastItemTab = state.tab end
+  local itemsDone = false
+  local function mainTab(name, count, active, iconName, itemIcon, onClick, onDrop)
+    local button = g_ui.createWidget('PCMainTab', tabsPanel)
+    button:setText(name)
+    local label = button:getChildById('countLabel')
+    label:setText(count > 999 and '999+' or fmt(count))
+    label:setColor(count > 0 and '#dce8f5' or '#5a6b84')
+    setTabIcon(button, iconName, itemIcon)
     button:setOn(active)
-    button:getChildById('marker'):setBackgroundColor('#00000000')
-    button.onClick = function()
-      if state.tab ~= tab.index then
-        selected = nil
-        searchSent = ''
-        W('searchEdit'):setText('')
-        pkSearch, pkHint = '', nil
-        gSearch, gRes = '', nil
-        send('TAB|' .. tab.index)
+    button.onClick = onClick
+    if onDrop then button.onDrop = onDrop end
+  end
+  for _, tab in ipairs(tabs) do
+    if tab.index > 0 then
+      if not itemsDone then
+        itemsDone = true
+        mainTab('Itens', itemTotal, state.tab > 0, 'outros', 0, function()
+          if state.tab > 0 then return end
+          local target = lastItemTab
+          local ok = false
+          for _, t in ipairs(itemTabs) do if t.index == target then ok = true end end
+          if not ok then
+            target = itemTabs[1].index
+            for _, t in ipairs(itemTabs) do
+              if (t.count or 0) > 0 then target = t.index break end
+            end
+          end
+          openTab(target)
+        end)
       end
+    else
+      local active = tab.index == state.tab or (tab.index == -1 and state.tab <= -3 and state.tab > -20)
+      mainTab(tab.name, tab.count or 0, active, tab.name, tab.icon, function() openTab(tab.index) end, onExternalDrop)
     end
-    button.onDrop = onExternalDrop
+  end
+  -- categorias de itens
+  local showSub = state.tab > 0 and #itemTabs > 0
+  subPanel:setVisible(showSub)
+  subPanel:setHeight(showSub and 28 or 0)
+  W('contentPanel'):setMarginTop(showSub and 6 or 0)
+  if showSub then
+    for _, tab in ipairs(itemTabs) do
+      local button = g_ui.createWidget('PCSubTab', subPanel)
+      button:setText(tab.name)
+      button:setTooltip(tab.name .. ': ' .. fmt(tab.count or 0) .. ' item(ns)')
+      setTabIcon(button, tab.name, tab.icon)
+      if (tab.count or 0) == 0 and tab.index ~= state.tab then button:setColor('#6f86a8') end
+      button:setOn(tab.index == state.tab)
+      button.onClick = function() openTab(tab.index) end
+      button.onDrop = onExternalDrop
+    end
   end
 end
 
