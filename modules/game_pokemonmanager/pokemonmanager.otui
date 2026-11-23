@@ -9,8 +9,13 @@ PMTab < UIButton
   image-source: /modules/game_pokemonmanager/v2/st_btn_blue
   image-border: 9
 
-  $hover:
-    opacity: 0.85
+  $hover !on:
+    image-source: /modules/game_pokemonmanager/v2/st_btn_blue_on
+    color: #ffffff
+
+  $on:
+    image-source: /modules/game_pokemonmanager/v2/st_btn_gold
+    color: #1a1400
 
   UIWidget
     id: icon
@@ -35,8 +40,9 @@ PMSubTab < UIButton
   font: verdana-11px-antialised
   color: #e8f0ff
 
-  $hover:
+  $hover !on:
     color: #ffffff
+    image-source: /modules/game_pokemonmanager/v2/st_btn_blue_on
 
   $on:
     color: #1a1400
@@ -125,6 +131,12 @@ PMBaseTeamCard < Panel
   border-width: 0
   image-source: /modules/game_pokemonmanager/v2/st_cidade
   image-border: 8
+
+  $hover !on:
+    image-source: /modules/game_pokemonmanager/v2/st_cidade_on
+
+  $on:
+    image-source: /modules/game_pokemonmanager/v2/st_cidade_sel
 
 PMActionButton < UIButton
   width: 30
@@ -6325,8 +6337,8 @@ UIWindow
                 id: evAddAllButton
                 anchors.right: parent.right
                 anchors.top: parent.top
-                width: 62
-                height: 18
+                width: 70
+                height: 20
                 margin: 22 12 0 0
                 text: "TODOS"
                 tooltip: "Usa todos os EV Add da mochila (ate o limite de 512)"
@@ -6336,9 +6348,9 @@ UIWindow
                 id: evAddOneButton
                 anchors.right: evAddAllButton.left
                 anchors.top: evAddAllButton.top
-                width: 118
-                height: 18
-                margin-right: 4
+                width: 140
+                height: 20
+                margin-right: 6
                 text: "+1 EV ADD (x0)"
                 tooltip: "Usa 1 EV Add (item da mochila): +1 ponto de EV para distribuir"
                 font: verdana-11px-antialised

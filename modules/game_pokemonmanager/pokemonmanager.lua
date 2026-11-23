@@ -1152,13 +1152,7 @@ function PokemonManager.refreshEVSelection()
     if card and not card:isDestroyed() then
       if PokemonManager.pokemon[i] then
         card:setVisible(true)
-        if i == PokemonManager.selected then
-          card:setBackgroundColor('#263b59')
-          card:setBorderColor('#ffd24a')
-        else
-          card:setBackgroundColor('#111c2c')
-          card:setBorderColor('#263b59')
-        end
+        card:setOn(i == PokemonManager.selected)
       else
         card:setVisible(false)
       end
@@ -2092,7 +2086,7 @@ function PokemonManager.refreshBaseSelection()
         card:setVisible(true)
         local isSelected = i == PokemonManager.selected
         card:setBackgroundColor('#00000000')
-        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'st_cidade_sel' or 'st_cidade'))
+        card:setOn(isSelected and true or false)
         local level = card:recursiveGetChildById('level')
         if level then level:setColor(isSelected and '#ffd24a' or '#9bb6dc') end
       else
@@ -2621,7 +2615,7 @@ function PokemonManager.updateDashboard()
         end
         if slot then slot:setText('#' .. tostring(i)) end
         card:setBackgroundColor('#00000000')
-        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'st_cidade_sel' or 'st_cidade'))
+        card:setOn(isSelected and true or false)
       else
         card:setVisible(false)
       end
@@ -4012,8 +4006,7 @@ function PokemonManager.updateMovesPartyBar()
         level:setColor(index == PokemonManager.selected and '#ffd24a' or '#9bb6dc')
       end
 
-      card:setBorderColor(index == PokemonManager.selected and '#ffd24a' or '#294765')
-      card:setBackgroundColor(index == PokemonManager.selected and '#263b59' or '#102138')
+      card:setOn((index == PokemonManager.selected) and true or false)
     end
   end
 end
@@ -4838,8 +4831,7 @@ function PokemonManager.updateAbilitiesPartyBar()
         level:setText('Lv.' .. tostring(p.level or 0))
         level:setColor(isSelected and '#ffd24a' or '#9bb6dc')
       end
-      card:setBorderColor(isSelected and '#ffd24a' or '#294765')
-      card:setBackgroundColor(isSelected and '#263b59' or '#102138')
+      card:setOn((isSelected) and true or false)
     end
   end
 end
@@ -4931,8 +4923,7 @@ function PokemonManager.updateHeldPartyBar()
         level:setText('Lv.' .. tostring(p.level or 0))
         level:setColor(isSelected and '#ffd24a' or '#9bb6dc')
       end
-      card:setBorderColor(isSelected and '#ffd24a' or '#294765')
-      card:setBackgroundColor(isSelected and '#263b59' or '#102138')
+      card:setOn((isSelected) and true or false)
     end
   end
 end
@@ -5217,8 +5208,7 @@ function PokemonManager.updateEvolutionCards()
         end)
         card:getChildById('level'):setText('Lv.' .. tostring(p.level or 0))
         card:getChildById('level'):setColor(sel and '#ffd24a' or '#9bb6dc')
-        card:setBackgroundColor(sel and '#263b59' or '#102138')
-        card:setBorderColor(sel and '#ffd24a' or '#294765')
+        card:setOn((sel) and true or false)
       end
     end
   end
@@ -5387,7 +5377,7 @@ function PokemonManager.updateFriendCards()
           miniFill:setBackgroundColor(PokemonManager.getFriendshipColor(friendship))
         end
         card:setBackgroundColor('#00000000')
-        card:setImageSource('/modules/game_pokemonmanager/v2/' .. (isSelected and 'st_cidade_sel' or 'st_cidade'))
+        card:setOn(isSelected and true or false)
       else
         card:setVisible(false)
       end
@@ -6138,8 +6128,6 @@ function PokemonManager.marcarAba(page)
     if b then
       local on = aba == atual
       b:setOn(on)
-      b:setImageSource(PM_V2 .. (on and 'st_btn_gold' or 'st_btn_blue'))
-      b:setColor(on and '#1a1400' or '#e8f0ff')
     end
   end
   local sub = win:recursiveGetChildById('codexSubAbas')
@@ -6184,7 +6172,6 @@ function PokemonManager.montarAbas()
     b:setText(aba.nome)
     b:setWidth(114)
     b:setHeight(30)
-    b:setImageSource(PM_V2 .. 'st_btn_blue')
     local icon = b:getChildById('icon')
     if icon then icon:hide() end
     b.onClick = function()
