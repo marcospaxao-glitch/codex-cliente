@@ -1182,20 +1182,19 @@ local function buildTabs(tabs)
   -- categorias de itens
   local showSub = state.tab > 0 and #itemTabs > 0
   subPanel:setVisible(showSub)
-  subPanel:setHeight(showSub and 38 or 0)
+  local linhas = math.ceil(#itemTabs / 5)
+  subPanel:setHeight(showSub and (linhas * 30 + (linhas - 1) * 6) or 0)
   W('contentPanel'):setMarginTop(showSub and 6 or 0)
   if showSub then
     for _, tab in ipairs(itemTabs) do
       local button = g_ui.createWidget('PCSubTab', subPanel)
       local nome = button:getChildById('nameLabel')
-      nome:setText(SUB_CURTO[tostring(tab.name):lower()] or tab.name)
+      nome:setText(tab.name)
       local qtd = button:getChildById('countLabel')
       local n = tab.count or 0
-      qtd:setText(n > 0 and (n > 99999 and '99999+' or fmt(n)) or 'vazio')
-      qtd:setColor(n > 0 and '#ffd84a' or '#5a6b84')
+      qtd:setText(n > 9999 and '9999+' or fmt(n))
+      qtd:setColor(n > 0 and '#dce8f5' or '#5a6b84')
       if tab.index == state.tab then nome:setColor('#ffe27a') elseif n == 0 then nome:setColor('#6f86a8') end
-      local largura = math.floor((subPanel:getWidth() - 6 * (#itemTabs - 1)) / #itemTabs)
-      if largura >= 70 then button:setWidth(math.min(largura, 140)) end
       button:setTooltip(tab.name .. ': ' .. fmt(tab.count or 0) .. ' item(ns)')
       setTabIcon(button, tab.name, tab.icon)
       button:setOn(tab.index == state.tab)
