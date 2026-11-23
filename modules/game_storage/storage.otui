@@ -1012,7 +1012,7 @@ UIWindow
       num-columns: 5
       flow: true
 
-  Panel
+  ScrollablePanel
     id: contentPanel
     anchors.top: subTabsPanel.bottom
     anchors.left: parent.left
@@ -1025,736 +1025,756 @@ UIWindow
     image-source: /modules/game_storage/images/st_card
     image-border: 12
     padding: 4
+    vertical-scrollbar: pcScroll
 
-    PCButton
-      id: prevButton
-      text: <
-      size: 28 24
+    Panel
+      id: contentInner
       anchors.top: parent.top
       anchors.left: parent.left
-      margin-top: 8
-      margin-left: 8
-
-    Label
-      id: pageLabel
-      width: 120
-      anchors.verticalCenter: prevButton.verticalCenter
-      anchors.left: prevButton.right
-      margin-left: 4
-      text-align: center
-      font: verdana-11px-rounded
-      color: #f2c400
-
-    PCButton
-      id: nextButton
-      text: >
-      size: 28 24
-      anchors.verticalCenter: prevButton.verticalCenter
-      anchors.left: pageLabel.right
-      margin-left: 4
-
-    TextEdit
-      id: searchEdit
-      height: 22
-      anchors.verticalCenter: prevButton.verticalCenter
       anchors.right: parent.right
-      margin-right: 8
-      width: 170
-      font: verdana-11px-antialised
-      color: #0a1320
-      background-color: #a2a2a2
-      selection-color: #ffffff
-      selection-background-color: #2b5a8a
+      height: 630
 
-    Panel
-      id: pokeGrid
-      anchors.top: prevButton.bottom
-      anchors.left: parent.left
-      anchors.right: parent.right
-      height: 418
-      margin-top: 8
-      margin-left: 8
-      margin-right: 8
-      layout:
-        type: grid
-        cell-size: 128 100
-        cell-spacing: 6
-        num-columns: 5
-        flow: false
-
-    Panel
-      id: itemGrid
-      anchors.top: prevButton.bottom
-      anchors.left: parent.left
-      anchors.right: parent.right
-      height: 402
-      margin-top: 8
-      margin-left: 8
-      margin-right: 8
-      visible: false
-      layout:
-        type: grid
-        cell-size: 62 62
-        cell-spacing: 6
-        num-columns: 10
-        flow: false
-
-    Panel
-      id: marketFilters
-      anchors.top: prevButton.bottom
-      anchors.left: parent.left
-      anchors.right: parent.right
-      height: 28
-      margin-top: 8
-      margin-left: 8
-      margin-right: 8
-      visible: false
-      layout:
-        type: horizontalBox
-        spacing: 6
-
-    ScrollablePanel
-      id: marketPanel
-      anchors.top: marketFilters.bottom
-      anchors.left: parent.left
-      anchors.right: marketScroll.left
-      height: 386
-      margin-top: 6
-      margin-left: 8
-      margin-right: 4
-      vertical-scrollbar: marketScroll
-      visible: false
-      layout:
-        type: verticalBox
-        spacing: 3
-
-    VerticalScrollBar
-      id: marketScroll
-      width: 12
-      anchors.top: marketFilters.bottom
-      anchors.right: parent.right
-      height: 386
-      margin-top: 6
-      margin-right: 8
-      step: 45
-      pixels-scroll: true
-      visible: false
-
-    ScrollablePanel
-      id: searchPanel
-      anchors.top: prevButton.bottom
-      anchors.left: parent.left
-      anchors.right: searchScroll.left
-      height: 410
-      margin-top: 8
-      margin-left: 8
-      margin-right: 4
-      vertical-scrollbar: searchScroll
-      visible: false
-      layout:
-        type: verticalBox
-        spacing: 3
-
-    VerticalScrollBar
-      id: searchScroll
-      width: 12
-      anchors.top: prevButton.bottom
-      anchors.right: parent.right
-      height: 410
-      margin-top: 8
-      margin-right: 8
-      step: 45
-      pixels-scroll: true
-      visible: false
-
-    UIWidget
-      id: footerLine
-      height: 1
-      anchors.left: parent.left
-      anchors.right: parent.right
-      anchors.bottom: parent.bottom
-      margin-bottom: 104
-      background-color: #1d3557
-      phantom: true
-
-    Label
-      id: selectedLabel
-      anchors.top: footerLine.bottom
-      anchors.left: parent.left
-      anchors.right: parent.right
-      margin-top: 8
-      margin-left: 10
-      margin-right: 10
-      height: 14
-      font: verdana-11px-rounded
-      color: #ffffff
-
-    TextEdit
-      id: amountEdit
-      size: 60 22
-      anchors.top: selectedLabel.bottom
-      anchors.left: parent.left
-      margin-top: 8
-      margin-left: 10
-      font: verdana-11px-antialised
-      color: #0a1320
-      background-color: #a2a2a2
-      selection-color: #ffffff
-      selection-background-color: #2b5a8a
-      text: 1
-
-    PCButton
-      id: withdrawButton
-      text: Sacar
-      width: 70
-      anchors.verticalCenter: amountEdit.verticalCenter
-      anchors.left: amountEdit.right
-      margin-left: 6
-
-    PCButton
-      id: withdrawAllButton
-      text: Sacar tudo
-      width: 80
-      anchors.verticalCenter: amountEdit.verticalCenter
-      anchors.left: withdrawButton.right
-      margin-left: 6
-
-    PCButton
-      id: depositTabButton
-      text: Guardar tudo desta aba
-      width: 150
-      anchors.verticalCenter: amountEdit.verticalCenter
-      anchors.right: parent.right
-      margin-right: 10
-
-    PCButton
-      id: summaryButton
-      text: Resumo
-      width: 80
-      anchors.verticalCenter: amountEdit.verticalCenter
-      anchors.left: cartAddButton.right
-      margin-left: 6
-      visible: false
-
-    PCButton
-      id: lockButton
-      text: Cadeado
-      width: 84
-      anchors.verticalCenter: amountEdit.verticalCenter
-      anchors.left: summaryButton.right
-      margin-left: 6
-      visible: false
-
-    UIButton
-      id: releaseButton
-      text: Liberar
-      width: 90
-      height: 24
-      anchors.verticalCenter: amountEdit.verticalCenter
-      anchors.left: lockButton.right
-      margin-left: 6
-      font: verdana-11px-rounded
-      color: #ffd0d0
-      background-color: #3a1212
-      border-width: 1
-      border-color: #7a1f1f
-      visible: false
-
-      $hover:
-        color: #ffffff
-        background-color: #7a1f1f
-        border-color: #e04848
-
-      $disabled:
-        color: #5a3a3a
-        background-color: #1a0d0d
-        border-color: #3a1a1a
-
-    PCButton
-      id: cartAddButton
-      text: + Carrinho
-      width: 100
-      anchors.verticalCenter: amountEdit.verticalCenter
-      anchors.left: withdrawAllButton.right
-      margin-left: 6
-
-    Label
-      id: cartLabel
-      anchors.top: amountEdit.bottom
-      anchors.left: parent.left
-      margin-top: 10
-      margin-left: 10
-      font: verdana-11px-rounded
-      color: #f2c400
-      text-auto-resize: true
-      text: Carrinho
-
-    PCButton
-      id: sellButton
-      text: Anunciar
-      width: 100
-      anchors.verticalCenter: cartLabel.verticalCenter
-      anchors.right: parent.right
-      margin-right: 10
-
-    Label
-      id: cartSummary
-      anchors.verticalCenter: cartLabel.verticalCenter
-      anchors.left: cartLabel.right
-      anchors.right: sellButton.left
-      margin-left: 8
-      margin-right: 8
-      height: 14
-      font: verdana-11px-rounded
-      color: #8fa7c4
-
-    Label
-      id: hintLabel
-      anchors.top: cartLabel.bottom
-      anchors.left: parent.left
-      anchors.right: parent.right
-      margin-top: 6
-      margin-left: 10
-      margin-right: 10
-      height: 13
-      font: verdana-11px-rounded
-      color: #6f86a8
-
-    Panel
-      id: forgePanel
-      anchors.fill: parent
-      margin: 1
-      background-color: #0a1933
-      visible: false
+      PCButton
+        id: prevButton
+        text: <
+        size: 28 24
+        anchors.top: parent.top
+        anchors.left: parent.left
+        margin-top: 8
+        margin-left: 8
 
       Label
-        id: forgeSpeciesTitle
-        text: POKEMONS NO PC
-        anchors.top: parent.top
+        id: pageLabel
+        width: 120
+        anchors.verticalCenter: prevButton.verticalCenter
+        anchors.left: prevButton.right
+        margin-left: 4
+        text-align: center
+        font: verdana-11px-rounded
+        color: #f2c400
+
+      PCButton
+        id: nextButton
+        text: >
+        size: 28 24
+        anchors.verticalCenter: prevButton.verticalCenter
+        anchors.left: pageLabel.right
+        margin-left: 4
+
+      TextEdit
+        id: searchEdit
+        height: 22
+        anchors.verticalCenter: prevButton.verticalCenter
+        anchors.right: parent.right
+        margin-right: 8
+        width: 170
+        font: verdana-11px-antialised
+        color: #0a1320
+        background-color: #a2a2a2
+        selection-color: #ffffff
+        selection-background-color: #2b5a8a
+
+      Panel
+        id: pokeGrid
+        anchors.top: prevButton.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 418
+        margin-top: 8
+        margin-left: 8
+        margin-right: 8
+        layout:
+          type: grid
+          cell-size: 128 100
+          cell-spacing: 6
+          num-columns: 5
+          flow: false
+
+      Panel
+        id: itemGrid
+        anchors.top: prevButton.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 402
+        margin-top: 8
+        margin-left: 8
+        margin-right: 8
+        visible: false
+        layout:
+          type: grid
+          cell-size: 62 62
+          cell-spacing: 6
+          num-columns: 10
+          flow: false
+
+      Panel
+        id: marketFilters
+        anchors.top: prevButton.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 28
+        margin-top: 8
+        margin-left: 8
+        margin-right: 8
+        visible: false
+        layout:
+          type: horizontalBox
+          spacing: 6
+
+      ScrollablePanel
+        id: marketPanel
+        anchors.top: marketFilters.bottom
+        anchors.left: parent.left
+        anchors.right: marketScroll.left
+        height: 386
+        margin-top: 6
+        margin-left: 8
+        margin-right: 4
+        vertical-scrollbar: marketScroll
+        visible: false
+        layout:
+          type: verticalBox
+          spacing: 3
+
+      VerticalScrollBar
+        id: marketScroll
+        width: 12
+        anchors.top: marketFilters.bottom
+        anchors.right: parent.right
+        height: 386
+        margin-top: 6
+        margin-right: 8
+        step: 45
+        pixels-scroll: true
+        visible: false
+
+      ScrollablePanel
+        id: searchPanel
+        anchors.top: prevButton.bottom
+        anchors.left: parent.left
+        anchors.right: searchScroll.left
+        height: 410
+        margin-top: 8
+        margin-left: 8
+        margin-right: 4
+        vertical-scrollbar: searchScroll
+        visible: false
+        layout:
+          type: verticalBox
+          spacing: 3
+
+      VerticalScrollBar
+        id: searchScroll
+        width: 12
+        anchors.top: prevButton.bottom
+        anchors.right: parent.right
+        height: 410
+        margin-top: 8
+        margin-right: 8
+        step: 45
+        pixels-scroll: true
+        visible: false
+
+      UIWidget
+        id: footerLine
+        height: 1
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-bottom: 104
+        background-color: #1d3557
+        phantom: true
+
+      Label
+        id: selectedLabel
+        anchors.top: footerLine.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 8
+        margin-left: 10
+        margin-right: 10
+        height: 14
+        font: verdana-11px-rounded
+        color: #ffffff
+
+      TextEdit
+        id: amountEdit
+        size: 60 22
+        anchors.top: selectedLabel.bottom
+        anchors.left: parent.left
+        margin-top: 8
+        margin-left: 10
+        font: verdana-11px-antialised
+        color: #0a1320
+        background-color: #a2a2a2
+        selection-color: #ffffff
+        selection-background-color: #2b5a8a
+        text: 1
+
+      PCButton
+        id: withdrawButton
+        text: Sacar
+        width: 70
+        anchors.verticalCenter: amountEdit.verticalCenter
+        anchors.left: amountEdit.right
+        margin-left: 6
+
+      PCButton
+        id: withdrawAllButton
+        text: Sacar tudo
+        width: 80
+        anchors.verticalCenter: amountEdit.verticalCenter
+        anchors.left: withdrawButton.right
+        margin-left: 6
+
+      PCButton
+        id: depositTabButton
+        text: Guardar tudo desta aba
+        width: 150
+        anchors.verticalCenter: amountEdit.verticalCenter
+        anchors.right: parent.right
+        margin-right: 10
+
+      PCButton
+        id: summaryButton
+        text: Resumo
+        width: 80
+        anchors.verticalCenter: amountEdit.verticalCenter
+        anchors.left: cartAddButton.right
+        margin-left: 6
+        visible: false
+
+      PCButton
+        id: lockButton
+        text: Cadeado
+        width: 84
+        anchors.verticalCenter: amountEdit.verticalCenter
+        anchors.left: summaryButton.right
+        margin-left: 6
+        visible: false
+
+      UIButton
+        id: releaseButton
+        text: Liberar
+        width: 90
+        height: 24
+        anchors.verticalCenter: amountEdit.verticalCenter
+        anchors.left: lockButton.right
+        margin-left: 6
+        font: verdana-11px-rounded
+        color: #ffd0d0
+        background-color: #3a1212
+        border-width: 1
+        border-color: #7a1f1f
+        visible: false
+
+        $hover:
+          color: #ffffff
+          background-color: #7a1f1f
+          border-color: #e04848
+
+        $disabled:
+          color: #5a3a3a
+          background-color: #1a0d0d
+          border-color: #3a1a1a
+
+      PCButton
+        id: cartAddButton
+        text: + Carrinho
+        width: 100
+        anchors.verticalCenter: amountEdit.verticalCenter
+        anchors.left: withdrawAllButton.right
+        margin-left: 6
+
+      Label
+        id: cartLabel
+        anchors.top: amountEdit.bottom
         anchors.left: parent.left
         margin-top: 10
         margin-left: 10
         font: verdana-11px-rounded
         color: #f2c400
         text-auto-resize: true
+        text: Carrinho
 
-      ScrollablePanel
-        id: forgeSpeciesList
-        anchors.top: forgeSpeciesTitle.bottom
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        width: 200
-        margin-top: 8
-        margin-left: 10
-        margin-bottom: 10
-        vertical-scrollbar: forgeSpeciesScroll
-        layout:
-          type: verticalBox
-          spacing: 3
-
-      VerticalScrollBar
-        id: forgeSpeciesScroll
-        width: 12
-        anchors.top: forgeSpeciesList.top
-        anchors.bottom: forgeSpeciesList.bottom
-        anchors.left: forgeSpeciesList.right
-        margin-left: 2
-        step: 43
-        pixels-scroll: true
+      PCButton
+        id: sellButton
+        text: Anunciar
+        width: 100
+        anchors.verticalCenter: cartLabel.verticalCenter
+        anchors.right: parent.right
+        margin-right: 10
 
       Label
-        id: forgeTitle
-        anchors.top: parent.top
-        anchors.left: forgeSpeciesScroll.right
-        anchors.right: forgeAuto.left
-        margin-top: 10
-        margin-left: 12
+        id: cartSummary
+        anchors.verticalCenter: cartLabel.verticalCenter
+        anchors.left: cartLabel.right
+        anchors.right: sellButton.left
+        margin-left: 8
         margin-right: 8
         height: 14
         font: verdana-11px-rounded
-        color: #ffffff
+        color: #8fa7c4
 
-      PCButton
-        id: forgeAuto
-        text: Auto
-        width: 60
-        anchors.top: parent.top
+      Label
+        id: hintLabel
+        anchors.top: cartLabel.bottom
+        anchors.left: parent.left
         anchors.right: parent.right
         margin-top: 6
+        margin-left: 10
         margin-right: 10
-
-      ScrollablePanel
-        id: forgePokeList
-        anchors.top: forgeTitle.bottom
-        anchors.left: forgeTitle.left
-        anchors.right: forgePokeScroll.left
-        height: 126
-        margin-top: 8
-        margin-right: 4
-        vertical-scrollbar: forgePokeScroll
-        layout:
-          type: grid
-          cell-size: 84 60
-          cell-spacing: 6
-          num-columns: 5
-          flow: false
-
-      VerticalScrollBar
-        id: forgePokeScroll
-        width: 12
-        height: 126
-        anchors.top: forgeTitle.bottom
-        anchors.right: parent.right
-        margin-top: 8
-        margin-right: 10
-        step: 66
-        pixels-scroll: true
+        height: 13
+        font: verdana-11px-rounded
+        color: #6f86a8
 
       Panel
-        id: forgePreview
-        anchors.top: forgePokeList.bottom
-        anchors.left: forgeTitle.left
-        anchors.right: parent.right
-        height: 268
-        margin-top: 8
-        margin-right: 10
-        background-color: #07101c
-        border-width: 1
-        border-color: #1d3557
-
-        UIWidget
-          id: tableHeader
-          height: 18
-          anchors.top: parent.top
-          anchors.left: parent.left
-          anchors.right: parent.right
-          margin: 1
-          background-color: #101f3e
-          phantom: true
-
-        Label
-          id: hAttr
-          text: ATRIBUTO
-          anchors.verticalCenter: tableHeader.verticalCenter
-          anchors.left: parent.left
-          margin-left: 10
-          font: verdana-11px-rounded
-          color: #8fa7c4
-          text-auto-resize: true
-
-        Label
-          id: hBest
-          text: MELHOR
-          width: 80
-          anchors.verticalCenter: tableHeader.verticalCenter
-          anchors.right: hCommon.left
-          text-align: center
-          font: verdana-11px-rounded
-          color: #8fa7c4
-
-        Label
-          id: hCommon
-          width: 110
-          anchors.verticalCenter: tableHeader.verticalCenter
-          anchors.right: hPerfect.left
-          text-align: center
-          font: verdana-11px-rounded
-          color: #f2c400
-
-        Label
-          id: hPerfect
-          width: 110
-          anchors.verticalCenter: tableHeader.verticalCenter
-          anchors.right: parent.right
-          margin-right: 10
-          text-align: center
-          font: verdana-11px-rounded
-          color: #5fd35f
-
-        Panel
-          id: forgeTable
-          anchors.top: tableHeader.bottom
-          anchors.left: parent.left
-          anchors.right: parent.right
-          height: 226
-          margin-top: 2
-          layout:
-            type: verticalBox
-            spacing: 1
-
-        Label
-          id: shinyLabel
-          anchors.bottom: parent.bottom
-          anchors.left: parent.left
-          anchors.right: parent.right
-          margin-bottom: 4
-          margin-left: 10
-          height: 14
-          font: verdana-11px-rounded
-          color: #f2c400
-
-      Panel
-        id: forge2
-        anchors.top: parent.top
-        anchors.left: forgeSpeciesScroll.right
-        anchors.right: parent.right
-        anchors.bottom: costTitle.top
-        margin-left: 12
-        margin-right: 10
-        margin-bottom: 8
+        id: forgePanel
+        anchors.fill: parent
+        margin: 1
+        background-color: #0a1933
         visible: false
 
         Label
-          id: f2Title
+          id: forgeSpeciesTitle
+          text: POKEMONS NO PC
           anchors.top: parent.top
           anchors.left: parent.left
-          anchors.right: f2Clear.left
           margin-top: 10
+          margin-left: 10
+          font: verdana-11px-rounded
+          color: #f2c400
+          text-auto-resize: true
+
+        ScrollablePanel
+          id: forgeSpeciesList
+          anchors.top: forgeSpeciesTitle.bottom
+          anchors.left: parent.left
+          anchors.bottom: parent.bottom
+          width: 200
+          margin-top: 8
+          margin-left: 10
+          margin-bottom: 10
+          vertical-scrollbar: forgeSpeciesScroll
+          layout:
+            type: verticalBox
+            spacing: 3
+
+        VerticalScrollBar
+          id: forgeSpeciesScroll
+          width: 12
+          anchors.top: forgeSpeciesList.top
+          anchors.bottom: forgeSpeciesList.bottom
+          anchors.left: forgeSpeciesList.right
+          margin-left: 2
+          step: 43
+          pixels-scroll: true
+
+        Label
+          id: forgeTitle
+          anchors.top: parent.top
+          anchors.left: forgeSpeciesScroll.right
+          anchors.right: forgeAuto.left
+          margin-top: 10
+          margin-left: 12
           margin-right: 8
           height: 14
           font: verdana-11px-rounded
           color: #ffffff
 
         PCButton
-          id: f2Auto
+          id: forgeAuto
           text: Auto
-          width: 56
-          anchors.top: parent.top
-          anchors.right: parent.right
-          margin-top: 6
-          @onSetup: self:setTooltip('Escolhe sozinho: origem = melhor IV, materiais = os piores')
-
-        PCButton
-          id: f2Clear
-          text: Limpar
           width: 60
           anchors.top: parent.top
-          anchors.right: f2Auto.left
+          anchors.right: parent.right
           margin-top: 6
-          margin-right: 4
-
-        UIWidget
-          id: f2Origem
-          size: 170 150
-          anchors.top: f2Title.bottom
-          anchors.left: parent.left
-          margin-top: 10
-          background-color: #0d2410
-          border-width: 2
-          border-color: #5fd35f
-
-          Label
-            id: title
-            text: ORIGEM
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            margin-top: 5
-            height: 13
-            text-align: center
-            font: verdana-11px-rounded
-            color: #5fd35f
-            phantom: true
-
-          UIWidget
-            id: portrait
-            size: 64 64
-            anchors.top: title.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            margin-top: 4
-            image-size: 64 64
-            phantom: true
-
-          Label
-            id: nameLabel
-            anchors.top: portrait.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            margin-top: 4
-            height: 13
-            text-align: center
-            font: verdana-11px-rounded
-            color: #ffffff
-            phantom: true
-
-          Label
-            id: infoLabel
-            anchors.top: nameLabel.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            margin-top: 2
-            height: 13
-            text-align: center
-            font: verdana-11px-rounded
-            color: #8fa7c4
-            phantom: true
-
-          Label
-            id: natLabel
-            anchors.top: infoLabel.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            margin-top: 2
-            height: 13
-            text-align: center
-            font: verdana-11px-rounded
-            color: #f2c400
-            phantom: true
-
-          Label
-            id: emptyLabel
-            anchors.centerIn: parent
-            width: 150
-            text-wrap: true
-            text-auto-resize: true
-            text-align: center
-            font: verdana-11px-rounded
-            color: #6f86a8
-            phantom: true
-
-        Label
-          id: f2Plus
-          text: +
-          anchors.verticalCenter: f2Origem.verticalCenter
-          anchors.left: f2Origem.right
-          width: 24
-          text-align: center
-          font: verdana-11px-rounded
-          color: #f2c400
-
-        Panel
-          id: f2Mats
-          anchors.top: f2Origem.top
-          anchors.left: f2Plus.right
-          anchors.right: parent.right
-          height: 150
-          layout:
-            type: horizontalBox
-            spacing: 6
-
-        Panel
-          id: f2Result
-          anchors.top: f2Origem.bottom
-          anchors.left: parent.left
-          anchors.right: parent.right
-          height: 136
-          margin-top: 8
-          background-color: #07101c
-          border-width: 1
-          border-color: #1d3557
-
-          Label
-            id: f2ResTitle
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            margin: 5 10 0 10
-            height: 13
-            font: verdana-11px-rounded
-            color: #f2c400
-
-          Panel
-            id: f2Ivs
-            anchors.top: f2ResTitle.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            margin-top: 3
-            height: 96
-            layout:
-              type: verticalBox
-
-          Label
-            id: f2Info
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            margin: 0 10 4 10
-            height: 13
-            font: verdana-11px-rounded
-            color: #8fa7c4
-
-        Label
-          id: f2ListTitle
-          anchors.top: f2Result.bottom
-          anchors.left: parent.left
-          anchors.right: parent.right
-          margin-top: 8
-          height: 13
-          font: verdana-11px-rounded
-          color: #8fa7c4
+          margin-right: 10
 
         ScrollablePanel
-          id: f2List
-          anchors.top: f2ListTitle.bottom
-          anchors.left: parent.left
-          anchors.right: f2ListScroll.left
-          anchors.bottom: parent.bottom
-          margin-top: 6
+          id: forgePokeList
+          anchors.top: forgeTitle.bottom
+          anchors.left: forgeTitle.left
+          anchors.right: forgePokeScroll.left
+          height: 126
+          margin-top: 8
           margin-right: 4
-          vertical-scrollbar: f2ListScroll
+          vertical-scrollbar: forgePokeScroll
           layout:
             type: grid
             cell-size: 84 60
             cell-spacing: 6
             num-columns: 5
-            flow: true
+            flow: false
 
         VerticalScrollBar
-          id: f2ListScroll
+          id: forgePokeScroll
           width: 12
-          anchors.top: f2ListTitle.bottom
-          anchors.bottom: parent.bottom
+          height: 126
+          anchors.top: forgeTitle.bottom
           anchors.right: parent.right
-          margin-top: 6
+          margin-top: 8
+          margin-right: 10
           step: 66
           pixels-scroll: true
 
-      Label
-        id: costTitle
-        text: PAGAMENTO
-        anchors.bottom: forgeCosts.top
-        anchors.left: forgeSpeciesScroll.right
-        margin-left: 12
-        margin-bottom: 6
-        font: verdana-11px-rounded
-        color: #f2c400
-        text-auto-resize: true
-
-      Panel
-        id: forgeCosts
-        anchors.bottom: forgeButton.top
-        anchors.left: forgeSpeciesScroll.right
-        anchors.right: parent.right
-        height: 40
-        margin-left: 12
-        margin-bottom: 10
-        margin-right: 10
-        layout:
-          type: horizontalBox
-          spacing: 6
-
-      UIButton
-        id: forgeButton
-        anchors.left: forgeSpeciesScroll.right
-        margin-left: 12
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        height: 36
-        margin-right: 10
-        margin-bottom: 10
-        font: verdana-11px-antialised
-        color: #1a1200
-        background-color: #f2c400
-        border-width: 1
-        border-color: #ffe27a
-
-        $hover:
-          background-color: #ffd633
-
-        $disabled:
-          color: #6f86a8
-          background-color: #101f3e
+        Panel
+          id: forgePreview
+          anchors.top: forgePokeList.bottom
+          anchors.left: forgeTitle.left
+          anchors.right: parent.right
+          height: 268
+          margin-top: 8
+          margin-right: 10
+          background-color: #07101c
+          border-width: 1
           border-color: #1d3557
+
+          UIWidget
+            id: tableHeader
+            height: 18
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            margin: 1
+            background-color: #101f3e
+            phantom: true
+
+          Label
+            id: hAttr
+            text: ATRIBUTO
+            anchors.verticalCenter: tableHeader.verticalCenter
+            anchors.left: parent.left
+            margin-left: 10
+            font: verdana-11px-rounded
+            color: #8fa7c4
+            text-auto-resize: true
+
+          Label
+            id: hBest
+            text: MELHOR
+            width: 80
+            anchors.verticalCenter: tableHeader.verticalCenter
+            anchors.right: hCommon.left
+            text-align: center
+            font: verdana-11px-rounded
+            color: #8fa7c4
+
+          Label
+            id: hCommon
+            width: 110
+            anchors.verticalCenter: tableHeader.verticalCenter
+            anchors.right: hPerfect.left
+            text-align: center
+            font: verdana-11px-rounded
+            color: #f2c400
+
+          Label
+            id: hPerfect
+            width: 110
+            anchors.verticalCenter: tableHeader.verticalCenter
+            anchors.right: parent.right
+            margin-right: 10
+            text-align: center
+            font: verdana-11px-rounded
+            color: #5fd35f
+
+          Panel
+            id: forgeTable
+            anchors.top: tableHeader.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: 226
+            margin-top: 2
+            layout:
+              type: verticalBox
+              spacing: 1
+
+          Label
+            id: shinyLabel
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            margin-bottom: 4
+            margin-left: 10
+            height: 14
+            font: verdana-11px-rounded
+            color: #f2c400
+
+        Panel
+          id: forge2
+          anchors.top: parent.top
+          anchors.left: forgeSpeciesScroll.right
+          anchors.right: parent.right
+          anchors.bottom: costTitle.top
+          margin-left: 12
+          margin-right: 10
+          margin-bottom: 8
+          visible: false
+
+          Label
+            id: f2Title
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: f2Clear.left
+            margin-top: 10
+            margin-right: 8
+            height: 14
+            font: verdana-11px-rounded
+            color: #ffffff
+
+          PCButton
+            id: f2Auto
+            text: Auto
+            width: 56
+            anchors.top: parent.top
+            anchors.right: parent.right
+            margin-top: 6
+            @onSetup: self:setTooltip('Escolhe sozinho: origem = melhor IV, materiais = os piores')
+
+          PCButton
+            id: f2Clear
+            text: Limpar
+            width: 60
+            anchors.top: parent.top
+            anchors.right: f2Auto.left
+            margin-top: 6
+            margin-right: 4
+
+          UIWidget
+            id: f2Origem
+            size: 170 150
+            anchors.top: f2Title.bottom
+            anchors.left: parent.left
+            margin-top: 10
+            background-color: #0d2410
+            border-width: 2
+            border-color: #5fd35f
+
+            Label
+              id: title
+              text: ORIGEM
+              anchors.top: parent.top
+              anchors.left: parent.left
+              anchors.right: parent.right
+              margin-top: 5
+              height: 13
+              text-align: center
+              font: verdana-11px-rounded
+              color: #5fd35f
+              phantom: true
+
+            UIWidget
+              id: portrait
+              size: 64 64
+              anchors.top: title.bottom
+              anchors.horizontalCenter: parent.horizontalCenter
+              margin-top: 4
+              image-size: 64 64
+              phantom: true
+
+            Label
+              id: nameLabel
+              anchors.top: portrait.bottom
+              anchors.left: parent.left
+              anchors.right: parent.right
+              margin-top: 4
+              height: 13
+              text-align: center
+              font: verdana-11px-rounded
+              color: #ffffff
+              phantom: true
+
+            Label
+              id: infoLabel
+              anchors.top: nameLabel.bottom
+              anchors.left: parent.left
+              anchors.right: parent.right
+              margin-top: 2
+              height: 13
+              text-align: center
+              font: verdana-11px-rounded
+              color: #8fa7c4
+              phantom: true
+
+            Label
+              id: natLabel
+              anchors.top: infoLabel.bottom
+              anchors.left: parent.left
+              anchors.right: parent.right
+              margin-top: 2
+              height: 13
+              text-align: center
+              font: verdana-11px-rounded
+              color: #f2c400
+              phantom: true
+
+            Label
+              id: emptyLabel
+              anchors.centerIn: parent
+              width: 150
+              text-wrap: true
+              text-auto-resize: true
+              text-align: center
+              font: verdana-11px-rounded
+              color: #6f86a8
+              phantom: true
+
+          Label
+            id: f2Plus
+            text: +
+            anchors.verticalCenter: f2Origem.verticalCenter
+            anchors.left: f2Origem.right
+            width: 24
+            text-align: center
+            font: verdana-11px-rounded
+            color: #f2c400
+
+          Panel
+            id: f2Mats
+            anchors.top: f2Origem.top
+            anchors.left: f2Plus.right
+            anchors.right: parent.right
+            height: 150
+            layout:
+              type: horizontalBox
+              spacing: 6
+
+          Panel
+            id: f2Result
+            anchors.top: f2Origem.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: 136
+            margin-top: 8
+            background-color: #07101c
+            border-width: 1
+            border-color: #1d3557
+
+            Label
+              id: f2ResTitle
+              anchors.top: parent.top
+              anchors.left: parent.left
+              anchors.right: parent.right
+              margin: 5 10 0 10
+              height: 13
+              font: verdana-11px-rounded
+              color: #f2c400
+
+            Panel
+              id: f2Ivs
+              anchors.top: f2ResTitle.bottom
+              anchors.left: parent.left
+              anchors.right: parent.right
+              margin-top: 3
+              height: 96
+              layout:
+                type: verticalBox
+
+            Label
+              id: f2Info
+              anchors.bottom: parent.bottom
+              anchors.left: parent.left
+              anchors.right: parent.right
+              margin: 0 10 4 10
+              height: 13
+              font: verdana-11px-rounded
+              color: #8fa7c4
+
+          Label
+            id: f2ListTitle
+            anchors.top: f2Result.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            margin-top: 8
+            height: 13
+            font: verdana-11px-rounded
+            color: #8fa7c4
+
+          ScrollablePanel
+            id: f2List
+            anchors.top: f2ListTitle.bottom
+            anchors.left: parent.left
+            anchors.right: f2ListScroll.left
+            anchors.bottom: parent.bottom
+            margin-top: 6
+            margin-right: 4
+            vertical-scrollbar: f2ListScroll
+            layout:
+              type: grid
+              cell-size: 84 60
+              cell-spacing: 6
+              num-columns: 5
+              flow: true
+
+          VerticalScrollBar
+            id: f2ListScroll
+            width: 12
+            anchors.top: f2ListTitle.bottom
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            margin-top: 6
+            step: 66
+            pixels-scroll: true
+
+        Label
+          id: costTitle
+          text: PAGAMENTO
+          anchors.bottom: forgeCosts.top
+          anchors.left: forgeSpeciesScroll.right
+          margin-left: 12
+          margin-bottom: 6
+          font: verdana-11px-rounded
+          color: #f2c400
+          text-auto-resize: true
+
+        Panel
+          id: forgeCosts
+          anchors.bottom: forgeButton.top
+          anchors.left: forgeSpeciesScroll.right
+          anchors.right: parent.right
+          height: 40
+          margin-left: 12
+          margin-bottom: 10
+          margin-right: 10
+          layout:
+            type: horizontalBox
+            spacing: 6
+
+        UIButton
+          id: forgeButton
+          anchors.left: forgeSpeciesScroll.right
+          margin-left: 12
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          height: 36
+          margin-right: 10
+          margin-bottom: 10
+          font: verdana-11px-antialised
+          color: #1a1200
+          background-color: #f2c400
+          border-width: 1
+          border-color: #ffe27a
+
+          $hover:
+            background-color: #ffd633
+
+          $disabled:
+            color: #6f86a8
+            background-color: #101f3e
+            border-color: #1d3557
+
+  VerticalScrollBar
+    id: pcScroll
+    anchors.top: contentPanel.top
+    anchors.bottom: contentPanel.bottom
+    anchors.right: contentPanel.right
+    width: 16
+    margin: 6 2 6 0
+    step: 24
+    pixels-scroll: true
+    visible: false
+
 
   Panel
     id: sellPanel

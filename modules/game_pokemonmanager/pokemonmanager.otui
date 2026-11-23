@@ -1922,6 +1922,7 @@ UIWindow
         anchors.left: sidebar.right
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+        vertical-scrollbar: contentScrollBar
         margin-left: 0
         margin-right: 4
         focusable: false
@@ -1967,7 +1968,7 @@ UIWindow
           anchors.top: parent.top
           anchors.left: parent.left
           anchors.right: parent.right
-          anchors.bottom: parent.bottom
+          height: 640
           background-color: #00000000
           focusable: false
           clip: true
@@ -2971,7 +2972,7 @@ UIWindow
           anchors.top: parent.top
           anchors.left: parent.left
           anchors.right: parent.right
-          anchors.bottom: parent.bottom
+          height: 640
           background-color: #00000000
           focusable: false
           clip: true
@@ -4340,7 +4341,7 @@ UIWindow
           anchors.top: parent.top
           anchors.left: parent.left
           anchors.right: parent.right
-          anchors.bottom: parent.bottom
+          height: 640
           focusable: false
           background-color: #00000000
           clip: true
@@ -5954,7 +5955,7 @@ UIWindow
           anchors.top: parent.top
           anchors.left: parent.left
           anchors.right: parent.right
-          anchors.bottom: parent.bottom
+          height: 640
           focusable: false
           background-color: #00000000
           clip: true
@@ -8837,7 +8838,7 @@ UIWindow
           anchors.top: parent.top
           anchors.left: parent.left
           anchors.right: parent.right
-          anchors.bottom: parent.bottom
+          height: 640
           background-color: #00000000
           focusable: false
           clip: true
@@ -9569,7 +9570,7 @@ UIWindow
           anchors.top: parent.top
           anchors.left: parent.left
           anchors.right: parent.right
-          anchors.bottom: parent.bottom
+          height: 640
           background-color: #00000000
           focusable: false
           clip: true
@@ -10432,7 +10433,7 @@ UIWindow
           anchors.top: parent.top
           anchors.left: parent.left
           anchors.right: parent.right
-          anchors.bottom: parent.bottom
+          height: 640
           background-color: #00000000
           focusable: false
           clip: true
@@ -11040,7 +11041,7 @@ UIWindow
           anchors.top: parent.top
           anchors.left: parent.left
           anchors.right: parent.right
-          anchors.bottom: parent.bottom
+          height: 640
           background-color: #00000000
           focusable: false
           clip: true
@@ -12469,7 +12470,7 @@ UIWindow
           anchors.top: parent.top
           anchors.left: parent.left
           anchors.right: parent.right
-          anchors.bottom: parent.bottom
+          height: 640
           background-color: #00000000
           focusable: false
           clip: true
@@ -12584,7 +12585,7 @@ UIWindow
           anchors.top: parent.top
           anchors.left: parent.left
           anchors.right: parent.right
-          anchors.bottom: parent.bottom
+          height: 640
           focusable: false
           background-color: #00000000
           clip: true

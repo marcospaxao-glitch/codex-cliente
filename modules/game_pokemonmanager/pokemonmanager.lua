@@ -6175,6 +6175,25 @@ function PokemonManager.montarAbas()
     if tit then tit:setWidth(340); tit:setHeight(28) end
     local fx = win:recursiveGetChildById('btnClose')
     if fx then fx:setMarginTop(5) end
+    -- celular: a tela e mais baixa que a janela; as paginas tem altura fixa (640)
+    -- e o conteudo rola (barra visivel + arrastar com o dedo)
+    local barra = win:recursiveGetChildById('contentScrollBar')
+    local conteudo = win:recursiveGetChildById('content')
+    if barra and conteudo then
+      barra:setVisible(true)
+      barra:setWidth(16)
+      local ultimoY = nil
+      conteudo.onMouseMove = function(self, pos, moved)
+        local ok, apertado = pcall(function() return g_mouse.isPressed(MouseLeftButton) end)
+        if not ok or not apertado then ultimoY = nil return false end
+        if ultimoY then
+          local dy = pos.y - ultimoY
+          if dy ~= 0 then barra:setValue(barra:getValue() - dy) end
+        end
+        ultimoY = pos.y
+        return false
+      end
+    end
   end
   local icone = win:recursiveGetChildById('dashboardIcon')
   if icone then icone.codexLookSize = 170 end

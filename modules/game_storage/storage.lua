@@ -1185,6 +1185,11 @@ local function buildTabs(tabs)
   local linhas = math.ceil(#itemTabs / 5)
   subPanel:setHeight(showSub and (linhas * 30 + (linhas - 1) * 6) or 0)
   W('contentPanel'):setMarginTop(showSub and 6 or 0)
+  -- o conteudo tem altura fixa (a do PC); no celular a janela fica mais baixa
+  -- e o conteudo rola pela barra da direita
+  W('contentInner'):setHeight(showSub and 558 or 630)
+  local celular = type(codexCelular) == 'function' and codexCelular()
+  W('pcScroll'):setVisible(celular and true or false)
   if showSub then
     for _, tab in ipairs(itemTabs) do
       local button = g_ui.createWidget('PCSubTab', subPanel)
