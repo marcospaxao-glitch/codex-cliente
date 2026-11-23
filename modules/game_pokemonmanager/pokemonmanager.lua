@@ -6179,13 +6179,31 @@ function PokemonManager.montarAbas()
     -- e o conteudo rola (barra visivel + arrastar com o dedo)
     local barra = win:recursiveGetChildById('contentScrollBar')
     local conteudo = win:recursiveGetChildById('content')
+    -- a janela cabe na altura da tela (o conteudo rola)
+    local root = g_ui.getRootWidget()
+    local alturaTela = root:getHeight()
+    if win:getHeight() > alturaTela - 8 then
+      win:setHeight(alturaTela - 8)
+    end
     if barra and conteudo then
       barra:setVisible(true)
       barra:setWidth(16)
       local ultimoY = nil
       conteudo.onMouseMove = function(self, pos, moved)
-        local ok, apertado = pcall(function() return g_mouse.isPressed(MouseLeftButton) end)
-        if not ok or not apertado then ultimoY = nil return false end
+        -- arrastar com o dedo: so enquanto algo dentro do conteudo esta pressionado
+        local apertado = g_ui.getPressedWidget()
+        local function dentro(w, pai)
+          while w do
+            if w == pai then return true end
+            w = w:getParent()
+          end
+          return false
+        end
+        if not apertado or g_ui.getDraggingWidget() or dentro(apertado, barra)
+            or not dentro(apertado, self) then
+          ultimoY = nil
+          return false
+        end
         if ultimoY then
           local dy = pos.y - ultimoY
           if dy ~= 0 then barra:setValue(barra:getValue() - dy) end

@@ -1102,6 +1102,40 @@ end
 -- nomes curtos para caber na linha de categorias (o nome inteiro fica no tooltip)
 local SUB_CURTO = { ['mega stones'] = 'Megas', ['held items'] = 'Helds', ['pokebolas'] = 'Bolas' }
 
+-- celular: a janela cabe na altura da tela e o conteudo rola arrastando o dedo
+local function ajustarCelular()
+  if not window then return end
+  local alturaTela = g_ui.getRootWidget():getHeight()
+  if window:getHeight() > alturaTela - 8 then
+    window:setHeight(alturaTela - 8)
+  end
+  local conteudo, barra = W('contentPanel'), W('pcScroll')
+  if not conteudo or not barra or conteudo.codexArrasto then return end
+  conteudo.codexArrasto = true
+  local ultimoY = nil
+  local function dentro(w, pai)
+    while w do
+      if w == pai then return true end
+      w = w:getParent()
+    end
+    return false
+  end
+  conteudo.onMouseMove = function(self, pos, moved)
+    local apertado = g_ui.getPressedWidget()
+    -- arrastando item (para a mochila etc.) nao rola
+    if not apertado or g_ui.getDraggingWidget() or apertado:isDraggable() or not dentro(apertado, self) then
+      ultimoY = nil
+      return false
+    end
+    if ultimoY then
+      local dy = pos.y - ultimoY
+      if dy ~= 0 then barra:setValue(barra:getValue() - dy) end
+    end
+    ultimoY = pos.y
+    return false
+  end
+end
+
 local lastItemTab = nil -- ultima aba de itens aberta (a aba "Itens" volta nela)
 
 local function setTabIcon(button, name, itemIcon)
@@ -1190,6 +1224,7 @@ local function buildTabs(tabs)
   W('contentInner'):setHeight(showSub and 558 or 630)
   local celular = type(codexCelular) == 'function' and codexCelular()
   W('pcScroll'):setVisible(celular and true or false)
+  if celular then ajustarCelular() end
   if showSub then
     for _, tab in ipairs(itemTabs) do
       local button = g_ui.createWidget('PCSubTab', subPanel)
