@@ -670,8 +670,8 @@ PMSummaryTile < Panel
     anchors.right: parent.right
     anchors.top: parent.top
     height: 12
-    margin-left: 10
-    margin-right: 14
+    margin-left: 8
+    margin-right: 10
     margin-top: 10
     text-align: left
     font: verdana-11px-antialised
@@ -684,8 +684,8 @@ PMSummaryTile < Panel
     anchors.right: parent.right
     anchors.top: tileLabel.bottom
     height: 14
-    margin-left: 10
-    margin-right: 14
+    margin-left: 8
+    margin-right: 10
     margin-top: 2
     text-align: left
     font: verdana-11px-antialised
@@ -698,7 +698,7 @@ PMSummaryTile < Panel
     anchors.right: parent.right
     anchors.top: tileValue.bottom
     height: 12
-    margin-left: 10
+    margin-left: 8
     margin-right: 8
     margin-top: 1
     text-align: left
@@ -1385,7 +1385,7 @@ UIWindow
       image-source: /modules/game_pokemonmanager/v2/pm2_tabbar
       layout:
         type: horizontalBox
-        spacing: 5
+        spacing: 8
 
     Panel
       id: body
@@ -4892,10 +4892,10 @@ UIWindow
                 id: dashboardGradeTitle
                 anchors.top: parent.top
                 anchors.left: parent.left
-                width: 92
+                width: 98
                 height: 16
-                margin-top: 4
-                margin-left: 30
+                margin-top: 3
+                margin-left: 33
                 text: "QUALIDADE IV"
                 text-align: center
                 font: verdana-11px-antialised
