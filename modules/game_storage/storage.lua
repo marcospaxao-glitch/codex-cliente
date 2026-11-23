@@ -666,6 +666,9 @@ local function buildFilters(filters)
     local button = g_ui.createWidget('PCFilter', panel)
     button:setText(filter.name:upper())
     button:setTooltip(filter.count .. ' anuncio(s)')
+    local qtd = button:getChildById('countLabel')
+    qtd:setText(filter.count > 999 and '999+' or fmt(filter.count))
+    qtd:setColor(filter.count > 0 and '#dce8f5' or '#5a6b84')
     button:setOn(filter.index == state.tab)
     button.onClick = function()
       if state.tab ~= filter.index then
@@ -1179,17 +1182,22 @@ local function buildTabs(tabs)
   -- categorias de itens
   local showSub = state.tab > 0 and #itemTabs > 0
   subPanel:setVisible(showSub)
-  subPanel:setHeight(showSub and 28 or 0)
+  subPanel:setHeight(showSub and 38 or 0)
   W('contentPanel'):setMarginTop(showSub and 6 or 0)
   if showSub then
     for _, tab in ipairs(itemTabs) do
       local button = g_ui.createWidget('PCSubTab', subPanel)
-      button:setText(SUB_CURTO[tostring(tab.name):lower()] or tab.name)
+      local nome = button:getChildById('nameLabel')
+      nome:setText(SUB_CURTO[tostring(tab.name):lower()] or tab.name)
+      local qtd = button:getChildById('countLabel')
+      local n = tab.count or 0
+      qtd:setText(n > 0 and (n > 99999 and '99999+' or fmt(n)) or 'vazio')
+      qtd:setColor(n > 0 and '#ffd84a' or '#5a6b84')
+      if tab.index == state.tab then nome:setColor('#ffe27a') elseif n == 0 then nome:setColor('#6f86a8') end
       local largura = math.floor((subPanel:getWidth() - 6 * (#itemTabs - 1)) / #itemTabs)
       if largura >= 70 then button:setWidth(math.min(largura, 140)) end
       button:setTooltip(tab.name .. ': ' .. fmt(tab.count or 0) .. ' item(ns)')
       setTabIcon(button, tab.name, tab.icon)
-      if (tab.count or 0) == 0 and tab.index ~= state.tab then button:setColor('#6f86a8') end
       button:setOn(tab.index == state.tab)
       button.onClick = function() openTab(tab.index) end
       button.onDrop = onExternalDrop

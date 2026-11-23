@@ -137,39 +137,58 @@ PCMainTab < UIButton
     phantom: true
 
 PCSubTab < UIButton
-  size: 92 28
-  font: verdana-11px-antialised
-  color: #c9d6ea
-  text-align: left
-  text-offset: 27 0
+  size: 92 38
   image-source: /modules/game_storage/images/st_stat
   image-border: 8
 
   $hover !on:
-    color: #ffffff
     image-source: /modules/game_storage/images/st_btn_blue_on
 
   $on:
-    color: #ffe27a
     image-source: /modules/game_storage/images/st_cidade_sel
 
   UIItem
     id: icon
-    size: 18 18
+    size: 20 20
     anchors.left: parent.left
     anchors.verticalCenter: parent.verticalCenter
-    margin-left: 5
+    margin-left: 6
     virtual: true
     phantom: true
 
   UIWidget
     id: iconImage
-    size: 18 18
+    size: 20 20
     anchors.left: parent.left
     anchors.verticalCenter: parent.verticalCenter
-    margin-left: 5
+    margin-left: 6
     phantom: true
     visible: false
+
+  Label
+    id: nameLabel
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 5
+    margin-left: 30
+    margin-right: 4
+    height: 13
+    font: verdana-11px-antialised
+    color: #c9d6ea
+    phantom: true
+
+  Label
+    id: countLabel
+    anchors.top: nameLabel.bottom
+    anchors.left: nameLabel.left
+    anchors.right: parent.right
+    margin-top: 2
+    margin-right: 4
+    height: 13
+    font: verdana-11px-antialised
+    color: #ffd84a
+    phantom: true
 
 PCButton < UIButton
   height: 24
@@ -457,9 +476,11 @@ PCMarketRow < UIWidget
     phantom: true
 
 PCFilter < UIButton
-  width: 104
-  font: verdana-11px-rounded
+  width: 140
+  font: verdana-11px-antialised
   color: #e8f0ff
+  text-align: left
+  text-offset: 12 0
   image-source: /modules/game_storage/images/st_btn_blue
   image-border: 9
 
@@ -470,6 +491,19 @@ PCFilter < UIButton
   $on:
     color: #1a1400
     image-source: /modules/game_storage/images/st_btn_gold
+
+  Label
+    id: countLabel
+    size: 38 18
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 6
+    text-align: center
+    font: verdana-11px-antialised
+    color: #dce8f5
+    image-source: /modules/game_storage/images/st_campo
+    image-border: 6
+    phantom: true
 
 PCInfoSection < Label
   height: 20
@@ -964,7 +998,7 @@ UIWindow
 
   Panel
     id: subTabsPanel
-    height: 28
+    height: 38
     anchors.top: tabsPanel.bottom
     anchors.left: parent.left
     anchors.right: parent.right
@@ -1067,14 +1101,14 @@ UIWindow
       anchors.top: prevButton.bottom
       anchors.left: parent.left
       anchors.right: parent.right
-      height: 24
+      height: 28
       margin-top: 8
       margin-left: 8
       margin-right: 8
       visible: false
       layout:
         type: horizontalBox
-        spacing: 4
+        spacing: 6
 
     ScrollablePanel
       id: marketPanel
