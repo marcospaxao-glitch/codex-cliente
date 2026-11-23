@@ -1096,6 +1096,9 @@ local function sectionOf(index)
   return 'MERCADO'
 end
 
+-- nomes curtos para caber na linha de categorias (o nome inteiro fica no tooltip)
+local SUB_CURTO = { ['mega stones'] = 'Megas', ['held items'] = 'Helds', ['pokebolas'] = 'Bolas' }
+
 local lastItemTab = nil -- ultima aba de itens aberta (a aba "Itens" volta nela)
 
 local function setTabIcon(button, name, itemIcon)
@@ -1181,7 +1184,9 @@ local function buildTabs(tabs)
   if showSub then
     for _, tab in ipairs(itemTabs) do
       local button = g_ui.createWidget('PCSubTab', subPanel)
-      button:setText(tab.name)
+      button:setText(SUB_CURTO[tostring(tab.name):lower()] or tab.name)
+      local largura = math.floor((subPanel:getWidth() - 6 * (#itemTabs - 1)) / #itemTabs)
+      if largura >= 70 then button:setWidth(math.min(largura, 140)) end
       button:setTooltip(tab.name .. ': ' .. fmt(tab.count or 0) .. ' item(ns)')
       setTabIcon(button, tab.name, tab.icon)
       if (tab.count or 0) == 0 and tab.index ~= state.tab then button:setColor('#6f86a8') end

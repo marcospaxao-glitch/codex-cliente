@@ -89,11 +89,11 @@ PCTab < UIButton
     phantom: true
 
 PCMainTab < UIButton
-  size: 150 32
-  font: verdana-11px-rounded
+  size: 176 32
+  font: verdana-11px-antialised
   color: #e8f0ff
   text-align: left
-  text-offset: 36 0
+  text-offset: 38 0
   image-source: /modules/game_storage/images/st_btn_blue
   image-border: 9
 
@@ -125,12 +125,12 @@ PCMainTab < UIButton
 
   Label
     id: countLabel
-    size: 36 18
+    size: 38 18
     anchors.right: parent.right
     anchors.verticalCenter: parent.verticalCenter
-    margin-right: 7
+    margin-right: 8
     text-align: center
-    font: verdana-11px-rounded
+    font: verdana-11px-antialised
     color: #dce8f5
     image-source: /modules/game_storage/images/st_campo
     image-border: 6
@@ -141,7 +141,7 @@ PCSubTab < UIButton
   font: verdana-11px-antialised
   color: #c9d6ea
   text-align: left
-  text-offset: 26 0
+  text-offset: 27 0
   image-source: /modules/game_storage/images/st_stat
   image-border: 8
 
