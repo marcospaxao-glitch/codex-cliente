@@ -1,0 +1,616 @@
+TkTab < UIButton
+  size: 210 32
+  font: verdana-11px-antialised
+  color: #e8f0ff
+  text-align: left
+  text-offset: 14 0
+  image-source: /modules/game_storage/images/st_btn_blue
+  image-border: 9
+
+  $hover !on:
+    color: #ffffff
+    image-source: /modules/game_storage/images/st_btn_blue_on
+
+  $on:
+    color: #1a1400
+    image-source: /modules/game_storage/images/st_btn_gold
+
+  Label
+    id: countLabel
+    size: 44 18
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 8
+    text-align: center
+    font: verdana-11px-antialised
+    color: #dce8f5
+    image-source: /modules/game_storage/images/st_campo
+    image-border: 6
+    phantom: true
+
+TkFilter < UIButton
+  size: 116 28
+  font: verdana-11px-antialised
+  color: #e8f0ff
+  text-align: left
+  text-offset: 10 0
+  image-source: /modules/game_storage/images/st_btn_blue
+  image-border: 9
+
+  $hover !on:
+    color: #ffffff
+    image-source: /modules/game_storage/images/st_btn_blue_on
+
+  $on:
+    color: #1a1400
+    image-source: /modules/game_storage/images/st_btn_gold
+
+  UIWidget
+    id: dot
+    size: 4 14
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    phantom: true
+
+  Label
+    id: countLabel
+    size: 32 16
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 5
+    text-align: center
+    font: verdana-11px-antialised
+    color: #dce8f5
+    image-source: /modules/game_storage/images/st_campo
+    image-border: 6
+    phantom: true
+
+TkButton < UIButton
+  height: 28
+  font: verdana-11px-antialised
+  color: #e8f0ff
+  image-source: /modules/game_storage/images/st_btn_blue
+  image-border: 9
+
+  $hover:
+    color: #ffffff
+    image-source: /modules/game_storage/images/st_btn_blue_on
+
+  $disabled:
+    color: #8a97ab
+    image-source: /modules/game_storage/images/st_btn_off
+
+TkGoldButton < TkButton
+  color: #1a1400
+  image-source: /modules/game_storage/images/st_btn_gold
+
+  $hover:
+    color: #1a1400
+    image-source: /modules/game_storage/images/st_btn_gold_on
+
+  $disabled:
+    color: #8a97ab
+    image-source: /modules/game_storage/images/st_btn_off
+
+TkRedButton < TkButton
+  color: #ffffff
+  image-source: /modules/game_storage/images/st_btn_red
+
+  $hover:
+    color: #ffffff
+    image-source: /modules/game_storage/images/st_btn_red_on
+
+TkTypeIcon < UIWidget
+  size: 46 20
+  phantom: true
+
+TkRewardItem < UIItem
+  size: 24 24
+  virtual: true
+  phantom: false
+
+TkActiveCard < UIWidget
+  height: 128
+  image-source: /modules/game_storage/images/st_card
+  image-border: 12
+
+  UIWidget
+    id: accent
+    width: 4
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    margin: 10 0 10 6
+    phantom: true
+
+  UIWidget
+    id: portrait
+    size: 104 104
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 18
+    image-source: /modules/game_storage/images/st_campo
+    image-border: 6
+    phantom: true
+
+  UICreature
+    id: creature
+    size: 96 96
+    anchors.centerIn: portrait
+    phantom: true
+
+  Label
+    id: nameLabel
+    anchors.top: parent.top
+    anchors.left: portrait.right
+    margin-top: 14
+    margin-left: 16
+    font: sans-bold-16px
+    color: #ffffff
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: tierLabel
+    height: 18
+    anchors.verticalCenter: nameLabel.verticalCenter
+    anchors.left: nameLabel.right
+    margin-left: 10
+    text-align: center
+    font: verdana-11px-antialised
+    color: #0a1320
+    phantom: true
+
+  TkTypeIcon
+    id: type1
+    anchors.verticalCenter: nameLabel.verticalCenter
+    anchors.left: tierLabel.right
+    margin-left: 8
+
+  TkTypeIcon
+    id: type2
+    anchors.verticalCenter: nameLabel.verticalCenter
+    anchors.left: type1.right
+    margin-left: 4
+
+  TkButton
+    id: claimButton
+    size: 140 32
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 22
+    margin-right: 18
+
+  TkRedButton
+    id: cancelButton
+    size: 140 26
+    anchors.top: claimButton.bottom
+    anchors.right: parent.right
+    margin-top: 8
+    margin-right: 18
+    text: Cancelar
+
+  UIWidget
+    id: track
+    height: 24
+    anchors.top: nameLabel.bottom
+    anchors.left: nameLabel.left
+    anchors.right: claimButton.left
+    margin-top: 12
+    margin-right: 22
+    image-source: /modules/game_storage/images/st_campo
+    image-border: 6
+    phantom: true
+
+  UIWidget
+    id: fill
+    anchors.top: track.top
+    anchors.bottom: track.bottom
+    anchors.left: track.left
+    margin: 3 0 3 3
+    width: 0
+    background-color: #3a6ea5
+    phantom: true
+
+  Label
+    id: progressLabel
+    anchors.centerIn: track
+    font: verdana-11px-antialised
+    color: #ffffff
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: rewardLabel
+    anchors.top: track.bottom
+    anchors.left: track.left
+    margin-top: 10
+    font: verdana-11px-rounded
+    color: #c9d6e6
+    text-auto-resize: true
+    phantom: true
+
+  Panel
+    id: rewardItems
+    height: 24
+    width: 120
+    anchors.verticalCenter: rewardLabel.verticalCenter
+    anchors.left: rewardLabel.right
+    margin-left: 8
+    layout:
+      type: horizontalBox
+      spacing: 4
+
+  Label
+    id: infoLabel
+    anchors.top: rewardLabel.bottom
+    anchors.left: track.left
+    margin-top: 4
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: true
+    phantom: true
+
+TkEmptyCard < UIWidget
+  height: 128
+  image-source: /modules/game_storage/images/st_vazio
+  image-border: 8
+
+  Label
+    id: emptyLabel
+    anchors.centerIn: parent
+    margin-top: -16
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: true
+    text: Espaco livre - escolha um pokemon na aba Mural
+    phantom: true
+
+  TkButton
+    id: goBoardButton
+    size: 160 28
+    anchors.top: emptyLabel.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 10
+    text: Ver o Mural
+
+TkBoardCard < UIWidget
+  image-source: /modules/game_storage/images/st_card
+  image-border: 12
+
+  UIWidget
+    id: accent
+    height: 3
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 6 14 0 14
+    phantom: true
+
+  UIWidget
+    id: portrait
+    size: 70 70
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 14
+    margin-left: 10
+    image-source: /modules/game_storage/images/st_campo
+    image-border: 6
+    phantom: true
+
+  UICreature
+    id: creature
+    size: 64 64
+    anchors.centerIn: portrait
+    phantom: true
+
+  Label
+    id: nameLabel
+    anchors.top: portrait.top
+    anchors.left: portrait.right
+    anchors.right: parent.right
+    margin-top: 1
+    margin-left: 8
+    margin-right: 8
+    font: verdana-11px-antialised
+    color: #ffffff
+    phantom: true
+
+  Label
+    id: tierLabel
+    anchors.top: nameLabel.bottom
+    anchors.left: nameLabel.left
+    margin-top: 2
+    font: verdana-11px-rounded
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: levelLabel
+    anchors.top: tierLabel.bottom
+    anchors.left: nameLabel.left
+    margin-top: 1
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: true
+    phantom: true
+
+  TkTypeIcon
+    id: type1
+    size: 40 17
+    anchors.top: levelLabel.bottom
+    anchors.left: nameLabel.left
+    margin-top: 2
+
+  TkTypeIcon
+    id: type2
+    size: 40 17
+    anchors.top: type1.top
+    anchors.left: type1.right
+    margin-left: 3
+
+  Label
+    id: doneBadge
+    size: 30 16
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 12
+    margin-right: 10
+    text-align: center
+    font: verdana-11px-antialised
+    color: #5fd35f
+    image-source: /modules/game_storage/images/st_campo
+    image-border: 6
+    phantom: true
+    visible: false
+
+  Label
+    id: goalLabel
+    anchors.top: portrait.bottom
+    anchors.left: parent.left
+    margin-top: 6
+    margin-left: 12
+    font: verdana-11px-antialised
+    color: #ffd84a
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: goldLabel
+    anchors.verticalCenter: goalLabel.verticalCenter
+    anchors.right: parent.right
+    margin-right: 12
+    font: verdana-11px-rounded
+    color: #c9d6e6
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: expLabel
+    anchors.top: goalLabel.bottom
+    anchors.left: goalLabel.left
+    margin-top: 3
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: true
+    phantom: true
+
+  Panel
+    id: rewardItems
+    size: 60 22
+    anchors.verticalCenter: expLabel.verticalCenter
+    anchors.right: parent.right
+    margin-right: 10
+    layout:
+      type: horizontalBox
+      spacing: 2
+      align-right: true
+
+  TkButton
+    id: actionButton
+    height: 26
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 0 10 9 10
+
+UIWindow
+  id: tasksWindow
+  size: 896 700
+  anchors.centerIn: parent
+  background-color: #00000000
+  border-width: 0
+  image-source: /modules/game_storage/images/st_card
+  image-border: 12
+  focusable: true
+  visible: false
+
+  Label
+    id: titleLabel
+    text: Mural de Tasks
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 13
+    margin-left: 18
+    font: sans-bold-16px
+    color: #ffd84a
+    text-auto-resize: true
+    phantom: true
+
+  Label
+    id: summaryLabel
+    anchors.verticalCenter: titleLabel.verticalCenter
+    anchors.left: titleLabel.right
+    margin-left: 14
+    font: verdana-11px-rounded
+    color: #8fa7c4
+    text-auto-resize: true
+    phantom: true
+
+  UIButton
+    id: closeButton
+    text: X
+    size: 26 26
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 9
+    margin-right: 12
+    font: verdana-11px-antialised
+    color: #ffffff
+    image-source: /modules/game_storage/images/st_btn_red
+    image-border: 9
+
+    $pressed:
+      image-source: /modules/game_storage/images/st_btn_red_on
+
+  TkTab
+    id: tabMine
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 44
+    margin-left: 14
+    text: Minhas Tasks
+
+  TkTab
+    id: tabBoard
+    anchors.top: tabMine.top
+    anchors.left: tabMine.right
+    margin-left: 8
+    text: Mural
+
+  Label
+    id: hintLabel
+    height: 26
+    anchors.verticalCenter: tabMine.verticalCenter
+    anchors.right: parent.right
+    margin-right: 16
+    text-align: center
+    font: verdana-11px-antialised
+    color: #dce8f5
+    image-source: /modules/game_storage/images/st_campo
+    image-border: 6
+    phantom: true
+
+  ScrollablePanel
+    id: minePage
+    anchors.top: tabMine.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin: 10 26 14 14
+    vertical-scrollbar: mineScroll
+    layout:
+      type: verticalBox
+      spacing: 8
+
+  VerticalScrollBar
+    id: mineScroll
+    width: 10
+    anchors.top: minePage.top
+    anchors.bottom: minePage.bottom
+    anchors.right: parent.right
+    margin-right: 12
+    step: 40
+    pixels-scroll: true
+    visible: false
+
+  Panel
+    id: boardPage
+    anchors.top: tabMine.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin: 10 14 14 14
+    visible: false
+
+    Panel
+      id: filtersPanel
+      height: 28
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      layout:
+        type: horizontalBox
+        spacing: 6
+
+    TextEdit
+      id: searchEdit
+      size: 220 24
+      anchors.top: filtersPanel.bottom
+      anchors.left: parent.left
+      margin-top: 8
+      font: verdana-11px-antialised
+      placeholder: Buscar pokemon...
+
+    CheckBox
+      id: hideDoneBox
+      height: 16
+      anchors.verticalCenter: searchEdit.verticalCenter
+      anchors.left: searchEdit.right
+      margin-left: 14
+      font: verdana-11px-rounded
+      color: #c9d6e6
+      text: Mostrar so as disponiveis
+      text-auto-resize: true
+
+    Label
+      id: resultLabel
+      anchors.verticalCenter: searchEdit.verticalCenter
+      anchors.right: parent.right
+      font: verdana-11px-rounded
+      color: #8fa7c4
+      text-auto-resize: true
+      phantom: true
+
+    Panel
+      id: grid
+      anchors.top: searchEdit.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: prevButton.top
+      margin-top: 8
+      margin-bottom: 8
+      layout:
+        type: grid
+        cell-size: 211 160
+        cell-spacing: 8
+        num-columns: 4
+        flow: true
+
+    Label
+      id: emptyGridLabel
+      anchors.centerIn: grid
+      font: verdana-11px-rounded
+      color: #8fa7c4
+      text-auto-resize: true
+      phantom: true
+      visible: false
+
+    TkButton
+      id: prevButton
+      size: 90 26
+      anchors.bottom: parent.bottom
+      anchors.right: pageLabel.left
+      margin-right: 10
+      text: < Anterior
+
+    Label
+      id: pageLabel
+      size: 120 26
+      anchors.bottom: parent.bottom
+      anchors.horizontalCenter: parent.horizontalCenter
+      text-align: center
+      font: verdana-11px-antialised
+      color: #dce8f5
+      image-source: /modules/game_storage/images/st_campo
+      image-border: 6
+      phantom: true
+
+    TkButton
+      id: nextButton
+      size: 90 26
+      anchors.bottom: parent.bottom
+      anchors.left: pageLabel.right
+      margin-left: 10
+      text: Proxima >

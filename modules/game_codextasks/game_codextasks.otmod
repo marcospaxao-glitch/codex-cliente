@@ -1,0 +1,10 @@
+Module
+  name: game_codextasks
+  description: Tasks de abate (Mural de Tasks)
+  author: Marcos
+  autoload: true
+  autoload-priority: 1005
+  scripts: [ codextasks ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()
