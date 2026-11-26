@@ -64,8 +64,44 @@ g_logger.info('[codex] passo: searchAndAddPackages')
 g_resources.searchAndAddPackages('/', '.otpkg', true)
 
 -- load settings
+-- CODEX: as configuracoes (posicao das janelas, opcoes, senha lembrada) vem SEMPRE da
+-- pasta do usuario. Antes, um configdash.otml esquecido na pasta do jogo (ou num pacote)
+-- podia ser lido no lugar e tudo "voltava ao padrao" a cada abertura. E se o arquivo
+-- estragar (jogo fechado no meio do salvamento), volta a copia de seguranca.
 g_logger.info('[codex] passo: loadSettings')
-g_configs.loadSettings('/configdash.otml')
+do
+  local CFG, BAK = '/configdash.otml', '/configdash_copia.otml'
+  local pasta = g_resources.getWriteDir()
+  local outro = g_resources.getRealDir(CFG)
+  local naFrente = pcall(function()
+    g_resources.removeSearchPath(pasta)
+    g_resources.addSearchPath(pasta, true)
+  end)
+  if outro ~= '' and outro ~= pasta then
+    g_logger.warning('[codex] configdash.otml em ' .. outro .. ' ignorado; usando o de ' .. pasta)
+  end
+  local ok = g_configs.loadSettings(CFG)
+  if not ok and g_resources.fileExists(BAK) then
+    local lido, conteudo = pcall(g_resources.readFileContents, BAK)
+    if lido and conteudo and #conteudo > 0 then
+      g_resources.writeFileContents(CFG, conteudo)
+      ok = g_configs.loadSettings(CFG)
+      g_logger.warning('[codex] configdash.otml estragado ou sumido: copia de seguranca restaurada')
+    end
+  end
+  if ok and g_resources.fileExists(CFG) then
+    -- arquivo bom: guarda a copia para a proxima vez
+    local lido, conteudo = pcall(g_resources.readFileContents, CFG)
+    if lido and conteudo and #conteudo > 0 then g_resources.writeFileContents(BAK, conteudo) end
+  end
+  if naFrente then
+    pcall(function()
+      g_resources.removeSearchPath(pasta)
+      g_resources.addSearchPath(pasta, false)
+    end)
+  end
+  g_logger.info('[codex] configuracoes: ' .. pasta .. 'configdash.otml (' .. (ok and 'carregado' or 'novo') .. ')')
+end
 
 g_logger.info('[codex] passo: discoverModules')
 g_modules.discoverModules()
